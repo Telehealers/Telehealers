@@ -1,0 +1,177 @@
+[24-Apr-2021 03:34:12 America/Chicago] PHP Fatal error:  Uncaught GuzzleHttp\Exception\ClientException: Client error: `POST https://zoom.us/oauth/token` resulted in a `400 Bad Request` response:
+{"reason":"Internal Error","error":"invalid_request"}
+ in /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php:113
+Stack trace:
+#0 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Middleware.php(69): GuzzleHttp\Exception\RequestException::create(Object(GuzzleHttp\Psr7\Request), Object(GuzzleHttp\Psr7\Response), NULL, Array, NULL)
+#1 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/Promise.php(204): GuzzleHttp\Middleware::GuzzleHttp\{closure}(Object(GuzzleHttp\Psr7\Response))
+#2 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/Promise.php(153): GuzzleHttp\Promise\Promise::callHandler(1, Object(GuzzleHttp\Psr7\Response), NULL)
+#3 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/TaskQueue.php(48): GuzzleHttp\Promise\Promise::GuzzleHttp\Promise\{closure}()
+#4 /home/ecomso in /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php on line 113
+[24-Apr-2021 03:34:22 America/Chicago] PHP Fatal error:  Uncaught GuzzleHttp\Exception\ClientException: Client error: `POST https://zoom.us/oauth/token` resulted in a `400 Bad Request` response:
+{"reason":"Internal Error","error":"invalid_request"}
+ in /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php:113
+Stack trace:
+#0 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Middleware.php(69): GuzzleHttp\Exception\RequestException::create(Object(GuzzleHttp\Psr7\Request), Object(GuzzleHttp\Psr7\Response), NULL, Array, NULL)
+#1 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/Promise.php(204): GuzzleHttp\Middleware::GuzzleHttp\{closure}(Object(GuzzleHttp\Psr7\Response))
+#2 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/Promise.php(153): GuzzleHttp\Promise\Promise::callHandler(1, Object(GuzzleHttp\Psr7\Response), NULL)
+#3 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/TaskQueue.php(48): GuzzleHttp\Promise\Promise::GuzzleHttp\Promise\{closure}()
+#4 /home/ecomso in /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php on line 113
+[24-Apr-2021 03:37:52 America/Chicago] PHP Fatal error:  Uncaught GuzzleHttp\Exception\ClientException: Client error: `POST https://zoom.us/oauth/token` resulted in a `400 Bad Request` response:
+{"reason":"Internal Error","error":"invalid_request"}
+ in /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php:113
+Stack trace:
+#0 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Middleware.php(69): GuzzleHttp\Exception\RequestException::create(Object(GuzzleHttp\Psr7\Request), Object(GuzzleHttp\Psr7\Response), NULL, Array, NULL)
+#1 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/Promise.php(204): GuzzleHttp\Middleware::GuzzleHttp\{closure}(Object(GuzzleHttp\Psr7\Response))
+#2 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/Promise.php(153): GuzzleHttp\Promise\Promise::callHandler(1, Object(GuzzleHttp\Psr7\Response), NULL)
+#3 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/TaskQueue.php(48): GuzzleHttp\Promise\Promise::GuzzleHttp\Promise\{closure}()
+#4 /home/ecomso in /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php on line 113
+[24-Apr-2021 03:39:01 America/Chicago] PHP Fatal error:  Uncaught GuzzleHttp\Exception\ClientException: Client error: `POST https://zoom.us/oauth/token` resulted in a `400 Bad Request` response:
+{"reason":"Internal Error","error":"invalid_request"}
+ in /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php:113
+Stack trace:
+#0 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Middleware.php(69): GuzzleHttp\Exception\RequestException::create(Object(GuzzleHttp\Psr7\Request), Object(GuzzleHttp\Psr7\Response), NULL, Array, NULL)
+#1 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/Promise.php(204): GuzzleHttp\Middleware::GuzzleHttp\{closure}(Object(GuzzleHttp\Psr7\Response))
+#2 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/Promise.php(153): GuzzleHttp\Promise\Promise::callHandler(1, Object(GuzzleHttp\Psr7\Response), NULL)
+#3 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/TaskQueue.php(48): GuzzleHttp\Promise\Promise::GuzzleHttp\Promise\{closure}()
+#4 /home/ecomso in /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php on line 113
+[24-Apr-2021 03:41:38 America/Chicago] PHP Fatal error:  Uncaught GuzzleHttp\Exception\ClientException: Client error: `POST https://zoom.us/oauth/token` resulted in a `400 Bad Request` response:
+{"reason":"Internal Error","error":"invalid_request"}
+ in /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php:113
+Stack trace:
+#0 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Middleware.php(69): GuzzleHttp\Exception\RequestException::create(Object(GuzzleHttp\Psr7\Request), Object(GuzzleHttp\Psr7\Response), NULL, Array, NULL)
+#1 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/Promise.php(204): GuzzleHttp\Middleware::GuzzleHttp\{closure}(Object(GuzzleHttp\Psr7\Response))
+#2 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/Promise.php(153): GuzzleHttp\Promise\Promise::callHandler(1, Object(GuzzleHttp\Psr7\Response), NULL)
+#3 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/TaskQueue.php(48): GuzzleHttp\Promise\Promise::GuzzleHttp\Promise\{closure}()
+#4 /home/ecomso in /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php on line 113
+[24-Apr-2021 03:42:43 America/Chicago] PHP Fatal error:  Uncaught GuzzleHttp\Exception\ClientException: Client error: `POST https://zoom.us/oauth/token` resulted in a `401 Unauthorized` response:
+{"reason":"Invalid Token!","error":"invalid_request"}
+ in /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php:113
+Stack trace:
+#0 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Middleware.php(69): GuzzleHttp\Exception\RequestException::create(Object(GuzzleHttp\Psr7\Request), Object(GuzzleHttp\Psr7\Response), NULL, Array, NULL)
+#1 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/Promise.php(204): GuzzleHttp\Middleware::GuzzleHttp\{closure}(Object(GuzzleHttp\Psr7\Response))
+#2 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/Promise.php(153): GuzzleHttp\Promise\Promise::callHandler(1, Object(GuzzleHttp\Psr7\Response), NULL)
+#3 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/TaskQueue.php(48): GuzzleHttp\Promise\Promise::GuzzleHttp\Promise\{closure}()
+#4 /home/ecoms in /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php on line 113
+[24-Apr-2021 03:44:24 America/Chicago] PHP Fatal error:  Uncaught GuzzleHttp\Exception\ClientException: Client error: `POST https://zoom.us/oauth/token` resulted in a `401 Unauthorized` response:
+{"reason":"Invalid Token!","error":"invalid_request"}
+ in /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php:113
+Stack trace:
+#0 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Middleware.php(69): GuzzleHttp\Exception\RequestException::create(Object(GuzzleHttp\Psr7\Request), Object(GuzzleHttp\Psr7\Response), NULL, Array, NULL)
+#1 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/Promise.php(204): GuzzleHttp\Middleware::GuzzleHttp\{closure}(Object(GuzzleHttp\Psr7\Response))
+#2 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/Promise.php(153): GuzzleHttp\Promise\Promise::callHandler(1, Object(GuzzleHttp\Psr7\Response), NULL)
+#3 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/TaskQueue.php(48): GuzzleHttp\Promise\Promise::GuzzleHttp\Promise\{closure}()
+#4 /home/ecoms in /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php on line 113
+[24-Apr-2021 03:44:56 America/Chicago] PHP Fatal error:  Uncaught GuzzleHttp\Exception\ClientException: Client error: `POST https://zoom.us/oauth/token` resulted in a `401 Unauthorized` response:
+{"reason":"Invalid Token!","error":"invalid_request"}
+ in /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php:113
+Stack trace:
+#0 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Middleware.php(69): GuzzleHttp\Exception\RequestException::create(Object(GuzzleHttp\Psr7\Request), Object(GuzzleHttp\Psr7\Response), NULL, Array, NULL)
+#1 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/Promise.php(204): GuzzleHttp\Middleware::GuzzleHttp\{closure}(Object(GuzzleHttp\Psr7\Response))
+#2 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/Promise.php(153): GuzzleHttp\Promise\Promise::callHandler(1, Object(GuzzleHttp\Psr7\Response), NULL)
+#3 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/TaskQueue.php(48): GuzzleHttp\Promise\Promise::GuzzleHttp\Promise\{closure}()
+#4 /home/ecoms in /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php on line 113
+[24-Apr-2021 03:46:25 America/Chicago] PHP Fatal error:  Uncaught GuzzleHttp\Exception\ClientException: Client error: `POST https://zoom.us/oauth/token` resulted in a `401 Unauthorized` response:
+{"reason":"Invalid Token!","error":"invalid_request"}
+ in /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php:113
+Stack trace:
+#0 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Middleware.php(69): GuzzleHttp\Exception\RequestException::create(Object(GuzzleHttp\Psr7\Request), Object(GuzzleHttp\Psr7\Response), NULL, Array, NULL)
+#1 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/Promise.php(204): GuzzleHttp\Middleware::GuzzleHttp\{closure}(Object(GuzzleHttp\Psr7\Response))
+#2 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/Promise.php(153): GuzzleHttp\Promise\Promise::callHandler(1, Object(GuzzleHttp\Psr7\Response), NULL)
+#3 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/TaskQueue.php(48): GuzzleHttp\Promise\Promise::GuzzleHttp\Promise\{closure}()
+#4 /home/ecoms in /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php on line 113
+[24-Apr-2021 03:46:56 America/Chicago] PHP Fatal error:  Uncaught GuzzleHttp\Exception\ClientException: Client error: `POST https://zoom.us/oauth/token` resulted in a `401 Unauthorized` response:
+{"reason":"Invalid Token!","error":"invalid_request"}
+ in /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php:113
+Stack trace:
+#0 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Middleware.php(69): GuzzleHttp\Exception\RequestException::create(Object(GuzzleHttp\Psr7\Request), Object(GuzzleHttp\Psr7\Response), NULL, Array, NULL)
+#1 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/Promise.php(204): GuzzleHttp\Middleware::GuzzleHttp\{closure}(Object(GuzzleHttp\Psr7\Response))
+#2 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/Promise.php(153): GuzzleHttp\Promise\Promise::callHandler(1, Object(GuzzleHttp\Psr7\Response), NULL)
+#3 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/TaskQueue.php(48): GuzzleHttp\Promise\Promise::GuzzleHttp\Promise\{closure}()
+#4 /home/ecoms in /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php on line 113
+[24-Apr-2021 03:55:07 America/Chicago] PHP Fatal error:  Uncaught GuzzleHttp\Exception\ClientException: Client error: `POST https://zoom.us/oauth/token` resulted in a `401 Unauthorized` response:
+{"reason":"Invalid Token!","error":"invalid_request"}
+ in /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php:113
+Stack trace:
+#0 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Middleware.php(69): GuzzleHttp\Exception\RequestException::create(Object(GuzzleHttp\Psr7\Request), Object(GuzzleHttp\Psr7\Response), NULL, Array, NULL)
+#1 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/Promise.php(204): GuzzleHttp\Middleware::GuzzleHttp\{closure}(Object(GuzzleHttp\Psr7\Response))
+#2 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/Promise.php(153): GuzzleHttp\Promise\Promise::callHandler(1, Object(GuzzleHttp\Psr7\Response), NULL)
+#3 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/TaskQueue.php(48): GuzzleHttp\Promise\Promise::GuzzleHttp\Promise\{closure}()
+#4 /home/ecoms in /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php on line 113
+[24-Apr-2021 03:56:05 America/Chicago] PHP Fatal error:  Uncaught GuzzleHttp\Exception\ClientException: Client error: `POST https://zoom.us/oauth/token` resulted in a `401 Unauthorized` response:
+{"reason":"Invalid Token!","error":"invalid_request"}
+ in /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php:113
+Stack trace:
+#0 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Middleware.php(69): GuzzleHttp\Exception\RequestException::create(Object(GuzzleHttp\Psr7\Request), Object(GuzzleHttp\Psr7\Response), NULL, Array, NULL)
+#1 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/Promise.php(204): GuzzleHttp\Middleware::GuzzleHttp\{closure}(Object(GuzzleHttp\Psr7\Response))
+#2 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/Promise.php(153): GuzzleHttp\Promise\Promise::callHandler(1, Object(GuzzleHttp\Psr7\Response), NULL)
+#3 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/TaskQueue.php(48): GuzzleHttp\Promise\Promise::GuzzleHttp\Promise\{closure}()
+#4 /home/ecoms in /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php on line 113
+[24-Apr-2021 03:59:18 America/Chicago] PHP Fatal error:  Uncaught GuzzleHttp\Exception\ClientException: Client error: `GET https://api.zoom.us/v2/users/me/meetings` resulted in a `401 Unauthorized` response:
+{"code":124,"message":"Invalid access token."}
+ in /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php:113
+Stack trace:
+#0 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Middleware.php(69): GuzzleHttp\Exception\RequestException::create(Object(GuzzleHttp\Psr7\Request), Object(GuzzleHttp\Psr7\Response), NULL, Array, NULL)
+#1 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/Promise.php(204): GuzzleHttp\Middleware::GuzzleHttp\{closure}(Object(GuzzleHttp\Psr7\Response))
+#2 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/Promise.php(153): GuzzleHttp\Promise\Promise::callHandler(1, Object(GuzzleHttp\Psr7\Response), NULL)
+#3 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/TaskQueue.php(48): GuzzleHttp\Promise\Promise::GuzzleHttp\Promise\{closure}()
+#4 /home/ in /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php on line 113
+[24-Apr-2021 04:00:03 America/Chicago] PHP Fatal error:  Uncaught GuzzleHttp\Exception\ClientException: Client error: `GET https://api.zoom.us/v2/users/me/meetings` resulted in a `401 Unauthorized` response:
+{"code":124,"message":"Invalid access token."}
+ in /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php:113
+Stack trace:
+#0 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Middleware.php(69): GuzzleHttp\Exception\RequestException::create(Object(GuzzleHttp\Psr7\Request), Object(GuzzleHttp\Psr7\Response), NULL, Array, NULL)
+#1 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/Promise.php(204): GuzzleHttp\Middleware::GuzzleHttp\{closure}(Object(GuzzleHttp\Psr7\Response))
+#2 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/Promise.php(153): GuzzleHttp\Promise\Promise::callHandler(1, Object(GuzzleHttp\Psr7\Response), NULL)
+#3 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/TaskQueue.php(48): GuzzleHttp\Promise\Promise::GuzzleHttp\Promise\{closure}()
+#4 /home/ in /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php on line 113
+[24-Apr-2021 04:00:36 America/Chicago] PHP Fatal error:  Uncaught GuzzleHttp\Exception\ClientException: Client error: `GET https://api.zoom.us/v2/users/me/meetings` resulted in a `401 Unauthorized` response:
+{"code":124,"message":"Invalid access token."}
+ in /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php:113
+Stack trace:
+#0 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Middleware.php(69): GuzzleHttp\Exception\RequestException::create(Object(GuzzleHttp\Psr7\Request), Object(GuzzleHttp\Psr7\Response), NULL, Array, NULL)
+#1 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/Promise.php(204): GuzzleHttp\Middleware::GuzzleHttp\{closure}(Object(GuzzleHttp\Psr7\Response))
+#2 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/Promise.php(153): GuzzleHttp\Promise\Promise::callHandler(1, Object(GuzzleHttp\Psr7\Response), NULL)
+#3 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/TaskQueue.php(48): GuzzleHttp\Promise\Promise::GuzzleHttp\Promise\{closure}()
+#4 /home/ in /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php on line 113
+[24-Apr-2021 04:00:39 America/Chicago] PHP Fatal error:  Uncaught GuzzleHttp\Exception\ClientException: Client error: `GET https://api.zoom.us/v2/users/me/meetings` resulted in a `401 Unauthorized` response:
+{"code":124,"message":"Invalid access token."}
+ in /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php:113
+Stack trace:
+#0 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Middleware.php(69): GuzzleHttp\Exception\RequestException::create(Object(GuzzleHttp\Psr7\Request), Object(GuzzleHttp\Psr7\Response), NULL, Array, NULL)
+#1 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/Promise.php(204): GuzzleHttp\Middleware::GuzzleHttp\{closure}(Object(GuzzleHttp\Psr7\Response))
+#2 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/Promise.php(153): GuzzleHttp\Promise\Promise::callHandler(1, Object(GuzzleHttp\Psr7\Response), NULL)
+#3 /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/promises/src/TaskQueue.php(48): GuzzleHttp\Promise\Promise::GuzzleHttp\Promise\{closure}()
+#4 /home/ in /home/ecomsolv/telehealers.in/zoom/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php on line 113
+[24-Apr-2021 04:05:35 America/Chicago] PHP Parse error:  syntax error, unexpected 'print_r' (T_STRING), expecting ',' or ';' in /home/ecomsolv/telehealers.in/zoom/callback.php on line 20
+[24-Apr-2021 04:05:37 America/Chicago] PHP Parse error:  syntax error, unexpected 'print_r' (T_STRING), expecting ',' or ';' in /home/ecomsolv/telehealers.in/zoom/callback.php on line 20
+[24-Apr-2021 05:14:20 America/Chicago] PHP Warning:  curl_exec() expects parameter 1 to be resource, null given in /home/ecomsolv/telehealers.in/zoom/generate_token.php on line 16
+[24-Apr-2021 05:14:20 America/Chicago] PHP Warning:  curl_close() expects parameter 1 to be resource, null given in /home/ecomsolv/telehealers.in/zoom/generate_token.php on line 18
+[24-Apr-2021 05:15:27 America/Chicago] PHP Warning:  curl_exec() expects parameter 1 to be resource, null given in /home/ecomsolv/telehealers.in/zoom/generate_token.php on line 16
+[24-Apr-2021 05:15:27 America/Chicago] PHP Warning:  curl_close() expects parameter 1 to be resource, null given in /home/ecomsolv/telehealers.in/zoom/generate_token.php on line 18
+[24-Apr-2021 05:16:30 America/Chicago] PHP Warning:  curl_close() expects parameter 1 to be resource, null given in /home/ecomsolv/telehealers.in/zoom/generate_token.php on line 23
+[24-Apr-2021 05:17:08 America/Chicago] PHP Warning:  curl_close() expects parameter 1 to be resource, null given in /home/ecomsolv/telehealers.in/zoom/generate_token.php on line 23
+[24-Apr-2021 05:17:09 America/Chicago] PHP Warning:  curl_close() expects parameter 1 to be resource, null given in /home/ecomsolv/telehealers.in/zoom/generate_token.php on line 23
+[24-Apr-2021 05:17:11 America/Chicago] PHP Warning:  curl_close() expects parameter 1 to be resource, null given in /home/ecomsolv/telehealers.in/zoom/generate_token.php on line 23
+[24-Apr-2021 05:17:12 America/Chicago] PHP Warning:  curl_close() expects parameter 1 to be resource, null given in /home/ecomsolv/telehealers.in/zoom/generate_token.php on line 23
+[24-Apr-2021 05:17:12 America/Chicago] PHP Warning:  curl_close() expects parameter 1 to be resource, null given in /home/ecomsolv/telehealers.in/zoom/generate_token.php on line 23
+[24-Apr-2021 05:17:12 America/Chicago] PHP Warning:  curl_close() expects parameter 1 to be resource, null given in /home/ecomsolv/telehealers.in/zoom/generate_token.php on line 23
+[24-Apr-2021 05:22:25 America/Chicago] PHP Warning:  Illegal string offset 'access_token' in /home/ecomsolv/telehealers.in/zoom/generate_token.php on line 23
+[24-Apr-2021 05:22:27 America/Chicago] PHP Warning:  Illegal string offset 'access_token' in /home/ecomsolv/telehealers.in/zoom/generate_token.php on line 23
+[24-Apr-2021 05:23:02 America/Chicago] PHP Fatal error:  Uncaught Error: Cannot use object of type stdClass as array in /home/ecomsolv/telehealers.in/zoom/generate_token.php:24
+Stack trace:
+#0 {main}
+  thrown in /home/ecomsolv/telehealers.in/zoom/generate_token.php on line 24
+[24-Apr-2021 05:23:03 America/Chicago] PHP Fatal error:  Uncaught Error: Cannot use object of type stdClass as array in /home/ecomsolv/telehealers.in/zoom/generate_token.php:24
+Stack trace:
+#0 {main}
+  thrown in /home/ecomsolv/telehealers.in/zoom/generate_token.php on line 24
+[24-Apr-2021 05:23:20 America/Chicago] PHP Fatal error:  Uncaught Error: Cannot use object of type stdClass as array in /home/ecomsolv/telehealers.in/zoom/generate_token.php:22
+Stack trace:
+#0 {main}
+  thrown in /home/ecomsolv/telehealers.in/zoom/generate_token.php on line 22
+[24-Apr-2021 05:23:21 America/Chicago] PHP Fatal error:  Uncaught Error: Cannot use object of type stdClass as array in /home/ecomsolv/telehealers.in/zoom/generate_token.php:22
+Stack trace:
+#0 {main}
+  thrown in /home/ecomsolv/telehealers.in/zoom/generate_token.php on line 22
+[24-Apr-2021 08:58:36 America/Chicago] PHP Parse error:  syntax error, unexpected '$refersh_token' (T_VARIABLE), expecting ')' in /home/ecomsolv/telehealers.in/zoom/generate_token.php on line 28
+[24-Apr-2021 08:58:37 America/Chicago] PHP Parse error:  syntax error, unexpected '$refersh_token' (T_VARIABLE), expecting ')' in /home/ecomsolv/telehealers.in/zoom/generate_token.php on line 28

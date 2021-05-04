@@ -1,0 +1,28 @@
+[15-Jan-2021 19:32:10 Australia/Sydney] PHP Fatal error:  Cannot redeclare Razorpay::success() in /home/ecomsolv/mentalhealth.guru/application/controllers/admin/payment_method/Razorpay.php on line 288
+[08-Mar-2021 22:27:57 Australia/Sydney] PHP Fatal error:  Cannot use isset() on the result of an expression (you can use "null !== expression" instead) in /home/ecomsolv/mentalhealth.guru/application/views/admin/websetting/add_testimonial.php on line 55
+[30-Apr-2021 08:23:18 America/Chicago] PHP Parse error:  syntax error, unexpected '<', expecting end of file in /home/ecomsolv/telehealers.in/test.php on line 2
+[30-Apr-2021 08:23:42 America/Chicago] PHP Parse error:  syntax error, unexpected '<', expecting end of file in /home/ecomsolv/telehealers.in/test.php on line 2
+[30-Apr-2021 08:23:43 America/Chicago] PHP Parse error:  syntax error, unexpected '<', expecting end of file in /home/ecomsolv/telehealers.in/test.php on line 2
+[30-Apr-2021 08:40:02 America/Chicago] PHP Parse error:  syntax error, unexpected '<', expecting end of file in /home/ecomsolv/telehealers.in/test.php on line 40
+[30-Apr-2021 08:40:03 America/Chicago] PHP Parse error:  syntax error, unexpected '<', expecting end of file in /home/ecomsolv/telehealers.in/test.php on line 40
+[30-Apr-2021 08:42:59 America/Chicago] PHP Parse error:  syntax error, unexpected '<', expecting end of file in /home/ecomsolv/telehealers.in/test.php on line 40
+[30-Apr-2021 08:43:30 America/Chicago] PHP Parse error:  syntax error, unexpected '<', expecting end of file in /home/ecomsolv/telehealers.in/test.php on line 40
+[30-Apr-2021 08:43:32 America/Chicago] PHP Parse error:  syntax error, unexpected '<', expecting end of file in /home/ecomsolv/telehealers.in/test.php on line 40
+[30-Apr-2021 23:05:48 America/Chicago] PHP Warning:  DOMDocument::loadHTML(): Tag nav invalid in Entity, line: 221 in /home/ecomsolv/telehealers.in/test.php on line 55
+[30-Apr-2021 23:05:48 America/Chicago] PHP Warning:  DOMDocument::loadHTML(): Tag section invalid in Entity, line: 303 in /home/ecomsolv/telehealers.in/test.php on line 55
+[30-Apr-2021 23:05:48 America/Chicago] PHP Warning:  DOMDocument::loadHTML(): Tag section invalid in Entity, line: 329 in /home/ecomsolv/telehealers.in/test.php on line 55
+[30-Apr-2021 23:05:48 America/Chicago] PHP Warning:  DOMDocument::loadHTML(): Unexpected end tag : b in Entity, line: 380 in /home/ecomsolv/telehealers.in/test.php on line 55
+[30-Apr-2021 23:05:48 America/Chicago] PHP Warning:  DOMDocument::loadHTML(): Unexpected end tag : b in Entity, line: 411 in /home/ecomsolv/telehealers.in/test.php on line 55
+[30-Apr-2021 23:05:48 America/Chicago] PHP Warning:  DOMDocument::loadHTML(): htmlParseEntityRef: expecting ';' in Entity, line: 1814 in /home/ecomsolv/telehealers.in/test.php on line 55
+[30-Apr-2021 23:06:10 America/Chicago] PHP Warning:  DOMDocument::loadHTML(): Tag nav invalid in Entity, line: 221 in /home/ecomsolv/telehealers.in/test.php on line 55
+[30-Apr-2021 23:06:10 America/Chicago] PHP Warning:  DOMDocument::loadHTML(): Tag section invalid in Entity, line: 303 in /home/ecomsolv/telehealers.in/test.php on line 55
+[30-Apr-2021 23:06:10 America/Chicago] PHP Warning:  DOMDocument::loadHTML(): Tag section invalid in Entity, line: 329 in /home/ecomsolv/telehealers.in/test.php on line 55
+[30-Apr-2021 23:06:10 America/Chicago] PHP Warning:  DOMDocument::loadHTML(): Unexpected end tag : b in Entity, line: 380 in /home/ecomsolv/telehealers.in/test.php on line 55
+[30-Apr-2021 23:06:10 America/Chicago] PHP Warning:  DOMDocument::loadHTML(): Unexpected end tag : b in Entity, line: 411 in /home/ecomsolv/telehealers.in/test.php on line 55
+[30-Apr-2021 23:06:10 America/Chicago] PHP Warning:  DOMDocument::loadHTML(): htmlParseEntityRef: expecting ';' in Entity, line: 1814 in /home/ecomsolv/telehealers.in/test.php on line 55
+[30-Apr-2021 23:07:09 America/Chicago] PHP Warning:  DOMDocument::loadHTML(): Tag nav invalid in Entity, line: 221 in /home/ecomsolv/telehealers.in/test.php on line 55
+[30-Apr-2021 23:07:09 America/Chicago] PHP Warning:  DOMDocument::loadHTML(): Tag section invalid in Entity, line: 303 in /home/ecomsolv/telehealers.in/test.php on line 55
+[30-Apr-2021 23:07:09 America/Chicago] PHP Warning:  DOMDocument::loadHTML(): Tag section invalid in Entity, line: 329 in /home/ecomsolv/telehealers.in/test.php on line 55
+[30-Apr-2021 23:07:09 America/Chicago] PHP Warning:  DOMDocument::loadHTML(): Unexpected end tag : b in Entity, line: 380 in /home/ecomsolv/telehealers.in/test.php on line 55
+[30-Apr-2021 23:07:09 America/Chicago] PHP Warning:  DOMDocument::loadHTML(): Unexpected end tag : b in Entity, line: 411 in /home/ecomsolv/telehealers.in/test.php on line 55
+[30-Apr-2021 23:07:09 America/Chicago] PHP Warning:  DOMDocument::loadHTML(): htmlParseEntityRef: expecting ';' in Entity, line: 1814 in /home/ecomsolv/telehealers.in/test.php on line 55

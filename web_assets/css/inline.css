@@ -1,0 +1,114 @@
+.d-hed-2 {
+    color: rgb(255, 255, 255);
+    margin-left: 70px;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.paypal-div {
+    float: right;
+    margin-top: 20px;
+}
+
+.paypal-img {
+    height: 50px;
+    max-height: 100px;
+}
+
+
+/*history page*/
+
+.h-top-border {
+    border-bottom: 7px double #EAEAEA;
+}
+
+.h-header-p {
+    padding: 30px 20px;
+}
+
+.h-a {
+    border: 1px solid #ddd;
+    width: 184px;
+    paddign: 2px;
+}
+
+.h-f {
+    border-top: 7px double #EAEAEA;
+}
+
+.timg {
+    height: 100px;
+}
+
+.logostyle {
+    height: 120px;
+    max-height: 120px;
+}
+
+.pimg {
+    width: 40%;
+}
+
+.main_form_row_fild {
+    width: 800px;
+    background-repeat: no-repeat;
+}
+
+.container {
+    background-color: transparent !important;
+}
+
+.main_form_row_fild .main-header .header_area {
+    border-top: 0px solid #df405f !important;
+    border-bottom: 0px double #EAEAEA !important;
+    background-color: #049e8d !important;
+}
+
+.main_form_row_fild .a-one {
+    float: right;
+    width: 50%;
+}
+
+.main_form_row_fild .patient_area .col-md-12 {
+    padding: 0;
+}
+
+.main_form_row_fild .patient_area h5 {
+    background: #049e8d;
+    margin: 0;
+    padding: 10px 15px;
+    color: #fff;
+}
+
+.main_form_row_fild .left-side h4 {
+    color: #049e8d;
+    font-size: 16px;
+}
+
+.main_form_row_fild .footer1 {
+    border-top: 0px double #EAEAEA;
+    padding: 10px;
+    background-color: #049e8d;
+    color: #fff;
+}
+
+.ecc {
+    padding: 0;
+}
+
+.main_form_row_fild .main-footer {
+    border: none;
+    padding-left: 15px;
+}
+
+.gggggg .btn-primary {
+    color: #fff;
+    background-color: #049e8d;
+    border-color: #049e8d;
+}
+
+.gggggg .btn-primary:hover {
+    color: #fff;
+    background-color: #049e8d;
+    border-color: #049e8d;
+}

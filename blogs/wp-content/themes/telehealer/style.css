@@ -1,0 +1,314 @@
+<?php
+/*
+Theme Name: Ecomsolver
+Theme URI: http://192.168.1.222/ecom
+Author: Ecomsolver
+Author URI: http://ecomsolver.com
+Description: Ecomsolver
+Version: 1.0
+License: GNU General Public License
+Tags: one-column, two-columns, right-sidebar, flexible-header, accessibility-ready, custom-colors, custom-header, custom-menu, custom-logo, editor-style, featured-images, footer-widgets, post-formats, rtl-language-support, sticky-post, theme-options, threaded-comments, translation-ready
+Text Domain: twentyseventeen
+*/
+/*--------------------------------------------------------------
+>>> TABLE OF CONTENTS:
+----------------------------------------------------------------
+1.0 Normalize
+2.0 Accessibility
+3.0 Alignments
+4.0 Clearings
+5.0 Typography
+6.0 Forms
+7.0 Formatting
+8.0 Lists
+9.0 Tables
+10.0 Links
+11.0 Featured Image Hover
+12.0 Navigation
+13.0 Layout
+   13.1 Header
+   13.2 Front Page
+   13.3 Regular Content
+   13.4 Posts
+   13.5 Pages
+   13.6 Footer
+14.0 Comments
+15.0 Widgets
+16.0 Media
+   16.1 Galleries
+17.0 Customizer
+18.0 SVGs Fallbacks
+19.0 Media Queries
+20.0 Print
+--------------------------------------------------------------*/
+?>
+
+/*Post single Comment Form*/
+
+#respond{
+}
+
+p.comment-form-comment{
+	display: none;
+}
+
+.comment-form .btn{
+	width: auto;
+}
+
+div.comment ol{
+  list-style: none;
+}
+div#comment-box .img-rounded img{
+  border-radius: 50%;
+}
+div#comment-box p#athr-name{
+  font-size: 20px;
+}
+
+div#comment-box p#c-reply{
+  margin-bottom: 0px;
+}
+
+section.blog-detail-text ol, section.blog-detail-text ul{
+  margin-left: 1rem;
+}
+section.blog-detail-text code{
+  font: 12px "Andale Mono",Courier,"Courier New",monospace;
+  background-color: #f0f0f0;
+  display: block;
+  padding: 20px 20px 20px 20px;
+}
+div.enlighter>div>div{
+	padding: 9px;
+}
+
+
+/*Careers Page*/
+.together-box a{
+	background: #f05223;
+    display: inline-block;
+    color: #fff;
+    font-weight: 500;
+    padding: 8px 35px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    margin-top: 15px;
+}
+
+
+/*.dropdown-item:hover{
+color: #fff;
+    background-color: rgba(255,255,255,0.0);
+}
+
+.dropdown-item:focus{
+  color: #fff;
+    background-color: rgba(255,255,255,0.0);
+}*/
+/*.m-nav li{
+  margin-right: 0px;
+}*/
+/*.dropdown-item.active, .dropdown-item:active{
+color: #fff;
+    background-color: rgba(255,255,255,0.0);
+}*/
+
+/*Blog page Subscription form*/
+div#mailpoet_form_1{
+  display: inline-flex;
+}
+
+ul li.parsley-custom-error-message{
+  margin-left: 2rem;
+  margin-right: 2rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem !important;
+  color: #fff !important;
+}
+
+p.mailpoet_validate_success{
+  margin: 2rem;
+  color: #fff !important;
+}
+p.mailpoet_validate_error{
+  margin: 2rem;
+  color: #fff !important;
+}
+
+.blog-banner .overlay span.post-cat ul.post-categories li a{
+  display: inline-block;
+    padding: 0 8px;
+    margin-right: 5px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    line-height: 26px;
+    background: #f05223 !important;
+    color: #fff !important;
+}
+
+/*Blog page*/
+.news-box .news-box-inner .content .post-meta time{
+  display: inline-flex;
+}
+.news-box .news-box-inner .content .post-meta span.post-cat ul{
+  margin-left: 0px;
+}
+
+/*Mega Menu*/
+/*.wp-megamenu-wrap .wpmm-nav-wrap > ul.wp-megamenu > li.wpmm_dropdown_menu{
+  margin-right: 0px;
+}
+
+ul.wp-megamenu-sub-menu li{
+  margin-right: 0px;
+  display: block;
+}
+
+.wp-megamenu-wrap .wpmm-nav-wrap > ul.wp-megamenu li.wpmm_mega_menu .wpmm-strees-row-and-content-container > .wp-megamenu-sub-menu >li > .wp-megamenu-sub-menu >li{
+  margin-right: 0px;
+}
+
+h3.xx-large {
+    font-size: 60px;
+    font-weight: 700;
+    color: #000;
+    text-align: center;
+}
+
+#wp-megamenu-top>.wpmm-nav-wrap .wp-megamenu>li .wpmm-strees-row-and-content-container>ul.wp-megamenu-sub-menu li.wpmm-type-widget>a{
+  text-transform: none !important;
+  font-size: 16px !important;
+}*/
+
+/*#wp-megamenu-top>.wpmm-nav-wrap .wp-megamenu>li .wpmm-strees-row-and-content-container>ul.wp-megamenu-sub-menu li.wpmm-type-widget>a:hover{
+  color: #ff0000 !important;
+}*/
+
+/*.m-nav li a:hover:before{
+  background: none;
+}
+
+.wp-megamenu-wrap .wpmm-nav-wrap > ul.wp-megamenu ul.wp-megamenu-sub-menu li.wpmm-type-widget{
+  margin-bottom: 12px !important;
+}*/
+
+/*Search page & Archeive page*/
+form.search-form input[type=search]{
+  width: 300px;
+    margin: 0 auto;
+    display: block;
+    border: none;
+    border: 1px solid #e5e5e5;
+    box-shadow: none !important;
+    outline: none !important;
+    outline: 0;
+    background-position: 0 0 !important;
+    background: #fff;
+    box-sizing: border-box;
+    padding: 0 16px;
+    max-width: 100%;
+    font-size: 14px;
+    color: #989898;
+    border-radius: 0;
+    height: 3.14286em;
+}
+
+form.search-form button{
+  margin: 0 auto;
+    display: block;
+    width: 300px;
+    font-size: 17px !important;
+    font-size: 12px;
+    background: #ff001f !important;
+    -webkit-appearance: none;
+    color: #fff;
+    padding: 16px 20px;
+    border: 0;
+    font-weight: 500;
+    line-height: 1;
+    height: auto;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    border-radius: 0;
+}
+form.search-form button svg{
+  display: none;
+}
+
+/*About us page*/
+div.review-box .review-profile-img img{
+	border-radius: 50%;
+}
+
+/*Hire Resources*/
+.provide ul {
+  margin-bottom: 2rem;
+}
+.provide ul li {
+     color: #f15e32; 
+    list-style: circle;
+    margin-left: 15px;
+    list-style: circle;
+    font-weight: 500;
+}
+.provide h2{
+  text-align: center;
+    color: #000000;
+    font-size: 40px;
+    font-weight: 400;
+    position: relative;
+    margin-bottom: 25px;
+}
+.provide h2:after {
+    content: "";
+    background: #f05223;
+    width: 73px;
+    height: 2px;
+    position: absolute;
+    left: 0;
+    bottom: -14px;
+    margin: 0 auto;
+    right: 0;
+}
+.provide h2{
+  color: #000000;
+}
+.provide h3{
+  color: #000000;
+}
+.provide p{
+  color: #000;
+}
+.hire-developers p {
+    text-align: center;
+    max-width: 1000px;
+    margin: 0 auto;
+    margin-bottom: 60px;
+}
+.hire-developers div#aText2 p {
+    margin-bottom: 20px;
+}
+.hire-developers div#aText2 ul {
+  margin-bottom: 2rem;
+}
+.hire-developers div#aText2 ul li {
+     color: #f15e32; 
+    list-style: circle;
+    margin-left: 15px;
+    list-style: circle;
+    font-weight: 500;
+}
+.page_n_f{text-align:center; width:100%;}
+.page_n_f img{text-align:center; display:inline-block;}
+.page_n_f_img{width:70%;}
+/*Uber Menu*/
+.ubermenu .ubermenu-item.ubermenu-item-5047 {
+    min-height: 320px;
+}
+/*.logo-menu.navbar-shrink .ubermenu-skin-black-white-2 ul li.ubermenu-item-level-2{
+	color: #fff;
+}*/
+
+/*Archive Page*/

@@ -1,0 +1,14 @@
+
+.es{
+    margin: 0px 0px 10px 0px; 
+    background: #997300;padding: 10px;
+    color: #fff;
+    border: 3px dashed #1c506c;
+}
+
+
+
+    .google-map iframe{
+        width: 200px;
+        height: 100px;
+    }
