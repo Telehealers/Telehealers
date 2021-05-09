@@ -35,10 +35,11 @@
                         </div>
                     </div>
                     
-                <div class="panel-body">
-                        <table width="100%" class="table table-striped table-bordered table-hover" id="appointment">
+                <div class="panel-body"><div class="table-responsive">
+                        <table width="100%" class="table table-striped table-bordered table-hover" id="patient_list">
                             <thead>
                                 <tr>
+								    <th class="all"><?php echo display('doctor_name'); ?></th>
                                     <th class=""><?php echo display('patient_name');?></th>
                                     <th class="none"><?php echo display('patient_id');?></th>
                                     <th class="all"><?php echo display('phone_number');?></th>
@@ -47,7 +48,8 @@
                                     <th class="all"><?php echo display('venue');?></th>
                                     <th class="all"><?php echo display('sequence');?></th>
                                     <th class="all"><?php echo display('date');?></th>
-                                    <th class="desktop"><?php echo display('sms');?></th>
+                                    <th class="all">Meeting URL</th>
+                                    <th class="all">Meeting Password</th>
                                     <th class="desktop"><?php echo display('action');?></th>
                                 </tr>
                             </thead>
@@ -61,20 +63,51 @@
                                      ->get()
                                      ->num_rows();
 
-                                   
+                                   $sql2 = "select * from appointment_tbl where appointment_id= '".$value->appointment_id."'";
+									$res_doc = $this->db->query($sql2);
+									$result_doc = $res_doc->result_array();
+									if(is_array($result_doc) && count($result_doc)>0){
+										$symt1 = $result_doc[0]['symt1'];
+										$symt2 = $result_doc[0]['symt2'];
+										$doctor_id = $result_doc[0]['doctor_id'];
+									}
+									
+									$SQL = 'select doctor_name from doctor_tbl where doctor_id = "'.$doctor_id.'"';
+		
+									$query = $this->db->query($SQL);
+
+									$result2 = $query->result_array();
+									$doctor_name = '-';
+									if(is_array($result2) && count($result2)>0){
+										$doctor_name = $result2[0]['doctor_name'];
+									}
                                 ?>
 
-                                    <tr <?php echo ($result>0)?'class="green"':''?> >
+                                    <tr>
+									<td><?php echo html_escape($doctor_name);?></td>
                                     <td><?php echo html_escape($value->patient_name);?></td>
                                     <td><?php echo html_escape($value->patient_id);?></td>
                                     <td><?php echo html_escape($value->patient_phone);?></td>
                                     <td><?php echo html_escape($value->problem);?></td>
                                     <td><?php echo html_escape($value->appointment_id);?></td>
                                     <td><?php echo html_escape($value->venue_name);?></td>
-                                    <td><?php echo html_escape($value->sequence);?></td>
-                                    <td><?php echo html_escape($value->date);?></td>
                                     <td>
-                                        <?php echo '<a class="btn btn-sm btn-primary" href="javascript:void(0)" title="send sms" onclick="sms_send('."'".$value->appointment_id."'".')"><i class="fa fa-envelope-o" aria-hidden="true"></i> SMS</a>';?>
+									
+									<?php 
+									$app_time = date('h:i A', strtotime($value->sequence));
+									?>
+									<?php echo $app_time ;?>
+									</td>
+                                    <td><?php 
+									$app_date = date('jS F Y',strtotime($value->date));
+									echo $app_date;
+									?></td>
+                                    <td>
+                                        <a href="<?php echo $symt1;?>" target="_blank"><?php echo $symt1;?></a>
+                                    </td>
+										
+                                    <td>
+										<?php echo $symt2;?>
                                     </td>
                                     <td class="text-center">
                                     <?php if(empty($result) AND $this->session->userdata('user_type')==1) { ?>
@@ -83,7 +116,7 @@
                                     <a class="btn btn-xs btn-primary" data-original-title="View Prescription" target="_blank" href="<?php echo base_url();?>admin/Prescription_controller/my_prescription/<?php echo html_escape($value->appointment_id); ?>"><i class="fa fa-eye"></i></a>   
                                     <?php } ?> 
                                         <a class="btn btn-xs btn-success" data-original-title="View Appointment" target="_blank" href="<?php echo base_url();?>admin/Basic_controller/my_appointment/<?php echo $value->appointment_id; ?>"><i class="fa fa-print"></i></a>
-                                        <a class="btn btn-xs btn-info" data-original-title="View History" target="_blank" href="<?php echo base_url();?>History_controller/patient_history/<?php echo html_escape($value->patient_id); ?>"><i class="fa fa-history" aria-hidden="true"></i></a>
+                                        <!--<a class="btn btn-xs btn-info" data-original-title="View History" target="_blank" href="<?php echo base_url();?>History_controller/patient_history/<?php echo html_escape($value->patient_id); ?>"><i class="fa fa-history" aria-hidden="true"></i></a>-->
                                         
                                     </td>
                                   
@@ -92,7 +125,7 @@
                                     }
                                 ?>
                             </tbody>
-                        </table>
+                        </table>				</div>
                     </div>
                 </div>
             </div>

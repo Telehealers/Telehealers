@@ -108,6 +108,24 @@ class Appointment extends CI_Controller {
 		
 		//get doctor list for appointmaent
 		$data['doctor_info_for_appo'] = $this->doctor_model->getDoctorListByselect();
+		
+		$language_arr = array();
+		$language_str = $this->doctor_model->getDoctorListByselect();
+		if(is_array($language_str) && count($language_str)>0){
+			foreach($language_str as $val){
+				$lan_str = trim($val['language']);
+				if($lan_str!=""){
+					$lan_arr = explode(',',$lan_str);
+					foreach($lan_arr as $lang){
+						$language_arr[] = trim($lang);
+					}	
+				}				
+			}
+		}
+		$language_arr = array_unique($language_arr);
+		//echo "<pre>";print_r($language_arr);die();	
+		
+		$data['language_arr'] = $language_arr;
 
         $meta_sql = "select * from metadata where id = '4'";
 		$res_meta = $this->db->query($meta_sql);
@@ -403,7 +421,7 @@ function randstrGenapp($len)
 			
 			$app_date_time = date('Y-m-d',strtotime($info->date)).'T'.$info->sequence;
 
-			$metting_pass = '123456768';
+			$meeting_pass = '123456768';
 			$response_z = $client->request('POST', '/v2/users/me/meetings', [
 				"headers" => [
 					"Authorization" => "Bearer $accessToken"
@@ -413,7 +431,7 @@ function randstrGenapp($len)
 					"type" => 2,
 					"start_time" => $app_date_time,
 					"duration" => $per_patient_time, // 30 mins
-					"password" => $metting_pass
+					"password" => $meeting_pass
 				]
 			]);
 
@@ -465,7 +483,7 @@ function randstrGenapp($len)
                                             use the contact details below to get in touch with us.</p>
 										<h2 style="text-align:center;font-weight:600;color:#356d82">Zoom Meeting Details:</h2>
 										<p>Zoom meeting URL: '.$zoom_meeting_url.',</p>
-										<p>Zoom meeting Password: '.$metting_pass.',</p>	
+										<p>Zoom meeting Password: '.$meeting_pass.',</p>	
                                         <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Appointment ID - ('.$appointment_id.')</h2><h1></h1>
                                         <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Other Details:</h2><h1></h1>
                                         <p>Location Name: '.$venue_name.'</p>
@@ -727,14 +745,15 @@ function randstrGenapp($len)
 			$doctor_id = $this->input->post('doc_idd',TRUE);
 			$sequence = $this->input->post('slot_idd',TRUE);
 			$schedul_id = $this->input->post('sh_idd',TRUE);
+			
 		}else{
 			$doctor_id = $this->input->post('doctor_id');
 			$schedul_id = $this->input->post('schedul_id',TRUE);
 		}
 		
 		
-		
-		//echo $doctor_id.'/'.$sequence;die(); 
+		//echo $doctor_id."/".$sequence."/".$schedul_id;die(); 
+		//echo $schedul_id;die(); 
 		/* if($this->input->post('doctor_id')){
 			$doctor_id = $this->input->post('doctor_id');
 		}else{
@@ -751,7 +770,9 @@ function randstrGenapp($len)
 		$p_phone = $this->input->post('p_phone',TRUE);
 		$p_age = $this->input->post('p_age',TRUE);
 		$p_gender = $this->input->post('p_gender',TRUE);
-		$existing_user = $this->input->post('existing_user',TRUE);
+		//$existing_user = $this->input->post('existing_user',TRUE);
+		$existing_user = 0;
+		$patient_id = "P".date('y').strtoupper($this->randstrGenapp(5));
 		
 		$patient_exist=0;
 		$sql_log = "select * from log_info where email = '$p_email'";
@@ -765,8 +786,22 @@ function randstrGenapp($len)
 			$result_pat = $res_pat->result_array();
 			if(is_array($result_pat) && count($result_pat)>0){
 				$patient_id = $result_pat[0]['patient_id'];
+				$existing_user=1;
+			}else{
+				$patient_data = array(
+					'patient_id' => $patient_id,
+					'log_id' => $log_id,
+					'patient_name' => $p_name,
+					'patient_email' => $p_email,
+					'patient_phone' => $p_phone,
+					'sex' => $p_age,
+					'age' => $p_gender,
+					'doctor_id' => $doctor_id
+				);	
+				$this->db->insert('patient_tbl', $patient_data);
 			}
 		}else{
+		    
 			//$log_id=0;
 			$p_password = md5('PTele@123!');
 			$pass_p = 'PTele@123!';
@@ -806,12 +841,17 @@ function randstrGenapp($len)
                             <td valign="middle" width="100%" style="text-align:left; padding: 0 2.5em;">
                                 <div class="product-entry">
                                     <div class="text">
-                                        <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Patient Account Details:</h2>
+                                        <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Dear '.$p_name.':</h2>
+										<p>Thanks for choosing telehealers.in</p>
+										<p>Kindly visit Your dashboard using registered mobile number.</p>
+										<p>Url:  https://telehealers.in/Userlogin</p>
                                         <p>Name: '.$p_name.'</p>
                                         <p>ID: '.$patient_id.'</p>
 										<p>Email: '.$p_email.'</p>
-										<p>Password: '.$pass_p.'</p>
-										
+										<p>&nbsp;</p>
+										<p>Keep in touch during this tough time! </p>
+										<p>Kindly write us back without any hasitation if you find any issues at support@telehealers.in</p>
+                                        
 										
                                     </div>
                                 </div>
@@ -851,11 +891,11 @@ function randstrGenapp($len)
 			//echo "<pre>";print_r($result);die();
 			if(is_array($result_p) && count($result_p)>0){
 				$patient_id = $result_p[0]['patient_id'];
-				$patient_name = $result_p[0]['patient_name'];
-				$patient_phone = $result_p[0]['patient_phone'];
-				$sex = $result_p[0]['sex'];
-				$age = $result_p[0]['age'];
-				if($p_name==""){
+				//$patient_name = $result_p[0]['patient_name'];
+				//$patient_phone = $result_p[0]['patient_phone'];
+				//$sex = $result_p[0]['sex'];
+				//$age = $result_p[0]['age'];
+				/* if($p_name==""){
 					$p_name = $patient_name;
 				}
 				if($p_phone==""){
@@ -866,13 +906,13 @@ function randstrGenapp($len)
 				}
 				if($p_gender==""){
 					$p_gender = $sex;
-				}
+				} */
 				$sql_u = "update patient_tbl set patient_name = '$p_name', patient_phone = '$p_phone', sex = '$p_gender', age = '$p_age' where patient_email = '$p_email'";	
 				$this->db->query($sql_u);
 			}
 		
 		}else{
-			$patient_id = "P".date('y').strtoupper($this->randstrGenapp(5));
+			
 		}
 		
 		$create_date = date('Y-m-d h:i:s');
@@ -974,6 +1014,12 @@ function randstrGenapp($len)
 			}
 		}	
 		
+		$sql_rk = "select * from token2 where id = '1'";
+		$res_rk = $this->db->query($sql_rk);
+		$result_rk = $res_rk->result_array();
+		if(is_array($result_rk) && count($result_rk)>0){
+			$refershToken = $result_rk[0]['refersh_token'];
+		}
 		
 		$sql_tk = "select * from token where id = '1'";
 		$res_tk = $this->db->query($sql_tk);
@@ -981,26 +1027,54 @@ function randstrGenapp($len)
 		if(is_array($result_tk) && count($result_tk)>0){
 			$accessToken = $result_tk[0]['access_token'];
 		}
-		$client = new GuzzleHttp\Client(['base_uri' => 'https://zoom.us']);
+		
+		if($refershToken!="" && $accessToken!=""){
+			$client = new GuzzleHttp\Client(['base_uri' => 'https://zoom.us']);
 			
-		$app_date_time = date('Y-m-d',strtotime($date)).'T'.$sequence;
+			//$app_date_time = date('Y-m-d',strtotime($date)).'T'.$sequence;
+			
+			//$app_date_time = date('jS F Y',strtotime($date)).' - '.date('h:i A', strtotime($sequence));
+			
+			$date_g = '12-07-2021';
+			$sequence_g = '6:15 PM';
+			//$app_date_time = '2021-06-20T16:45:00Z';
+			//$app_date_time = '2021-05-15T12:00:00Z';
+			//2021-05-05T19:00Z
+			$app_date_time = date('Y-m-d',strtotime($date)).'T'.$sequence.":00";
+			//die();
 
-		$metting_pass = '123456768';
-		$response_z = $client->request('POST', '/v2/users/me/meetings', [
-			"headers" => [
-				"Authorization" => "Bearer $accessToken"
-			],
-			'json' => [
-				"topic" => "Appointment Metting - $appointment_id",
-				"type" => 2,
-				"start_time" => $app_date_time,
-				"duration" => $per_patient_time, // 30 mins
-				"password" => $metting_pass
-			]
-		]);
+			$meeting_pass = '123456768';
+			
+			$response_z = $client->request('POST', '/v2/users/me/meetings', [
+				"headers" => [
+					"Authorization" => "Bearer $accessToken"
+				],
+				'json' => [
+					"topic" => "Appointment Meeting - $appointment_id",
+					"type" => 2,
+					"start_time" => $app_date_time,
+					"duration" => $per_patient_time, // 30 mins
+					"timezone" => 'Asia/Calcutta', // 30 mins
+					"password" => $meeting_pass
+				]
+			]);
 
-		$data_zoom = json_decode($response_z->getBody());
-		$zoom_meeting_url = $data_zoom->join_url;
+			$data_zoom = json_decode($response_z->getBody());
+			$zoom_meeting_url = $data_zoom->join_url;
+		}else{
+			$meeting_pass = '';
+			$zoom_meeting_url = '';
+		}
+		
+		
+		
+		$symt1 = $zoom_meeting_url;
+		$symt2 = $meeting_pass;
+		
+		$sql_m = "update appointment_tbl set symt1 = '".$symt1."',symt2 = '".$symt2."' where appointment_id = '$appointment_id'";
+		$this->db->query($sql_m);
+		
+		
 		
 		$message = '<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #f1f1f1;">
     <center style="width: 100%; background-color: #f1f1f1;">
@@ -1032,11 +1106,11 @@ function randstrGenapp($len)
                                 <div class="product-entry">
                                     <div class="text">
                                         <p>Hey <strong>'.$p_name.'</strong>,</p>
-                                        <p>Our staff member has confirmed you for a '.$service2.' appointment on '.date('d F Y',strtotime($date)).' with Dr. '.$doctor_name.'. If you have questions before your appointment,
+                                        <p>Our staff member has confirmed you for a '.$service2.' appointment on '.date('jS F Y',strtotime($date)).' with Dr. '.$doctor_name.'. If you have questions before your appointment,
                                             use the contact form with appointment ID to get in touch with us.</p>
 										<h2 style="text-align:left;font-weight:600;color:#356d82">Zoom Meeting Details:</h2> 
 										<p>Zoom meeting URL: '.$zoom_meeting_url.',</p>
-										<p>Zoom meeting Password: '.$metting_pass.',</p>	
+										<p>Zoom meeting Password: '.$meeting_pass.',</p>	
                                         <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Appointment ID - ('.$appointment_id.')</h2><h1></h1>
                                         <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Doctor Details:</h2><h1></h1>
                                         <p>Name: '.$doctor_name.'</p>
@@ -1048,7 +1122,7 @@ function randstrGenapp($len)
 										<p>Age: '.$p_age.'</p>
 										<p>Gender: '.$p_gender.',</p>
 										<p>Tell us your symptom or health problem: '.$p_cc.'</p>
-										<p>Appointment Date: '.$date.'</p>
+										<p>Appointment Date: '.date('jS F Y',strtotime($date)).'</p>
 										<p>Appointment Time: '.date('h:i A', strtotime($sequence)).'</p>
 										<p>Appointment ID: '.$appointment_id.'</p>
 										

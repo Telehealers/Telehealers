@@ -38,16 +38,31 @@ class Appointment_model extends CI_model {
     */
     public function get_appointment_list()
     {
-        $result = $this->db->select("action_serial.*,doctor_tbl.*,
+		$result = $this->db->select("appointment_tbl.*,doctor_tbl.*,
                   patient_tbl.*,
                   venue_tbl.*,")
-                  ->from('action_serial')
-                  ->join('patient_tbl', 'patient_tbl.patient_id = action_serial.patient_id','left')
-                  ->join('doctor_tbl', 'doctor_tbl.doctor_id = action_serial.doctor_id','left')
-                  ->join('venue_tbl', ' venue_tbl.venue_id = action_serial.venue_id','left')
+                  ->from('appointment_tbl')
+                  ->join('patient_tbl', 'patient_tbl.patient_id = appointment_tbl.patient_id','left')
+                  ->join('doctor_tbl', 'doctor_tbl.doctor_id = appointment_tbl.doctor_id','left')
+                  ->join('venue_tbl', ' venue_tbl.venue_id = appointment_tbl.venue_id','left')
                   ->get()->result(); 
+				  
         return $result;    
-    }		 public function get_appointment_list_by_id($id)    {        $result = $this->db->select("action_serial.*,doctor_tbl.*,                  patient_tbl.*,                  venue_tbl.*,")                  ->from('action_serial')				  				  ->where('doctor_tbl.doctor_id',$id)                  ->join('patient_tbl', 'patient_tbl.patient_id = action_serial.patient_id','left')                  ->join('doctor_tbl', 'doctor_tbl.doctor_id = action_serial.doctor_id','left')                  ->join('venue_tbl', ' venue_tbl.venue_id = action_serial.venue_id','left')                  ->get()->result();         return $result;        }
+    }		
+
+	public function get_appointment_list_by_id($id)    {
+
+        $result = $this->db->select("appointment_tbl.*,doctor_tbl.*, 
+		patient_tbl.*,                 
+		venue_tbl.*,")               
+		->from('appointment_tbl')			
+		->where('doctor_tbl.doctor_id',$id)  
+		->join('patient_tbl', 'patient_tbl.patient_id = appointment_tbl.patient_id','left')
+		->join('doctor_tbl', 'doctor_tbl.doctor_id = appointment_tbl.doctor_id','left')
+		->join('venue_tbl', ' venue_tbl.venue_id = appointment_tbl.venue_id','left')
+		->get()->result();       
+		
+		return $result;        }
 
 
 

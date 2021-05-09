@@ -59,29 +59,18 @@
   gtag('config', 'G-Y9P95E4VWH');
 
 </script>
-
-
+<script id="mcjs">!function(c,h,i,m,p){m=c.createElement(h),p=c.getElementsByTagName(h)[0],m.async=1,m.src=i,p.parentNode.insertBefore(m,p)}(document,"script","https://chimpstatic.com/mcjs-connected/js/users/e836e1578317f3389cedf8f6a/0bf682a738edbb1cd96720c12.js");</script>
 
 <script type="text/javascript">
-
 var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-
 (function(){
-
 var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-
 s1.async=true;
-
-s1.src='https://embed.tawk.to/608b89375eb20e09cf37f9d4/1f4gh00vt';
-
+s1.src='https://embed.tawk.to/608c0bf662662a09efc3afa9/1f4hgtf3e';
 s1.charset='UTF-8';
-
 s1.setAttribute('crossorigin','*');
-
 s0.parentNode.insertBefore(s1,s0);
-
 })();
-
 </script>
 
 </head>
@@ -160,10 +149,11 @@ $hello = GeraHash(5);
                                 <ul>
                                     <li><a href="<?php echo base_url(); ?>Patient">Appointments</a></li>
                                     <li class=""><a href="<?php echo base_url(); ?>Patientprofile">Update Profile</a></li>
-									<li class=""><a href="<?php echo base_url(); ?>Patientprofilepassword">Update Password</a></li>
 									
-									<li class="active" ><a href="<?php echo base_url(); ?>Patientreports">Upload Reports</a></li>
-                                    <li><a href="<?php echo base_url();?>logout">Logout</a></li>
+									
+									<li class="active"><a href="<?php echo base_url(); ?>Patientreports">Upload Reports</a></li>
+									<li><a href="<?php echo base_url(); ?>Patientprescription">Prescription</a></li>
+                                    <li><a href="<?php echo base_url();?>Patient/logout">Logout</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -419,6 +409,11 @@ $(document).ready(function(){
 
 
 
+function preventBack() { 
+window.history.forward(); 
+}  
+setTimeout("preventBack()", 0);  
+window.onunload = function () { null };  
 
 
 

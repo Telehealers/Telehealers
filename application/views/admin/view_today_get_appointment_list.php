@@ -33,7 +33,8 @@
                     </div>
                     
                 <div class="panel-body">
-                        <table width="100%" class="table table-striped table-bordered table-hover" id="appointment">
+				<div class="table-responsive">
+                        <table width="100%" class="table table-striped table-bordered table-hover" id="patient_list">
                             <thead>
                                 <tr>																		<th class="all"><?php echo display('doctor_name'); ?></th>
                                     <th class=""><?php echo display('patient_name');?></th>
@@ -90,6 +91,7 @@
                                 <?php } ?>
                             </tbody>
                         </table>
+						</div>
                     </div>
                 </div>
             </div>

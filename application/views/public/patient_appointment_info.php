@@ -46,89 +46,7 @@ $hello = GeraHash(5);
 </style>
 <body>
 
-    <header class="header">
-        <div class="topbar">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-6 col-sm-8">
-                        <div class="top_content">
-                            <!--<p>Certifiedd Therapists from AIIMS Delhi | <a href="#">Join Mental Health</a></p>-->
-                            <p><?php //echo (!empty(html_escape($info->phone->details))?html_escape($info->phone->details):null); ?> <a href="#"><?php echo (!empty(html_escape($info->email->details))?html_escape($info->email->details):null); ?></a></p>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-sm-4">
-                        <div class="top_social">
-                            <ul>
-                                <li>
-                                    <a href="<?php echo (!empty(html_escape($info->facebook->details))?html_escape($info->facebook->details):null); ?>" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                                </li>
-                                <li>
-                                    <a href="<?php echo (!empty(html_escape($info->twitter->details))?html_escape($info->twitter->details):null); ?>" target="_blank"><i class="fab fa-twitter"></i></a>
-                                </li>
-                                <li>
-                                    <a href="<?php echo (!empty(html_escape($info->youtube->details))?html_escape($info->youtube->details):null); ?>" target="_blank"><i class="fab fa-youtube"></i></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="menubar">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
-                        <nav class="navbar navbar-expand-md">
-                            <div class="container-fluid">
-                                <a class="navbar-brand" href="<?php echo base_url()?>">
-                                    <img src="<?php echo (!empty(html_escape($info->logo->picture))?html_escape($info->logo->picture):null); ?>" alt="Logo" />
-                                </a>
-                                <div class="buttonmenu">
-                                    <input type="checkbox" class="openSidebarMenu" id="openSidebarMenu">
-                                    <label for="openSidebarMenu" class="sidebarIconToggle">
-                                      <div class="spinner diagonal part-1"></div>
-                                      <div class="spinner horizontal"></div>
-                                      <div class="spinner diagonal part-2"></div>
-                                    </label>
-                                </div>
-                                <div class="main_menu_custom" id="custom_menu">
-                                    <ul class="navbar-nav ml-auto ">
-                                        <li class="active">
-                                            <a href="#home">Home</a>
-                                        </li>
-                                        <!--<li class="dropdown">
-                                            <a href="#" class="dropdown-toggle dropdown-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Case Studies</a>
-                                            <ul class="dropdown-content">
-                                                <li>
-                                                    <a href="#">Home</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#">About Us</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#">Blog</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#">Contact Us</a>
-                                                </li>
-                                            </ul>
-                                        </li>-->
-										<!--<li><a href="#appointment">Appointment</a></li>-->
-										<li><a href="<?php echo base_url();?>#about">About Us</a></li>
-										<li><a href="<?php echo base_url();?>#doctors">Doctors</a></li>
-										<li><a href="<?php echo base_url();?>Appointment">Appointment</a></li>
-										<li><a href="<?php echo base_url();?>#testimonials">Testimonials</a></li>
-										<li><a href="<?php echo base_url();?>blogs">Blog</a></li>
-										<li><a href="<?php echo base_url();?>#faq">FAQs</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </nav>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
+    <?php $this->load->view('header.php')?>
 
    
 	
@@ -206,7 +124,10 @@ $hello = GeraHash(5);
 							<p class="h2"><?php echo display('appointment_information_page')?></p>
 						</div>
 
-
+<?php
+		$app_time = date('h:i A', strtotime($print->sequence));
+		$app_date = date('jS F Y',strtotime($print->date));
+		?>
 
 						<div class="information">
 							<div class="information-details"  >
@@ -214,8 +135,8 @@ $hello = GeraHash(5);
 									<li><?php echo display('appointment_id')?>: <span class="pull-right"> <?php echo html_escape($print->appointment_id) ;?></span></li>
 									<li><?php echo display('name')?> : <span class="pull-right"><?php echo html_escape(@$print->patient_name) ;?></span></li>
 									<li><?php echo display('patient_id')?> : <span class="pull-right"><?php echo html_escape(@$print->patient_id) ;?></span></li>
-									<li><?php echo display('Sequence')?> : <span class="pull-right"><?php echo html_escape(@$print->sequence) ;?></span></li>
-									<li><?php echo display('date')?> : <span class="pull-right"><?php echo date('d M, Y' , strtotime(@$print->date)) ;?> </span></li>
+									<li><?php echo display('Sequence')?> : <span class="pull-right"><?php echo $app_time ;?></span></li>
+									<li><?php echo display('date')?> : <span class="pull-right"><?php echo $app_date ;?> </span></li>
 									<li><?php echo display('doctor')?> : <span class="pull-right"><?php echo html_escape(@$print->doctor_name) ;?></span></li>
 									<!--<li><?php echo display('department')?> : <span class="pull-right"> <?php echo html_escape(@$print->department_name);?></span></li>-->
 								</ul>
@@ -274,11 +195,7 @@ $hello = GeraHash(5);
 		}
 		if($fees==2){
 			?>
-           <div class="paypal-div">
-                Paid Service
-                <a target="_blank" href="<?php echo base_url();?>admin/payment_method/Payment/pay_with_doctor/<?php echo html_escape($print->appointment_id);?>">
-                Make Payment</a>
-          </div>
+          
         <?php
 		}
            }?>
@@ -292,12 +209,7 @@ $hello = GeraHash(5);
 		<?php 
 			}else{
 		?>
-		    <div class="container">
-            <div class="alert alert-block alert-danger fade in">
-                 <strong><?php echo display('Please_Click_to_back_home')?></strong>
-                <a href="<?php echo base_url();?>" class="btn btn-large btn-primary"><?php echo display('back_home')?></a>
-            </div>
-        </div>
+		    
 		<?php } ?>
                     
                     

@@ -78,7 +78,16 @@
                                                     <div class="had">
 
                                                         <div class="col-md-2 pid" >
-                                                            <input type="text" autocomplete="off" name="p_id" id="p_id" required onkeyup="loadNameOne(this.value);" class="form-control" placeholder="<?php echo display('patient_id')?>"> 
+                                                            <!--<input type="text" autocomplete="off" name="p_id" id="p_id" required onkeyup="loadNameOne(this.value);" class="form-control" placeholder="<?php echo display('patient_id')?>">--> 
+															
+															<select class="form-control"  name="p_id" id="p_id" onChange="loadNameOne(this.value);" required>
+															<option value="">Select Patient</option>
+															<?php if(is_array($patient_info) && count($patient_info)>0){?>
+															<?php foreach($patient_info as $val){?>
+															<option value="<?php echo $val->patient_id?>"><?php echo $val->patient_id?> (<?php echo $val->patient_name?>)</option>
+															<?php }} ?>
+														</select>
+														
                                                         </div>
 
                                                         <div class="col-md-2">
@@ -261,7 +270,7 @@
                                         <div class="form-group row">
                                             <div class="col-sm-offset-9 col-sm-6">
                                                 <button type="reset" class="btn btn-danger"><?php echo display('reset')?></button>
-                                                <button type="submit" class="btn btn-success"><?php echo display('submit')?></button>
+                                                <button type="submit" class="btn btn-success"><?php //echo display('submit')?>Send to Patient</button>
                                             </div>
                                         </div>
                                 </div>

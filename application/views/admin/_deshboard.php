@@ -18,10 +18,25 @@
                         </ol>
                     </div>
                 </section>
+<?php	
+
+$user_type = $this->session->userdata('user_type');
+
+if($user_type==1){
+	$user_id = $this->session->userdata('doctor_id');	
+}
+if($user_type==2){
+	$user_id = $this->session->userdata('user_id');
+}
+if($user_id==1){
+?>
+
+
+
 
                 
                 <!-- Main content -->
-                <section class="content">
+                <section class="content" style="display:;">
                     <div class="row">
                         <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
                             <div class="panel panel-bd">
@@ -126,7 +141,7 @@
                         </div>
 
 
-                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
+                        <!--<div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
                             <div class="panel panel-bd">
                              <a href="<?php echo base_url();?>admin/Sms_report_controller/sms_list">
                                 <div class="panel-body">
@@ -193,7 +208,7 @@
                                 </div>
                             </a>    
                             </div>
-                        </div>
+                        </div>-->
                     </div>
 
                     <div class="row">
@@ -228,7 +243,136 @@
 
                     </div>
                     
-                </section> <!-- /.content -->
+                </section>
+
+<?php }else{?>
+
+			<!--<section class="content" style="display:;"> 
+
+				<div class="row">                 
+
+					<div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">	
+
+						<h3><?php echo 'Welcome'?></h3>		
+
+					</div>						
+
+				</div>					
+
+			</section>-->
+			
+			<section class="content" style="min-height:400px;">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
+                            <div class="panel panel-bd">
+                                <a href="<?php echo base_url();?>patient_list">
+                                    <div class="panel-body">
+                                        <div class="statistic-box">
+                                            <h2><span class="count-number"><?php echo html_escape(@$total_patient);?></span> </h2>
+                                                <div class="small"> <?php echo display('total_patient')?> </div>
+                                            <div class="sparkline1 text-center"></div>
+                                        </div>
+                                        <div class="icon"><i class="ti-user"></i></div>
+                                    </div>
+                                </a>    
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
+                            <div class="panel panel-bd">
+                            <a href="<?php echo base_url();?>admin/Patient_controller/today_patient_list">
+                                <div class="panel-body">
+                                    <div class="statistic-box">
+                                        <h2><span class="count-number"><?php echo html_escape(count($today_patient));?></span> </h2>
+                                        <div class="small"><?php echo display('today_patient')?></div>
+                                        <div class="sparkline2 text-center"></div>
+                                    </div>
+                                    <div class="icon"><i class="ti-user"></i></div>
+                                </div>
+                            </a>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
+                            <div class="panel panel-bd">
+                            <a href="<?php echo base_url();?>admin/Appointment_controller/today_appointment_list">
+                                <div class="panel-body">
+                                   <div class="statistic-box">
+                                        <h2><span class="count-number"><?php echo html_escape(count($to_day_appointment));?></span></h2>
+                                        <div class="small"><?php echo display('today_appointment')?></div>
+                                    </div>
+                                       <div class="icon"><i class="ti-notepad"></i></div>
+                                </div>
+                            </a>    
+                            </div>
+                        </div>
+                        
+                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
+                            <div class="panel panel-bd">
+                            <a href="<?php echo base_url();?>admin/Appointment_controller/today_gate_appointment_list">
+                                <div class="panel-body">
+                                    <div class="statistic-box">
+                                        <h2><span class="count-number"><?php echo html_escape(count(@$to_day_get_appointment));?></span></h2>
+                                        <div class="small"><?php echo display('new_appointment')?></div>
+                                    </div>
+                                    <div class="icon"><i class="ti-notepad"></i></div>
+                                </div>
+                            </a>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
+                            <div class="panel panel-bd">
+                            <a href="<?php echo base_url();?>admin/Appointment_controller/appointment_list">
+                                <div class="panel-body">
+                                    <div class="statistic-box">
+                                        <h2><span class="count-number"><?php echo html_escape(@$total_appointment);?></span></h2>
+                                        <div class="small"><?php echo display('total_appointment')?></div>
+                                    </div>
+                                    <div class="icon"><i class="ti-notepad"></i></div>
+                                </div>
+                            </a>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
+                            <div class="panel panel-bd">
+                            <a href="<?php echo base_url();?>admin/Prescription_controller/today_prescription_list">
+                                <div class="panel-body">
+                                    <div class="statistic-box">
+                                        <h2><span class="count-number"><?php echo html_escape(count(@$today_prescription)); ?></span></h2>
+                                        <div class="small"></i> <?php echo display('today_prescription')?></div>
+                                        
+                                    </div>
+                                     <div class="icon"><i class="ti-notepad"></i></div>
+                                </div>
+                            </a>    
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
+                            <div class="panel panel-bd">
+                             <a href="<?php echo base_url();?>admin/Prescription_controller/prescription_list">
+                                <div class="panel-body">
+                                    <div class="statistic-box">
+                                        <h2><span class="count-number"><?php echo html_escape(@$total_prescription) ?></span></h2>
+                                        <div class="small"><?php echo display('total_prescription')?></div>
+                                        
+                                    </div>
+                                     <div class="icon"><i class="ti-notepad"></i></div>
+                                </div>
+                            </a>    
+                            </div>
+                        </div>
+
+                    </div>
+
+                    
+                    
+                </section>
+
+<?php } ?>
+				<!-- /.content -->
             </div> <!-- /.content-wrapper -->
 
             <!-- dynamic chart -->

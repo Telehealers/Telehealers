@@ -6,7 +6,7 @@
     newproducts.owlCarousel({ autoplay: true, nav: false, animateIn: 'fadeIn', smartSpeed: 1000, dots: false, margin: 0, loop: true, navText: ['<i class="fas fa-caret-left"></i>', '<i class="fas fa-caret-right"></i>'], responsiveClass: true, responsive: { 0: { items: 1, }, 575: { items: 1, }, 991: { items: 1, }, 992: { items: 1, } } });
 
     var newproducts = $("#home_testimonail_slider");
-    newproducts.owlCarousel({ autoplay: true, nav: false, animateIn: 'fadeIn', mouseDrag: false, smartSpeed: 1000, dots: true, margin: 20, loop: true, responsiveClass: true, responsive: { 0: { items: 1, }, 575: { items: 1, }, 991: { items: 1, }, 992: { items: 1, } } });
+    newproducts.owlCarousel({ autoplay: true, nav: false, animateIn: 'fadeIn',  smartSpeed: 1000, dots: true, margin: 20, loop: true, responsiveClass: true, responsive: { 0: { items: 1, }, 575: { items: 1, }, 991: { items: 1, }, 992: { items: 1, } } });
 	
 	var newproducts = $("#home_faq_slider");
     newproducts.owlCarousel({ autoplay: true, nav: false, animateIn: 'fadeIn', mouseDrag: false, smartSpeed: 1000, dots: true, margin: 20, loop: true, responsiveClass: true, responsive: { 0: { items: 1, }, 575: { items: 1, }, 991: { items: 2, }, 992: { items: 2, } } });

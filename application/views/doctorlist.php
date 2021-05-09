@@ -29,18 +29,18 @@
 
   gtag('config', 'G-Y9P95E4VWH');
 </script>
-
 <script type="text/javascript">
 var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
 (function(){
 var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
 s1.async=true;
-s1.src='https://embed.tawk.to/608b89375eb20e09cf37f9d4/1f4gh00vt';
+s1.src='https://embed.tawk.to/608c0bf662662a09efc3afa9/1f4hgtf3e';
 s1.charset='UTF-8';
 s1.setAttribute('crossorigin','*');
 s0.parentNode.insertBefore(s1,s0);
 })();
 </script>
+
 </head>
 <?php
 function GeraHash($qtd){
@@ -82,11 +82,11 @@ $hello = GeraHash(5);
 					<?php if($doctor['picture']!=""){?>
                         <img src="<?php echo $doctor['picture'];?>" alt="">
 					<?php }else{ ?>
-						<img src="<?php echo base_url();?>web_assets2/images/DoctorImg.jpg" alt="">
+						<img src="<?php echo base_url();?>web_assets2/images/user_img.png" alt="">
 					<?php } ?>	
                         <h1><?php echo $doctor['doctor_name'];?></h1>
                         <span><?php echo $doctor['specialist'];?></span>
-                        <p><?php echo $doctor['designation'];?></p>
+                        <p><?php echo $doctor['degrees'];?></p>
 						<p><?php echo $doctor['language'];?></p>
                     </div>
                 </div>
@@ -195,6 +195,11 @@ $(document).ready(function(){
 
 
 
+function preventBack() { 
+window.history.forward(); 
+}  
+setTimeout("preventBack()", 0);  
+window.onunload = function () { null };  
 
 </script>	
 </body>

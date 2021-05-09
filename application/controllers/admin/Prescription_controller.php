@@ -18,6 +18,7 @@ class Prescription_controller extends CI_Controller {
 
         $this->load->helper('form');
 		$this->load->library('form_validation');
+		$this->load->model('admin/Patient_model','patient_model');
         $this->load->model('admin/Prescription_model','prescription_model');
 	 	$this->load->model('admin/Venue_model','venue_model');
 	 	$this->load->model('admin/Overview_model','overview_model');
@@ -27,6 +28,10 @@ class Prescription_controller extends CI_Controller {
 	 	$result = $this->db->select('*')->from('web_pages_tbl')->where('name','timezone')->get()->row();
 		
 		date_default_timezone_set(@$result->details);
+		
+		$this->load->model('admin/email/Email_model','email_model');
+        $this->load->library('email');
+		
 	}
 
 
@@ -35,7 +40,19 @@ class Prescription_controller extends CI_Controller {
 #---------------------------------------------- 
 	public function prescription_list()
 	{
-	 	$data['Prescription'] = $this->prescription_model->prescription_list();
+		$user_type = $this->session->userdata('user_type');
+		if($user_type==1){
+			$user_id = $this->session->userdata('doctor_id');	
+			if($user_id == 1){
+				$data['Prescription'] = $this->prescription_model->prescription_list();
+			}else{
+				$data['Prescription'] = $this->prescription_model->prescription_list_doc_id($user_id);
+			}
+		}
+		if($user_type==2){		
+			$data['Prescription'] = $this->prescription_model->prescription_list();
+		}
+	 	
 	 	$this->load->view('admin/_header',$data);
 		$this->load->view('admin/_left_sideber');
 		$this->load->view('admin/view_prescription_list');
@@ -100,6 +117,9 @@ class Prescription_controller extends CI_Controller {
 	 	$this->db->insert('prescription',$pdata);
 	    // get last insert id
 	    $prescription_id = $this->db->insert_id();
+		
+		
+		
 	#----------------------------------------------------#
 			 	# medicine assign for patient 
 	#----------------------------------------------------#    
@@ -241,8 +261,8 @@ class Prescription_controller extends CI_Controller {
             	$this->db->insert('advice_prescriptiion',$advice_data);
 			}
 		}
-
-	 	$d['appointment_id'] = $this->input->post('appointment_id',TRUE);
+		
+		$d['appointment_id'] = $this->input->post('appointment_id',TRUE);
     	$this->session->set_userdata($d);
 	 	redirect("prescription");
 	}		 
@@ -255,7 +275,26 @@ class Prescription_controller extends CI_Controller {
 	{
 		$data['title'] = "Create New Prescription ";
 		$data['venue'] = $this->venue_model->get_venue_list();
-		$data['doctor_info'] = $this->doctor_model->getDoctorListByselect();
+		
+		//$data['doctor_info'] = $this->doctor_model->getDoctorListByselect();
+		
+		$user_type = $this->session->userdata('user_type');
+		if($user_type==1){
+			$doctor_id = $this->session->userdata('doctor_id');
+			if($doctor_id!="1"){
+				$data['doctor_info'] = $this->doctor_model->getDoctorListById($doctor_id);	
+				$data['patient_info'] = $this->patient_model->get_by_id_patient($doctor_id);
+			}else{
+				$data['doctor_info'] = $this->doctor_model->getDoctorListByselect();
+				$data['patient_info'] = $this->patient_model->get_all_patient();
+			}
+			
+		}else{
+			$data['doctor_info'] = $this->doctor_model->getDoctorListByselect();
+			$data['patient_info'] = $this->patient_model->get_all_patient();
+		}
+		
+		
 	 	$this->load->view('admin/_header',$data);
 		$this->load->view('admin/_left_sideber');
 		$this->load->view('admin/create_new_Prescription');
@@ -958,6 +997,332 @@ class Prescription_controller extends CI_Controller {
     	$this->session->set_userdata($d);
 	 	redirect("prescription");
 	}
+	
+	
+	public function send_prescription($p_id){
+		
+		// patient info
+		$data['patient_info'] = $this->prescription_model->gereric_by_id($p_id);	    
+	   
+	    // test query
+	    $data['t_info'] = $this->db->select('*')
+	     ->from('test_assign_for_patine')
+	     ->join('test_name_tbl', 'test_name_tbl.test_id = test_assign_for_patine.test_id')
+	     ->where('test_assign_for_patine.prescription_id',$p_id)
+	     ->get()
+	     ->result();
 
+	    // advice query
+	    $data['a_info'] = $this->db->select('advice_prescriptiion.*,doctor_advice.*')
+	     ->from('advice_prescriptiion')
+	     ->join('doctor_advice', 'doctor_advice.advice_id = advice_prescriptiion.advice_id')
+	     ->where('advice_prescriptiion.prescription_id',$p_id)
+	     ->get()
+	     ->result();
+
+
+	      //venue info
+          $data['v_info'] = $this->db->select('prescription.venue_id,venue_tbl.*')
+         ->from('prescription')
+         ->join('venue_tbl', 'venue_tbl.venue_id = prescription.venue_id')
+         ->where('prescription.prescription_id',$p_id)
+         ->get()
+         ->row();
+
+	 	@$venue_id = $this->db->select('prescription_id,venue_id')->from('prescription')->where('prescription_id',$p_id)->get()->row();
+	    $data['chember_time'] = $this->db->select('*')
+	        ->from('schedul_setup_tbl')
+	        ->where('venue_id', $venue_id->venue_id)
+	        ->limit(1)
+	        ->get()
+	        ->row();
+
+	        $data['pattern'] = $this->db->select('*')
+			->from('print_pattern')
+			->where('doctor_id',$this->session->userdata('doctor_id'))
+			->where('venue_id',$venue_id->venue_id)
+			->get()
+			->row();
+	        if($data['pattern']!==NULL){
+				$data['others'] = $this->load->view('generic_pattern/'.$data['pattern']->pattern_no.'',$data,true);
+			}
+			$data['default'] = $this->load->view('generic_pattern/default',$data,true); 
+			
+			
+			
+			
+			
+		//echo "p_id--".$p_id;die();
+		$ci = get_instance();
+		$ci->load->library('email');
+		$config['protocol'] = "tls";
+		$config['smtp_host'] = "inpro8.fcomet.com";
+		$config['smtp_port'] = "465";
+		$config['smtp_user'] = "info@telehealers.in"; 
+		$config['smtp_pass'] = "Ajay@1234%";
+		$config['charset'] = "utf-8";
+		$config['mailtype'] = "html";
+		$config['newline'] = "\r\n";
+		$ci->email->initialize($config);
+		
+		$patient_id='';
+		$doctor_id='';
+		
+		
+		$sql_p = "select * from prescription where prescription_id = '".$p_id."' ";
+		$res_p = $this->db->query($sql_p);
+		$result_p = $res_p->result_array();
+		if(is_array($result_p) && count($result_p)>0){
+			$patient_id = $result_p[0]['patient_id'];
+			
+			$doctor_id = $result_p[0]['doctor_id'];
+		}
+		if($patient_id!="" && $doctor_id!=""){
+			$sql = "select * from patient_tbl where patient_id = '".$patient_id."' ";
+			$res = $this->db->query($sql);
+			$result = $res->result_array();
+			if(is_array($result) && count($result)>0){
+				$patient_name = $result[0]['patient_name'];
+				$patient_email = $result[0]['patient_email'];
+			}
+			$sql_doc = "select * from doctor_tbl where doctor_id = '".$doctor_id."' ";
+			$res_doc = $this->db->query($sql_doc);
+			$result_doc = $res_doc->result_array();
+			if(is_array($result_doc) && count($result_doc)>0){
+				$doctor_name = $result_doc[0]['doctor_name'];
+				$doc_id = $result_doc[0]['doc_id'];
+			}
+			
+			$message = '<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #f1f1f1;">
+    <center style="width: 100%; background-color: #f1f1f1;">
+        <div style="display: none; font-size: 1px;max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
+            &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
+        </div>
+        <div style="max-width: 600px; margin: 0 auto;" class="email-container">
+            <!-- BEGIN BODY -->
+            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
+                <tbody><tr>
+                    <td valign="top" class="bg_white" style="padding: 1em 2.5em 0 2.5em;">
+                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                            <tbody><tr>
+                                <td class="logo" style="text-align: left;">
+                                    <h1>
+                                        <a href="https://telehealers.in/">
+                                        <img src="https://telehealers.in/assets/uploads/images/telehe2.png">    
+                                        </a>
+                                    </h1>
+                                </td>
+                            </tr>
+                        </tbody></table>
+                    </td>
+                </tr>
+                <tr>
+                    </tr></tbody></table><table class="bg_white" role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                        <tbody><tr style="border-bottom: 1px solid rgba(0,0,0,.05);">
+                            <td valign="middle" width="100%" style="text-align:left; padding: 0 2.5em;">
+                                <div class="product-entry">
+                                    <div class="text">
+                                        <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Dear '.$patient_name.':</h2>
+										<p>Thanks for choosing telehealers.in</p>
+										<p>We hope your consultation was well with '.$doctor_name.' </p>
+                                        <p>Here you will find attachment of Prescription with this email</p>
+										<p>Please download your Prescription from <a href="https://telehealers.in/admin/Generic_controller/generic/'.$p_id.'" target="_blank">Here</a></p>
+										<p>&nbsp;</p>
+										
+                                        <p>Also you can login to the website to view it</p>
+                                        <p>with below mentioned details from your account we have created:- </p>
+										<p><b>Details of Login:-</b></p>
+										<p>Url:  https://telehealers.in/Userlogin</p>
+                                        <p>&nbsp;</p>
+										
+										<p>Keep in touch during this tough time! </p>
+										<p>Kindly write us back without any hasitation if you find any issues at support@telehealers.in</p>
+										
+										
+										
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody></table>
+                
+            
+            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
+                <tbody><tr>
+                    <td class="bg_white" style="text-align: center;">
+                        <p>Receive these email? You can <a href="#" style="color: rgba(0,0,0,.8);">Unsubscribe here</a></p>
+                    </td>
+                </tr>
+            </tbody></table>
+
+        </div>
+    </center>
+
+
+</body></html>';
+
+		$start = $data['v_info']->start_time;
+		$end =  $data['v_info']->end_time;
+		$pp_time = $data['v_info']->per_patient_time;
+		$patient_time = date('h:i A', strtotime($start));
+		$end_time = date('h:i A', strtotime($end));
+		$img_url = 'https://www.telehealers.in/assets/uploads/images/telehe.png';
+		$img_url2 = 'https://www.telehealers.in/web_assets2/images/aajay.jpg';
+			
+		$message2 = '';
+
+		$ci->email->from('info@telehealers.in', 'telehealers');
+		$list = array($patient_email);
+		$ci->email->to($list);
+		$this->email->reply_to('info@telehealers.in', 'telehealers');
+		$ci->email->subject('Prescription Information');
+		$ci->email->message($message);
+		$ci->email->send();
+		
+		$ci->email->from('info@telehealers.in', 'telehealers');
+		$list = array('info@telehealers.in');
+		$ci->email->to($list);
+		$this->email->reply_to('info@telehealers.in', 'telehealers');
+		$ci->email->subject('Prescription Information');
+		$ci->email->message($message);
+		$ci->email->send();
+		}
+		 $this->session->set_flashdata('message','<div class="alert alert-success">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Prescription has been sent successfully!</strong>
+              </div>');
+		redirect("admin/Prescription_controller/prescription_list");
+	}
+	
+	public function send_prescription2($p_id){
+		//echo "p_id--".$p_id;die();
+		$ci = get_instance();
+		$ci->load->library('email');
+		$config['protocol'] = "tls";
+		$config['smtp_host'] = "inpro8.fcomet.com";
+		$config['smtp_port'] = "465";
+		$config['smtp_user'] = "info@telehealers.in"; 
+		$config['smtp_pass'] = "Ajay@1234%";
+		$config['charset'] = "utf-8";
+		$config['mailtype'] = "html";
+		$config['newline'] = "\r\n";
+		$ci->email->initialize($config);
+		
+		$patient_id='';
+		$doctor_id='';
+		$app_id='';
+		
+		$sql_p = "select * from prescription where prescription_id = '".$p_id."' ";
+		$res_p = $this->db->query($sql_p);
+		$result_p = $res_p->result_array();
+		if(is_array($result_p) && count($result_p)>0){
+			$patient_id = $result_p[0]['patient_id'];
+			$app_id = $result_p[0]['app_id'];
+			$doctor_id = $result_p[0]['doctor_id'];
+		}
+		if($patient_id!="" && $doctor_id!="" && $app_id!=""){
+			$sql = "select * from patient_tbl where patient_id = '".$patient_id."' ";
+			$res = $this->db->query($sql);
+			$result = $res->result_array();
+			if(is_array($result) && count($result)>0){
+				$patient_name = $result[0]['patient_name'];
+				$patient_email = $result[0]['patient_email'];
+			}
+			$sql_doc = "select * from doctor_tbl where doctor_id = '".$doctor_id."' ";
+			$res_doc = $this->db->query($sql_doc);
+			$result_doc = $res_doc->result_array();
+			if(is_array($result_doc) && count($result_doc)>0){
+				$doctor_name = $result_doc[0]['doctor_name'];
+				$doc_id = $result_doc[0]['doc_id'];
+			}
+			$message = '<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #f1f1f1;">
+    <center style="width: 100%; background-color: #f1f1f1;">
+        <div style="display: none; font-size: 1px;max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
+            &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
+        </div>
+        <div style="max-width: 600px; margin: 0 auto;" class="email-container">
+            <!-- BEGIN BODY -->
+            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
+                <tbody><tr>
+                    <td valign="top" class="bg_white" style="padding: 1em 2.5em 0 2.5em;">
+                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                            <tbody><tr>
+                                <td class="logo" style="text-align: left;">
+                                    <h1>
+                                        <a href="https://telehealers.in/">
+                                        <img src="https://telehealers.in/assets/uploads/images/telehe2.png">    
+                                        </a>
+                                    </h1>
+                                </td>
+                            </tr>
+                        </tbody></table>
+                    </td>
+                </tr>
+                <tr>
+                    </tr></tbody></table><table class="bg_white" role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                        <tbody><tr style="border-bottom: 1px solid rgba(0,0,0,.05);">
+                            <td valign="middle" width="100%" style="text-align:left; padding: 0 2.5em;">
+                                <div class="product-entry">
+                                    <div class="text">
+                                        <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Dear '.$patient_name.':</h2>
+										<p>Thanks for choosing telehealers.in</p>
+										<p>We hope your consultation was well with '.$doctor_name.' </p>
+                                        <p>Here you will find attachment of Prescription with this email</p>
+										<p>Please download your Prescription from <a href="https://telehealers.in/admin/Prescription_controller/my_prescription/'.$app_id.'" target="_blank">Here</a></p>
+										<p>&nbsp;</p>
+										
+                                        <p>Also you can login to the website to view it</p>
+                                        <p>with below mentioned details from your account we have created:- </p>
+										<p><b>Details of Login:-</b></p>
+										<p>Url:  https://telehealers.in/Userlogin</p>
+                                        
+										
+										<p>Keep in touch during this tough time! </p>
+										<p>Kindly write us back without any hasitation if you find any issues at support@telehealers.in</p>
+										
+										
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody></table>
+                
+            
+            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
+                <tbody><tr>
+                    <td class="bg_white" style="text-align: center;">
+                        <p>Receive these email? You can <a href="#" style="color: rgba(0,0,0,.8);">Unsubscribe here</a></p>
+                    </td>
+                </tr>
+            </tbody></table>
+
+        </div>
+    </center>
+
+
+</body></html>';
+
+		$ci->email->from('info@telehealers.in', 'telehealers');
+		$list = array($patient_email);
+		$ci->email->to($list);
+		$this->email->reply_to('info@telehealers.in', 'telehealers');
+		$ci->email->subject('Prescription Information');
+		$ci->email->message($message);
+		$ci->email->send();
+		
+		$ci->email->from('info@telehealers.in', 'telehealers');
+		$list = array('info@telehealers.in');
+		$ci->email->to($list);
+		$this->email->reply_to('info@telehealers.in', 'telehealers');
+		$ci->email->subject('Prescription Information');
+		$ci->email->message($message);
+		$ci->email->send();
+		}
+		 $this->session->set_flashdata('message','<div class="alert alert-success">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Prescription has been sent successfully!</strong>
+              </div>');
+		redirect("admin/Prescription_controller/prescription_list");
+	}
 
 }

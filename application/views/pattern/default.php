@@ -4,6 +4,9 @@
     $pp_time = @$v_info->per_patient_time;
     $patient_time = date('H:i A', strtotime($start));
     $end_time = date('H:i A', strtotime($end));
+	$img_url = 'https://www.telehealers.in/assets/uploads/images/telehe.png';
+	$img_url2 = 'https://www.telehealers.in/web_assets2/images/aajay.jpg';
+	//$img_url = 'https://www.telehealers.in/./assets/uploads/doctor/signat1.png';
 ?>
 
 <?php 
@@ -12,28 +15,31 @@
 <!-- style -->
 <link href="<?php echo base_url(); ?>web_assets/css/inline.css" rel="stylesheet">
 
-
+<div id="printDiv">
     <div id="dif_p" class="container gggggg" >
         <div class="row">
-		<div class="col-md-3">
+		
         <?php if($this->session->userdata('user_type')==1){?>
-             <a class="btn btn-primary" href="<?php echo base_url();?>admin/Prescription_controller/create_new_prescription"><i class="fa fa-plus" aria-hidden="true"></i> <?php echo display('create_trade')?> </a>
+		<div class="col-md-3">
+             <!--<a class="btn btn-primary" href="<?php echo base_url();?>admin/Prescription_controller/create_new_prescription"><i class="fa fa-plus" aria-hidden="true"></i> <?php echo display('create_trade')?> </a>-->
+			 </div>
         <?php }?>
-		</div>
-		<div class="col-md-6" style="text-align:center;">
-			<img src="http://telehealers.in/./assets/uploads/images/telehe.png" style="width:140px;">
+		
+		<div class="col-md-9" style="text-align:left;">
+			<img src="<?php echo $img_url; ?>" style="width:140px; display:block;">
+			
 			</div>
 			<div class="col-md-3">
             <div class="social-icons pull-right">
                 <!--<label class="radio-inline btn btn btn-primary"  id="pad"><?php echo display('pad_print');?></label>-->
                 <ul>
-                    <li><a href="" onclick="printContent('div1')" title="Print"><i class="fa fa-print"></i></a></li>
+                    <li><a href="" onclick="printContent('printDiv')" title="Print"><i class="fa fa-print"></i></a></li>
                 </ul>
             </div> 
 			</div>
         </div>
     </div>
-    <div class="main_form_row_fild" style="background-image: url(<?php echo base_url();?>/web_assets2/images/aajay.jpg);">
+    <div class="main_form_row_fild" style="background-image: url(<?php echo $img_url2;?>);">
     <div id="div1">
     <?php if(!empty($patient_info)){ ?>
 
@@ -78,10 +84,11 @@
     	                <strong><?php echo display('patient_name');?>:</strong> <b><?php echo html_escape(@$value->patient_name);?></b>,
     	                 &nbsp; <strong>Age :</strong> 
     	                 <?php
-    	                    $date1=date_create(@$value->birth_date);
+    	                    /* $date1=date_create(@$value->birth_date);
     	                    $date2= date_create( date('y-m-d'));
     	                    $diff=date_diff($date1,$date2);
-    	                    echo @$diff->format("%Y-Y:%m-M:%d-D");
+    	                    echo @$diff->format("%Y-Y:%m-M:%d-D"); */
+							echo @$value->age;
     	                  ?>,
     	                 &nbsp;<strong><?php echo display('sex');?> :</strong> <?php echo html_escape(@$value->sex);?>, 
     	                 &nbsp;<strong><?php echo display('patient_weight');?> :</strong> <?php echo html_escape(@$value->weight);?>, 
@@ -107,7 +114,7 @@
                     <div class="col-md-4 col-sm-4 left-side">
 		                    <?php if(!empty($value->problem)){?>
 		                        <div class="problem">
-		                            <h4><?php echo display('patient_cc');?> </h4>
+		                            <h4>Patient complaint</h4>
 		                            <?php 
 		                                $cc =  explode(",",$value->problem);
 		                                for ($i=0; $i<count($cc); $i++) {
@@ -262,7 +269,7 @@
 						
 						<?php $signature = $value->picture2; ?>						
 						<?php if($signature!=""){?>						
-						<img src="<?php echo $signature; ?>" style="width:120px; float:right;">
+						<img src="<?php echo $signature; ?>" style="width:120px; margin-left:100px;">
 						<?php } ?>
 
 						<?php } ?>
@@ -271,9 +278,9 @@
                 </div>
                 
 	            <div class="col-sm-12 footer1">
-	                <?php echo display('chamber_time');?>:
-	                <?php echo display('start_time');?> : <?php echo date('h:i A', strtotime(@$chember_time->start_time));?>,
-	                <?php echo display('end_time');?> : <?php echo date('h:i A', strtotime(@$chember_time->end_time));?>
+	                <?php //echo display('chamber_time');?>
+	                <?php //echo display('start_time');?>  <?php //echo date('h:i A', strtotime(@$chember_time->start_time));?>
+	                <?php //echo display('end_time');?>  <?php //echo date('h:i A', strtotime(@$chember_time->end_time));?>
 	            </div>
             </div> 
         </div> 
@@ -282,5 +289,6 @@
 <!-- end footer area -->
 <!--  -->  
     </div>
+	</div>
 
 

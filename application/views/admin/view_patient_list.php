@@ -48,6 +48,7 @@
                         </thead>
                         <tbody>
                            <?php
+								$doctor_name='';
                                 foreach ($patient_info as $value) {
 							$ref_doc_id	= $value->ref_doc_id;	
 							if($ref_doc_id==0){

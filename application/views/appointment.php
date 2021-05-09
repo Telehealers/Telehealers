@@ -32,7 +32,7 @@ var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
 (function(){
 var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
 s1.async=true;
-s1.src='https://embed.tawk.to/608b89375eb20e09cf37f9d4/1f4gh00vt';
+s1.src='https://embed.tawk.to/608c0bf662662a09efc3afa9/1f4hgtf3e';
 s1.charset='UTF-8';
 s1.setAttribute('crossorigin','*');
 s0.parentNode.insertBefore(s1,s0);
@@ -88,7 +88,7 @@ $hello = GeraHash(5);
                                 <h2>Book an Appointment</h2>
                                 <!--<p>In order to use this service, you have to complete this verification process</p>-->
                             </div>
-							<div id="message_id"></div>
+							<div id="message_id" class=""></div>
 							<fieldset id="book_popup_1">
 								<!--<h3>Select Your Consultancy</h3>-->
 								<!--<p>We will send you a SMS. Input the code to verify.</p>-->
@@ -109,7 +109,12 @@ $hello = GeraHash(5);
 										}
 									}
 									?>
-									</ul>
+									</ul><br>
+									<?php if(is_array($language_arr) && count($language_arr)>0){
+										foreach($language_arr as $val){
+										?>
+									<input type="checkbox" name="lang_set" id="lang_set" value="<?php echo $val;?>">&nbsp;<?php echo $val;?> &nbsp;&nbsp;&nbsp;&nbsp;
+									<?php }} ?>
 								</div>
 								<button onClick="addService()" id="add_service" type="button" class="next action-button">Continue</button>  
 							</fieldset>
@@ -119,14 +124,14 @@ $hello = GeraHash(5);
                                 
                                 <div class="mb-5 more_btns">
 									<ul>
-										<li>
+										<!--<li>
 											<button type="button" class="btn_choose_sent bg_btn_chose_1">
 												<input type="radio" name="app_val" value="1" checked />Immediately 
 											</button>
-										</li>
+										</li>-->
 										<li>
 											<button type="button" class="btn_choose_sent bg_btn_chose_1">
-												<input type="radio" name="app_val" value="2" />Schedule Appointment
+												<input checked type="radio" name="app_val" value="2" />Schedule Appointment
 											</button>
 										</li>
 									</ul>
@@ -209,7 +214,7 @@ $hello = GeraHash(5);
                                         <textarea maxlength="200" type="message" name="problem" id="problem" placeholder="Tell us your symptom or health problem..." required="required"></textarea>
                                     </div>
                                     <div class="input-group">
-                                        <input type="checkbox" class="term_con_btn" name="term_condition" value="1" disabled checked="checked" id="term_condition">&nbsp;&nbsp;I agree to the Tele medicine Terms & Conditions
+                                        <input type="checkbox" class="term_con_btn" name="term_condition" value="1" disabled checked="checked" id="term_condition">&nbsp;&nbsp;<a href="<?php echo base_url();?>terms" target="_blank" style="text-decoration:underline;">I agree to the Tele medicine Terms & Conditions</a>
                                     </div> 
                                 </div>
                             <input type="hidden" name="existing_user" id="existing_user" value="">
@@ -383,6 +388,27 @@ $hello = GeraHash(5);
 <script>
 $(document).ready(function(){
 	
+	$('#p_name').keypress(function (e) {
+		var charLength = $(this).val().length;
+		var regex = new RegExp("^[a-zA-Z ]+$");
+		var strigChar = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+		if (regex.test(strigChar)) {
+			if(charLength < 21){
+			return true;
+			}
+		}  
+		return false;
+	});
+	$('#p_phone').keypress(function (e) {
+		var charLength = $(this).val().length;
+		if(charLength < 10){
+			return true;
+		}else{
+			return false;	
+		} 
+	});
+	
+	
 
 	$("#p_phone").keypress (function (event) {
         if ((event.which < 32) || (event.which > 126)) return true; 
@@ -485,6 +511,8 @@ $(document).ready(function(){
 	$(document).on("click","#add_servicetype", function(){	
 		var servicestype =	$('input[name="servicetype"]:checked').val();
 		var base_url = $('#base_url').val();
+		var lang_set_val =	$('#service3').val();
+		
 		$('#service2').val(servicestype);
 		//alert('servicestype--'+servicestype)
 		if(servicestype==""){
@@ -504,7 +532,7 @@ $(document).ready(function(){
 		$.ajax({
 			url:base_url+'index.php/Welcome/getdoctorforappointment',
 			method: 'post',
-			data: {servicestype:servicestype},
+			data: {servicestype:servicestype,lang_set_val:lang_set_val},
 			type: 'POST',
 			success: function(response){
 				//alert(response);
@@ -531,7 +559,7 @@ $(document).ready(function(){
 			$('.multi_step_form .book_popup_4').remove();
 		}	
 	});
-	$(document).on("change","#p_email",function(){
+	$(document).on("change","#p_email_old",function(){
 		var email = $(this).val();
 		base_url = $('#base_url').val();
 		$.ajax({
@@ -542,27 +570,43 @@ $(document).ready(function(){
 			success: function(response){
 				//alert(response);
 				if(response!=""){
-					var p_data = response.split(',');
-					var p_name = p_data[0];
-					var p_phone = p_data[1];
-					var p_sex = p_data[2];
-					var p_age = p_data[3];
-					$('#p_name').val(p_name);
-					$('#p_name').attr("disabled", true);
-					$('#p_phone').val(p_phone);
-					$('#p_phone').attr("disabled", true);
-					$('#p_gender').val(p_sex);
-					$('#p_gender').attr("disabled", true);
-					$('#p_age').val(p_age);
-					$('#p_age').attr("disabled", true);
-					$('#email_msg').html('<span style="color:red;float:left;">Existing Patient</span><span style="color:green;float:right;cursor:pointer;font-size:10px;" onclick="setfields()">To change in existing details like age, name, sex, click here</span>');
-					$('#p_date').focus();
-					$('#existing_user').val(1);
+				    if(response==1){
+				        $('#email_msg').html('<span style="color:red;float:left;">This email ID already Used!</span><span style="color:green;float:right;cursor:pointer;font-size:10px;" onclick="setfields()">To change in existing details like age, name, sex, click here</span>');
+				        $('#bb_app').hide();
+				        
+				    }else if(response==2){
+				        $('#email_msg').html('<span style="color:red;float:left;">This email ID already Used!</span><span style="color:green;float:right;cursor:pointer;font-size:10px;" onclick="setfields()">To change in existing details like age, name, sex, click here</span>');
+				        $('#bb_app').hide();
+				        
+				    }else{
+				        $('#bb_app').show();
+    					var p_data = response.split(',');
+    					var p_name = p_data[0];
+    					var p_phone = p_data[1];
+    					var p_sex = p_data[2];
+    					var p_age = p_data[3];
+    					$('#p_name').val(p_name);
+    					$('#p_name').attr("disabled", true);
+    					$('#p_phone').val(p_phone);
+    					$('#p_phone').attr("disabled", true);
+    					$('#p_gender').val(p_sex);
+    					$('#p_gender').attr("disabled", true);
+    					$('#p_age').val(p_age);
+    					$('#p_age').attr("disabled", true);
+    					$('#email_msg').html('<span style="color:red;float:left;">Existing Patient</span><span style="color:green;float:right;cursor:pointer;font-size:10px;" onclick="setfields()">To change in existing details like age, name, sex, click here</span>');
+    					$('#p_date').focus();
+    					$('#existing_user').val(1);
+				    }
 				}else{
+				    $('#bb_app').show();
 					//$('#p_name').val('');
 					$('#p_phone').val('');
 					$('#p_gender').val('');
 					$('#p_age').val('');
+					$('#p_name').attr("disabled", false);
+					$('#p_phone').attr("disabled", false);
+					$('#p_gender').attr("disabled", false);
+					$('#p_age').attr("disabled", false);
 					$('#email_msg').html('<span style="color:green;float:left;">New Patient</span>');
 					$('#existing_user').val(0);
 				}
@@ -641,9 +685,15 @@ $( document ).ajaxComplete(function() {
                 easing: 'easeInOutBack'
             });
         });
+		
+		$(document).on("click",".previous_button", function(){
+			$('#message_id').html('');
+		});	
 		$(document).on("click",".previous_button1", function(){
             if (animating) return false;
             animating = true;
+			
+			
 
             current_fs = $(this).parent();
             previous_fs = $(this).parent().prev();
@@ -727,10 +777,11 @@ function setDoctor(){
 		document.querySelector("#p_date").value = today;
 		$('#venue_id').val(3);
 		var servicestype =	$('input[name="servicetype"]:checked').val();
+		var lang_set_val =	$('#service3').val();
 		$.ajax({
 			url: base_url+'index.php/Welcome/getservicetypedoctorforimmde',
 			method: 'post',
-			data: {servicestype:servicestype},
+			data: {servicestype:servicestype,lang_set_val:lang_set_val},
 			type: 'POST',
 			success: function(response){
 				//alert(response);
@@ -745,7 +796,7 @@ function setDoctor(){
 					var str = response.split(',');
 					var d_id = str[0];
 					var s_id = str[1];
-					var sh_id = str[1];
+					var sh_id = str[2];
 					$('#doc_idd').val(d_id);
 					$('#slot_idd').val(s_id);
 					$('#sh_idd').val(sh_id);
@@ -788,6 +839,16 @@ function resetVenue(){
 }
 function addService(){
 	var services =	$('input[name="service"]:checked').val();
+	
+	const selectedValues = $('input[name="lang_set"]:checked').map( function () { 
+        return $(this).val(); 
+    })
+    .get()
+    .join(', ');
+	//alert(selectedValues);
+	$('#service3').val(selectedValues);
+	
+	
 	if(services=="Consultation for COVID-19"){
 		$('.multi_step_form #book_popup_2').remove();
 		setTimeout(function(){ 
@@ -800,11 +861,52 @@ function addService(){
 	}
 }
 function setSlot(){
+	base_url = $('#base_url').val();
 	var time_slot = $('#serial_no').val();
-	if(time_slot==""){
-		$('#msg_c').html('<div class="col-md-12"><div class="alert alert-danger">Please select appointment time slot</div></div>');
-		return false;
+	var p_email = $('#p_email').val();
+	var p_date = $('#p_date').val();
+	//p_date = '2021-05-08';
+	if(typeof time_slot === 'undefined'){
+		$('#bb_app').attr("disabled", true);
+		$('#bb_app').addClass("btn_disable");
+		$('#message_id').addClass('alert alert-danger');
+		$('#message_id').html('Kindly fill the information Correctly!');
+	}else{
+		$('#bb_app').attr("disabled", false);
+		if(time_slot==""){
+			$('#bb_app').attr("disabled", true);
+			$('#bb_app').addClass("btn_disable");
+			$('#msg_c').html('<div class="col-md-12"><div class="alert alert-danger">Please select appointment time slot</div></div>');
+			return false;
+		}	
 	}
+	if(p_email!="" || p_date!=""){
+		//alert(p_email+' / '+p_date);
+		//raghuveer@ecomsolver.com / 2021-05-13
+		$.ajax({
+			url:base_url+'index.php/Welcome/checkAppointment',
+			method: 'post',
+			data: {p_email:p_email,p_date:p_date},
+			type: 'POST',
+			success: function(response){
+				//alert(response);
+				if(response==1){
+					$('#bb_app').attr("disabled", true);
+					$('#bb_app').addClass("btn_disable");
+					$('#message_id').addClass('alert alert-danger');
+					$('#message_id').html('Sorry You already get apointment in this date');
+				}else{
+					$('#bb_app').attr("disabled", false);
+					$('#bb_app').removeClass("btn_disable");
+					$('#message_id').removeClass('alert alert-danger');
+					$('#message_id').html('');	
+				}
+				//$('#service_type').html(response);
+			}
+		});
+	}
+	
+	
 }
 function setfields(){
 	$('#p_name').attr("disabled", false);
@@ -812,6 +914,14 @@ function setfields(){
 	$('#p_gender').attr("disabled", false);
 	$('#p_age').attr("disabled", false);
 }
+
+function preventBack() { 
+window.history.forward(); 
+}  
+setTimeout("preventBack()", 0);  
+window.onunload = function () { null };  
+
+
 </script>	
 </body>
 </html>

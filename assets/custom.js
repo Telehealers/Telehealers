@@ -226,7 +226,7 @@ function load_patient_id(){
     }
 
     function myBooking(data){
-		alert(data);
+		//alert(data);
         'use strict';
         var id = $("#t_" + data).text();
         document.getElementById("msg_c").innerHTML = "<div style=' color:green; font-size:20px;'>You Selected " +id +"</div>";

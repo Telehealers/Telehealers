@@ -60,7 +60,7 @@ class Doctor_model extends CI_model {
 
 	public function getDoctorList()	 {
 
-		$SQL = 'select a.* , b.department_name from doctor_tbl as a , doctor_department_info as b where a.department = b.department_id and a.doctor_id != "1"';				
+		$SQL = 'select a.* , b.department_name from doctor_tbl as a , doctor_department_info as b where a.department = b.department_id and a.doctor_id != "1" order by a.doctor_name ASC';				
 		
 		$query = $this->db->query($SQL);
 
@@ -72,7 +72,7 @@ class Doctor_model extends CI_model {
 
 	public function getDoctorListByselect()	 {
 
-		$SQL = 'select a.* , b.email from doctor_tbl as a , log_info as b where a.log_id = b.log_id and a.doctor_id != "1"';
+		$SQL = 'select a.* , b.email from doctor_tbl as a , log_info as b where a.log_id = b.log_id and a.doctor_id != "1" and a.doctor_status = "1" order by a.doctor_name ASC';
 
 		$query = $this->db->query($SQL);
 

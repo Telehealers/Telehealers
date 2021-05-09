@@ -1,9 +1,9 @@
 <?php
 class DB {
     private $dbHost     = 'localhost';
-    private $dbUsername = 'telehea2_telehealers';
+    private $dbUsername = 'telehea2_telehealers_new';
     private $dbPassword = '#&$H3enA1Shd(*3!()';
-    private $dbName     = 'telehea2_telehealers';
+    private $dbName     = 'telehea2_telehealers_new';
   
     public function __construct(){
         if(!isset($this->db)){

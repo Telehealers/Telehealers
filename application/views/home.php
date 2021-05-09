@@ -29,18 +29,20 @@
 
   gtag('config', 'G-Y9P95E4VWH');
 </script>
-
+<script id="mcjs">!function(c,h,i,m,p){m=c.createElement(h),p=c.getElementsByTagName(h)[0],m.async=1,m.src=i,p.parentNode.insertBefore(m,p)}(document,"script","https://chimpstatic.com/mcjs-connected/js/users/e836e1578317f3389cedf8f6a/0bf682a738edbb1cd96720c12.js");</script>
+<!--Start of Tawk.to Script-->
 <script type="text/javascript">
 var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
 (function(){
 var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
 s1.async=true;
-s1.src='https://embed.tawk.to/608b89375eb20e09cf37f9d4/1f4gh00vt';
+s1.src='https://embed.tawk.to/608c0bf662662a09efc3afa9/1f4hgtf3e';
 s1.charset='UTF-8';
 s1.setAttribute('crossorigin','*');
 s0.parentNode.insertBefore(s1,s0);
 })();
 </script>
+<!--End of Tawk.to Script-->
 
 
 </head>
@@ -95,7 +97,8 @@ $hello = GeraHash(5);
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="img_box">
-                                                <a href="https://www.telehealers.in/appointment"><img src="<?php echo base_url();?>web_assets2/images/banner_new_2.png" alt="#"></a>
+                                                <a href="https://www.telehealers.in/appointment" class="desktop_img"><img src="<?php echo base_url();?>web_assets2/images/banner_new_2.png" alt="#"></a>
+                                                <a href="https://www.telehealers.in/appointment" class="mobile_img"><img src="<?php echo base_url();?>web_assets2/images/banner_new_4.png" alt="#"></a>
                                             </div>
                                         </div>
                                     </div>
@@ -171,7 +174,7 @@ $hello = GeraHash(5);
             <div class="row">
                 <div class="col-lg-6">
                     <div class="ab_box_img">
-                        <img src="<?php echo (!empty(html_escape($info->about_img->picture))?html_escape($info->about_img->picture):null); ?>" alt="About Mental Health">
+                        <img src="<?php echo (!empty(html_escape($info->about_img->picture))?html_escape($info->about_img->picture):null); ?>" alt="About telehealers">
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -284,9 +287,9 @@ $hello = GeraHash(5);
             </div>
 <?php
 $servername = 'localhost';
-$username = 'telehea2_telehealers';
+$username = 'telehea2_telehealers_new';
 $password = '#&$H3enA1Shd(*3!()';
-$dbname = 'telehea2_telehealers';
+$dbname = 'telehea2_telehealers_new';
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -561,7 +564,11 @@ $(document).ready(function(){
 });
 
 
-
+function preventBack() { 
+window.history.forward(); 
+}  
+setTimeout("preventBack()", 0);  
+window.onunload = function () { null };  
 
 </script>	
 </body>

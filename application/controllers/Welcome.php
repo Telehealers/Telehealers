@@ -895,6 +895,8 @@ public function registration()
 	
 	public function getdoctorforappointment(){
 		$servicestype = $this->input->post('servicestype',TRUE);
+		$lang_set_val = $this->input->post('lang_set_val',TRUE);
+		//echo "lang_set_val--".$lang_set_val;die();
 		$sql = "select id,doctors from servicetype where servicetype = '".$servicestype."'";
 		$res = $this->db->query($sql);
 		$result = $res->result_array();
@@ -907,25 +909,169 @@ public function registration()
 		$con = '<div class="row">';
 		//echo "<pre>";print_r($doctors_arr);die();
 		$i=0;
-		if(is_array($doctors_arr) && count($doctors_arr)>0){
-			foreach($doctors_arr as $doc){
+		$with_lng=array();
+		$without_lng=array();
+		//$doctors_arr=array(58);
+		//echo "<pre>";
+		if($lang_set_val!=""){
+			$lang_set_arr = explode(',',$lang_set_val);
+			//echo "<pre>";print_r($lang_set_arr);die();
+			if(is_array($doctors_arr) && count($doctors_arr)>0){
+				foreach($doctors_arr as $doc){
+					$sql_ln = "select doc_id,language from doctor_tbl where doctor_id = '".$doc."'";
+					//echo $sql_ln;
+					$res_ln = $this->db->query($sql_ln);
+					$result_ln = $res_ln->result_array();
+					if(is_array($result_ln) && count($result_ln)>0){
+						$language = $result_ln[0]['language'];
+						if($language!=""){
+							$language_arr = explode(',',$language);
+							foreach($language_arr as $val){
+								if(in_array(trim($val),$lang_set_arr)){
+									$with_lng[] = $doc;
+								}else{
+									$without_lng[] = $doc;
+								}
+							}	
+						}else{
+							$without_lng[] = $doc;	
+						}
+					}	
+				}
+			}
+			$doctors_arr_2=array();
+			foreach($with_lng as $val){
+				$doctors_arr_2[] = $val;
+			}
+			foreach($without_lng as $val){
+				$doctors_arr_2[] = $val;
+			}
+		}else{
+			$doctors_arr_2=array();
+			foreach($doctors_arr as $val){
+				$doctors_arr_2[] = $val;
+			}
+		}
+		//echo "<pre>";print_r($with_lng);
+		$doctors_arr_2 = array_unique($doctors_arr_2);
+		//echo "<pre>";print_r($doctors_arr_2);
+		
+		
+		if(is_array($doctors_arr_2) && count($doctors_arr_2)>0){
+			foreach($doctors_arr_2 as $doc){
 				$i++;
-				$sql_doc = "select doc_id,doctor_name,designation,picture from doctor_tbl where doctor_id = '".$doc."'";
+				$sql_doc = "select doc_id,doctor_name,doc_id,language,degrees,picture from doctor_tbl where doctor_id = '".$doc."'";
 				//echo $sql_doc;
 				$res_doc = $this->db->query($sql_doc);
 				$result_doc = $res_doc->result_array();
 				if(is_array($result_doc) && count($result_doc)>0){
 					$doc_id = $result_doc[0]['doc_id'];
 					$doctor_name    = $result_doc[0]['doctor_name'];
-					$designation    = $result_doc[0]['designation'];
+					$doc_id    = $result_doc[0]['doc_id'];
+					$language    = $result_doc[0]['language'];
 					$picture    = $result_doc[0]['picture'];
+					$degrees    = $result_doc[0]['degrees'];
 					if($picture==""){
-					    $picture = 'https://telehealers.in/web_assets2/appointment/images/doctor.jpg';
+					    $picture = 'https://www.telehealers.in/web_assets2/images/user_img.png';
 					}
 					if($i==1){
-						$con .= '<div class="col-md-6"><div class="doc_box"><span class="image_dr"><img src="'.$picture.'" alt="#"></span><span class="content"><h5> '.$doctor_name.' </h5><p>'.$designation.'</p><div class="select_dr"><input type="radio" checked="checked" name="doctor_id" value="'.$doc.'">Take an Appointment</div></span></div></div>';
+						$con .= '<div class="col-md-6"><div class="doc_box"><span class="image_dr"><img src="'.$picture.'" alt="#"></span><span class="content"><h5> '.$doctor_name.' </h5><p>'.$language.'</p><div class="select_dr"><input type="radio" checked="checked" name="doctor_id" value="'.$doc.'">Take an Appointment</div></span></div></div>';
 					}else{
-						$con .= '<div class="col-md-6"><div class="doc_box"><span class="image_dr"><img src="'.$picture.'" alt="#"></span><span class="content"><h5> '.$doctor_name.' </h5><p>'.$designation.'</p><div class="select_dr"><input type="radio" name="doctor_id" value="'.$doc.'">Take an Appointment</div></span></div></div>';
+						$con .= '<div class="col-md-6"><div class="doc_box"><span class="image_dr"><img src="'.$picture.'" alt="#"></span><span class="content"><h5> '.$doctor_name.' </h5><p>'.$language.'</p><div class="select_dr"><input type="radio" name="doctor_id" value="'.$doc.'">Take an Appointment</div></span></div></div>';
+					}
+					
+				} 
+			}
+		}
+		$con .= "</div>";
+		echo $con;
+	}
+	
+	public function getdoctorforappointment2(){
+		$servicestype = $this->input->post('servicestype',TRUE);
+		$lang_set_val = $this->input->post('lang_set_val',TRUE);
+		//echo "lang_set_val--".$lang_set_val;die();
+		$sql = "select id,doctors from servicetype where servicetype = '".$servicestype."'";
+		$res = $this->db->query($sql);
+		$result = $res->result_array();
+		if(is_array($result) && count($result)>0){
+			$service_id = $result[0]['id'];
+			$doctors    = $result[0]['doctors'];
+		}
+		//echo "<pre>";print_r($doctors);die();
+		$doctors_arr = explode(',',$doctors);
+		$con = '<div class="row">';
+		//echo "<pre>";print_r($doctors_arr);die();
+		$i=0;
+		$with_lng=array();
+		$without_lng=array();
+		//$doctors_arr=array(58);
+		//echo "<pre>";
+		if($lang_set_val!=""){
+			$lang_set_arr = explode(',',$lang_set_val);
+			//echo "<pre>";print_r($lang_set_arr);die();
+			if(is_array($doctors_arr) && count($doctors_arr)>0){
+				foreach($doctors_arr as $doc){
+					$sql_ln = "select doc_id,language from doctor_tbl where doctor_id = '".$doc."'";
+					//echo $sql_ln;
+					$res_ln = $this->db->query($sql_ln);
+					$result_ln = $res_ln->result_array();
+					if(is_array($result_ln) && count($result_ln)>0){
+						$language = $result_ln[0]['language'];
+						if($language!=""){
+							$language_arr = explode(',',$language);
+							foreach($language_arr as $val){
+								if(in_array(trim($val),$lang_set_arr)){
+									$with_lng[] = $doc;
+								}else{
+									$without_lng[] = $doc;
+								}
+							}	
+						}else{
+							$without_lng[] = $doc;	
+						}
+					}	
+				}
+			}
+			$doctors_arr_2=array();
+			foreach($with_lng as $val){
+				$doctors_arr_2[] = $val;
+			}
+			foreach($without_lng as $val){
+				$doctors_arr_2[] = $val;
+			}
+		}else{
+			$doctors_arr_2=array();
+			foreach($doctors_arr as $val){
+				$doctors_arr_2[] = $val;
+			}
+		}
+		//echo "<pre>";print_r($with_lng);
+		$doctors_arr_2 = array_unique($doctors_arr_2);
+		//echo "<pre>";print_r($doctors_arr_2);
+		
+		
+		if(is_array($doctors_arr_2) && count($doctors_arr_2)>0){
+			foreach($doctors_arr_2 as $doc){
+				$i++;
+				$sql_doc = "select doc_id,doctor_name,doc_id,language,degrees,picture from doctor_tbl where doctor_id = '".$doc."'";
+				//echo $sql_doc;
+				$res_doc = $this->db->query($sql_doc);
+				$result_doc = $res_doc->result_array();
+				if(is_array($result_doc) && count($result_doc)>0){
+					$doc_id = $result_doc[0]['doc_id'];
+					$doctor_name    = $result_doc[0]['doctor_name'];
+					$doc_id    = $result_doc[0]['doc_id'];
+					$language    = $result_doc[0]['language'];
+					$picture    = $result_doc[0]['picture'];
+					$degrees    = $result_doc[0]['degrees'];
+					if($picture==""){
+					    $picture = 'https://www.telehealers.in/web_assets2/images/user_img.png';
+					}
+					if($i==1){
+						$con .= '<div class="col-md-6"><div class="doc_box"><span class="image_dr"><img src="'.$picture.'" alt="#"></span><span class="content"><h5> '.$doctor_name.' </h5><p>&nbsp;</p><div class="select_dr"><input type="radio" checked="checked" name="doctor_id" value="'.$doc.'">Take an Appointment</div></span></div></div>';
+					}else{
+						$con .= '<div class="col-md-6"><div class="doc_box"><span class="image_dr"><img src="'.$picture.'" alt="#"></span><span class="content"><h5> '.$doctor_name.' </h5><p>&nbsp;</p><div class="select_dr"><input type="radio" name="doctor_id" value="'.$doc.'">Take an Appointment</div></span></div></div>';
 					}
 					
 				} 
@@ -937,22 +1083,31 @@ public function registration()
 	
 	public function getPatientDetails(){
 		$email = $this->input->post('email',TRUE);
-		$sql = "select * from log_info where email = '".$email."' and user_type = '3'";
+		$sql = "select * from log_info where email = '".$email."'";
 		$res = $this->db->query($sql);
 		$result = $res->result_array();
 		if(is_array($result) && count($result)>0){
 			$log_id = $result[0]['log_id'];
 			$user_type = $result[0]['user_type'];
-			$sql_pat = "select * from patient_tbl where log_id = '".$log_id."'";
-			$res_pat = $this->db->query($sql_pat);
-			$result_pat = $res_pat->result_array();
-			if(is_array($result_pat) && count($result_pat)>0){
-				$patient_name  = $result_pat[0]['patient_name'];
-				$patient_phone = $result_pat[0]['patient_phone'];
-				$sex   		   = $result_pat[0]['sex'];
-				$age    	   = $result_pat[0]['age'];
-			}
-			echo $patient_name.",".$patient_phone.",".$sex.",".$age;	
+			if($user_type==3){
+			    $sql_pat = "select * from patient_tbl where log_id = '".$log_id."'";
+    			$res_pat = $this->db->query($sql_pat);
+    			$result_pat = $res_pat->result_array();
+    			if(is_array($result_pat) && count($result_pat)>0){
+    				$patient_name  = $result_pat[0]['patient_name'];
+    				$patient_phone = $result_pat[0]['patient_phone'];
+    				$sex   		   = $result_pat[0]['sex'];
+    				$age    	   = $result_pat[0]['age'];
+    			}
+    			echo $patient_name.",".$patient_phone.",".$sex.",".$age;    
+    		}
+    		if($user_type==2){
+    		    echo "2";    
+    		}
+    		if($user_type==1){
+    		    echo "1";
+    		}
+				
 		}else{
 			echo "";
 		}
@@ -962,8 +1117,9 @@ public function registration()
 	public function getservicetypedoctorforimmde(){
 		
 		$servicestype = $this->input->post('servicestype',TRUE);
+		$lang_set_val = $this->input->post('lang_set_val',TRUE);
 		$sql = "select id,doctors from servicetype where servicetype = '".$servicestype."'";
-		//echo "<pre>";print_r($sql);die();
+		//echo "<pre>";print_r($lang_set_val);die(); 
 		$res = $this->db->query($sql);
 		$result = $res->result_array();
 		
@@ -973,19 +1129,63 @@ public function registration()
 			$doctors    = $result[0]['doctors'];
 		}
 		$doctors_arr = explode(',',$doctors);
-		
+		//echo "<pre>";print_r($doctors_arr);die();
 		$date	= date('d-m-Y');
 		$timestamp = strtotime($date);
 		$day1 = date('D', $timestamp); 
 		$day = $this->hash_model->day_to_de($day1);
 		$slot_arr =array();
-		if(is_array($doctors_arr) && count($doctors_arr)>0){
-			foreach($doctors_arr as $doctor_id){
+		$with_lng=array();
+		$without_lng=array();
+		if($lang_set_val!=""){
+			$lang_set_arr = explode(',',$lang_set_val);
+			//echo "<pre>";print_r($lang_set_arr);die();
+			if(is_array($doctors_arr) && count($doctors_arr)>0){
+				foreach($doctors_arr as $doc){
+					$sql_ln = "select doc_id,language from doctor_tbl where doctor_id = '".$doc."'";
+					//echo $sql_ln;
+					$res_ln = $this->db->query($sql_ln);
+					$result_ln = $res_ln->result_array();
+					if(is_array($result_ln) && count($result_ln)>0){
+						$language = $result_ln[0]['language'];
+						if($language!=""){
+							$language_arr = explode(',',$language);
+							foreach($language_arr as $val){
+								if(in_array(trim($val),$lang_set_arr)){
+									$with_lng[] = $doc;
+								}else{
+									$without_lng[] = $doc;
+								}
+							}	
+						}else{
+							$without_lng[] = $doc;	
+						}
+					}	
+				}
+			}
+			$doctors_arr_2=array();
+			foreach($with_lng as $val){
+				$doctors_arr_2[] = $val;
+			}
+			foreach($without_lng as $val){
+				$doctors_arr_2[] = $val;
+			}
+		}else{
+			$doctors_arr_2=array();
+			foreach($doctors_arr as $val){
+				$doctors_arr_2[] = $val;
+			}
+		}
+		//echo "<pre>".print_r($doctors_arr_2);die();
+		//$doctors_arr=array(58);
+		if(is_array($doctors_arr_2) && count($doctors_arr_2)>0){
+			foreach($doctors_arr_2 as $doctor_id){
 				//echo $day;
 				$venue_id=3;
 				//$doctor_id=14;
 			
 				$sql = "select * from schedul_setup_tbl where venue_id = '$venue_id' and doctor_id = '$doctor_id' and day = '".$day."'";
+				//echo $sql;die();
 				$res = $this->db->query($sql);
 				$result_pat = $res->result_array();
 				//echo "<pre>";print_r($result_pat);die();
@@ -1012,6 +1212,7 @@ public function registration()
 						if (is_array($result_pat) && count($result_pat)>0) {
 							//echo '<button type="button" disabled class="btn '.$button_color.'">'.$patient_time.'</button>';
 						} else {
+							if(strtotime($patient_time)>=$start_time_f && strtotime($patient_time)<$end_time_f)
 							$slot_avi[] = $patient_time;
 						}
 					}
@@ -1030,20 +1231,181 @@ public function registration()
 								break;
 							}
 						}
-						//echo "<re>";print_r($slot_avi);	
+						//echo "<re>";print_r($slot_arr);	
 					} 
 				}else{
-					echo '0'; 	
+					echo ''; 	
 				}
 			}
-			shuffle($slot_arr);
+			//shuffle($slot_arr);
 			//echo "<pre>";print_r($slot_arr);
-			echo $slot_arr[0]['doctor_id'].",".$slot_arr[0]['slot'].','.$slot_arr[0]['schedul_id'];
+			if(is_array($slot_arr) && count($slot_arr)>0){
+				echo $slot_arr[0]['doctor_id'].",".$slot_arr[0]['slot'].','.$slot_arr[0]['schedul_id'];	
+			}else{
+				echo '';
+			}
 			
 		}else{
-			echo '0'; 	
+			echo ''; 	
 		} 
+	}
+	
+	public function getservicetypedoctorforimmde2(){
 		
+		$servicestype = $this->input->post('servicestype',TRUE);
+		$lang_set_val = $this->input->post('lang_set_val',TRUE);
+		$sql = "select id,doctors from servicetype where servicetype = '".$servicestype."'";
+		//echo "<pre>";print_r($lang_set_val);die(); 
+		$res = $this->db->query($sql);
+		$result = $res->result_array();
+		
+		$doctors='';
+		if(is_array($result) && count($result)>0){
+			$service_id = $result[0]['id'];
+			$doctors    = $result[0]['doctors'];
+		}
+		$doctors_arr = explode(',',$doctors);
+		//echo "<pre>";print_r($doctors_arr);die();
+		$date	= date('d-m-Y');
+		$timestamp = strtotime($date);
+		$day1 = date('D', $timestamp); 
+		$day = $this->hash_model->day_to_de($day1);
+		$slot_arr =array();
+		$with_lng=array();
+		$without_lng=array();
+		if($lang_set_val!=""){
+			$lang_set_arr = explode(',',$lang_set_val);
+			//echo "<pre>";print_r($lang_set_arr);die();
+			if(is_array($doctors_arr) && count($doctors_arr)>0){
+				foreach($doctors_arr as $doc){
+					$sql_ln = "select doc_id,language from doctor_tbl where doctor_id = '".$doc."'";
+					//echo $sql_ln;
+					$res_ln = $this->db->query($sql_ln);
+					$result_ln = $res_ln->result_array();
+					if(is_array($result_ln) && count($result_ln)>0){
+						$language = $result_ln[0]['language'];
+						if($language!=""){
+							$language_arr = explode(',',$language);
+							foreach($language_arr as $val){
+								if(in_array(trim($val),$lang_set_arr)){
+									$with_lng[] = $doc;
+								}else{
+									$without_lng[] = $doc;
+								}
+							}	
+						}else{
+							$without_lng[] = $doc;	
+						}
+					}	
+				}
+			}
+			$doctors_arr_2=array();
+			foreach($with_lng as $val){
+				$doctors_arr_2[] = $val;
+			}
+			foreach($without_lng as $val){
+				$doctors_arr_2[] = $val;
+			}
+		}else{
+			$doctors_arr_2=array();
+			foreach($doctors_arr as $val){
+				$doctors_arr_2[] = $val;
+			}
+		}
+		//echo "<pre>".print_r($doctors_arr_2);die();
+		//$doctors_arr=array(58);
+		if(is_array($doctors_arr_2) && count($doctors_arr_2)>0){
+			foreach($doctors_arr_2 as $doctor_id){
+				//echo $day;
+				$venue_id=3;
+				//$doctor_id=14;
+			
+				$sql = "select * from schedul_setup_tbl where venue_id = '$venue_id' and doctor_id = '$doctor_id' and day = '".$day."'";
+				//echo $sql;die();
+				$res = $this->db->query($sql);
+				$result_pat = $res->result_array();
+				//echo "<pre>";print_r($result_pat);die();
+				if(is_array($result_pat) && count($result_pat)>0){
+					$start_time = $result_pat[0]['start_time'];
+					$end_time = $result_pat[0]['end_time'];
+					$schedul_id = $result_pat[0]['schedul_id'];
+					$per_patient_time = $result_pat[0]['per_patient_time'];
+					$start_time_f = strtotime($start_time);
+					$end_time_f = strtotime($end_time);
+					$total_m =  round(abs($end_time_f- $start_time_f) / 60,2);
+					$slot_avi=array();
+					for ($i = 1; $i <= $per_patient_time; $i++) {
+						$m_time = $i-1;
+						$time = ($m_time * $per_patient_time);
+										   
+						$date_f = date('Y-m-d',strtotime($date));							
+						$patient_time =date('H:i', strtotime($start_time)+$time*60);
+						$sql = "select * from appointment_tbl where venue_id = '$venue_id' and doctor_id = '$doctor_id' and date = '$date_f' and sequence = '$patient_time'"; 
+						//echo $sql;	
+						$res = $this->db->query($sql);
+						$result_pat = $res->result_array();	
+						//echo "<pre>";print_r($sql);die();
+						if (is_array($result_pat) && count($result_pat)>0) {
+							//echo '<button type="button" disabled class="btn '.$button_color.'">'.$patient_time.'</button>';
+						} else {
+							if(strtotime($patient_time)>=$start_time_f && strtotime($patient_time)<$end_time_f)
+							$slot_avi[] = $patient_time;
+						}
+					}
+					//echo "<pre>";print_r($slot_avi);die();
+					if(is_array($slot_avi) && count($slot_avi)>0){
+						date_default_timezone_set('Asia/Kolkata');
+						$current_time = date('d-m-Y H:i');
+						$current_time_f = date('H:i', strtotime($current_time));
+						//$current_time_f = '14:14:00';
+						$current_time_f_int = strtotime($current_time_f);
+						//echo $current_time_f_int;
+						foreach($slot_avi as $val){
+							if(strtotime($val)>$current_time_f_int){
+								//echo $val.",".$doctor_id;
+								$slot_arr[] = array('doctor_id'=>$doctor_id,"slot"=>$val,"value"=>strtotime($val),'schedul_id'=>$schedul_id);
+								break;
+							}
+						}
+						//echo "<re>";print_r($slot_arr);	
+					} 
+				}else{
+					echo ''; 	
+				}
+			}
+			//shuffle($slot_arr);
+			//echo "<pre>";print_r($slot_arr);
+			if(is_array($slot_arr) && count($slot_arr)>0){
+				echo $slot_arr[0]['doctor_id'].",".$slot_arr[0]['slot'].','.$slot_arr[0]['schedul_id'];	
+			}else{
+				echo '';
+			}
+			
+		}else{
+			echo ''; 	
+		} 
+	}
+	
+	public function checkAppointment(){
+		$p_email = $this->input->post('p_email',TRUE);
+		$p_date = $this->input->post('p_date',TRUE);
+		
+		$patient_id = '';
+		$sql = "select * from patient_tbl where patient_email = '$p_email' ";
+		$res = $this->db->query($sql);
+		$result = $res->result_array();
+		if(is_array($result) && count($result)>0){
+			$patient_id = $result[0]['patient_id'];
+		}
+		
+		$check =  $this->appointment_model->Check_appointment($p_date,$patient_id);
+		  
+		if(!empty($check)){
+			echo '1';
+		}else{
+			echo '0';
+		}
 		
 	}
+	
 }

@@ -1,3 +1,10 @@
+
+<?php
+$user_type = $this->session->userdata('user_type');
+if($user_type =="3" || $user_type==""){
+	redirect('/');
+}
+?>
 <nav class="navbar navbar-static-top">
                     <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button"> 
                         <span class="sr-only">Toggle navigation</span>
@@ -6,8 +13,6 @@
                     <div class="navbar-custom-menu">
                     <?php if($this->session->userdata('user_type') == 1) { ?>
                         <ul class="nav navbar-nav">
-
-                            
                             <!-- settings -->
                             <li class="dropdown dropdown-user">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <i class="pe-7s-settings"></i></a>
@@ -55,6 +60,7 @@
 				<?php
 				//echo '<pre>'; print_r($this->session->all_userdata());exit;
 				$user_id = $this->session->userdata('doctor_id');
+				
 				?>
                     <!-- Sidebar user panel -->
                     <?php if($this->session->userdata('user_type')==1) { ?>
@@ -78,8 +84,18 @@
                             <p><?php echo $this->session->userdata('doctor_name'); ?></p>
 							
                             <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
-							<p><a href="<?php echo base_url();?>logout"><i class="fa fa-sign-out fa-fw"></i> <?php echo display('logout');?></a></p>
-                        </div>
+						</div>
+						<ul style="text-align: left; margin-left: 53px;">
+							<li>
+								<a href="<?php echo base_url();?>profile"><i class="pe-7s-users"></i><?php echo display('profile');?></a>
+							</li>
+							<li>
+								<a href="<?php echo base_url();?>admin/Setting_controller/password_change"><i class="pe-7s-key"></i><?php echo display('change_password');?></a>
+							</li>
+							<li>
+								<a href="<?php echo base_url();?>logout"><i class="fa fa-sign-out fa-fw"></i> <?php echo display('logout');?></a>
+							</li>
+						</ul>
                     </div>
 
                     <!-- sidebar menu -->
@@ -98,13 +114,13 @@
                                 </span>
                             </a>
                             <ul class="treeview-menu">
-                                <li><a href="<?php echo base_url();?>admin/Prescription_controller/create_new_prescription"><i class="fa fa-plus" aria-hidden="true"></i> <?php echo display('create_trade')?> </a></li>
+                                <!--<li><a href="<?php echo base_url();?>admin/Prescription_controller/create_new_prescription"><i class="fa fa-plus" aria-hidden="true"></i> <?php echo display('create_trade')?> </a></li>-->
                                 <li class=""><a href="<?php echo base_url();?>admin/Generic_controller/create_new_generic"><i class="fa fa-plus" aria-hidden="true"></i> <?php echo display('create_generic')?></a></li>
                                 <li><a href="<?php echo base_url();?>admin/Prescription_controller/prescription_list"> <i class="fa fa-list" aria-hidden="true"></i> <?php echo display('prescription_list')?></a></li>
                             </ul>
                         </li>
 
-                        <li class="treeview payment">
+                        <!--<li class="treeview payment">
                             <a href="#">
                                 <i class="fa fa-plus"></i><span><?php echo display('payment');?></span>
                                 <span class="pull-right-container">
@@ -115,7 +131,7 @@
                                 <li><a href="<?php echo base_url();?>admin/payment_method/Payment"><i class="fa fa-plus" aria-hidden="true"></i> <?php echo display('Payment_Setup');?> </a></li>
                                 <li><a href="<?php echo base_url();?>admin/payment_method/Payment_manage"><i class="fa fa-plus" aria-hidden="true"></i> <?php echo display('payment_list');?></a></li>
                             </ul>
-                        </li>
+                        </li>-->
 
                         <li class="treeview appointment">
                             <a href="#">
@@ -157,7 +173,7 @@
                             </ul>
                         </li>
 
-                        <li class="treeview emergency_stop">
+                        <!--<li class="treeview emergency_stop">
                             <a href="#">
                                <i class="fa fa-hand-paper-o" aria-hidden="true"></i><span><?php echo display('emergency_stop')?> </span>
                                 <span class="pull-right-container">
@@ -168,7 +184,7 @@
                                 <li><a href="<?php echo base_url();?>admin/Emergency_stop_controller"> <i class="fa fa-stop-circle" aria-hidden="true"></i> <?php echo display('emergency_stop_setup')?></a></li>
                                 <li><a href="<?php echo base_url();?>admin/Emergency_stop_controller/emergency_stop_list"> <i class="fa fa-list" aria-hidden="true"></i> <?php echo display('emergency_stop_list')?></a></li>
                             </ul>
-                        </li>
+                        </li>-->
 
                         <li class="treeview venue">
                             <a href="#">
@@ -419,7 +435,7 @@
                             </ul>
                         </li>
 
-                        <li class="treeview sms_setup">
+                        <!--<li class="treeview sms_setup">
                             <a href="#">
                                 <i class="fa fa-envelope-o" aria-hidden="true"></i> <?php echo display('sms_setup')?> </span>
                                 <span class="pull-right-container">
@@ -435,7 +451,7 @@
                              <li><a href="<?php echo base_url();?>admin/Sms_report_controller/custom_sms_list" class="nav-link"> <i class="fa fa-sun-o" aria-hidden="true"></i> <?php echo display('custom_sms_report')?> </a></li>
                             <li><a href="<?php echo base_url();?>admin/Sms_report_controller/auto_sms_list" class="nav-link"> <i class="fa fa-sun-o" aria-hidden="true"></i> <?php echo display('auto_sms_report')?> </a></li>
                             </ul>
-                        </li>
+                        </li>-->
 
                         <li class="treeview email">
                             <a href="#">
@@ -494,8 +510,18 @@
                     <div class="info">
                         <p><?php echo $this->session->userdata('doctor_name'); ?></p>
                         <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
-						<p><a href="<?php echo base_url();?>logout"><i class="fa fa-sign-out fa-fw"></i> <?php echo display('logout');?></a></p>
-                    </div>
+					</div>
+					<ul style="text-align: left; margin-left: 53px;">
+							<li>
+								<a href="<?php echo base_url();?>profile"><i class="pe-7s-users"></i><?php echo display('profile');?></a>
+							</li>
+							<li>
+								<a href="<?php echo base_url();?>admin/Setting_controller/password_change"><i class="pe-7s-key"></i><?php echo display('change_password');?></a>
+							</li>
+							<li>
+								<a href="<?php echo base_url();?>logout"><i class="fa fa-sign-out fa-fw"></i> <?php echo display('logout');?></a>
+							</li>
+						</ul>
                 </div>
 
 
@@ -515,7 +541,7 @@
                                 </span>
                             </a>
                             <ul class="treeview-menu">
-                                <li><a href="<?php echo base_url();?>admin/Prescription_controller/create_new_prescription"><i class="fa fa-plus" aria-hidden="true"></i> <?php echo display('create_trade')?> </a></li>
+                                <!--<li><a href="<?php echo base_url();?>admin/Prescription_controller/create_new_prescription"><i class="fa fa-plus" aria-hidden="true"></i> <?php echo display('create_trade')?> </a></li>-->
                                 <li class=""><a href="<?php echo base_url();?>admin/Generic_controller/create_new_generic"><i class="fa fa-plus" aria-hidden="true"></i> <?php echo display('create_generic')?></a></li>
                                 <li><a href="<?php echo base_url();?>admin/Prescription_controller/prescription_list"> <i class="fa fa-list" aria-hidden="true"></i> <?php echo display('prescription_list')?></a></li>
                             </ul>
@@ -559,7 +585,7 @@
                             </ul>
                         </li>
 
-                     <li class="treeview emergency_stop">
+                     <!--<li class="treeview emergency_stop">
                         <a href="#"><i class="fa fa-paw" aria-hidden="true"></i> <?php echo display('emergency_stop')?>
                             <span class="pull-right-container">
                                 <i class="fa fa-angle-left pull-right"></i>
@@ -569,7 +595,7 @@
                             <li><a href="<?php echo base_url();?>admin/Emergency_stop_controller"> <i class="fa fa-stop-circle" aria-hidden="true"></i> <?php echo display('emergency_stop_setup')?></a></li>
                             <li><a href="<?php echo base_url();?>admin/Emergency_stop_controller/emergency_stop_list"> <i class="fa fa-list" aria-hidden="true"></i><?php echo display('emergency_stop_list')?></a></li>
                         </ul>
-                    </li>
+                    </li>-->
 
                      <li class="treeview setup_data">
                         <a href="#">
@@ -589,7 +615,7 @@
                         </ul>
                     </li>
 					
-					<li class="treeview sms_setup">
+					<!--<li class="treeview sms_setup">
                             <a href="#">
                                 <i class="fa fa-envelope-o" aria-hidden="true"></i> <?php echo display('sms_setup')?> </span>
                                 <span class="pull-right-container">
@@ -604,7 +630,7 @@
                         <li><a href="<?php echo base_url();?>admin/Sms_report_controller/custom_sms_list" class="nav-link"> <i class="fa fa-sun-o" aria-hidden="true"></i> <?php echo display('custom_sms_report')?> </a></li>
                         <li><a href="<?php echo base_url();?>admin/Sms_report_controller/auto_sms_list" class="nav-link"> <i class="fa fa-sun-o" aria-hidden="true"></i> <?php echo display('auto_sms_report')?> </a></li>
                         </ul>
-                    </li>
+                    </li>-->
 
                 </ul>
 					<?php }?>
@@ -626,8 +652,18 @@
                     <div class="info">
                         <p><?php echo $this->session->userdata('user_name'); ?></p>
                         <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
-						<p><a href="<?php echo base_url();?>logout"><i class="fa fa-sign-out fa-fw"></i> <?php echo display('logout');?></a></p>
-                    </div>
+					</div>
+					<ul style="text-align: left; margin-left: 53px;">
+							<li>
+								<a href="<?php echo base_url();?>profile"><i class="pe-7s-users"></i><?php echo display('profile');?></a>
+							</li>
+							<li>
+								<a href="<?php echo base_url();?>admin/Setting_controller/password_change"><i class="pe-7s-key"></i><?php echo display('change_password');?></a>
+							</li>
+							<li>
+								<a href="<?php echo base_url();?>logout"><i class="fa fa-sign-out fa-fw"></i> <?php echo display('logout');?></a>
+							</li>
+						</ul>
                 </div>
 
 
@@ -648,7 +684,7 @@
                                 </span>
                             </a>
                             <ul class="treeview-menu">
-                                <li><a href="<?php echo base_url();?>admin/Prescription_controller/create_new_prescription"><i class="fa fa-plus" aria-hidden="true"></i> <?php echo display('create_trade')?> </a></li>
+                                <!--<li><a href="<?php echo base_url();?>admin/Prescription_controller/create_new_prescription"><i class="fa fa-plus" aria-hidden="true"></i> <?php echo display('create_trade')?> </a></li>-->
                                 <li class=""><a href="<?php echo base_url();?>admin/Generic_controller/create_new_generic"><i class="fa fa-plus" aria-hidden="true"></i> <?php echo display('create_generic')?></a></li>
                                 <li><a href="<?php echo base_url();?>admin/Prescription_controller/prescription_list"> <i class="fa fa-list" aria-hidden="true"></i> <?php echo display('prescription_list')?></a></li>
                             </ul>
@@ -691,7 +727,7 @@
                             </ul>
                         </li>
 
-                     <li class="treeview emergency_stop">
+                     <!--<li class="treeview emergency_stop">
                         <a href="#"><i class="fa fa-paw" aria-hidden="true"></i> <?php echo display('emergency_stop')?>
                             <span class="pull-right-container">
                                 <i class="fa fa-angle-left pull-right"></i>
@@ -701,7 +737,7 @@
                             <li><a href="<?php echo base_url();?>admin/Emergency_stop_controller"> <i class="fa fa-stop-circle" aria-hidden="true"></i> <?php echo display('emergency_stop_setup')?></a></li>
                             <li><a href="<?php echo base_url();?>admin/Emergency_stop_controller/emergency_stop_list"> <i class="fa fa-list" aria-hidden="true"></i><?php echo display('emergency_stop_list')?></a></li>
                         </ul>
-                    </li>
+                    </li>-->
 
                      <li class="treeview setup_data">
                         <a href="#">
@@ -722,7 +758,7 @@
                     </li>
 
 
-                     <li class="treeview sms_setup">
+                     <!--<li class="treeview sms_setup">
                             <a href="#">
                                 <i class="fa fa-envelope-o" aria-hidden="true"></i> <?php echo display('sms_setup')?> </span>
                                 <span class="pull-right-container">
@@ -737,7 +773,7 @@
                              <li><a href="<?php echo base_url();?>admin/Sms_report_controller/custom_sms_list" class="nav-link"> <i class="fa fa-sun-o" aria-hidden="true"></i> <?php echo display('custom_sms_report')?> </a></li>
                             <li><a href="<?php echo base_url();?>admin/Sms_report_controller/auto_sms_list" class="nav-link"> <i class="fa fa-sun-o" aria-hidden="true"></i> <?php echo display('auto_sms_report')?> </a></li>
                             </ul>
-                        </li>
+                        </li>-->
                     
                     
                 </ul>

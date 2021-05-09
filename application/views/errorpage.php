@@ -21,6 +21,28 @@
 	<meta name="keywords" content="<?php echo $meta_info[0]['meta_keywords']; ?>">
 	<meta name="description" content="<?php echo $meta_info[0]['meta_description']; ?>">
 	
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y9P95E4VWH"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-Y9P95E4VWH');
+</script>
+<script id="mcjs">!function(c,h,i,m,p){m=c.createElement(h),p=c.getElementsByTagName(h)[0],m.async=1,m.src=i,p.parentNode.insertBefore(m,p)}(document,"script","https://chimpstatic.com/mcjs-connected/js/users/e836e1578317f3389cedf8f6a/0bf682a738edbb1cd96720c12.js");</script>
+
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/608c0bf662662a09efc3afa9/1f4hgtf3e';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+	
 </head>
 <?php
 function GeraHash($qtd){
@@ -94,30 +116,7 @@ $hello = GeraHash(5);
                                         <li class="active">
                                             <a href="#home">Home</a>
                                         </li>
-                                        <!--<li class="dropdown">
-                                            <a href="#" class="dropdown-toggle dropdown-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Case Studies</a>
-                                            <ul class="dropdown-content">
-                                                <li>
-                                                    <a href="#">Home</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#">About Us</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#">Blog</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#">Contact Us</a>
-                                                </li>
-                                            </ul>
-                                        </li>-->
-										<!--<li><a href="#appointment">Appointment</a></li>-->
-										<li><a href="<?php echo base_url();?>#about">About Us</a></li>
-										<li><a href="<?php echo base_url();?>#doctors">Doctors</a></li>
-										<li><a href="<?php echo base_url();?>Appointment">Appointment</a></li>
-										<li><a href="<?php echo base_url();?>#testimonials">Testimonials</a></li>
-										<li><a href="<?php echo base_url();?>blogs">Blog</a></li>
-										<li><a href="<?php echo base_url();?>#faq">FAQs</a></li>
+										<li><a href="<?php echo base_url();?>Appointment">Book Appointment</a></li>
 										<li><a href="<?php echo base_url();?>contact">Contact Us</a></li>
                                     </ul>
                                 </div>
@@ -129,9 +128,23 @@ $hello = GeraHash(5);
         </div>
     </header>
 
-   <section class="multi_step_form appointment_page">
-	<img src="<?php echo base_url();?>web_assets2/images/404.png" />
+    <section class="multi_step_form appointment_page pt-5 pb-5 mb-0">
+       <div class="container">
+            <div class="row">
+                <div class="col-md-8 mb-4">
+                   <div class="page_no">
+                        <a href="https://www.telehealers.in/"><img src="<?php echo base_url();?>web_assets2/images/page_not_found.jpg" /></a>
+                   </div>
+                </div>
+                <div class="col-md-4">
+                   <div class="page_no">
+                        <img src="<?php echo base_url();?>web_assets2/images/anima2.gif" />
+                   </div>
+                </div>
+            </div>
+       </div>	
 	</section>
+
 
     
 	
@@ -196,6 +209,14 @@ $hello = GeraHash(5);
     
     <script src="<?php echo base_url();?>web_assets2/appointment/js/script.js"></script>
 	
+<script>
+function preventBack() { 
+window.history.forward(); 
+}  
+setTimeout("preventBack()", 0);  
+window.onunload = function () { null };  
+
+</script>
 	
 </body>
 </html>

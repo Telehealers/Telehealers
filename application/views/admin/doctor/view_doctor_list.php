@@ -32,7 +32,8 @@
                         </div>
                     </div>
                 <div class="panel-body">
-                    <table width="100%" class="table table-striped table-bordered table-hover" >
+				<!--<table width="100%" class="table table table-striped table-bordered table-hover" id="dataTables">-->
+                    <table width="100%" class="table table-striped table-bordered table-hover">
                         <thead>
                             <tr>
                                 <th><?php echo display('picture');?></th>
@@ -42,11 +43,11 @@
                                 <th>Degrees</th>
                                 <th>Specialist</th>
                                 <th>Doctor Experiance</th>
-                                <th>Birth Date</th>
+                               
                                 <th>Sex</th>
-                                <th>Blood Group</th>
+                                
                                 <th>Phone</th>
-                                <th>Address</th>
+                               
                                 <th><?php echo display('action');?></th> 
                             </tr>
                         </thead>
@@ -74,11 +75,9 @@
                                 <td><?php echo html_escape($value['degrees']);?></td>
                                 <td><?php echo html_escape($value['specialist']);?></td>
                                 <td><?php echo html_escape($value['doctor_exp']);?></td>
-                                <td><?php echo html_escape($value['birth_date']);?></td>
                                 <td><?php echo html_escape($value['sex']);?></td>
-                                <td><?php echo html_escape($value['blood_group']);?></td>
                                 <td><?php echo html_escape($value['doctor_phone']);?></td>
-                                <td><?php echo html_escape($value['address']);?></td>
+                                
                                 <td class="">
 								<a  class="btn btn-xs btn-danger" href="<?php echo base_url();?>admin/Doctor_controller/edit_profile/<?php echo html_escape($value['doctor_id']) ;?>">
                                     <i class="fa fa-edit"></i> </a>
@@ -94,7 +93,8 @@
                 </div>
             </div>
         </div>
-    </div>            
+    </div>       
+</div>	
     </section>
 </div>
 

@@ -29,6 +29,14 @@
                         echo "<div class='alert alert-success msg'>".html_escape($mag)."</div><br>";
                     }
                 ?>
+				
+				<?php 
+                    $mag = $this->session->flashdata('message2');
+                    if($mag !=''){
+                        echo "<div class='alert alert-danger msg'>".html_escape($mag)."</div><br>";
+                    }
+                ?>
+				
                 <div class="panel panel-default">
 
                     <div class="panel-heading">
@@ -39,7 +47,7 @@
                 
                     <div class="panel-body">
                         <div class="table-responsive">
-                        <table width="100%" class="table table-striped table-bordered table-hover dt-responsive" id="appointment">
+                         <table width="100%" class="table table-striped table-bordered table-hover" id="patient_list">
                             <thead>
                                 <tr>
                                     <th class="all"><?php echo display('doctor_name'); ?></th>
@@ -51,8 +59,8 @@
                                     <th class="none"><?php echo display('venue'); ?></th>
                                     <th class="all"><?php echo display('sequence'); ?></th>
                                     <th class="all"><?php echo display('date'); ?></th>
-                                    <th class="all"><?php echo display('sms'); ?></th>
-                                    <th class="all">Payment Status</th>
+                                    <th class="all">Meeting URL</th>
+                                    <th class="all">Meeting Password</th>
                                     <th class="desktop"><?php echo display('action'); ?></th>
                                 </tr>
                             </thead>
@@ -74,10 +82,10 @@
                                
 
                                      @$sequence_time = $value->sequence-1; 
-                                     $time = ($sequence_time * $value->per_patient_time);
-                                     $serial_time =date('h:i A', strtotime($value->start_time)+$time*60);
+                                     $time = ($sequence_time * 15);
+                                     //$serial_time =date('h:i A', strtotime($value->start_time)+$time*60);
 
-									$SQL = 'select doctor_name from doctor_tbl where doctor_id != "'.$value->doctor_id.'"';
+									$SQL = 'select doctor_name from doctor_tbl where doctor_id = "'.$value->doctor_id.'"';
 		
 									$query = $this->db->query($SQL);
 
@@ -86,9 +94,31 @@
 									if(is_array($result2) && count($result2)>0){
 										$doctor_name = $result2[0]['doctor_name'];
 									}
+									
+									$sql2 = "select * from appointment_tbl where appointment_id= '".$value->appointment_id."'";
+									$res_doc = $this->db->query($sql2);
+									$result_doc = $res_doc->result_array();
+									if(is_array($result_doc) && count($result_doc)>0){
+										$symt1 = $result_doc[0]['symt1'];
+										$symt2 = $result_doc[0]['symt2'];
+										$doctor_id = $result_doc[0]['doctor_id'];
+									}
+									
+									$SQL = 'select doctor_name from doctor_tbl where doctor_id = "'.$doctor_id.'"';
+		
+									$query = $this->db->query($SQL);
+
+									$result2 = $query->result_array();
+									$doctor_name = '-';
+									if(is_array($result2) && count($result2)>0){
+										$doctor_name = $result2[0]['doctor_name'];
+									}
+									
+									
+									
                                     ?>
 
-                                <tr <?php echo ($result>0)?'style="background-color: rgb(19, 203, 21)"':''?> >
+                                <tr>
 
                                     <td><?php echo html_escape($doctor_name);?></td>
 									<td><?php echo html_escape($value->patient_name);?></td>
@@ -97,29 +127,25 @@
                                     <td><?php echo html_escape($value->problem);?></td>
                                     <td><?php echo html_escape($value->appointment_id);?></td>
                                     <td><?php echo html_escape($value->venue_name);?></td>
-                                    <td><?php echo html_escape(@$value->sequence) ;?></td>
-                                    <td><?php echo html_escape($value->date);?></td>
                                     <td>
-                                        <?php echo '<a class="btn btn-sm btn-primary" href="javascript:void(0)" title="send sms" onclick="sms_send('."'".html_escape($value->appointment_id)."'".')"><i class="fa fa-envelope-o" aria-hidden="true"></i> SMS</a>';?>
+									<?php
+		$app_time = date('h:i A', strtotime($value->sequence));
+		?>
+									<?php echo $app_time ;?>
+									
+									</td>
+                                    <td>
+									<?php
+		$app_date = date('jS F Y',strtotime($value->date));
+		?>
+									<?php echo  $app_date; ?>								
+									</td>
+                                    <td>
+                                        <a href="<?php echo $symt1;?>" target="_blank"><?php echo $symt1;?></a>
                                     </td>
-
+										
                                     <td>
-									<?php 
-									$schedul_id = $value->schedul_id;
-									$SQL1 = "select * from schedul_setup_tbl where schedul_id = '".$schedul_id."'";
-									$query1 = $this->db->query($SQL1);
-									$result1 = $query1->result_array();
-									if(is_array($result1) && count($result1)>0){
-										$fees = $result1[0]['fees'];
-									}
-			
-									?>
-                                        <?php if($Payment!=NULL){?>
-                                            <a class="btn btn-sm btn-primary"> Paid</a>
-                                        <?php } else{ ?>
-											<?php if($fees==1){echo 'Free';}else{?>
-                                            <a class="btn btn-sm btn-danger" target="_blank" href="<?php echo base_url();?>admin/payment_method/Payment/pay_with_doctor/<?php echo html_escape($value->appointment_id);?>"> Not Paid</a>
-											<?php }}?>
+										<?php echo $symt2;?>
                                     </td>
 
                                     <td class="text-center" width="100">
@@ -130,9 +156,9 @@
                                             <a class="btn btn-xs btn-primary" data-toggle="tooltip" title="View Prescription!"  target="_blank" href="<?php echo base_url();?>admin/Prescription_controller/my_prescription/<?php echo html_escape($value->appointment_id); ?>"><i class="fa fa-eye"></i></a>   
                                         <?php } ?> 
                                         <a class="btn btn-xs btn-success" data-toggle="tooltip" title="View Appointment" target="_blank" href="<?php echo base_url();?>admin/Basic_controller/my_appointment/<?php echo html_escape($value->appointment_id); ?>"><i class="fa fa-print"></i></a>
-                                        <a class="btn btn-xs btn-info" data-toggle="tooltip" title="View History" target="_blank" href="<?php echo base_url();?>History_controller/patient_history/<?php echo html_escape($value->patient_id); ?>"><i class="fa fa-history" aria-hidden="true"></i></a>
-                                        <a class="btn btn-xs btn-danger" data-toggle="tooltip" title="Delet" href="<?php echo base_url();?>admin/Appointment_controller/delete_appointment/<?php echo html_escape($value->appointment_id); ?>"><i class="fa fa-trash" aria-hidden="true"></i></a>
-                                       
+                                        <!--<a class="btn btn-xs btn-info" data-toggle="tooltip" title="View History" target="_blank" href="<?php echo base_url();?>History_controller/patient_history/<?php echo html_escape($value->patient_id); ?>"><i class="fa fa-history" aria-hidden="true"></i></a>-->
+                                        <a class="btn btn-xs btn-danger" data-toggle="tooltip" title="Delete" href="<?php echo base_url();?>admin/Appointment_controller/delete_appointment/<?php echo html_escape($value->appointment_id); ?>"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                       <a class="btn btn-xs btn-primary" href="<?php echo base_url();?>admin/Appointment_controller/send_meet_url/<?php echo $value->appointment_id; ?>" onclick="return confirm('Are you want to send meeting url?');">Send Meeting Url</a>
                                     </td>
                                 </tr>
                                 <?php

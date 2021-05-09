@@ -32,7 +32,8 @@
                         </div>
                     </div>
                 <div class="panel-body">
-                    <table width="100%" class="table table-striped table-bordered table-hover" id="patient_list">
+				<div class="table-responsive">
+                   <table width="100%" class="table table-striped table-bordered table-hover" id="patient_list">
                         <thead>
                             <tr>
                                 <th><?php echo display('picture');?></th>
@@ -81,6 +82,7 @@
                             ?>
                         </tbody>
                     </table> 
+					</div>
                 </div>
             </div>
         </div>

@@ -59,6 +59,8 @@ $result = $this->db->select('*')->from('web_pages_tbl')->where('name','logo')->w
         <input type="hidden" id="segment2" value="<?php echo $this->uri->segment(2); ?>">
         <input type="hidden" id="segment3" value="<?php echo $this->uri->segment(3); ?>">
     
+       
+        
         <div class="se-pre-con"></div>
         <!-- Site wrapper -->
         <div class="wrapper">
@@ -71,6 +73,8 @@ $result = $this->db->select('*')->from('web_pages_tbl')->where('name','logo')->w
                         <img src="<?php echo html_escape($result->picture);?>" alt="">
                     </span>
                 </a>
+
+                
 
                 <!-- Header Navbar -->
                 <nav class="navbar navbar-static-top">

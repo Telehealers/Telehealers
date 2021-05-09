@@ -20,14 +20,18 @@ class Generic_controller extends CI_Controller {
 
         $this->load->helper('form');
 		$this->load->library('form_validation');
+		$this->load->model('admin/Patient_model','patient_model');
         $this->load->model('admin/Prescription_model','prescription_model');
 	 	$this->load->model('admin/Venue_model','venue_model');
 	 	$this->load->model('admin/Overview_model','overview_model');
 	 	$this->load->model('admin/Represcription','represcription');
 		$this->load->model('admin/Doctor_model','doctor_model');
 	 	$result = $this->db->select('*')->from('web_pages_tbl')->where('name','timezone')->get()->row();
-		
 		date_default_timezone_set(@$result->details);	 	
+		
+		$this->load->model('admin/email/Email_model','email_model');
+        $this->load->library('email');
+		
 	}
 
 #-----------------------------------------------
@@ -286,8 +290,30 @@ class Generic_controller extends CI_Controller {
 	public function create_new_generic()
 	{
 		$data['venue'] = $this->venue_model->get_venue_list();
-		$data['doctor_info'] = $this->doctor_model->getDoctorListByselect();
-	 	$this->load->view('admin/_header',$data);
+		
+		//$data['doctor_info'] = $this->doctor_model->getDoctorListByselect();
+		
+		$user_type = $this->session->userdata('user_type');
+		if($user_type==1){
+			$doctor_id = $this->session->userdata('doctor_id');
+			if($doctor_id!="1"){
+				$data['doctor_info'] = $this->doctor_model->getDoctorListById($doctor_id);
+				$data['patient_info'] = $this->patient_model->get_by_id_patient($doctor_id);
+					
+			}else{
+				$data['doctor_info'] = $this->doctor_model->getDoctorListByselect();
+				$data['patient_info'] = $this->patient_model->get_all_patient();
+			}
+			
+		}else{
+			$data['doctor_info'] = $this->doctor_model->getDoctorListByselect();
+			$data['patient_info'] = $this->patient_model->get_all_patient();
+		}
+	 	
+		//echo "<pre>";print_r($data['patient_info']);die();
+		
+		
+		$this->load->view('admin/_header',$data);
 		$this->load->view('admin/_left_sideber');
 		$this->load->view('admin/view_create_generic');
 		$this->load->view('admin/_footer');	 
@@ -324,6 +350,7 @@ class Generic_controller extends CI_Controller {
 
 	public function save_generic()
 	{
+		
 
 		$info = $this->db->where('name','timezone')->get('web_pages_tbl')->row();
          date_default_timezone_set(@$info->details);
@@ -345,13 +372,16 @@ class Generic_controller extends CI_Controller {
 			$this->db->query($sql_int);
 		} else {
 			 	$patient_id = $this->input->post('patient_id',TRUE);
+			 	$doctor_id = $this->input->post('doctor',TRUE);
 		}
 
 	 	if(empty($this->input->post('appointment_id',TRUE))) {
-	 		$pdata['appointment_id'] = "A".date('y').strtoupper($this->randstrGen(2,4));
+	 		//$pdata['appointment_id'] = "A".date('y').strtoupper($this->randstrGen(2,4));
+	 		$pdata['appointment_id'] = '';
 	 	} else {
 	 		$pdata['appointment_id'] = $this->input->post('appointment_id',TRUE);
 	 	}
+			$app_id = $pdata['appointment_id'];
 
 			 	$pdata['patient_id'] = $patient_id;
 			 	$pdata['appointment_id'] =$pdata['appointment_id'];
@@ -555,11 +585,14 @@ class Generic_controller extends CI_Controller {
 				$this->db->query($sql_int);
 			}
 		}
+		
+		
 	 	$d['appointment_id'] = $pdata['appointment_id'];
 	 	$d['prescription_id'] = $p;
     	$this->session->set_userdata($d);
 	 	redirect("admin/Generic_controller/prescription");
 	}
+
 
 
 #-------------------------------------------

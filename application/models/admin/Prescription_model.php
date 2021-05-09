@@ -36,6 +36,21 @@ class Prescription_model extends CI_model {
         return $result;
     }
 
+
+	public function prescription_list_doc_id($user_id)
+    {
+        $this->db->select("prescription.*,
+        patient_tbl.*"
+        );
+        $this->db->from("prescription");
+        $this->db->join('patient_tbl', 'patient_tbl.patient_id = prescription.patient_id','left'); 
+		$this->db->where('patient_tbl.doctor_id',$user_id);
+        $query = $this->db->get();
+        $result = $query->result();
+        return $result;
+    }
+
+
 /*
 |------------------------------------------------
 |  

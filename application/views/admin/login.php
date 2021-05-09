@@ -81,8 +81,7 @@
                                         <option value="">Select One</option>
                                         <option value="1"><?php echo display('doctor');?></option>
                                         <option value="2"><?php echo display('assistant');?></option>
-										<option value="3"><?php echo display('patient');?></option>
-                                    </select>
+									</select>
                                      <span class="text-danger"><?php echo form_error('type');?></span>
                                 </div>
 
@@ -94,6 +93,7 @@
                                 
                         </form>
                     </div>
+					<span style="text-align:center;width: 100%;float: left;margin-top: 20px;"><a href="<?php echo base_url();?>">Go to site</a></span>
                 </div>
             </div>
         </div>

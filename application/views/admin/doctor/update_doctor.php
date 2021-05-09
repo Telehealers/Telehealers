@@ -41,17 +41,24 @@
                                 echo htmlspecialchars_decode($mag);
                             }
                             $attributes = array('class' => 'form-horizontal','name'=>'d_info','role'=>'form');
-                            echo form_open_multipart('admin/Doctor_controller/update_profile', $attributes);                
+                            echo form_open_multipart('admin/Doctor_controller/update_profile_doc', $attributes);                
                         ?>
                             <div class="form-body">
 							
-							<div class="form-group">
+							<div class="form-group" style="display:none;">
                                     <label class="col-md-3 control-label"><span class="text-danger"> * </span> Fees</label>
                                     <div class="col-md-7">
                                        <input type="number"  requeird name="fees" value="<?php echo html_escape(@$doctor_info->fees); ?>"  class="form-control" placeholder="">
                                      </div>
                                 </div>
 								
+								<div class="form-group">
+                                    <label class="col-md-3 control-label">Registration number </label>
+                                    <div class="col-md-7">
+                                        <input type="text" name="registration_number" class="form-control" value="<?php echo html_escape(@$doctor_info->doc_id); ?>" placeholder="Registration Number"> 
+                                     <?php echo form_error('name', '<div class=" text-danger">', '</div>'); ?>
+                                    </div>
+                                </div>
 								
                                 <div class="form-group">
                                     <label class="col-md-3 control-label"><span class="text-danger"> * </span> <?php echo display('doctor_name');?> </label>
@@ -185,6 +192,13 @@
                                     <div class="col-md-7">
                                          <textarea name="language" value="<?php echo html_escape(@$doctor_info->language); ?>" 
                                             class="form-control" rows="3"><?php echo html_escape(@$doctor_info->language); ?></textarea>
+                                    </div>
+                                </div>
+								
+								<div class="form-group">
+                                    <label class="col-md-3 control-label">Meeting URL</label>
+                                    <div class="col-md-7">
+                                        <input type="text" name="meet_url" value="<?php echo html_escape(@$doctor_info->meet_url); ?>" class="form-control" placeholder="Meeting URL"> 
                                     </div>
                                 </div>
 

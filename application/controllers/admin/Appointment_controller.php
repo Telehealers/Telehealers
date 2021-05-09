@@ -1,4 +1,5 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
+include APPPATH.'../zoom/config.php';
 
 class Appointment_controller extends CI_Controller {
 
@@ -26,7 +27,8 @@ class Appointment_controller extends CI_Controller {
         $this->load->model('admin/email/Email_model','email_model');
 		$this->load->model('admin/Doctor_model','doctor_model');
         $this->load->library('email');
-
+		
+		
   }
 
 
@@ -73,17 +75,24 @@ class Appointment_controller extends CI_Controller {
         $data['teamplate'] = $this->sms_setup_model->teamplate_list();
     
 		$user_type = $this->session->userdata('user_type');
+		
+		
+		
+		
 		if($user_type==1){
-			$doctor_id = $this->session->userdata('doctor_id');
+			echo $doctor_id = $this->session->userdata('doctor_id');
 			if($doctor_id!="1"){
 				$data['appointmaent_info'] = $this->appointment_model->get_appointment_list_by_id($doctor_id);
 			}else{
+				
 				$data['appointmaent_info'] = $this->appointment_model->get_appointment_list();
+				//echo "<pre>";print_r($data['appointmaent_info']);die();
 			}
 		}else{
 			$data['appointmaent_info'] = $this->appointment_model->get_appointment_list();
 		}
-		
+
+		//echo "<pre>";print_r($data['appointmaent_info']);die();
 	
         
         
@@ -173,10 +182,26 @@ class Appointment_controller extends CI_Controller {
 
     public function save_appointment()
     { 
+		$ci = get_instance();
+		$ci->load->library('email');
+        $config['protocol'] = "tls";
+        $config['smtp_host'] = "inpro8.fcomet.com";
+        $config['smtp_port'] = "465";
+        $config['smtp_user'] = "info@telehealers.in"; 
+        $config['smtp_pass'] = "Ajay@1234%";
+        $config['charset'] = "utf-8";
+        $config['mailtype'] = "html";
+        $config['newline'] = "\r\n";
+		$ci->email->initialize($config);
+		
     	$this->form_validation->set_rules('date', 'Date', 'trim|required');
     	$this->form_validation->set_rules('p_id', 'Patient Id', 'trim|required');
       $this->form_validation->set_rules('venue', 'venue', 'trim|required'); 
       $this->form_validation->set_rules('sequence', 'sequence', 'trim|required');
+	  
+	  $p_cc = $this->input->post('problem',TRUE);
+	  $sequence = $this->input->post('sequence',TRUE);
+	  $date = $this->input->post('date',TRUE);
 
 
       if($this->form_validation->run()==true){
@@ -199,6 +224,7 @@ class Appointment_controller extends CI_Controller {
             'get_date_time' => date("Y-m-d H:i:s"),
             'get_by' => $get_by
             );
+			$doctor_id = $this->input->post('doctor',TRUE);
 
 
           $check =  $this->appointment_model->Check_appointment($this->input->post('date',TRUE),$this->input->post('p_id',TRUE));
@@ -208,13 +234,193 @@ class Appointment_controller extends CI_Controller {
               redirect('admin/Appointment_controller');
           }else{
               $this->appointment_model->SaveAppoin($saveData);
-              
+			  
+				$sql_rk = "select * from token2 where id = '1'";
+				$res_rk = $this->db->query($sql_rk);
+				$result_rk = $res_rk->result_array();
+				if(is_array($result_rk) && count($result_rk)>0){
+					$refershToken = $result_rk[0]['refersh_token'];
+				}
+
+				$sql_tk = "select * from token where id = '1'";
+				$res_tk = $this->db->query($sql_tk);
+				$result_tk = $res_tk->result_array();
+				if(is_array($result_tk) && count($result_tk)>0){
+					$accessToken = $result_tk[0]['access_token'];
+				}
+
+				if($refershToken!="" && $accessToken!=""){
+					$p_id = $this->input->post('p_id',TRUE);
+					$sql_tk = "select * from patient_tbl where patient_id = '$p_id'";
+					$res_tk = $this->db->query($sql_tk);
+					$result_tk = $res_tk->result_array();
+					if(is_array($result_tk) && count($result_tk)>0){
+						$p_name = $result_tk[0]['patient_name'];
+						//$doctor_id = $result_tk[0]['doctor_id'];
+						$p_email = $result_tk[0]['patient_email'];
+						$p_phone = $result_tk[0]['patient_phone'];
+						$p_gender = $result_tk[0]['sex'];
+						$p_age = $result_tk[0]['age'];
+					}
+					$service2 = 'Consultation for COVID-19';
+					$sql = "select * from doctor_tbl where doctor_id = '".$doctor_id."'";
+					$res = $this->db->query($sql);
+					$result = $res->result_array();
+					if(is_array($result) && count($result)>0){
+							$doctor_name = $result[0]['doctor_name'];
+							$doc_id = $result[0]['doc_id'];
+							$log_id = $result[0]['log_id'];
+							$department = $result[0]['department'];
+							$designation = $result[0]['designation'];
+							$degrees = $result[0]['degrees'];
+							$specialist = $result[0]['specialist'];
+						}
+					if($log_id>0){
+						$sql_doc = "select * from log_info where log_id = '".$log_id."'";
+						$res_doc = $this->db->query($sql_doc);
+						$result_doc = $res_doc->result_array();
+						if(is_array($result_doc) && count($result_doc)>0){
+							$doctor_email = $result_doc[0]['email'];
+						}
+					}	
+					
+				
+					$client = new GuzzleHttp\Client(['base_uri' => 'https://zoom.us']);
+			
+					//$app_date_time = date('Y-m-d',strtotime($date)).'T'.$sequence;
+					
+					//$app_date_time = date('jS F Y',strtotime($date)).' - '.date('h:i A', strtotime($sequence));
+					
+					$date_g = '12-07-2021';
+					$sequence_g = '6:15 PM';
+					//$app_date_time = '2021-06-20T16:45:00Z';
+					//$app_date_time = '2021-05-15T12:00:00Z';
+					//2021-05-05T19:00Z
+					$app_date_time = date('Y-m-d',strtotime($date)).'T'.$sequence.":00";
+					//die();
+
+					$meeting_pass = '123456768';
+					$per_patient_time='15';
+					$response_z = $client->request('POST', '/v2/users/me/meetings', [
+						"headers" => [
+							"Authorization" => "Bearer $accessToken"
+						],
+						'json' => [
+							"topic" => "Appointment Meeting - $appointment_id",
+							"type" => 2,
+							"start_time" => $app_date_time,
+							"duration" => $per_patient_time, // 30 mins
+							"timezone" => 'Asia/Calcutta', // 30 mins
+							"password" => $meeting_pass
+						]
+					]);
+
+					$data_zoom = json_decode($response_z->getBody());
+					$zoom_meeting_url = $data_zoom->join_url;
+				}else{
+					$meeting_pass = '';
+					$zoom_meeting_url = '';
+				}
+				$symt1 = $zoom_meeting_url;
+				$symt2 = $meeting_pass;
+
+				$sql_m = "update appointment_tbl set symt1 = '".$symt1."',symt2 = '".$symt2."' where appointment_id = '$appointment_id'";
+				$this->db->query($sql_m);
+				
+				$message = '<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #f1f1f1;">
+    <center style="width: 100%; background-color: #f1f1f1;">
+        <div style="display: none; font-size: 1px;max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
+            &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
+        </div>
+        <div style="max-width: 600px; margin: 0 auto;" class="email-container">
+            <!-- BEGIN BODY -->
+            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
+                <tbody><tr>
+                    <td valign="top" class="bg_white" style="padding: 1em 2.5em 0 2.5em;">
+                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                            <tbody><tr>
+                                <td class="logo" style="text-align: left;">
+                                    <h1>
+                                        <a href="http://telehealers.in/">
+                                        <img src="http://telehealers.in/assets/uploads/images/telehe2.png">    
+                                        </a>
+                                    </h1>
+                                </td>
+                            </tr>
+                        </tbody></table>
+                    </td>
+                </tr>
+                <tr>
+                    </tr></tbody></table><table class="bg_white" role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                        <tbody><tr style="border-bottom: 1px solid rgba(0,0,0,.05);">
+                            <td valign="middle" width="100%" style="text-align:left; padding: 0 2.5em;">
+                                <div class="product-entry">
+                                    <div class="text">
+                                        <p>Hey <strong>'.$p_name.'</strong>,</p>
+                                        <p>Our staff member has confirmed you for a '.$service2.' appointment on '.date('jS F Y',strtotime($date)).' with Dr. '.$doctor_name.'. If you have questions before your appointment,
+                                            use the contact form with appointment ID to get in touch with us.</p>
+										<h2 style="text-align:left;font-weight:600;color:#356d82">Zoom Meeting Details:</h2> 
+										<p>Zoom meeting URL: '.$zoom_meeting_url.',</p>
+										<p>Zoom meeting Password: '.$meeting_pass.',</p>	
+                                        <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Appointment ID - ('.$appointment_id.')</h2><h1></h1>
+                                        <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Doctor Details:</h2><h1></h1>
+                                        <p>Name: '.$doctor_name.'</p>
+                                        <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Patient Details:</h2>
+                                        <p>Name: '.$p_name.'</p>
+                                        <p>ID: '.$p_id.'</p>
+										<p>Email: '.$p_email.'</p>
+										<p>Phone: '.$p_phone.'</p>
+										<p>Age: '.$p_age.'</p>
+										<p>Gender: '.$p_gender.',</p>
+										<p>Tell us your symptom or health problem: '.$p_cc.'</p>
+										<p>Appointment Date: '.date('jS F Y',strtotime($date)).'</p>
+										<p>Appointment Time: '.date('h:i A', strtotime($sequence)).'</p>
+										<p>Appointment ID: '.$appointment_id.'</p>
+										
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody></table>
+                
+            
+            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
+                <tbody><tr>
+                    <td class="bg_white" style="text-align: center;">
+                        <p>Receive these email? You can <a href="#" style="color: rgba(0,0,0,.8);">Unsubscribe here</a></p>
+                    </td>
+                </tr>
+            </tbody></table>
+
+        </div>
+    </center>
+
+
+</body></html>';
+
+		$ci->email->from('info@telehealers.in', 'telehealers');
+		$list = array($p_email);
+		$ci->email->to($list);
+		$this->email->reply_to('info@telehealers.in', 'telehealers');
+		$ci->email->subject('Appointment Information');
+		$ci->email->message($message);
+		$ci->email->send();
+		
+		$ci->email->from('info@telehealers.in', 'telehealers');
+		$list = array($doctor_email);
+		$ci->email->to($list);
+		$this->email->reply_to('info@telehealers.in', 'telehealers');
+		$ci->email->subject('Appointment Information');
+		$ci->email->message($message);
+		$ci->email->send();
+				
+			  
               $info = $this->basic_model->get_appointment_print_result($appointment_id);
               #-----------------------------------------
               // sms information save in sms_info table
 
               $start = @$info->start_time;
-              $patient_time = $info->date.' '.date('h:i:s', strtotime($start));
+              $patient_time = $this->input->post('date',TRUE).' '.date('h:i:s', strtotime($start));
               
               $save_sms_info = array(
                 'patient_id'        => $info->patient_id,
@@ -368,6 +574,128 @@ class Appointment_controller extends CI_Controller {
         return $newStr; 
     }
 
+	function send_meet_url($appointmaent_id){
+		$ci = get_instance();
+		$ci->load->library('email');
+		$config['protocol'] = "tls";
+		$config['smtp_host'] = "inpro8.fcomet.com";
+		$config['smtp_port'] = "465";
+		$config['smtp_user'] = "info@telehealers.in"; 
+		$config['smtp_pass'] = "Ajay@1234%";
+		$config['charset'] = "utf-8";
+		$config['mailtype'] = "html";
+		$config['newline'] = "\r\n";
+		$ci->email->initialize($config);
+		
+		$patient_id='';
+		$doctor_id='';
+		$meet_url='';
+		
+		$sql_p = "select * from appointment_tbl where appointment_id = '".$appointmaent_id."' ";
+		$res_p = $this->db->query($sql_p);
+		$result_p = $res_p->result_array();
+		if(is_array($result_p) && count($result_p)>0){
+			$patient_id = $result_p[0]['patient_id'];
+			$doctor_id = $result_p[0]['doctor_id'];
+		}
+		if($patient_id!="" && $doctor_id!=""){
+			$sql = "select * from patient_tbl where patient_id = '".$patient_id."' ";
+			$res = $this->db->query($sql);
+			$result = $res->result_array();
+			if(is_array($result) && count($result)>0){
+				$patient_name = $result[0]['patient_name'];
+				$patient_email = $result[0]['patient_email'];
+			}
+			$sql_doc = "select * from doctor_tbl where doctor_id = '".$doctor_id."' ";
+			$res_doc = $this->db->query($sql_doc);
+			$result_doc = $res_doc->result_array();
+			if(is_array($result_doc) && count($result_doc)>0){
+				$doctor_name = $result_doc[0]['doctor_name'];
+				$meet_url = $result_doc[0]['meet_url'];
+				$doc_id = $result_doc[0]['doc_id'];
+			}
+			if($meet_url!=""){
+				
+			
+			$message = '<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #f1f1f1;">
+    <center style="width: 100%; background-color: #f1f1f1;">
+        <div style="display: none; font-size: 1px;max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
+            &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
+        </div>
+        <div style="max-width: 600px; margin: 0 auto;" class="email-container">
+            <!-- BEGIN BODY -->
+            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
+                <tbody><tr>
+                    <td valign="top" class="bg_white" style="padding: 1em 2.5em 0 2.5em;">
+                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                            <tbody><tr>
+                                <td class="logo" style="text-align: left;">
+                                    <h1>
+                                        <a href="https://telehealers.in/">
+                                        <img src="https://telehealers.in/assets/uploads/images/telehe2.png">    
+                                        </a>
+                                    </h1>
+                                </td>
+                            </tr>
+                        </tbody></table>
+                    </td>
+                </tr>
+                <tr>
+                    </tr></tbody></table><table class="bg_white" role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                        <tbody><tr style="border-bottom: 1px solid rgba(0,0,0,.05);">
+                            <td valign="middle" width="100%" style="text-align:left; padding: 0 2.5em;">
+                                <div class="product-entry">
+                                    <div class="text">
+                                        <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Dear '.$patient_name.':</h2>
+										<p>Thanks for choosing telehealers.in</p>
+										<p>We hope your consultation will go well with '.$doctor_name.' </p>
+                                        <p>Here you can find easy Google Meet URL to connect directly with Doctor.</p>
+										
+										<p>Meeting URL - '.$meet_url.'</p>	
+									
+										<p>&nbsp;</p>
+										
+										<p>Keep in touch during this tough time! </p>
+										<p>Kindly write us back without any hasitation if you find any issues at support@telehealers.in</p>
+										
+										
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody></table>
+                
+            
+            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
+                <tbody><tr>
+                    <td class="bg_white" style="text-align: center;">
+                        <p>Receive these email? You can <a href="#" style="color: rgba(0,0,0,.8);">Unsubscribe here</a></p>
+                    </td>
+                </tr>
+            </tbody></table>
 
+        </div>
+    </center>
+
+
+</body></html>';
+
+		$ci->email->from('info@telehealers.in', 'telehealers');
+		$list = array($patient_email);
+		$ci->email->to($list);
+		$this->email->reply_to('info@telehealers.in', 'telehealers');
+		$subject = 'Telehealers Meeting Link with '.$doctor_name;
+		$ci->email->subject($subject);
+		$ci->email->message($message);
+		$ci->email->send();
+			}
+		}
+		if($meet_url!=""){
+				$this->session->set_flashdata('message','Meeting URL has been sent successfully!');
+		}else{
+			$this->session->set_flashdata('message2','Doctor Meeting URL is empty.');
+		}
+		redirect("admin/Appointment_controller/appointment_list");
+	}
   
 }

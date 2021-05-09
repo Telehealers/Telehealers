@@ -94,15 +94,18 @@
                     'type': 'GET', 
                     'data': {'patient_id': venue_id },
                     'success': function(data) {
-						
 						if (y < r) {
 							//alert("Selected date is in the past");
 							var container = $(".schedul1");
 							//container.html("Past date appointment is not allowed!");
 							container.html('<div class="col-md-12"><div class="alert alert-danger">Past date appointment is not allowed!</div></div>');
+							$('#bb_app').prop('disabled', true);
+							$('#bb_app').addClass("btn_disable");
 						} else {
 							var container = $(".schedul1");
 							container.html(data);
+							
+							
 						}						
 						
 						
@@ -124,6 +127,10 @@
            var id = $("#t_" + data).text();
            document.getElementById("msg_c").innerHTML = "<div style=' color:green; font-size:20px;'> You have selected time of consultation at: " +id +" </div>";
            document.getElementById('serial_no').value = id;        
+		   $('#bb_app').attr("disabled", false);
+		   $('#bb_app').removeClass("btn_disable");
+		   $('#message_id').html('');
+		   $('#message_id').removeClass('alert alert-danger');
         } 
 
         // load slider

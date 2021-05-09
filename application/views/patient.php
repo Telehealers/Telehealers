@@ -29,13 +29,13 @@
 
   gtag('config', 'G-Y9P95E4VWH');
 </script>
-
+<script id="mcjs">!function(c,h,i,m,p){m=c.createElement(h),p=c.getElementsByTagName(h)[0],m.async=1,m.src=i,p.parentNode.insertBefore(m,p)}(document,"script","https://chimpstatic.com/mcjs-connected/js/users/e836e1578317f3389cedf8f6a/0bf682a738edbb1cd96720c12.js");</script>
 <script type="text/javascript">
 var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
 (function(){
 var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
 s1.async=true;
-s1.src='https://embed.tawk.to/608b89375eb20e09cf37f9d4/1f4gh00vt';
+s1.src='https://embed.tawk.to/608c0bf662662a09efc3afa9/1f4hgtf3e';
 s1.charset='UTF-8';
 s1.setAttribute('crossorigin','*');
 s0.parentNode.insertBefore(s1,s0);
@@ -91,10 +91,9 @@ $hello = GeraHash(5);
                                 <ul>
                                     <li class="active"><a href="<?php echo base_url(); ?>Patient">Appointments</a></li>
                                     <li class=""><a href="<?php echo base_url(); ?>Patientprofile">Update Profile</a></li>
-									<li class=""><a href="<?php echo base_url(); ?>Patientprofilepassword">Update Password</a></li>
-									
-									<li><a href="#">Upload Reports</a></li>
-                                    <li><a href="<?php echo base_url();?>logout">Logout</a></li>
+									<li><a href="<?php echo base_url(); ?>Patientreports">Upload Reports</a></li>
+									<li><a href="<?php echo base_url(); ?>Patientprescription">Prescription</a></li>
+									<li><a href="<?php echo base_url();?>Patient/logout">Logout</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -108,8 +107,9 @@ $hello = GeraHash(5);
                                         <th scope="col">Doctor</th>
                                         <th scope="col">Date</th>
                                         <th scope="col">Time</th>
-                                        <th scope="col">Patient Complaint</th>
+                                        <th scope="col">Zoom meeting</th>
 										<th scope="col">Service</th>
+										
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -129,14 +129,24 @@ $hello = GeraHash(5);
 										$degrees = $result[0]['degrees'];
 										$specialist = $result[0]['specialist'];
 									}
+									$prescription_id='';
+									$app_id = $val['appointment_id'];
+									$sql_pre = "select * from prescription where appointment_id = '".$app_id."'";
+									$res_pre = $this->db->query($sql_pre);
+									$result_pre = $res_pre->result_array();
+									if(is_array($result_pre) && count($result_pre)>0){
+										$prescription_id = $result_pre[0]['prescription_id'];
+										$prescription_type = $result_pre[0]['prescription_type'];
+									}	
 								?>
                                     <tr>
                                         <td><?php echo $val['appointment_id'];?></td>
                                         <td><?php echo $doctor_name;?><span><?php echo $specialist;?></span></td>
                                         <td><?php echo $val['date'];?></td>
                                         <td><?php echo $val['sequence'];?></td>
-                                        <td><?php echo $val['problem'];?></td>
+                                        <td><?php echo $val['symt1'];?></td>
                                         <td><?php echo $val['service'];?></td>
+										
 								    </tr>
 								<?php }} ?>	
                                 </tbody>
@@ -237,6 +247,11 @@ $(document).ready(function(){
 	
 });
 
+function preventBack() { 
+window.history.forward(); 
+}  
+setTimeout("preventBack()", 0);  
+window.onunload = function () { null };  
 
 
 

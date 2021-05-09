@@ -41,6 +41,12 @@ class Patient extends CI_Controller {
 		
         $this->load->model('admin/email/Email_model','email_model');
         $this->load->library('email');
+		
+		$this->load->library('session');
+		$this->load->library('form_validation');
+		$this->load->helper('form');
+		$this->load->model('AuthModel','auth_model');
+		
   }
 
 
@@ -906,5 +912,71 @@ public function registration()
 		}
 		$con .= "</div>";
 		echo $con;
+	}
+	
+	public function checkUser(){
+		$phone = $this->input->post('phone',TRUE);
+		$sql_doc = "select * from patient_tbl where patient_phone = '".$phone."'";
+		$res_doc = $this->db->query($sql_doc);
+		$result_doc = $res_doc->result_array();
+		if(is_array($result_doc) && count($result_doc)>0){
+			$patient_name = $result_doc[0]['patient_name'];
+			$rand = rand(1000,9999);
+			$sql = "update patient_tbl set opt_code = '$rand' where patient_phone = '$phone'";
+			$this->db->query($sql);
+			$path = "http://japi.instaalerts.zone/httpapi/QueryStringReceiver?ver=1.0&key=pjjXNjf8In8sb8BdmFYVgw==&encrypt=0&dest=".$phone."&send=LOADIT&text=OTP%20IS%20-%20".$rand;
+			
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $path);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+			curl_setopt($ch, CURLOPT_HEADER, true);
+			curl_exec($ch); 
+			
+			echo '1';
+		}else{
+			echo '0';
+		}	
+	}
+	
+	public function userLogin(){
+		$phone = $this->input->post('phone',TRUE);
+		$otp = $this->input->post('otp',TRUE);
+		$sql = "select * from patient_tbl where patient_phone = '".$phone."'";
+		$res_doc = $this->db->query($sql);
+		$result_doc = $res_doc->result_array();
+		if(is_array($result_doc) && count($result_doc)>0){
+			$patient_name = $result_doc[0]['patient_name'];
+			$opt_code = $result_doc[0]['opt_code'];
+			$patient_id = $result_doc[0]['patient_id'];
+			$patient_email = $result_doc[0]['patient_email'];
+			$picture = $result_doc[0]['picture'];
+			$log_id = $result_doc[0]['log_id'];
+			if($opt_code!=$otp){
+				echo '1';
+			}else{
+				$sql_em = "update patient_tbl set opt_code = '' where patient_phone = '$phone'";
+				$this->db->query($sql_em);
+				$session_data = array(
+                    'log_id' => $log_id,
+                    'user_id' => $patient_id,
+                    'user_name' => $patient_name,
+                    'user_picture' => $picture,
+                    'user_email' => $patient_email,
+                    'user_type' => '3',
+                    'session_id' => session_id(),
+                    'logged_in' => TRUE
+                );
+				$this->session->set_userdata($session_data);
+				echo '2';	
+			}
+		}else{
+			echo '0';
+		}
+	}
+	
+	public function logout()
+	{
+		$this->session->sess_destroy();
+		redirect('Userlogin');
 	}
 }

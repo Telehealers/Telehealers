@@ -36,8 +36,7 @@ class Dashboard extends CI_Controller {
 		 $data['patient_7_day'] = $this->overview_model->patient_7_day();
 		 
 		 //precription
-		 $data['total_prescription'] = $this->overview_model->total_prescription();
-		 $data['today_prescription'] = $this->overview_model->today_prescription();
+		
 		 // sms
 		 $data['total_sms'] = $this->overview_model->total_sms();
 		 $data['today_sms'] = $this->overview_model->today_sms();
@@ -45,12 +44,57 @@ class Dashboard extends CI_Controller {
 		 $data['coustom_sms'] = $this->overview_model->coustom_sms();
 		 
 		 // patient
-		 $data['today_patient'] = $this->overview_model->today_patient();
-		 $data['total_patient'] = $this->overview_model->total_patient();
+		
+		 
+		 $user_type = $this->session->userdata('user_type');
+		if($user_type==1){
+			$user_id = $this->session->userdata('doctor_id');	
+			if($user_id == 1){
+				 $data['today_patient'] = $this->overview_model->today_patient();
+				$data['total_patient'] = $this->overview_model->total_patient();
+				$data['to_day_appointment'] = $this->overview_model->to_day_appointment();	
+				$data['total_appointment'] = $this->overview_model->total_appointment();
+				$data['to_day_get_appointment'] = $this->overview_model->to_day_get_appointment();				
+				$data['total_prescription'] = $this->overview_model->total_prescription();
+				$data['today_prescription'] = $this->overview_model->today_prescription();
+			}else{
+				
+				$data['to_day_appointment'] = $this->overview_model->to_day_appointment_by_id($user_id);			
+				$data['total_appointment'] = $this->overview_model->total_appointment_by_id($user_id);	
+				$data['today_patient'] = $this->overview_model->today_patient_by_doc($user_id);
+				$data['total_patient'] = $this->overview_model->total_patient_by_doc($user_id);
+				$data['to_day_get_appointment'] = $this->overview_model->to_day_get_appointment_by_id($user_id);
+				$data['total_prescription'] = $this->overview_model->total_prescription_doc_id($user_id);
+				$data['today_prescription'] = $this->overview_model->today_prescription_doc_id($user_id);
+			}
+		}
+		if($user_type==2){
+			$data['today_patient'] = $this->overview_model->today_patient();
+			$data['total_patient'] = $this->overview_model->total_patient();
+			$data['to_day_appointment'] = $this->overview_model->to_day_appointment();	
+			$data['total_appointment'] = $this->overview_model->total_appointment();	
+			$data['to_day_get_appointment'] = $this->overview_model->to_day_get_appointment();
+			$data['total_prescription'] = $this->overview_model->total_prescription();
+			$data['today_prescription'] = $this->overview_model->today_prescription();
+		}
+
+		 
 		 // appointment
 		
 
-		 $data['to_day_get_appointment'] = $this->overview_model->to_day_get_appointment();		 		$user_type = $this->session->userdata('user_type');		if($user_type==1){			$doctor_id = $this->session->userdata('doctor_id');			 $data['to_day_appointment'] = $this->overview_model->to_day_appointment_by_id($doctor_id);			$data['total_appointment'] = $this->overview_model->total_appointment_by_id($doctor_id);		}else{			 $data['to_day_appointment'] = $this->overview_model->to_day_appointment();			$data['total_appointment'] = $this->overview_model->total_appointment();		}		
+		 
+
+		 $user_type = $this->session->userdata('user_type');	
+
+		 if($user_type==1){	
+
+		 	
+		 
+		 }else{			
+
+		 
+
+		 }		
 		 
 		 $data['total_email'] = $this->overview_model->email_list();
 		

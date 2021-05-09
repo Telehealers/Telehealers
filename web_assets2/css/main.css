@@ -11,53 +11,6 @@
 
 /* *******************Font_face_Start********************** */
 
-
-/* 
-@font-face {
-    font-family: 'Humanst521 BT';
-    src: url('../fonts/Humanist521BT-Bold.eot');
-    src: url('../fonts/Humanist521BT-Bold.eot?#iefix') format('embedded-opentype'), url('../fonts/Humanist521BT-Bold.woff2') format('woff2'), url('../fonts/Humanist521BT-Bold.woff') format('woff'), url('../fonts/Humanist521BT-Bold.ttf') format('truetype');
-    font-weight: bold;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Humanst521 BT';
-    src: url('../fonts/Humanist521BT-Bold_1.eot');
-    src: url('../fonts/Humanist521BT-Bold_1.eot?#iefix') format('embedded-opentype'), url('../fonts/Humanist521BT-Bold_1.woff2') format('woff2'), url('../fonts/Humanist521BT-Bold_1.woff') format('woff'), url('../fonts/Humanist521BT-Bold_1.ttf') format('truetype');
-    font-weight: bold;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Humanst521 BT';
-    src: url('../fonts/Humanist521BT-Bold_2.eot');
-    src: url('../fonts/Humanist521BT-Bold_2.eot?#iefix') format('embedded-opentype'), url('../fonts/Humanist521BT-Bold_2.woff2') format('woff2'), url('../fonts/Humanist521BT-Bold_2.woff') format('woff'), url('../fonts/Humanist521BT-Bold_2.ttf') format('truetype');
-    font-weight: bold;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Humanst521 BT';
-    src: url('../fonts/Humanist521BT-Roman.eot');
-    src: url('../fonts/Humanist521BT-Roman.eot?#iefix') format('embedded-opentype'), url('../fonts/Humanist521BT-Roman.woff2') format('woff2'), url('../fonts/Humanist521BT-Roman.woff') format('woff'), url('../fonts/Humanist521BT-Roman.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Humanst521 BT';
-    src: url('../fonts/Humanist521BT-Roman_1.eot');
-    src: url('../fonts/Humanist521BT-Roman_1.eot?#iefix') format('embedded-opentype'), url('../fonts/Humanist521BT-Roman_1.woff2') format('woff2'), url('../fonts/Humanist521BT-Roman_1.woff') format('woff'), url('../fonts/Humanist521BT-Roman_1.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
-} */
-
 @font-face {
     font-family: 'Roboto';
     src: url('../fonts/Roboto-Bold.eot');
@@ -186,6 +139,8 @@ button:focus {
     box-shadow: none;
 }
 
+#ui-datepicker-div{display:none !important;}
+.btn_disable{background:grey !important;}
 button,
 button:hovre {
     -webkit-transition: all 1s ease-in-out;
@@ -2302,7 +2257,7 @@ a:hover {
     box-shadow: 0px 0px 10px 0px #0000002b;
     padding: 15px;
     text-align: center;
-    min-height: 250px;
+    min-height: 275px;
 }
 
 .docters_list_page .dr_box img {
@@ -2347,9 +2302,77 @@ a:hover {
     font-size: 14px;
 }
 
-.docters_list_page .dr_box {}
 
-.docters_list_page .dr_box {}
+/* ***********************************terms_service_page_css_Start**************************** */
+
+.terms_service_page {
+    position: relative;
+    height: auto;
+    width: 100%;
+}
+
+.terms_service_page .service_content .content_box h1,
+.terms_service_page .service_content .content_box h2,
+.terms_service_page .service_content .content_box h3,
+.terms_service_page .service_content .content_box h4 {
+    font-size: 20px;
+    text-transform: uppercase;
+    color: #2b697f;
+    margin-bottom: 15px;
+}
+
+.terms_service_page .service_content .content_box span {
+    font-size: 18px;
+    text-transform: uppercase;
+    color: #009c8c;
+    margin-bottom: 10px;
+}
+
+.terms_service_page .service_content .content_box p {
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.terms_service_page .service_content .content_box p strong {
+    margin-right: 10px;
+}
+
+.terms_service_page .service_content .content_box ul {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.terms_service_page .service_content .content_box ul li {
+    position: relative;
+    padding-left: 20px;
+    margin-bottom: 5px;
+}
+
+.terms_service_page .service_content .content_box ul li::before {
+    position: absolute;
+    content: "";
+    width: 10px;
+    height: 10px;
+    background-color: #009c8c;
+    left: 0;
+    top: 6px;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+}
+
+.terms_service_page .service_content .content_box a {
+    color: #009c8c;
+}
+
+.mobile_img {
+    display: none;
+}
+
+
+/* ***********************************terms_service_page_css_END**************************** */
 
 
 /* ***********************************Responsive_css_Start**************************** */
@@ -2586,6 +2609,12 @@ a:hover {
 }
 
 @media(max-width:575px) {
+    .desktop_img {
+        display: none;
+    }
+    .mobile_img {
+        display: block;
+    }
     .header .menubar .navbar .navbar-brand {
         max-width: 230px;
     }

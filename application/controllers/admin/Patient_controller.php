@@ -269,12 +269,16 @@ class Patient_controller extends CI_Controller {
                             <td valign="middle" width="100%" style="text-align:left; padding: 0 2.5em;">
                                 <div class="product-entry">
                                     <div class="text">
-                                        <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Patient Account Details:</h2>
+                                       <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Dear '.$p_name.':</h2>
+										<p>Thanks for choosing telehealers.in</p>
+										<p>Kindly visit Your dashboard using registered mobile number.</p>
+										<p>Url:  https://telehealers.in/Userlogin</p>
                                         <p>Name: '.$p_name.'</p>
                                         <p>ID: '.$patient_id.'</p>
 										<p>Email: '.$p_email.'</p>
-										<p>Password: '.$pass_p.'</p>
-										
+										<p>&nbsp;</p>
+										<p>Keep in touch during this tough time! </p>
+										<p>Kindly write us back without any hasitation if you find any issues at support@telehealers.in</p>
 										
                                     </div>
                                 </div>

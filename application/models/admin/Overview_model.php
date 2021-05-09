@@ -64,6 +64,15 @@ class Overview_model extends CI_model {
  	 {
  	 	return	$this->db->count_all_results('patient_tbl');
  	 }
+	 
+	 public function total_patient_by_doc($user_id)
+ 	 {
+ 	 	$result = $this->db->select("*")
+	 	 	->from('patient_tbl')
+	 	 	->where('doctor_id', $user_id)
+	 	 	->get()->num_rows();
+			return $result; 
+ 	 }
 
  	 #--- get last 30 day patient 
  	 public function patient_30_day(){
@@ -101,10 +110,35 @@ class Overview_model extends CI_model {
 
 			return $result; 
  	 }
+	 
+	 public function today_patient_by_doc($doctor_id){
+ 	 	$date = date("Y-m-d");
+ 	 	$result = $this->db->select("*")
+	 	 	->from('patient_tbl')
+			->where('doctor_id',$doctor_id)
+	 	 	->like('create_date',$date)
+	 	 	->get()
+	 	 	->result();
+
+			return $result; 
+ 	 }
 
 #-----------------------------------------------
  	 #--- today prescription 
  	 public function today_prescription(){
+ 	 	$date = date("Y-m-d");
+		$this->db->select("prescription.*,patient_tbl.*");
+        $this->db->from("prescription");
+        $this->db->join('patient_tbl', 'patient_tbl.patient_id = prescription.patient_id','left'); 
+        $this->db->where('prescription.doctor_id',$this->session->userdata('doctor_id'));
+        $this->db->like('prescription.create_date_time',$date);
+        $query = $this->db->get();
+        $result = $query->result();
+        return $result;	
+			
+ 	 }
+	 
+	  public function today_prescription_doc_id($doctor_id){
  	 	$date = date("Y-m-d");
 		$this->db->select("prescription.*,patient_tbl.*");
         $this->db->from("prescription");
@@ -122,6 +156,15 @@ class Overview_model extends CI_model {
  	 	$date = date("Y-m-d");
  	 	$result = $this->db->select("*")
 	 	 	->from('prescription')
+	 	 	->get()->num_rows();
+			return $result; 
+ 	 }
+	 
+	  public function total_prescription_doc_id($doctor_id_){
+ 	 	$date = date("Y-m-d");
+ 	 	$result = $this->db->select("*")
+	 	 	->from('prescription')
+			->where('doctor_id',$doctor_id_)
 	 	 	->get()->num_rows();
 			return $result; 
  	 }
@@ -185,7 +228,17 @@ class Overview_model extends CI_model {
               ->result(); 
 
           return $result; 
- 	 }	 	 	 public function to_day_get_appointment_by_id($id) 	 { 	 	$tow_day = date('Y-m-d');		             $result = $this->db->select("action_serial.*,doctor_tbl.*,                  patient_tbl.*,                  venue_tbl.*,")              ->from('action_serial')			  ->where('doctor_tbl.doctor_id',$id)	              ->join('patient_tbl', 'patient_tbl.patient_id = action_serial.patient_id','left')                            ->join('doctor_tbl', 'doctor_tbl.doctor_id = action_serial.doctor_id','left')                            ->join('venue_tbl', ' venue_tbl.venue_id = action_serial.venue_id','left')              ->like('action_serial.get_date_time',$tow_day)              ->get()              ->result();           return $result;  	 }
+ 	 }	 
+
+	 public function to_day_get_appointment_by_id($id) 	 { 
+
+	 $tow_day = date('Y-m-d');		 
+
+	 $result = $this->db->select("action_serial.*,doctor_tbl.*,                  patient_tbl.*,                  venue_tbl.*,")              ->from('action_serial')			  ->where('doctor_tbl.doctor_id',$id)	              ->join('patient_tbl', 'patient_tbl.patient_id = action_serial.patient_id','left')                            ->join('doctor_tbl', 'doctor_tbl.doctor_id = action_serial.doctor_id','left')                            ->join('venue_tbl', ' venue_tbl.venue_id = action_serial.venue_id','left')              ->like('action_serial.get_date_time',$tow_day)              ->get()              ->result();  
+
+	 return $result;  	
+
+	 }
 
 #-------------------------------------
  	 public function last_30(){

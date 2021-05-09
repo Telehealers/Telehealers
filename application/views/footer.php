@@ -4,7 +4,7 @@
                 <div class="col-md-12">
                     <div class="footer_content">
                         <div class="logo_menu">
-                            <span><a href="<?php echo base_url();?>"><img src="<?php echo (!empty(html_escape($info->footer_picture->picture))?html_escape($info->footer_picture->picture):null); ?>" alt="#"/></a></span>
+                            <span><a href="<?php echo base_url();?>"><img src="<?php echo (!empty(html_escape($info->footer_picture->picture))?html_escape($info->footer_picture->picture):null); ?>" alt="Telehealers"/></a></span>
                             <ul>
                                 <li><a href="<?php echo base_url();?>appointment">Appointment</a></li>
 								<li><a href="<?php echo base_url();?>#about">About Us</a></li>
@@ -13,7 +13,7 @@
                                 <li><a href="<?php echo base_url();?>blogs">Blog</a></li>
                                 <li><a href="<?php echo base_url();?>#faq">FAQs</a></li>
                                 <li><a href="<?php echo base_url();?>contact">Contact Us</a></li>
-								<li><a href="<?php echo base_url();?>Doctorlist">Doctors</a></li>
+								<li><a href="<?php echo base_url();?>Doctorlist">Doctors</a></li>								<li><a href="<?php echo base_url();?>login">Login</a></li>
                             </ul>
                         </div>
                         <div class="footer_copyright">
@@ -25,4 +25,4 @@
                 </div>
             </div>
         </div>
-    </footer>
+    </footer><script></script>

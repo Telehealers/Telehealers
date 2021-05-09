@@ -11,6 +11,9 @@
                         <div class="top_social">
                             <ul>
                                 <li>
+                                    <a href="<?php echo (!empty(html_escape($info->facebook->details))?html_escape($info->facebook->details):null); ?>" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                                </li>
+								<li>
                                     <a href="<?php echo (!empty(html_escape($info->linkedin->details))?html_escape($info->linkedin->details):null); ?>" target="_blank"><i class="fab fa-linkedin-in"></i></a>
                                 </li>
                                 <li>
@@ -32,7 +35,7 @@
                         <nav class="navbar navbar-expand-md">
                             <div class="container-fluid">
                                 <a class="navbar-brand" href="<?php echo base_url()?>">
-                                    <img src="<?php echo (!empty(html_escape($info->logo->picture))?html_escape($info->logo->picture):null); ?>" alt="Logo" />
+                                    <img src="<?php echo (!empty(html_escape($info->logo->picture))?html_escape($info->logo->picture):null); ?>" alt="Telehealers" />
                                 </a>
                                 <div class="buttonmenu">
                                     <input type="checkbox" class="openSidebarMenu" id="openSidebarMenu">
@@ -49,6 +52,8 @@
                                         </li>
 										<li><a href="<?php echo base_url()?>appointment">Book Appointment</a></li>
                                         <li><a href="<?php echo base_url()?>contact">Contact Us</a></li>
+										
+										<li><a href="<?php echo base_url()?>Userlogin">Login</a></li>
                                     </ul>
                                 </div>
                             </div>

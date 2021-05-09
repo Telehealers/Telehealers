@@ -40,7 +40,33 @@
         <script src="<?php echo base_url()?>assets/plugins/ui-datetimepicker/jquery-ui-timepicker-addon.js"></script>
         <script src="<?php echo base_url()?>assets/plugins/ui-datetimepicker/jquery-ui-sliderAccess.js"></script>
 		<!--<script src="//jonthornton.github.io/jquery-timepicker/jquery.timepicker.js"></script>-->
-        
+        <script>
+		$(document).ready(function(){
+			setTimeout(function(){ 
+			var w = $( window ).width();
+				if(w<500){
+					var getHtml = '<span style="float:right;"><a id="setmenu" href="javascript:void(0)"><img src="<?php echo base_url()?>web_assets2/images/menu.png" style="width:40px; margin-top:-20px;"></a></span><span id="check_val" style="display:none;">1</span>';
+					$(getHtml).insertAfter('.content-header .header-title h1');
+					//$('#patient_list_wrapper .sorting').css('display','block');
+					//$('#patient_list_wrapper .gradeX td').css('display','block');
+				}
+			}, 1000);
+			$(document).on("click","#setmenu", function(){
+				var check_val = $('#check_val').html();
+				if(check_val==1){
+					$('.main-sidebar').css('-webkit-transform','unset');
+					$('.main-sidebar').css('transform','unset');	
+					check_val = $('#check_val').html('');
+				}else{
+					$('.main-sidebar').css('-webkit-transform','translate(-250px,0)');
+					$('.main-sidebar').css('transform','translate(-250px,0)');
+					check_val = $('#check_val').html('1');
+				}
+				
+				//alert(r);
+			});
+		});
+		</script>
 
     </body>
 </html>
