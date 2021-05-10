@@ -118,11 +118,7 @@
                                     ?>
                                        
                                     </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <td colspan="5" class="text-center">Data retrieved from infoplease and worldometers</a>.</td>
-                                        </tr>
-                                    </tfoot>
+                                    
                                 </table>
                             </div>
                         </div>

@@ -39,7 +39,7 @@
 						 <input type="hidden" name="p_id" id="p_id" value="<?php echo $p_id;?>" >
                             <div class="form-body">
                                 <div class="form-group">
-                                    <label class="col-md-3 control-label"><span class="text-danger">*</span>Upload Document :</label>
+                                    <label class="col-md-3 control-label"><span class="text-danger">*</span>Upload Report :</label>
                                     <div class="col-md-5">
                                         <input type="file" name="doc_name" id="doc_name" class="form-control" required />
                                     </div>
@@ -72,7 +72,7 @@
                         <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables">
                             <thead>
                                 <tr class="center">
-                                    <th class="all">Document</th>
+                                    <th class="all">Reports</th>
 									<th class="all">Add Date</th>
                                     <th class="all"><?php echo display('action');?> </th>
                                 </tr>
@@ -83,7 +83,7 @@
                                     foreach ($patient_info as $value) {
                                 ?>
                                 <tr>
-                                    <td><a href="<?php echo html_escape($value['document']);?>" target="_blank"><img src="<?php echo html_escape($value['document']);?>" width="120" /></a></td>
+                                    <td><a href="<?php echo html_escape($value['document']);?>" target="_blank">View</a></td>
 									<td><?php echo html_escape($value['add_date']);?></td>
                                     <td class="text-right">
                                         <a href="<?php echo base_url();?>admin/Patient_controller/delete_patient_document/<?php echo html_escape($value['patient_doc_id']);?>/<?php echo html_escape($value['patient_id']);?>" onclick="return confirm('Are you want to delelte?');" class="btn btn-xs btn-danger">

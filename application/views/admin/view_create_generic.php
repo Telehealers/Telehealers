@@ -53,7 +53,13 @@
 
 											</select>		
 
-											</div>			
+											</div>		
+
+											<div class="col-md-4">
+											
+												<input type="text" name="create_date" class="form-control datepicker1" placeholder="Create Date" "create_date">
+											
+											</div>											
 
 											</div>
 											

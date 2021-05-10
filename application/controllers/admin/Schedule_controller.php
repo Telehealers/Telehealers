@@ -134,11 +134,13 @@ class Schedule_controller extends CI_Controller {
 	     		'fees' => $this->input->post('fees',TRUE) 
 	     	);
 
-	       $cdata['doctor_id'] = $this->session->userdata('doctor_id');      
+	       //$cdata['doctor_id'] = $this->session->userdata('doctor_id');      
+	       $cdata['doctor_id'] = $this->input->post('doctor',TRUE);    
 	       $cdata['venue_id'] = $this->input->post('venue',TRUE);      
 	       $cdata['day'] = $d_name['day'][$i];
 
-	       	//Chacking Schedul setup
+			//echo "<pre>"; print_r($cdata);die();
+	       	//Chacking Schedul setup 
 	       	$result = $this->chackSchedul($cdata); 
 	        if( ! empty($result)) {
 

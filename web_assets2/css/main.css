@@ -639,7 +639,30 @@ a:hover {
 .home_new_slider #Home_slider .owl-nav {
     display: none;
 }
+.previous_heading{background-color:#009c8c; color:#FFF; font-size:18px !important; padding:5px 15px; margin-bottom:10px;}
 
+.btn_app {
+    font-size: 14px;
+    color: #fff;
+    background-color: #202c45;
+    text-transform: capitalize;
+    width: 207px;
+    border: none;
+    box-shadow: none;
+    height: 45px;
+	padding:5px 20px;
+    text-align: center;
+    border-radius: 30px;
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+    -ms-border-radius: 30px;
+    -o-border-radius: 30px;
+    transition: 0.5s ease-in-out;
+    -webkit-transition: 0.5s ease-in-out;
+    -moz-transition: 0.5s ease-in-out;
+    -ms-transition: 0.5s ease-in-out;
+    -o-transition: 0.5s ease-in-out;
+}
 
 /* ***********************************home_slider_css_END**************************** */
 
@@ -2234,7 +2257,29 @@ a:hover {
     -o-transition: 0.6s ease-in-out;
 }
 
-
+.patient_table .applyjobform form input[type="button"] {
+    border: none;
+    background: #009c8c;
+    font-size: 18px;
+    color: #fff;
+    padding: 5px 20px;
+    border-radius: 30px;
+	margin-top:30px;
+    transition: 0.6s ease-in-out;
+    -webkit-transition: 0.6s ease-in-out;
+    -moz-transition: 0.6s ease-in-out;
+    -ms-transition: 0.6s ease-in-out;
+    -o-transition: 0.6s ease-in-out;
+}
+.patient_table .applyjobform form input[type="button"]:hover {
+    background: #202c45;
+    color: #fff;
+    transition: 0.6s ease-in-out;
+    -webkit-transition: 0.6s ease-in-out;
+    -moz-transition: 0.6s ease-in-out;
+    -ms-transition: 0.6s ease-in-out;
+    -o-transition: 0.6s ease-in-out;
+}
 /* *********************************************patient_table-css-end************************************************************************* */
 
 .docters_list_page {
