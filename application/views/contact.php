@@ -134,10 +134,10 @@ $hello = GeraHash(5);
                 
             
 <?php
-$servername = 'localhost';
-$username = 'telehea2_telehealers_new';
-$password = '#&$H3enA1Shd(*3!()';
-$dbname = 'telehea2_telehealers_new';
+$servername = getenv('DB_HOSTNAME');
+$username=getenv('DB_USERNAME');
+$password=getenv('DB_PASSWORD')
+$dbname = getenv('DB_NAME');
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);

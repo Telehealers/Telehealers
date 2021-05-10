@@ -4,12 +4,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $active_group = 'default';
 $query_builder = TRUE;
 $active_record = TRUE;
-
+$db_user=getenv('DB_USERNAME');
+$db_pwd=getenv('DB_PASSWORD')
 $db['default'] = array(
     'dsn'   => '',
     'hostname' => 'localhost',
-    'username' => 'telehea2_telehealers_new',
-    'password' => '#&$H3enA1Shd(*3!()',
+    'username' => $db_user,
+    'password' => $db_pwd,
     'database' => 'telehea2_telehealers_new',
     'dbdriver' => 'mysqli',
     'dbprefix' => '',
