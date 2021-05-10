@@ -99,6 +99,9 @@ $hello = GeraHash(5);
                         </div>
                     </div>
                     <div class="col-md-8">
+					<?php 
+						echo @$msg = $this->session->flashdata('message'); 
+					?>
                         <div class="table-responsive">
                             <table class="table">
                                 <thead>
@@ -114,9 +117,11 @@ $hello = GeraHash(5);
                                 </thead>
                                 <tbody>
 								<?php 
+								$doctor_arr = array();
 								if(is_array($patient_appointment_info) && count($patient_appointment_info)>0){
 									foreach($patient_appointment_info as $val){
 									$doctor_id = $val['doctor_id'];
+									$doctor_arr[] = $doctor_id;
 									$sql = "select * from doctor_tbl where doctor_id = '".$doctor_id."'";
 									$res = $this->db->query($sql);
 									$result = $res->result_array();
@@ -142,8 +147,13 @@ $hello = GeraHash(5);
                                     <tr>
                                         <td><?php echo $val['appointment_id'];?></td>
                                         <td><?php echo $doctor_name;?><span><?php echo $specialist;?></span></td>
-                                        <td><?php echo $val['date'];?></td>
-                                        <td><?php echo $val['sequence'];?></td>
+                                        <td>
+										<?php
+		$app_time = date('h:i A', strtotime($val['sequence']));
+		$app_date = date('jS F Y',strtotime($val['date']));										
+										echo $app_date;
+										?></td>
+                                        <td><?php echo $app_time;?></td>
                                         <td><?php echo $val['symt1'];?></td>
                                         <td><?php echo $val['service'];?></td>
 										
@@ -151,7 +161,115 @@ $hello = GeraHash(5);
 								<?php }} ?>	
                                 </tbody>
                             </table>
+							<br><br>
+							
                         </div>
+						<br><br>
+						<div id="bookippointment" style="">
+						<div class="row"><div class="col-md-12 previous_heading">Previous Consulting Doctors</div></div>
+						<?php 
+							$doctor_arr = array_unique($doctor_arr);
+							if(is_array($doctor_arr) && count($doctor_arr)>0){
+								?>
+								
+                            
+								<?php
+								$i=0;
+							foreach($doctor_arr as $val){
+								$i++;
+								$sql = "select * from doctor_tbl where doctor_id = '".$val."'";
+								$res = $this->db->query($sql);
+								$result = $res->result_array();
+								if(is_array($result) && count($result)>0){
+									$doctor_name = $result[0]['doctor_name'];
+								}
+								$d_day=array();
+								$sql2 = "select * from schedul_setup_tbl where doctor_id = '".$val."' and venue_id = '3'";
+								//echo $sql2;
+								$res2 = $this->db->query($sql2);
+								$result2 = $res2->result_array();
+								if(is_array($result2) && count($result2)>0){
+									foreach($result2 as $va){
+										$d_day[] = $va['day'];	
+									}
+								}
+								//echo "<pre>";print_r($d_day);
+								$d_day = array_unique($d_day);
+								?>
+								<div class="row">
+									<div class="col-md-1"><?php echo $i; ?></div>
+									<div class="col-md-5"><?php echo $doctor_name; ?></div>
+									<div class="col-md-6"><a href="javascript:void(0)" class="btn_app" onclick="setdocapp('<?php echo $doctor_name;?>','<?php echo $val;?>')" >Book Appointment</a>
+									
+									</div>
+									</div><br>	
+								<?php
+							}
+							?>
+							
+							
+							<?php
+							}
+							?>
+						<div class="applyjobform" style="display:none;">
+                                <?php 
+						$mag = $this->session->flashdata('message');
+						if($mag !=''){
+						echo $mag."<br>";
+						}
+						
+                            $attributes = array('class' => 'form-horizontal','id'=>'p_info','name'=>'p_info','role'=>'form');
+                            echo form_open_multipart('Appointment/patientAppointment', $attributes);                
+							
+                        ?>
+						
+						<input type='hidden' name="patient_id" id="patient_id" value="<?php echo $patient_info[0]['patient_id']?>">
+						<input type='hidden' name="patient_email" id="patient_email" value="<?php echo $patient_info[0]['patient_email']?>">
+						<input type='hidden' name="doctor_id" id="doctor_id" value="">
+                                    <h2 id="dr_name" style="font-size:20px;">Book Appointment</h2>
+									<div id="errmsg" style="display:none;" class="alert alert-danger"></div>
+                                    <div class="row" style="display:none;">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="email">Doctor</label>
+                                                <input type="text" class="form-control1" name="d_name" id="d_name" value="" disabled>
+                                            </div>
+                                        </div>
+									</div>
+									<div class="row">
+                                        <div class="col-md-7">
+                                            <div class="form-group">
+                                                <label for="phone-number">Date</label>
+                                                <input type="date" class="form-control datepicker3" name="p_date" id="p_date" value="" required>
+                                            </div>
+                                        </div>
+									</div>
+									<div class="row">									
+                                        <div class="col-md-7">
+                                            <div class="form-group">
+                                                <div class="schedul1" style="width:100%; float:left; clear:both; margin-top:20px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+									<br>
+									<div class="row">
+                                        <div class="col-md-7">
+                                            <div class="form-group">
+                                                <label for="phone-number">Tell us your symptom or health problem</label>
+                                                <textarea name="problem" id="problem" class="form-control" required></textarea>
+                                            </div>
+                                        </div>
+									</div>
+									<div class="row">				
+                                        <div class="col-md-7 mb-4">
+                                            <div class="sbtn">
+											    <input type="button" onClick="checkValidate()" value="Book Appointment">
+                                            </div>
+                                        </div>
+									</div>
+                                <?php echo form_close();?>
+						    </div>
+						</div>	
                     </div>
                 </div>
             </div>
@@ -168,6 +286,10 @@ $hello = GeraHash(5);
 <input type="hidden" id="base_url" value="<?php echo base_url()?>">
 	<script src="<?php echo base_url();?>web_assets2/js/jquery.js"></script>
     <script src="<?php echo base_url();?>web_assets2/js/bootstrap.min.js"></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.2/js/intlTelInput.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js'></script>
     <script src="<?php echo base_url();?>web_assets2/js/owl.carousel.min.js"></script>
     <script src="<?php echo base_url();?>web_assets2/js/main.js"></script>
     <script src="<?php echo base_url();?>web_assets2/js/all.min.js"></script>
@@ -179,71 +301,22 @@ $hello = GeraHash(5);
 <script>
 $(document).ready(function(){
     $('.appoimentbtn').show();
-	$('#contact_us').click(function(){
-		var full_name    = $('#full_name').val();
-		var email_id     = $('#email_id').val();
-		var subject      = $('#subject').val();
-		var message      = $('#message').val();
-		var captchdas    = '<?php echo $hello; ?>';
-		var captcha_code = $('#captcha_code').val();
-		var baseUrl = $('#baseUrl').val();
-		var msg = '';
-		
-		if(full_name==""){
-			msg += 'Please enter full name.<br>';
-		}
-		if(email_id==""){
-			msg += 'Please enter email ID.<br>';
-		}else{
-			var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-            if(email_id.match(mailformat))
-            {}else{
-                msg += 'You have entered an Invalid Email ID.<br>';
-            }  
-		}
-		if(subject==""){
-			msg += 'Please enter subject.<br>';
-		}
-		if(message==""){
-			msg += 'Please enter your message.<br>';
-		}
-		if(captcha_code==""){
-			msg += 'Please enter captcha code.<br>';
-		}
-		else{
-			if(captchdas != captcha_code){
-				msg += 'Please enter a valid captcha code.<br>';
-			}
-		}
-		if(msg!=""){
-            $('#q_succ_msg').hide();
-            $('#q_show_error').show();
-            $('#q_succ_msg').html('');
-            $('#q_show_error').html(msg);
-        }else{
-			$('#q_show_error').hide();
-			$('#q_succ_msg').show();
-			$('#q_succ_msg').html('Please wait...');
-			$.ajax({
-				url:baseUrl+'index.php/Welcome/contactEmail',
-				method: 'post',
-				data: {full_name:full_name, email_id:email_id, subject:subject, message:message},
-				type: 'POST',
-				success: function(response){
-					//$('#q_succ_msg').html('Your details has been submited successfully.');
-					$('#full_name').val('');
-					$('#email_id').val('');
-					$('#subject').val('');
-					$('#message').val('');
-					$('#captcha_code').val('');
-					$('#q_succ_msg').html(response);
-				}
-			});
-        }
-		
-	});
 	
 	
+	var date_input=$('input[name="p_date"]');
+	 $("#p_date").datepicker({
+		onSelect: function(dateText) {
+		  alert("Selected date: " + dateText + ", Current Selected Value= " + this.value);
+		  $(this).change();
+		}
+	  }).on("change", function() {
+		$('#errmsg').hide();
+		$('#errmsg').html('');
+		var date = $('#p_date').val();
+		var doctor_id = $('#doctor_id').val();
+		var venue_id = '3';
+		loadScheduldoc(date,venue_id,doctor_id);
+	  });
 	
 });
 
@@ -253,8 +326,68 @@ window.history.forward();
 setTimeout("preventBack()", 0);  
 window.onunload = function () { null };  
 
-
-
+function setdocapp(name,id){
+	//alert(name+' / '+id);
+	$('#d_name').val(name);
+	$('#doctor_id').val(id);
+	$('#dr_name').html('Book Appointment with '+name);
+	$('.applyjobform').show();
+}
+function checkValidate(){
+	var baseUrl = $('#baseUrl').val();
+	var p_date = $('#p_date').val();
+	var doctor_id = $('#doctor_id').val();
+	var p_email = $('#patient_email').val();
+	var venue_id = '3';
+	var patient_id = $('#patient_id').val();
+	var serial_no = $('#serial_no').val();
+	var problem = $('#problem').val();
+	var schedul_id = $('input[name="schedul_id"]').val();
+	//alert(p_email);
+	if(p_date==""){
+		$('#errmsg').show();
+		$('#errmsg').html('Please select Date first.');
+	}else if(problem==""){
+		$('#errmsg').show();
+		$('#errmsg').html('Please Enter Tell us your symptom or health problem.');
+	}else{
+		if(typeof serial_no === 'undefined'){
+		
+		}else{
+			if(serial_no==""){
+				$('#errmsg').show();
+				$('#errmsg').html('Please select time slot.');
+			}else{
+				$('#errmsg').hide();
+				$('#errmsg').html('');	
+				if(p_email!="" || p_date!=""){
+					//alert(p_email+' / '+p_date);
+					//raghuveer@ecomsolver.com / 2021-05-13
+					//raghuveer@ecomsolver.com / 2021-05-13
+					$.ajax({
+						url:baseUrl+'index.php/Welcome/checkAppointment',
+						method: 'post',
+						data: {p_email:p_email,p_date:p_date},
+						type: 'POST',
+						success: function(response2){
+							//alert(response);
+							if(response2==1){
+								$('#errmsg').show();
+								$('#errmsg').html('Sorry You already get apointment in this date.');
+							}else{
+								$('#errmsg').hide();
+								$('#errmsg').html('');
+								$('#p_info').submit();
+							}
+							//$('#service_type').html(response);
+						}
+					});
+				}
+			}
+		}	
+	}
+	
+}
 </script>	
 </body>
 </html>

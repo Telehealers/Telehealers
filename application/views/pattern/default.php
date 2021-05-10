@@ -20,9 +20,9 @@
         <div class="row">
 		
         <?php if($this->session->userdata('user_type')==1){?>
-		<div class="col-md-3">
-             <!--<a class="btn btn-primary" href="<?php echo base_url();?>admin/Prescription_controller/create_new_prescription"><i class="fa fa-plus" aria-hidden="true"></i> <?php echo display('create_trade')?> </a>-->
-			 </div>
+			<!--<div class="col-md-3">
+             <a class="btn btn-primary" href="<?php echo base_url();?>admin/Prescription_controller/create_new_prescription"><i class="fa fa-plus" aria-hidden="true"></i> <?php echo display('create_trade')?> </a>
+			 </div>-->
         <?php }?>
 		
 		<div class="col-md-9" style="text-align:left;">
@@ -53,14 +53,19 @@
     	                <b><?php echo display('date');?> :</b> 
     	                    <?php 
     	                        $date1 =  date_create(@$value->create_date_time);
-    	                        echo $newDate = date_format($date1,"d-M-Y H:i:sa l");
+								
+    	                        //echo $newDate = date_format($date1,"d-M-Y H:i:sa l");
+								
+								echo $newDate = date_format($date1,"d-M-Y l");
     	                    ?>
     	            </div>
 
     	           <div class="hed-2">                      
-    	                <?php echo display('patient_id');?>: <?php echo html_escape(@$value->patient_id);?>,
+    	                <?php echo display('patient_id');?>: <?php echo html_escape(@$value->patient_id);?>&nbsp;&nbsp;
     	                <?php echo display('appointment_id');?>: <?php echo html_escape(@$value->appointment_id);?> 
-    	                <a class="d-hed-2"  target="_blank" href="<?php echo base_url();?>History_controller/patient_history/<?php echo html_escape(@$value->patient_id);?>"><?php echo display('patient_history');?></a>
+						<?php if($value->patient_id!=""){ ?>
+    	                <a class="d-hed-2" style="margin-left:20px;" target="_blank" href="<?php echo base_url();?>History_controller/patient_history/<?php echo html_escape(@$value->patient_id);?>"><?php echo display('patient_history');?></a>
+						<?php } ?>
     	            </div>
                     
     	        </div>
@@ -73,7 +78,7 @@
     	                <?php echo html_escape(@$value->designation);?><br>
     	                <b><?php //echo html_escape(@$value->service_place);?></b>    	          
     	                <b><?php echo html_escape(@$v_info->venue_name);?></b><br>
-    	                <?php //echo html_escape(@$v_info->venue_address);?>,
+    	                <?php //echo html_escape(@$v_info->venue_address);?>
     	                <?php //echo html_escape(@$v_info->venue_contact);?>
     	            </div>
     	        </div>
@@ -81,7 +86,7 @@
     	        <div class="row patient_area">
     	            <div class="col-md-12">
     	                <h5 >
-    	                <strong><?php echo display('patient_name');?>:</strong> <b><?php echo html_escape(@$value->patient_name);?></b>,
+    	                <strong><?php echo display('patient_name');?>:</strong> <b><?php echo html_escape(@$value->patient_name);?></b>
     	                 &nbsp; <strong>Age :</strong> 
     	                 <?php
     	                    /* $date1=date_create(@$value->birth_date);
@@ -89,9 +94,9 @@
     	                    $diff=date_diff($date1,$date2);
     	                    echo @$diff->format("%Y-Y:%m-M:%d-D"); */
 							echo @$value->age;
-    	                  ?>,
-    	                 &nbsp;<strong><?php echo display('sex');?> :</strong> <?php echo html_escape(@$value->sex);?>, 
-    	                 &nbsp;<strong><?php echo display('patient_weight');?> :</strong> <?php echo html_escape(@$value->weight);?>, 
+    	                  ?>
+    	                 &nbsp;<strong><?php echo display('sex');?> :</strong> <?php echo html_escape(@$value->sex);?> 
+    	                 &nbsp;<strong><?php echo display('patient_weight');?> :</strong> <?php echo html_escape(@$value->weight);?> 
                          &nbsp;<strong><?php echo display('patient_bp');?> :</strong> <?php echo html_escape(@$value->pressure);?>
     	                 </h5>
     	            </div>

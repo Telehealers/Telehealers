@@ -396,7 +396,12 @@ class Generic_controller extends CI_Controller {
 				$pdata['temperature'] = $this->input->post('temperature',TRUE);
 			 	$pdata['pres_comments'] = $this->input->post('prescription_comment',TRUE);
 			 	$pdata['prescription_type'] = 2;
-			 	$pdata['create_date_time'] = date("Y-m-d H:i:s");
+				if($this->input->post('create_date',TRUE)==""){
+					$pdata['create_date_time'] = date("Y-m-d H:i:s");
+				}else{
+					$pdata['create_date_time'] = $this->input->post('create_date',TRUE);	
+				}
+			 	
 
 			 	$this->db->insert('prescription',$pdata);
 	            
@@ -718,23 +723,28 @@ class Generic_controller extends CI_Controller {
          ->row();
 
 	 	@$venue_id = $this->db->select('prescription_id,venue_id')->from('prescription')->where('prescription_id',$prescription_id)->get()->row();
-	    $data['chember_time'] = $this->db->select('*')
-	        ->from('schedul_setup_tbl')
-	        ->where('venue_id', $venue_id->venue_id)
-	        ->limit(1)
-	        ->get()
-	        ->row();
-
-	        $data['pattern'] = $this->db->select('*')
+		
+		//$data['chember_time'] =array();
+		//$data['pattern'] =array();
+		
+		//echo "<pre>";print_r($venue_id);die();
+		if($venue_id==""){
+			
+		}else{
+			$data['pattern'] = $this->db->select('*')
 			->from('print_pattern')
 			->where('doctor_id',$this->session->userdata('doctor_id'))
 			->where('venue_id',$venue_id->venue_id)
 			->get()
 			->row();
+			
 	        if($data['pattern']!==NULL){
 				$data['others'] = $this->load->view('generic_pattern/'.$data['pattern']->pattern_no.'',$data,true);
 			}
 			$data['default'] = $this->load->view('generic_pattern/default',$data,true); 
+		}
+		
+		    
 			$this->load->view('generic_pattern/generic',$data);
 	        
 

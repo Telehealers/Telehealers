@@ -1,4 +1,9 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php 
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+
+
+//include '/home/telehea2/telehealers.in/pdf/2/examples/tcpdf_include.php';
 
 class Prescription_controller extends CI_Controller {
 
@@ -11,6 +16,7 @@ class Prescription_controller extends CI_Controller {
 	    $this->load->library('session');
 		$log_id = $this->session->userdata('log_id');	
 		$session_id = $this->session->userdata('session_id');	
+		$this->load->library('Pdf');
 	    
 	   	if($session_id == NULL ) {
 	     redirect('logout');
@@ -112,7 +118,12 @@ class Prescription_controller extends CI_Controller {
 		$pdata['temperature'] = $this->input->post('temperature',TRUE);
 		$pdata['prescription_type'] = 1;
 	 	$pdata['pres_comments'] = $this->input->post('prescription_comment',TRUE);
-	 	$pdata['create_date_time'] = date("Y-m-d H:i:s");
+		if($this->input->post('create_date',TRUE)==""){
+			$pdata['create_date_time'] = date("Y-m-d H:i:s");
+		}else{
+			$pdata['create_date_time'] = $this->input->post('create_date',TRUE);	
+		}
+	 	
 
 	 	$this->db->insert('prescription',$pdata);
 	    // get last insert id
@@ -1011,6 +1022,8 @@ class Prescription_controller extends CI_Controller {
 	     ->where('test_assign_for_patine.prescription_id',$p_id)
 	     ->get()
 	     ->result();
+		 
+		//echo "<pre>";print_r($data['t_info']);die();
 
 	    // advice query
 	    $data['a_info'] = $this->db->select('advice_prescriptiion.*,doctor_advice.*')
@@ -1050,6 +1063,11 @@ class Prescription_controller extends CI_Controller {
 			
 			
 			
+		
+		
+		
+		
+			
 			
 			
 		//echo "p_id--".$p_id;die();
@@ -1067,16 +1085,57 @@ class Prescription_controller extends CI_Controller {
 		
 		$patient_id='';
 		$doctor_id='';
-		
+		$appointment_id='';
+		$sequence='';
+		$date='';
+		$app_date='';
+		$degrees='';
+		$weight='';
+		$pressure='';
+		$problem='';
+		$oex='';
+		$pd='';
+		$history='';
+		$temperature='';
+		$create_date_time='';
+		$prescription_type='';
 		
 		$sql_p = "select * from prescription where prescription_id = '".$p_id."' ";
 		$res_p = $this->db->query($sql_p);
 		$result_p = $res_p->result_array();
 		if(is_array($result_p) && count($result_p)>0){
 			$patient_id = $result_p[0]['patient_id'];
-			
 			$doctor_id = $result_p[0]['doctor_id'];
+			$appointment_id = $result_p[0]['appointment_id'];
+			$pres_comments = $result_p[0]['pres_comments'];
+			$weight = $result_p[0]['weight'];
+			$pressure = $result_p[0]['pressure'];
+			$problem = $result_p[0]['problem'];
+			$oex = $result_p[0]['oex'];
+			$pd = $result_p[0]['pd'];
+			$history = $result_p[0]['history'];
+			$temperature = $result_p[0]['temperature'];
+			$create_date_time = $result_p[0]['create_date_time'];
+			$prescription_type = $result_p[0]['prescription_type'];
 		}
+		
+		
+		if($appointment_id!=""){
+			$sql_ap = "select * from appointment_tbl where appointment_id = '".$appointment_id."' ";
+			//echo $sql_ap;
+			$res_ap = $this->db->query($sql_ap);
+			$result_ap = $res_ap->result_array();
+			if(is_array($result_ap) && count($result_ap)>0){
+				$sequence = $result_ap[0]['sequence'];
+				$date = $result_ap[0]['date'];
+			}
+		}
+		if($sequence!=""){
+			$sequence = date('h:i A', strtotime($sequence));
+			$app_date = date('jS F Y',strtotime($date));
+		}
+		
+		
 		if($patient_id!="" && $doctor_id!=""){
 			$sql = "select * from patient_tbl where patient_id = '".$patient_id."' ";
 			$res = $this->db->query($sql);
@@ -1084,6 +1143,8 @@ class Prescription_controller extends CI_Controller {
 			if(is_array($result) && count($result)>0){
 				$patient_name = $result[0]['patient_name'];
 				$patient_email = $result[0]['patient_email'];
+				$patient_age = $result[0]['age'];
+				$patient_sex = $result[0]['sex'];
 			}
 			$sql_doc = "select * from doctor_tbl where doctor_id = '".$doctor_id."' ";
 			$res_doc = $this->db->query($sql_doc);
@@ -1091,7 +1152,10 @@ class Prescription_controller extends CI_Controller {
 			if(is_array($result_doc) && count($result_doc)>0){
 				$doctor_name = $result_doc[0]['doctor_name'];
 				$doc_id = $result_doc[0]['doc_id'];
+				$degrees = $result_doc[0]['degrees'];
 			}
+			
+			
 			
 			$message = '<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #f1f1f1;">
     <center style="width: 100%; background-color: #f1f1f1;">
@@ -1161,11 +1225,11 @@ class Prescription_controller extends CI_Controller {
 
 </body></html>';
 
-		$start = $data['v_info']->start_time;
-		$end =  $data['v_info']->end_time;
-		$pp_time = $data['v_info']->per_patient_time;
-		$patient_time = date('h:i A', strtotime($start));
-		$end_time = date('h:i A', strtotime($end));
+		//$start = $data['v_info']->start_time;
+		//$end =  $data['v_info']->end_time;
+		//$pp_time = $data['v_info']->per_patient_time;
+		//$patient_time = date('h:i A', strtotime($start));
+		//$end_time = date('h:i A', strtotime($end));
 		$img_url = 'https://www.telehealers.in/assets/uploads/images/telehe.png';
 		$img_url2 = 'https://www.telehealers.in/web_assets2/images/aajay.jpg';
 			

@@ -192,8 +192,7 @@ $hello = GeraHash(5);
                                 <thead>
                                     <tr>
 									    <th scope="col">Sr. no.</th>
-                                        <th scope="col">Reports</th>
-                                        <th scope="col">Date</th>
+                                        <th scope="col">Reports Date</th>
                                         <th scope="col">Action</th>
                                     </tr>
                                 </thead>
@@ -206,7 +205,7 @@ $hello = GeraHash(5);
 								?>
                                     <tr>
 										<td><?php echo $i; ?></td>
-                                        <td><img src="<?php echo $val['document'];?>" style="width:140px;" /></td>
+                                       
                                         <td><?php echo $val['add_date'];?></td>
                                         <td><a target="_blank" href="<?php echo $val['document'];?>">View</a> | <a href="<?php echo base_url();?>Patientreports/delete_patient_document/<?php echo $val['patient_doc_id'];?>" onclick="return confirm('Are you want to delete?');" class="btn btn-xs btn-danger">
                                         <i class="fa fa-trash"></i> </a></td>

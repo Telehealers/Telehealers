@@ -65,7 +65,7 @@
         'use strict';
         function loadSchedul(){
             
-			//alert('hello3...');
+			//alert('hello3 here...');
 			
             var venue_id = $('#venue_id').val();
 
@@ -77,6 +77,65 @@
 			   doctor_id=3;
 			}
             var date     = $('.datepicker3').val();
+			//alert(date);
+			var now = new Date();
+			var r = now.setHours(0,0,0,0);
+			var y = Date.parse(date);
+			//alert(y);
+			
+            var base_url = $("#base_url").val();
+			
+            //alert(venue_id+'/'+doctor_id+'/'+date);
+			
+            if (venue_id!='') {
+				
+                $.ajax({ 
+                    'url': base_url + 'admin/Ajax_controller/get_schedul/'+venue_id+'/'+date+'/'+doctor_id,
+                    'type': 'GET', 
+                    'data': {'patient_id': venue_id },
+                    'success': function(data) {
+						if (y < r) {
+							//alert("Selected date is in the past");
+							var container = $(".schedul1");
+							//container.html("Past date appointment is not allowed!");
+							container.html('<div class="col-md-12"><div class="alert alert-danger">Past date appointment is not allowed!</div></div>');
+							$('#bb_app').prop('disabled', true);
+							$('#bb_app').addClass("btn_disable");
+						} else {
+							var container = $(".schedul1");
+							container.html(data);
+							
+							
+						}						
+						
+						
+						
+                    }
+					
+                    });
+					
+					
+					
+                };
+				
+        } 
+		
+		// load load schedul
+        'use strict';
+        function loadScheduldoc(date,venue_id,doctor_id){
+            
+			//alert('hello3 here...');
+			
+            /* var venue_id = $('#venue_id').val();
+
+			var doctor_id = $('#doctor_id').val();
+			
+			var doctor_id = $('input[name="doctor_id"]:checked').val();
+			
+			if(typeof doctor_id === 'undefined'){
+			   doctor_id=3;
+			}
+            var date     = $('.datepicker3').val(); */
 			//alert(date);
 			var now = new Date();
 			var r = now.setHours(0,0,0,0);

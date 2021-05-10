@@ -38,7 +38,7 @@
                                 <th class="all"><?php echo display('patient_name')?></th>
                                 <th class="all"><?php echo display('patient_id')?></th>
                                 <th class="all"><?php echo display('phone_number')?></th>
-                                <th class="all"><?php echo display('sex')?></th>
+                                <th class="all"><?php echo display('date')?></th>
                                 <th class="desktop"><?php echo display('action')?></th>
                             </tr>
                         </thead>
@@ -59,7 +59,13 @@
                                 <td><?php echo html_escape($value->patient_name);?></td>
                                 <td><?php echo html_escape($value->patient_id);?></td>
                                 <td><?php echo html_escape($value->patient_phone);?></td>
-                                <td><?php echo html_escape($value->sex); ?></td>
+                                <td>
+								<?php 
+								$app_date = date('jS F Y',strtotime($value->create_date_time));
+								echo $app_date; 
+								
+								?>
+								</td>
                                 <td>
 
                                 <?php if($value->prescription_type==1){?>

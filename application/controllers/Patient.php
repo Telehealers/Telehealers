@@ -65,7 +65,7 @@ class Patient extends CI_Controller {
 		}else{
 			redirect('login');
 		}
-		
+		//echo "log_id--".$log_id;
 		$sql_sh = "select * from patient_tbl where log_id = '".$log_id."'";
 		$res_sh = $this->db->query($sql_sh);
 		$result_sh = $res_sh->result_array();
@@ -80,8 +80,9 @@ class Patient extends CI_Controller {
 			$res_pt = $this->db->query($sql_pt);
 			$result_pt = $res_pt->result_array();
 			$data['patient_appointment_info'] = $result_pt;
-			//echo "<pre>";print_r($data['patient_appointment_info']);die();
+			
 		}
+		//echo "<pre>";print_r($data['patient_appointment_info']);die();
         //setup information
         $data['info'] = $this->home_view_model->Home_satup();
         //get doctor_info
@@ -94,7 +95,7 @@ class Patient extends CI_Controller {
 		$res_meta = $this->db->query($meta_sql);
 		$data['meta_info'] = $res_meta->result_array();
       
-
+		//echo "<pre>";print_r($data);die();
         #------view page----------
         $this->load->view('patient',$data);
 	}

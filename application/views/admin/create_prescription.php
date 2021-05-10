@@ -62,11 +62,18 @@
                                                 <span class=""><b><?php echo display('sex')?> : </b></span><?php echo html_escape(@$patient_info->sex);?>,&nbsp&nbsp&nbsp
                                                 <span class=""><b><?php echo display('patient_id')?> : </b></span><?php echo html_escape(@$patient_info->patient_id);?>,&nbsp&nbsp&nbsp
                                                 <span class=""><b><?php echo display('appointment_id')?> : </b></span><?php echo html_escape(@$patient_info->appointment_id);?>,&nbsp&nbsp&nbsp
+												
                                             </div>
                                            
                                         </div>
                                     </div> <hr/>
-
+									<div class="row">
+                                         <div class="col-xs-4">
+										 <input type="text" name="create_date" class="form-control datepicker1" placeholder="Create Date" "create_date">
+										 </div>
+									</div>
+									
+									<br>
                                      <input type="hidden" name="patient_id" value="<?php echo html_escape(@$patient_info->patient_id);?>"> 
                                      <input type="hidden" name="appointment_id" value="<?php echo html_escape(@$patient_info->appointment_id);?>"> 
                                      <input type="hidden" name="venue_id" value="<?php echo html_escape(@$patient_info->venue_id);?>"> 
