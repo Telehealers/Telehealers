@@ -20,22 +20,22 @@
 
 // ** MySQL settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-define( 'DB_NAME', 'telehea2_telehealers' );
+define( 'DB_NAME', getenv('DB_NAME') );
 
 /** MySQL database username */
-define( 'DB_USER', 'telehea2_telehealers' );
+define( 'DB_USER', getenv('DB_USERNAME'));
 
 /** MySQL database password */
-define( 'DB_PASSWORD', '#&$H3enA1Shd(*3!()' );
+define( 'DB_PASSWORD', getenv('DB_PASSWORD') );
 
 /** MySQL hostname */
-define( 'DB_HOST', 'localhost' );
+define( 'DB_HOST', getenv('DB_HOSTNAME') );
 
 /** Database Charset to use in creating database tables. */
 define( 'DB_CHARSET', 'utf8mb4' );
 
 /** The Database Collate type. Don't change this if in doubt. */
-define( 'DB_COLLATE', '' );
+define( 'DB_COLLATE', 'utf8_general_ci' );
 
 /**#@+
  * Authentication Unique Keys and Salts.

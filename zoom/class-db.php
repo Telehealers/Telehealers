@@ -1,14 +1,10 @@
 <?php
 class DB {
-    private $dbHost     = getenv('DB_HOSTNAME');
-    private $dbUsername = getenv('DB_USERNAME');
-    private $dbPassword = getenv('DB_PASSWORD');
-    private $dbName     = getenv('DB_NAME');
-  
+    
     public function __construct(){
         if(!isset($this->db)){
             // Connect to the database
-            $conn = new mysqli($this->dbHost, $this->dbUsername, $this->dbPassword, $this->dbName);
+            $conn = new mysqli(getenv('DB_HOSTNAME'), getenv('DB_USERNAME'),getenv('DB_PASSWORD'),getenv('DB_NAME'));
             if($conn->connect_error){
                 die("Failed to connect with MySQL: " . $conn->connect_error);
             }else{

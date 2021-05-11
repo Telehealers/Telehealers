@@ -136,7 +136,7 @@ $hello = GeraHash(5);
 <?php
 $servername = getenv('DB_HOSTNAME');
 $username=getenv('DB_USERNAME');
-$password=getenv('DB_PASSWORD')
+$password=getenv('DB_PASSWORD');
 $dbname = getenv('DB_NAME');
 
 // Create connection
