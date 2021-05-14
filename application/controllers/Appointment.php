@@ -176,6 +176,54 @@ function randstrGenapp($len)
     }
     return $result;
 }
+
+#-----------------------------------------------
+#   Superpro API: Create call room.
+#	Returns Video call link.
+#-----------------------------------------------
+function createVideoCallRoom($doctor_name, $doctor_email, $patient_name, $patient_email) {
+	$curl_session = curl_init();
+	curl_setopt_array($curl_session, array(
+		CURLOPT_URL => getenv('SUPERPRO_CREATE_VIDEOCALL_API_ENDPOINT'),
+		CURLOPT_RETURNTRANSFER => true,
+		CURLOPT_ENCODING => '',
+		CURLOPT_MAXREDIRS => 10,
+		CURLOPT_TIMEOUT => 0,
+		CURLOPT_FOLLOWLOCATION => true,
+		CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+		CURLOPT_RETURNTRANSFER => true,
+		CURLOPT_CUSTOMREQUEST => 'POST',
+		CURLOPT_POSTFIELDS =>'{
+		"usersAdd":[
+			{
+				"name":"'.$doctor_name.'",
+				"email":"'.$doctor_email.'",
+				"role":"host"
+			},
+			{
+				"name":"'.$patient_name.'",
+				"email":"'.$patient_email.'",
+				"role":"aud"
+			}
+		]
+	}
+	',
+		CURLOPT_HTTPHEADER => array(
+		'Authorization: Bearer '.getenv('SUPERPRO_AUTH_TOKEN'),
+		'Content-Type: application/json'
+		),
+	));
+	$superpro_response = curl_exec($curl_session);
+	if (!$superpro_response) {
+		//TODO: Proper bad request handling below.
+		throw new Exception('Bad videocall API.'));
+	}
+	curl_close($curl_session);
+	$superpro_data = json_decode($superpro_response);
+	return $superpro_data->videoCallUrl ;
+	
+}
+
 #-----------------------------------------------
 #    save appointmaent 
 #----------------------------------------------  
@@ -395,15 +443,15 @@ function randstrGenapp($len)
               
                 if(!empty($email_temp_info) && !empty($info->patient_email)) {     
               
-                    $message = $this->template([
-                         'doctor_name'      => $dData->doctor_name,
-                         'appointment_id'   => $appointment_id,
-                         'patient_name'     => $info->patient_name,
-                         'patient_id'       => $info->patient_id,
-                         'sequence'         => $info->sequence, 
-                         'appointment_date' => date('d F Y',strtotime($info->date)),
-                         'message'          => $email_temp_info->email_template
-                    ]); 
+					$message = $this->template([
+						'doctor_name'      => $dData->doctor_name,
+						'appointment_id'   => $appointment_id,
+						'patient_name'     => $info->patient_name,
+						'patient_id'       => $info->patient_id,
+						'sequence'         => $info->sequence, 
+						'appointment_date' => date('d F Y',strtotime($info->date)),
+						'message'          => $email_temp_info->email_template
+					]); 
 
                 #----------------------------
                     //$config = array();
@@ -416,41 +464,18 @@ function randstrGenapp($len)
 				if(is_array($result_tk) && count($result_tk)>0){
 					$accessToken = $result_tk[0]['access_token'];
 				}
-				
-			
-			$client = new GuzzleHttp\Client(['base_uri' => 'https://zoom.us']);
-			
-			$app_date_time = date('Y-m-d',strtotime($info->date)).'T'.$info->sequence;
+				/** Video call room creation **/				
+				$superpro_meeting_url = $this->createVideoCallRoom(
+					$dData->doctor_name, $dData->doctor_email,
+					$info->patient_name, $info->patient_emil);
 
-			$meeting_pass = '123456768';
-			$response_z = $client->request('POST', '/v2/users/me/meetings', [
-				"headers" => [
-					"Authorization" => "Bearer $accessToken"
-				],
-				'json' => [
-					"topic" => "Appointment Metting - $appointment_id",
-					"type" => 2,
-					"start_time" => $app_date_time,
-					"duration" => $per_patient_time, // 30 mins
-					"password" => $meeting_pass
-				]
-			]);
-
-			$data_zoom = json_decode($response_z->getBody());
-			$zoom_meeting_url = $data_zoom->join_url;
-        
-		
-		
-
-
-					
-					/* $config['protocol'] = $email_config->protocol;
-                    $config['mailpath'] = 'smtp-relay.sendinblue.com';
-                    $config['charset'] = 'utf-8';
-                    $config['wordwrap'] = TRUE;
-                    $config['mailtype'] = $email_config->mailtype; 
-                    $this->email->initialize($config);*/
-					$message = '<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #f1f1f1;">
+				/* $config['protocol'] = $email_config->protocol;
+				$config['mailpath'] = 'smtp-relay.sendinblue.com';
+				$config['charset'] = 'utf-8';
+				$config['wordwrap'] = TRUE;
+				$config['mailtype'] = $email_config->mailtype; 
+				$this->email->initialize($config);*/
+				$message = '<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #f1f1f1;">
     <center style="width: 100%; background-color: #f1f1f1;">
         <div style="display: none; font-size: 1px;max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
             &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
@@ -482,9 +507,8 @@ function randstrGenapp($len)
                                         <p>Hey <strong>'.$info->patient_name.'</strong>,</p>
                                         <p>Our staff member has confirmed you for a '.$service1.' ('.$service2.') appointment on '.date('d F Y',strtotime($info->date)).' with Dr. '.$dData->doctor_name.' at '.$venue_address.'. If you have questions before your appointment,
                                             use the contact details below to get in touch with us.</p>
-										<h2 style="text-align:center;font-weight:600;color:#356d82">Zoom Meeting Details:</h2>
-										<p>Zoom meeting URL: '.$zoom_meeting_url.',</p>
-										<p>Zoom meeting Password: '.$meeting_pass.',</p>	
+										<h2 style="text-align:center;font-weight:600;color:#356d82">Videocall Details:</h2>
+										<p>Superpro video call link: '.$superpro_meeting_url.',</p>
                                         <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Appointment ID - ('.$appointment_id.')</h2><h1></h1>
                                         <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Other Details:</h2><h1></h1>
                                         <p>Location Name: '.$venue_name.'</p>
@@ -1032,46 +1056,17 @@ function randstrGenapp($len)
 		}
 		
 		if($refershToken!="" && $accessToken!=""){
-			$client = new GuzzleHttp\Client(['base_uri' => 'https://zoom.us']);
-			
-			//$app_date_time = date('Y-m-d',strtotime($date)).'T'.$sequence;
-			
-			//$app_date_time = date('jS F Y',strtotime($date)).' - '.date('h:i A', strtotime($sequence));
-			
-			$date_g = '12-07-2021';
-			$sequence_g = '6:15 PM';
-			//$app_date_time = '2021-06-20T16:45:00Z';
-			//$app_date_time = '2021-05-15T12:00:00Z';
-			//2021-05-05T19:00Z
-			$app_date_time = date('Y-m-d',strtotime($date)).'T'.$sequence.":00";
-			//die();
-
-			$meeting_pass = '123456768';
-			
-			$response_z = $client->request('POST', '/v2/users/me/meetings', [
-				"headers" => [
-					"Authorization" => "Bearer $accessToken"
-				],
-				'json' => [
-					"topic" => "Appointment Meeting - $appointment_id",
-					"type" => 2,
-					"start_time" => $app_date_time,
-					"duration" => $per_patient_time, // 30 mins
-					"timezone" => 'Asia/Calcutta', // 30 mins
-					"password" => $meeting_pass
-				]
-			]);
-
-			$data_zoom = json_decode($response_z->getBody());
-			$zoom_meeting_url = $data_zoom->join_url;
+			/** Video call room creation **/				
+			$superpro_meeting_url = $this->createVideoCallRoom(
+				$doctor_name, $doctor_email,
+				$p_name, $p_email);
+			$meeting_pass = '';
 		}else{
 			$meeting_pass = '';
-			$zoom_meeting_url = '';
+			$superpro_meeting_url = '';
 		}
-		
-		
-		
-		$symt1 = $zoom_meeting_url;
+
+		$symt1 = $superpro_meeting_url;
 		$symt2 = $meeting_pass;
 		
 		$sql_m = "update appointment_tbl set symt1 = '".$symt1."',symt2 = '".$symt2."' where appointment_id = '$appointment_id'";
@@ -1111,9 +1106,8 @@ function randstrGenapp($len)
                                         <p>Hey <strong>'.$p_name.'</strong>,</p>
                                         <p>Our staff member has confirmed you for a '.$service2.' appointment on '.date('jS F Y',strtotime($date)).' with Dr. '.$doctor_name.'. If you have questions before your appointment,
                                             use the contact form with appointment ID to get in touch with us.</p>
-										<h2 style="text-align:left;font-weight:600;color:#356d82">Zoom Meeting Details:</h2> 
-										<p>Zoom meeting URL: '.$zoom_meeting_url.',</p>
-										<p>Zoom meeting Password: '.$meeting_pass.',</p>	
+										<h2 style="text-align:left;font-weight:600;color:#356d82">Videocall Details:</h2> 
+										<p>Superpro video call link: '.$superpro_meeting_url.',</p>
                                         <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Appointment ID - ('.$appointment_id.')</h2><h1></h1>
                                         <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Doctor Details:</h2><h1></h1>
                                         <p>Name: '.$doctor_name.'</p>
@@ -1324,46 +1318,19 @@ function randstrGenapp($len)
 		}
 		
 		if($refershToken!="" && $accessToken!=""){
-			$client = new GuzzleHttp\Client(['base_uri' => 'https://zoom.us']);
-			
-			//$app_date_time = date('Y-m-d',strtotime($date)).'T'.$sequence;
-			
-			//$app_date_time = date('jS F Y',strtotime($date)).' - '.date('h:i A', strtotime($sequence));
-			
-			$date_g = '12-07-2021';
-			$sequence_g = '6:15 PM';
-			//$app_date_time = '2021-06-20T16:45:00Z';
-			//$app_date_time = '2021-05-15T12:00:00Z';
-			//2021-05-05T19:00Z
-			$app_date_time = date('Y-m-d',strtotime($date)).'T'.$sequence.":00";
-			//die();
-
-			$meeting_pass = '123456768';
-			
-			$response_z = $client->request('POST', '/v2/users/me/meetings', [
-				"headers" => [
-					"Authorization" => "Bearer $accessToken"
-				],
-				'json' => [
-					"topic" => "Appointment Meeting - $appointment_id",
-					"type" => 2,
-					"start_time" => $app_date_time,
-					"duration" => $per_patient_time, // 30 mins
-					"timezone" => 'Asia/Calcutta', // 30 mins
-					"password" => $meeting_pass
-				]
-			]);
-
-			$data_zoom = json_decode($response_z->getBody());
-			$zoom_meeting_url = $data_zoom->join_url;
+			/** Video call room creation **/				
+			$superpro_meeting_url = $this->createVideoCallRoom(
+				$doctor_name, $doctor_email,
+				$p_name, $p_email);
+			$meeting_pass = '';
 		}else{
 			$meeting_pass = '';
-			$zoom_meeting_url = '';
+			$superpro_meeting_url = '';
 		}
 		
 		
 		
-		$symt1 = $zoom_meeting_url;
+		$symt1 = $superpro_meeting_url;
 		$symt2 = $meeting_pass;
 		
 		$sql_m = "update appointment_tbl set symt1 = '".$symt1."',symt2 = '".$symt2."' where appointment_id = '$appointment_id'";
@@ -1403,9 +1370,8 @@ function randstrGenapp($len)
                                         <p>Hey <strong>'.$p_name.'</strong>,</p>
                                         <p>Our staff member has confirmed you for a '.$service1.' appointment on '.date('jS F Y',strtotime($date)).' with Dr. '.$doctor_name.'. If you have questions before your appointment,
                                             use the contact form with appointment ID to get in touch with us.</p>
-										<h2 style="text-align:left;font-weight:600;color:#356d82">Zoom Meeting Details:</h2> 
-										<p>Zoom meeting URL: '.$zoom_meeting_url.',</p>
-										<p>Zoom meeting Password: '.$meeting_pass.',</p>	
+										<h2 style="text-align:left;font-weight:600;color:#356d82">Videocall Details:</h2> 
+										<p>Superpro video call link: '.$superpro_meeting_url.',</p>
                                         <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Appointment ID - ('.$appointment_id.')</h2><h1></h1>
                                         <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Doctor Details:</h2><h1></h1>
                                         <p>Name: '.$doctor_name.'</p>

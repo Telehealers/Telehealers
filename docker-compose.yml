@@ -20,10 +20,13 @@ services:
         volumes:
             - ./:/var/www/html
             - ${APACHE_LOG_VOLUME}:/var/log/apache2
+        restart: always
         environment:
             DB_USERNAME: ${DB_USERNAME}
             DB_PASSWORD : ${DB_PASSWORD}
             DB_NAME : ${DB_NAME}
             DB_HOSTNAME : 'db'
+            SUPERPRO_AUTH_TOKEN: ${SUPERPRO_AUTH_TOKEN}
+            SUPERPRO_CREATE_VIDEOCALL_API_ENDPOINT: ${SUPERPRO_CREATE_VIDEOCALL_API_ENDPOINT}
 volumes:
     persistent:
