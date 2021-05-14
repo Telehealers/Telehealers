@@ -8,7 +8,3 @@ RewriteRule .* https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php?/$1 [L]
-
-
-AddOutputFilterByType SUBSTITUTE text/html
-Substitute "s|</body>| <script type=\"text/javascript\">     var loc = ((\"https:\" == document.location.protocol) ? \"https://analytics.\" : \"http://analytics.\");     document.write(unescape(\"%3Cscript src='\" + loc + \"sitewit.com/v3/6953342/sw.js' type='text/javascript'%3E%3C/script%3E\")); </script>   </body>|ni"

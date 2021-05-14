@@ -13,5 +13,6 @@ This repo contains source of telehealers, written primarily in/using PHP, JS.
 * DB_USERNAME
 * DB_PASSWORD
 * DB_NAME
-* DB_HOSTNAME
+* SQL_MACHINE_PORT: Machine port to connect SQL on. **NOTE**: Remove this for better security.
+* HTTPS_MACHINE_PORT: Port to access SSL-secured version of site, HTTP port access is disabled for the container.
 * APACHE_LOG_VOLUME: Folder to log apache error into.
