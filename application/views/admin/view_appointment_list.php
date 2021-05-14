@@ -158,7 +158,7 @@
                                         <a class="btn btn-xs btn-success" data-toggle="tooltip" title="View Appointment" target="_blank" href="<?php echo base_url();?>admin/Basic_controller/my_appointment/<?php echo html_escape($value->appointment_id); ?>"><i class="fa fa-print"></i></a>
                                         <!--<a class="btn btn-xs btn-info" data-toggle="tooltip" title="View History" target="_blank" href="<?php echo base_url();?>History_controller/patient_history/<?php echo html_escape($value->patient_id); ?>"><i class="fa fa-history" aria-hidden="true"></i></a>-->
                                         <a class="btn btn-xs btn-danger" data-toggle="tooltip" title="Delete" href="<?php echo base_url();?>admin/Appointment_controller/delete_appointment/<?php echo html_escape($value->appointment_id); ?>"><i class="fa fa-trash" aria-hidden="true"></i></a>
-                                       <a class="btn btn-xs btn-primary" href="<?php echo base_url();?>admin/Appointment_controller/send_meet_url/<?php echo $value->appointment_id; ?>" onclick="return confirm('Are you want to send meeting url?');">Send Meeting Url</a>
+                                       <a class="btn btn-xs btn-primary" href="<?php echo base_url();?>admin/Appointment_controller/send_meet_url/<?php echo $value->appointment_id; ?>" onclick="return confirm('Are you want to send meeting url?');">Send Google Meet</a>
                                     </td>
                                 </tr>
                                 <?php

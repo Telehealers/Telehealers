@@ -9,8 +9,9 @@ var canvas = wrapper.querySelector("canvas");
 var signaturePad = new SignaturePad(canvas, {
   // It's Necessary to use an opaque color when saving image as JPEG;
   // this option can be omitted if only saving as PNG or SVG
-  backgroundColor: 'rgb(255, 255, 255)'
+  backgroundColor: '#f5f5ed'
 });
+
 
 // Adjust canvas coordinate space taking into account pixel ratio,
 // to make it look crisp on mobile devices.
@@ -45,16 +46,17 @@ function download(dataURL, filename) {
   } else {
     var blob = dataURLToBlob(dataURL);
     var url = window.URL.createObjectURL(blob);
-
+	
+	//alert(url)
     var a = document.createElement("a");
     a.style = "display: none";
     a.href = url;
     a.download = filename;
 
-    document.body.appendChild(a);
-    a.click();
+    //document.body.appendChild(a);
+    //a.click();
 
-    window.URL.revokeObjectURL(url);
+    //window.URL.revokeObjectURL(url);
   }
 }
 
@@ -102,7 +104,9 @@ savePNGButton.addEventListener("click", function (event) {
     alert("Please provide a signature first.");
   } else {
     var dataURL = signaturePad.toDataURL();
-    download(dataURL, "signature.png");
+	//alert(dataURL);
+	$('#dataURL img').attr('src',dataURL);
+    //download(dataURL, "signature.png");
   }
 });
 

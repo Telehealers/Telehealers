@@ -19,7 +19,7 @@ class Patient_controller extends CI_Controller {
 		$this->load->model('admin/Venue_model','venue_model');
 		$this->load->model('admin/Overview_model','overview_model');
 		$this->load->model('admin/email/Email_model','email_model');
-    
+		
   }
 /*
 |--------------------------------------
@@ -42,6 +42,7 @@ class Patient_controller extends CI_Controller {
 		}else{
 			//echo '1..'.$user_id;
 			$data['patient_info'] = $this->patient_model->get_by_id_patient($user_id);
+			//echo $data['patient_info'];die();
 		}
 		//echo "<pre>";print_r($data['patient_info']);die();
 		$data['title'] = "Patient List";
@@ -505,7 +506,53 @@ class Patient_controller extends CI_Controller {
   public function upload_patient_doc($p_id){
 	//echo $p_id;die(); 
 	$data['title'] = "Patient Document List";
-    $data['patient_info'] = $this->patient_model->get_patient_doc_info($p_id);
+	$user_type = $this->session->userdata('user_type');
+	$log_id = $this->session->userdata('log_id');
+	
+	if($user_type==1){
+		
+		if($log_id==1){
+			$data['patient_info'] = $this->patient_model->get_patient_doc_info($p_id);
+		}else{
+			$doctor_id = $this->session->userdata('doctor_id');	
+			$data['patient_info'] = $this->patient_model->get_patient_doc_info_by_doctor_id($p_id, $doctor_id);
+		}
+	}else{
+		$data['patient_info'] = $this->patient_model->get_patient_doc_info($p_id);
+	}
+	
+    
+	
+	
+	$doc_arr = array();
+	$sql = "select * from appointment_tbl where patient_id = '$p_id'";
+	$res = $this->db->query($sql);
+	$result = $res->result_array();
+	if(is_array($result) && count($result)>0){
+		foreach($result as $val){
+			$doc_arr[] = $val['doctor_id'];
+		}
+	}
+	//$doc_arr[] = 15;
+	$doc_arr = array_unique($doc_arr);
+	
+	
+	if($user_type==1){
+		
+		if($log_id==1){
+			$data['d_data'] = $doc_arr;
+		}else{
+			$doctor_id = $this->session->userdata('doctor_id');	
+			$doc_arr = array($doctor_id);
+			$data['d_data'] = $doc_arr;
+		}
+	}else{
+		$data['d_data'] = $doc_arr;
+	}	
+	
+	
+	//echo "<pre>";print_r($data['d_data']);die();
+	
 	$data['p_id'] = $p_id;
 	//echo "<pre>";print_r($data['patient_info']);die();
     $this->load->view('admin/_header',$data);
@@ -518,10 +565,11 @@ class Patient_controller extends CI_Controller {
   public function save_patient_doc(){
 	  
 	   $p_id = $this->input->post('p_id',TRUE);
+	   $doctor_id = $this->input->post('doctor_id',TRUE);
 	  
 	  if (@$_FILES['doc_name']['name']){
 			$config['upload_path']   = './assets/uploads/patient/';
-			$config['allowed_types'] = 'gif|jpg|jpeg|png';
+			$config['allowed_types'] = 'gif|jpg|jpeg|png|pdf';
 			$config['overwrite']     = false;
 			$config['max_size']      = 1024;
 			$config['remove_spaces'] = true;
@@ -531,7 +579,7 @@ class Patient_controller extends CI_Controller {
 			$this->load->library('upload', $config);
 			if (!$this->upload->do_upload('doc_name')){
 				$this->session->set_flashdata('exception',"<div class='alert alert-danger msg'>".$this->upload->display_errors()."</div>");
-					  redirect('create_new_patient');
+					  redirect('admin/Patient_controller/upload_patient_doc/'.$p_id);
 			} else {
 			$data = $this->upload->data();
 			$image = base_url($config['upload_path'].$data['file_name']);
@@ -558,6 +606,7 @@ class Patient_controller extends CI_Controller {
 			
 			$savedata =  array(
               'patient_id' => $p_id,
+              'doctor_id' => $doctor_id,
               'document' => $image,
               'add_date' => $create_date
             );
@@ -627,12 +676,21 @@ class Patient_controller extends CI_Controller {
   public function referral_patient_save(){
 	 
 		$patient_id = $this->input->post('p_id',TRUE);
+		$user_type = $this->session->userdata('user_type');
+		if($user_type==1){
+			$user_id = $this->session->userdata('doctor_id');
+		}else{
+			$user_id = $this->session->userdata('user_id');
+		} 
 		$savedata =  array(
-		'ref_doc_id' => $this->input->post('doctor',TRUE)
+		'ref_doc_id' => $this->input->post('doctor',TRUE),
+		'ref_doc_id_by' => $user_id
 		);
+		
+		$doc_id = $this->input->post('doctor',TRUE);
 
 		$this->patient_model->save_edit_patient($savedata,$patient_id);
-		$user_id = $this->session->userdata('log_id');
+		//$user_id = $this->session->userdata('log_id');
 		
 		$ci = get_instance();
 		$ci->load->library('email');
@@ -646,7 +704,7 @@ class Patient_controller extends CI_Controller {
         $config['newline'] = "\r\n";
 		$ci->email->initialize($config);
 		
-		$sql = "select * from doctor_tbl where doctor_id = '".$doctor."'";
+		$sql = "select * from doctor_tbl where doctor_id = '".$doc_id."'";
 		$res = $this->db->query($sql);
 		$result = $res->result_array();
 		if(is_array($result) && count($result)>0){
@@ -662,6 +720,18 @@ class Patient_controller extends CI_Controller {
 				$doctor_email = $result_doc[0]['email'];
 			}
 		}
+		
+		$sql2 = "select * from doctor_tbl where doctor_id = '".$user_id."'";
+		$res2 = $this->db->query($sql2);
+		$result2 = $res2->result_array();
+		if(is_array($result2) && count($result2)>0){
+			$doctor_name_f = $result2[0]['doctor_name'];
+			$doc_id_f = $result2[0]['doc_id'];
+			$log_id_f = $result2[0]['log_id'];
+		}
+		
+		
+		
 		$message = '<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #f1f1f1;">
     <center style="width: 100%; background-color: #f1f1f1;">
         <div style="display: none; font-size: 1px;max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
@@ -692,7 +762,7 @@ class Patient_controller extends CI_Controller {
                                 <div class="product-entry">
                                     <div class="text">
                                         <p>Hey Dr. '.$doctor_name.',</p>
-                                        <p>Patient referral to you.</p>
+                                        <p>Patient referral to you bt '.$doctor_name_f.'.</p>
                                         
                                         <p>ID: '.$patient_id.',</p>
 										

@@ -334,7 +334,7 @@ if($user_id==1){
                             </a>
                             </div>
                         </div>
-
+ <?php if($this->session->userdata('user_type') == 1) { ?>
                         <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
                             <div class="panel panel-bd">
                             <a href="<?php echo base_url();?>admin/Prescription_controller/today_prescription_list">
@@ -364,7 +364,7 @@ if($user_id==1){
                             </a>    
                             </div>
                         </div>
-
+ <?php } ?>
                     </div>
 
                     

@@ -48,7 +48,7 @@
                     ?>
                         
                         <div class="form-body">
-                            <div class="form-group">
+                            <div class="form-group" style="display:none;">
                                 <label class="col-md-3 control-label"> </label>
                                 <div class="col-md-7">
                                     <label>
@@ -57,7 +57,7 @@
                                 </div>
                             </div> 
                             
-                            <div class="form-group">
+                            <div class="form-group" style="display:none;">
                                 <label class="col-md-3 control-label"> </label>
                                 <div class="col-md-7">
                                     <label>
@@ -66,7 +66,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group" style="display:none;">
                                 <label class="col-md-3 control-label"> </label>
                                 <div class="col-md-7">
                                     <label>
@@ -80,28 +80,23 @@
                                 <div class="col-md-7">
                                      <input type="text" value="<?php echo html_escape(@$config->protocol);?>" name="protocol" required="1" class="form-control">
                                 </div>
-                            </div> 
+                            </div> 														<div class="form-group">                                <label class="col-md-3 control-label"> Prot : </label>                                <div class="col-md-7">                                     <input type="text" value="<?php echo html_escape(@$config->port);?>" name="port" required="1" class="form-control">                                </div>                            </div> 
 
                             <div class="form-group">
-                                <label class="col-md-3 control-label"> <?php echo display('mailepath');?> : </label>
+                                <label class="col-md-3 control-label"> Host : </label>
                                 <div class="col-md-7">
                                     <input type="text" name="mailpath" value="<?php echo html_escape(@$config->mailpath);?>" required="1" class="form-control">
                                 </div>
                             </div>
 
-                            <div class="form-group">
-                                <label class="col-md-3 control-label"> <?php echo display('mailtype');?> : </label>
-                                <div class="col-md-7">
-                                    <input type="text" name="mailtype" value="<?php echo html_escape(@$config->mailtype);?>" required="1" class="form-control">
-                                </div>
-                            </div>
+                            
 
                             <div class="form-group">
-                                <label class="col-md-3 control-label"> <?php echo display('sender_email');?> : </label>
+                                <label class="col-md-3 control-label"> User : </label>
                                 <div class="col-md-7">
                                      <input type="text" name="sender" value="<?php echo html_escape(@$config->sender);?>" required="1" class="form-control">
                                 </div>
-                            </div>
+                            </div>														<div class="form-group">                                <label class="col-md-3 control-label"> Password : </label>                                <div class="col-md-7">                                    <input type="text" name="mailtype" value="<?php echo html_escape(@$config->mailtype);?>" required="1" class="form-control">                                </div>                            </div>
 
                         </div>
 

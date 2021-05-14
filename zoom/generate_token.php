@@ -8,7 +8,7 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
-$sql = "SELECT * FROM token2 where id = '1'";
+$sql = "SELECT * FROM token where id = '1'";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
@@ -38,19 +38,14 @@ if($refersh_token!=""){
         $response = json_decode($response);
 
     
-    $access_token = $response->access_token;
-    $refresh_token = $response->refresh_token;
+    $access_token_new = $response->access_token;
+    $refresh_token_new = $response->refresh_token;
     
-    if($access_token!=""){
-        $sql2 = "update token set access_token = '$access_token' where id = '1'";
+    if($access_token_new!=""){
+        $sql2 = "update token set access_token = '$access_token_new', refersh_token = '$refresh_token_new' where id = '1'";
         $conn->query($sql2);    
     }
-    
-    //die();
-    if($refresh_token!=""){
-        $sql3 = "update token2 set refersh_token = '$refresh_token' where id = '1'";
-        $conn->query($sql3);
-    }
+   
 
 
     $conn->close();

@@ -514,7 +514,7 @@ $(document).ready(function(){
 		var lang_set_val =	$('#service3').val();
 		
 		$('#service2').val(servicestype);
-		//alert('servicestype--'+servicestype)
+		//alert(lang_set_val)
 		if(servicestype==""){
 			alert("Please select service type first");
 			return false;
@@ -778,6 +778,7 @@ function setDoctor(){
 		$('#venue_id').val(3);
 		var servicestype =	$('input[name="servicetype"]:checked').val();
 		var lang_set_val =	$('#service3').val();
+		//alert(lang_set_val);
 		$.ajax({
 			url: base_url+'index.php/Welcome/getservicetypedoctorforimmde',
 			method: 'post',

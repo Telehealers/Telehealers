@@ -1,3 +1,0 @@
-[10-May-2021 23:03:32 Australia/Sydney] PHP Warning:  file_put_contents(upload/60992f249ada5.): failed to open stream: No such file or directory in /home/telehea2/telehealers.in/pdf/1/upload.php on line 15
-[10-May-2021 23:03:35 Australia/Sydney] PHP Warning:  file_put_contents(upload/60992f27c19bf.): failed to open stream: No such file or directory in /home/telehea2/telehealers.in/pdf/1/upload.php on line 15
-[10-May-2021 23:03:37 Australia/Sydney] PHP Warning:  file_put_contents(upload/60992f29ca109.): failed to open stream: No such file or directory in /home/telehea2/telehealers.in/pdf/1/upload.php on line 15

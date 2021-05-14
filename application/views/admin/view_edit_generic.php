@@ -120,8 +120,8 @@
                                                                                
                                                                             </div>
                                                                              <div class="col-md-3">
-                                                                                <input type="hidden" class="mdcn_value" name="medicine_id[]" value="<?php echo html_escape($medicine->medicine_id)?>" />
-                                                                                <input type="text"  class="mdcn_name form-control" name="md_name[]"  value="<?php echo html_escape($medicine->group_name)?>" autocomplete="off" placeholder="<?php echo display('group_name')?>" />
+                                                                                <input type="hidden" class="mdcn_value" name="group_id[]" value="<?php echo html_escape($medicine->group_id)?>" />
+                                                                                <input type="text"  class="mdcn_name form-control" name="group_name[]"  value="<?php echo html_escape($medicine->group_name)?>" autocomplete="off" placeholder="<?php echo display('group_name')?>" />
                                                                                 <div id="suggesstion-box"></div>
                                                                              </div>
 

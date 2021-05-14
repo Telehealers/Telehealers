@@ -43,16 +43,13 @@
                                 <th><?php echo display('phone_number');?></th>
                                 <th><?php echo display('email');?></th>
                                 <th>Referral By</th>
-                                <th class="none" ><?php echo display('address');?></th>
-                                <th class="none"><?php echo display('birth_date');?></th>
-                                <th class="none"><?php echo display('sex');?></th>
                                 <th><?php echo display('action');?></th> 
                             </tr>
                         </thead>
                         <tbody>
                            <?php
                                 foreach ($patient_info as $value) {
-									$doctor_id = $value->doctor_id;
+									$doctor_id = $value->ref_doc_id_by;
 									$SQL = "select doctor_name from doctor_tbl where doctor_id = '$doctor_id'";
 									$query = $this->db->query($SQL);
 									$result = $query->result_array();
@@ -77,9 +74,6 @@
                                 <td><?php echo html_escape($value->patient_phone);?></td>
                                 <td><?php echo html_escape($value->patient_email);?></td>
                                 <td><?php echo $doctor_name;?></td>
-                                <td><?php echo html_escape($value->address);?></td>
-                                <td><?php echo html_escape($value->birth_date);?></td>
-                                <td><?php echo html_escape($value->sex);?></td>
                                 <td class="">
                                     <a target="_blank" title="Upload Document" class="btn btn-xs btn-info" href="<?php echo base_url();?>admin/Patient_controller/upload_patient_doc/<?php echo html_escape($value->patient_id);?>">                                    <i class="fa fa-edit"></i> </a>																		<a title="Update" class="btn btn-xs btn-info" href="<?php echo base_url();?>admin/Patient_controller/patient_edit/<?php echo html_escape($value->patient_id);?>">
                                     <i class="fa fa-edit"></i> </a>

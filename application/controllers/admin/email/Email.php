@@ -110,11 +110,7 @@ class Email extends CI_Controller {
 
 		$data = array(
 
-			'at_appointment' => $this->input->post('at_appointment',TRUE),
-
-			'at_registration' => $this->input->post('at_registration',TRUE),
-
-			'reminder' => $this->input->post('reminder',TRUE),
+			'port' => $this->input->post('port',TRUE),
 
 			'protocol' => $this->input->post('protocol',TRUE),
 

@@ -217,7 +217,7 @@
                                     <div class="form-group row">
                                         <div class="col-sm-offset-9 col-sm-6">
                                             <button type="reset" class="btn btn-danger"><?php echo display('reset')?></button>
-                                            <button type="submit" class="btn btn-success"><?php //echo display('submit')?>Send to Patient</button>
+                                            <button type="submit" class="btn btn-success"><?php //echo display('submit')?> Save</button>
                                         </div>
                                     </div>
 

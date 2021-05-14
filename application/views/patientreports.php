@@ -171,6 +171,29 @@ $hello = GeraHash(5);
                         ?>
 						
                                     <h2>Reports</h2>
+									 <div class="row">
+										<div class="col-md-6 col-sm-6 mb-4">
+                                            <div class="form-group">
+                                                <label for="et_pb_contact_brand_file_request_0" class="et_pb_contact_form_label">Doctor:</label>
+                                                <select name="doctor_id" id="doctor_id" required>
+										<option value="">Select Doctor</option>
+                                        <?php 
+										if(is_array($d_data) && count($d_data)>0){
+											foreach($d_data as $val){
+												$sql = "select doctor_name from doctor_tbl where doctor_id = '".$val."'";
+												$res = $this->db->query($sql);
+												$result = $res->result_array();
+												$doctor_name = $result[0]['doctor_name'];
+												?>
+												<option value="<?php echo $val; ?>"><?php echo $doctor_name; ?></option>
+												<?php
+											}
+										}
+										?>
+										</select>
+										    </div>
+										</div>
+									 </div>
                                     <div class="row">
                                         <div class="col-md-6 col-sm-6 mb-4">
                                             <div class="form-group">
@@ -192,6 +215,7 @@ $hello = GeraHash(5);
                                 <thead>
                                     <tr>
 									    <th scope="col">Sr. no.</th>
+										<th scope="col">Doctor</th>
                                         <th scope="col">Reports Date</th>
                                         <th scope="col">Action</th>
                                     </tr>
@@ -202,10 +226,14 @@ $hello = GeraHash(5);
 									$i=0;
 									foreach($patient_docs as $val){
 										$i++;
+										$sql = "select doctor_name from doctor_tbl where doctor_id = '".$val['doctor_id']."'";
+										$res = $this->db->query($sql);
+										$result = $res->result_array();
+										$doctor_name = $result[0]['doctor_name'];
 								?>
                                     <tr>
 										<td><?php echo $i; ?></td>
-                                       
+                                        <td><?php echo $doctor_name; ?></td>
                                         <td><?php echo $val['add_date'];?></td>
                                         <td><a target="_blank" href="<?php echo $val['document'];?>">View</a> | <a href="<?php echo base_url();?>Patientreports/delete_patient_document/<?php echo $val['patient_doc_id'];?>" onclick="return confirm('Are you want to delete?');" class="btn btn-xs btn-danger">
                                         <i class="fa fa-trash"></i> </a></td>
