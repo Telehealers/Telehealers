@@ -315,6 +315,8 @@ $(document).ready(function(){
 		var date = $('#p_date').val();
 		var doctor_id = $('#doctor_id').val();
 		var venue_id = '3';
+		//alert(date+','+venue_id+','+doctor_id);
+		//2021-05-13,3,14
 		loadScheduldoc(date,venue_id,doctor_id);
 	  });
 	

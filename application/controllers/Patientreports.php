@@ -75,7 +75,7 @@ class Patientreports extends CI_Controller {
 			$res_doc = $this->db->query($sql_doc);
 			$result_doc = $res_doc->result_array();
 			$data['patient_docs'] = $result_doc;
-		}
+		}				$doc_arr = array();		$sql = "select * from appointment_tbl where patient_id = '$patient_id'";		$res = $this->db->query($sql);		$result = $res->result_array();		if(is_array($result) && count($result)>0){			foreach($result as $val){				$doc_arr[] = $val['doctor_id'];			}		}		$doc_arr = array_unique($doc_arr);		$data['d_data'] = $doc_arr;
 		//echo "<pre>";print_r($data['patient_docs']);die(); 
 		
 		
@@ -91,7 +91,7 @@ class Patientreports extends CI_Controller {
   
 	public function save_patient_doc(){
 	  
-	   $p_id = $this->input->post('p_id',TRUE);
+	   $p_id = $this->input->post('p_id',TRUE);	   $doctor_id = $this->input->post('doctor_id',TRUE);
 	   
 	   //echo "p_id--".$p_id;die();
 	  
@@ -133,7 +133,7 @@ class Patientreports extends CI_Controller {
 			$create_date = date('Y-m-d h:i:s');
 			
 			$savedata =  array(
-              'patient_id' => $p_id,
+              'patient_id' => $p_id,			                'doctor_id' => $doctor_id,
               'document' => $image,
               'add_date' => $create_date
             );

@@ -55,6 +55,8 @@
 										<?php if($this->session->userdata('user_type')==3){?>
 										
 										<li><a href="<?php echo base_url();?>Patient">Dashboard</a></li>
+										<?php }else if($this->session->userdata('user_type')==1){?>
+										<li><a href="<?php echo base_url()?>Doctorlogin/logout">Logout</a></li>
 										<?php }else{ ?>
 										<li><a href="<?php echo base_url()?>Userlogin">Login</a></li>
 										<?php } ?>

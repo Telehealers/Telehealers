@@ -184,11 +184,19 @@ class Appointment_controller extends CI_Controller {
     { 
 		$ci = get_instance();
 		$ci->load->library('email');
-        $config['protocol'] = "tls";
-        $config['smtp_host'] = "inpro8.fcomet.com";
-        $config['smtp_port'] = "465";
-        $config['smtp_user'] = "info@telehealers.in"; 
-        $config['smtp_pass'] = "Ajay@1234%";
+        $email_config = $this->email_model->email_config();
+		if(is_array($email_config) && count($email_config)>0){
+			$protocol = $email_config->protocol;
+			$smtp_host = $email_config->mailpath;
+			$smtp_port = $email_config->port;
+			$smtp_user = $email_config->sender;
+			$smtp_pass = $email_config->mailtype;
+		}
+        $config['protocol'] = $protocol;
+        $config['smtp_host'] = $smtp_host;
+        $config['smtp_port'] = $smtp_port;
+        $config['smtp_user'] = $smtp_user; 
+        $config['smtp_pass'] = $smtp_pass;
         $config['charset'] = "utf-8";
         $config['mailtype'] = "html";
         $config['newline'] = "\r\n";
@@ -235,18 +243,15 @@ class Appointment_controller extends CI_Controller {
           }else{
               $this->appointment_model->SaveAppoin($saveData);
 			  
-				$sql_rk = "select * from token2 where id = '1'";
-				$res_rk = $this->db->query($sql_rk);
-				$result_rk = $res_rk->result_array();
-				if(is_array($result_rk) && count($result_rk)>0){
-					$refershToken = $result_rk[0]['refersh_token'];
-				}
+				
+				
 
 				$sql_tk = "select * from token where id = '1'";
 				$res_tk = $this->db->query($sql_tk);
 				$result_tk = $res_tk->result_array();
 				if(is_array($result_tk) && count($result_tk)>0){
 					$accessToken = $result_tk[0]['access_token'];
+					$refershToken = $result_tk[0]['refersh_token'];
 				}
 
 				if($refershToken!="" && $accessToken!=""){
@@ -284,21 +289,14 @@ class Appointment_controller extends CI_Controller {
 						}
 					}	
 					
+					try {
 				
 					$client = new GuzzleHttp\Client(['base_uri' => 'https://zoom.us']);
-			
-					//$app_date_time = date('Y-m-d',strtotime($date)).'T'.$sequence;
-					
-					//$app_date_time = date('jS F Y',strtotime($date)).' - '.date('h:i A', strtotime($sequence));
 					
 					$date_g = '12-07-2021';
 					$sequence_g = '6:15 PM';
-					//$app_date_time = '2021-06-20T16:45:00Z';
-					//$app_date_time = '2021-05-15T12:00:00Z';
-					//2021-05-05T19:00Z
 					$app_date_time = date('Y-m-d',strtotime($date)).'T'.$sequence.":00";
-					//die();
-
+			
 					$meeting_pass = '123456768';
 					$per_patient_time='15';
 					$response_z = $client->request('POST', '/v2/users/me/meetings', [
@@ -317,6 +315,12 @@ class Appointment_controller extends CI_Controller {
 
 					$data_zoom = json_decode($response_z->getBody());
 					$zoom_meeting_url = $data_zoom->join_url;
+					} catch(Exception $e) {
+						$meeting_pass = '';
+						$zoom_meeting_url = '';
+					}
+					
+					
 				}else{
 					$meeting_pass = '';
 					$zoom_meeting_url = '';
@@ -577,14 +581,22 @@ class Appointment_controller extends CI_Controller {
 	function send_meet_url($appointmaent_id){
 		$ci = get_instance();
 		$ci->load->library('email');
-		$config['protocol'] = "tls";
-		$config['smtp_host'] = "inpro8.fcomet.com";
-		$config['smtp_port'] = "465";
-		$config['smtp_user'] = "info@telehealers.in"; 
-		$config['smtp_pass'] = "Ajay@1234%";
-		$config['charset'] = "utf-8";
-		$config['mailtype'] = "html";
-		$config['newline'] = "\r\n";
+		$email_config = $this->email_model->email_config();
+		if(is_array($email_config) && count($email_config)>0){
+			$protocol = $email_config->protocol;
+			$smtp_host = $email_config->mailpath;
+			$smtp_port = $email_config->port;
+			$smtp_user = $email_config->sender;
+			$smtp_pass = $email_config->mailtype;
+		}
+        $config['protocol'] = $protocol;
+        $config['smtp_host'] = $smtp_host;
+        $config['smtp_port'] = $smtp_port;
+        $config['smtp_user'] = $smtp_user; 
+        $config['smtp_pass'] = $smtp_pass;
+        $config['charset'] = "utf-8";
+        $config['mailtype'] = "html";
+        $config['newline'] = "\r\n";
 		$ci->email->initialize($config);
 		
 		$patient_id='';

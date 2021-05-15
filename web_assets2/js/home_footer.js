@@ -149,7 +149,7 @@
             if (venue_id!='') {
 				
                 $.ajax({ 
-                    'url': base_url + 'admin/Ajax_controller/get_schedul/'+venue_id+'/'+date+'/'+doctor_id,
+                    'url': base_url + 'admin/Ajax_controller/get_schedul2/'+venue_id+'/'+date+'/'+doctor_id,
                     'type': 'GET', 
                     'data': {'patient_id': venue_id },
                     'success': function(data) {

@@ -39,6 +39,10 @@
         <!-- date time picker -->
         <script src="<?php echo base_url()?>assets/plugins/ui-datetimepicker/jquery-ui-timepicker-addon.js"></script>
         <script src="<?php echo base_url()?>assets/plugins/ui-datetimepicker/jquery-ui-sliderAccess.js"></script>
+		
+		<script src="<?php echo base_url()?>web_assets2/js/signature_pad.umd.js"></script>
+  <script src="<?php echo base_url()?>web_assets2/js/app.js"></script>
+
 		<!--<script src="//jonthornton.github.io/jquery-timepicker/jquery.timepicker.js"></script>-->
         <script>
 		$(document).ready(function(){

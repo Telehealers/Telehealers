@@ -4,6 +4,18 @@ $user_type = $this->session->userdata('user_type');
 if($user_type =="3" || $user_type==""){
 	redirect('/');
 }
+if($user_type==1){
+	$user_id = $this->session->userdata('doctor_id');
+	if($user_id!=1){
+		$sql = "select approve from doctor_tbl where doctor_id = '$user_id'";
+		$res = $this->db->query($sql);
+		$result = $res->result_array();
+		$approve = $result[0]['approve'];
+		if($approve!=2){
+			redirect('Doctorlogin/approve');
+		}
+	}
+}
 ?>
 <nav class="navbar navbar-static-top">
                     <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button"> 
@@ -35,12 +47,12 @@ if($user_type =="3" || $user_type==""){
                             <li class="dropdown dropdown-user">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <i class="pe-7s-settings"></i></a>
                                 <ul class="dropdown-menu">
-                                    <li>
+                                    <!--<li>
                                         <a href="<?php echo base_url();?>admin/Users_controller/update_profile"><i class="pe-7s-users"></i> <?php echo display('profile');?></a>
                                     </li>
                                     <li>
                                         <a href="<?php echo base_url();?>admin/Setting_controller/password_change"><i class="pe-7s-key"></i><?php echo display('change_password');?></a>
-                                    </li>
+                                    </li>-->
                                     <li>
                                         <a href="<?php echo base_url();?>logout"><i class="fa fa-sign-out fa-fw"></i> <?php echo display('logout');?></a>
                                     </li>
@@ -232,7 +244,7 @@ if($user_type =="3" || $user_type==""){
                             </ul>
                         </li>
 						
-						<li class="treeview doctors">
+						<li class="treeview doctors admin">
                             <a href="#">
                                <i class="fa fa-users" aria-hidden="true"></i><span> Doctors </span>
                                 <span class="pull-right-container">
@@ -244,7 +256,7 @@ if($user_type =="3" || $user_type==""){
                                 <li><a href="<?php echo base_url()?>admin/Doctor_controller/create_new_doctor"> <i class="fa fa-plus" aria-hidden="true"></i> Add New Doctors</a></li>
                                 <li><a href="<?php echo base_url()?>admin/Doctor_controller/doctor_list"> <i class="fa fa-list" aria-hidden="true"></i> Doctors List</a></li>
 								<li><a href="<?php echo base_url()?>admin/Department_controller/department_list"> <i class="fa fa-list" aria-hidden="true"></i> Doctors Departments</a></li>
-								
+								<li><a href="<?php echo base_url()?>admin/Doctor_controller/approveDoctor"> <i class="fa fa-list" aria-hidden="true"></i> Aggriment Content</a></li>
                             </ul>
                         </li>
 
@@ -507,7 +519,7 @@ if($user_type =="3" || $user_type==""){
                     <div class="image">
                         <img src="<?php echo $img;?>" class="img-circle" alt="User Image">
                     </div>
-                    <div class="info">
+                    <div class="info 13">
                         <p><?php echo $this->session->userdata('doctor_name'); ?></p>
                         <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
 					</div>
@@ -532,7 +544,7 @@ if($user_type =="3" || $user_type==""){
                         </a>
                     </li>
 
-                    
+                    <?php if($this->session->userdata('user_type') == 1) { ?>
 					<li class="treeview pres">
                             <a href="#">
                                 <i class="fa fa-file-text-o" aria-hidden="true"></i><span><?php echo display('prescription')?></span>
@@ -546,7 +558,7 @@ if($user_type =="3" || $user_type==""){
                                 <li><a href="<?php echo base_url();?>admin/Prescription_controller/prescription_list"> <i class="fa fa-list" aria-hidden="true"></i> <?php echo display('prescription_list')?></a></li>
                             </ul>
                         </li>
-						
+					<?php } ?>	
                     <li class="treeview appointment">
                         <a href="#"><i class="fa fa-phone-square" aria-hidden="true"></i> <?php echo display('appointment')?>
                             <span class="pull-right-container">
@@ -649,17 +661,17 @@ if($user_type =="3" || $user_type==""){
                     <div class="image">
                         <img src="<?php echo $img;?>" class="img-circle" alt="User Image">
                     </div>
-                    <div class="info">
+                    <div class="info 14">
                         <p><?php echo $this->session->userdata('user_name'); ?></p>
                         <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
 					</div>
 					<ul style="text-align: left; margin-left: 53px;">
-							<li>
+							<!--<li>
 								<a href="<?php echo base_url();?>profile"><i class="pe-7s-users"></i><?php echo display('profile');?></a>
 							</li>
 							<li>
 								<a href="<?php echo base_url();?>admin/Setting_controller/password_change"><i class="pe-7s-key"></i><?php echo display('change_password');?></a>
-							</li>
+							</li>-->
 							<li>
 								<a href="<?php echo base_url();?>logout"><i class="fa fa-sign-out fa-fw"></i> <?php echo display('logout');?></a>
 							</li>
@@ -676,7 +688,7 @@ if($user_type =="3" || $user_type==""){
 
                     
 
-					<li class="treeview pres">
+					<li class="treeview pres" style="display:none;">
                             <a href="#">
                                 <i class="fa fa-file-text-o" aria-hidden="true"></i><span><?php echo display('prescription')?></span>
                                 <span class="pull-right-container">

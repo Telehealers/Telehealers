@@ -44,17 +44,35 @@ class Generic_controller extends CI_Controller {
 
 		$prescription_id = $this->uri->segment('4');
 	 	$data['pres'] = $this->represcription->re_generic_prescription($prescription_id);
+		
 	 	$data['t_info'] = $this->represcription->re_test_data($prescription_id);
 	 	$data['a_info'] = $this->represcription->re_advice_data($prescription_id);
 	 	$data['m_info'] = $this->represcription->re_generic($prescription_id);
 	
-		//echo "<pre>";print_r($data['m_info']);die();
+		//echo "<pre>";print_r($data['pres']);die();
 
-		$data['doctor_info'] = $this->doctor_model->getDoctorListByselect();
+		//$data['doctor_info'] = $this->doctor_model->getDoctorListByselect();
+		$user_type = $this->session->userdata('user_type');
+		if($user_type==1){
+			$doctor_id = $this->session->userdata('doctor_id');
+			if($doctor_id!="1"){
+				$data['doctor_info'] = $this->doctor_model->getDoctorListById($doctor_id);
+				//$data['patient_info'] = $this->patient_model->get_by_id_patient($doctor_id);
+					
+			}else{
+				$data['doctor_info'] = $this->doctor_model->getDoctorListByselect();
+				//$data['patient_info'] = $this->patient_model->get_all_patient();
+			}
+			
+		}else{
+			$doctor_id=1;
+			$data['doctor_info'] = $this->doctor_model->getDoctorListByselect();
+			//$data['patient_info'] = $this->patient_model->get_all_patient();
+		}
 	 	#---------------------------------
 	 	// doctor venue info
-	 	$doctor_id = 1;
-	 	@$data['venue'] = $this->db->select('venue_id,venue_name,create_id')->from('venue_tbl')->where('create_id',$doctor_id)->get()->result();
+	 	//$doctor_id = 1;
+	 	@$data['venue'] = $this->db->select('venue_id,venue_name,create_id')->from('venue_tbl')->where('create_id',1)->get()->result();
 
 	 	$this->load->view('admin/_header',$data);
 		$this->load->view('admin/_left_sideber');
@@ -90,31 +108,41 @@ class Generic_controller extends CI_Controller {
 
 
 			 	$prescription_id = $this->input->post('prescription_id',TRUE);
-			 	$this->db->where('prescription_id',$prescription_id)->delete('prescription',TRUE);
+				
+			 	//$this->db->where('prescription_id',$prescription_id)->delete('prescription',TRUE);
+				
+				$sql_p = "delete from prescription where prescription_id = '$prescription_id'";
+				$res_p = $this->db->query($sql_p);
+
+			 	$this->db->insert('prescription',$pdata);
 
 	            # get last insert id
 	            $p = $this->db->insert_id();
-				$user_id = $this->session->userdata('log_id');
-				$action_title = 'Update generic prescription';
-				$action_description = 'User update generic Prescriptiion';
-				//$action_link = $pres_id;
-				$action_link = $p;
-				$add_date = date('Y-m-d h:i:s');
-				$sql_int = "insert into user_action_log (user_id,action_title,action_description,action_link,add_date) values ('$user_id','$action_title','$action_description','$action_link','$add_date')";
-				$this->db->query($sql_int);
 	            
-	            $mdata['med_type'] = $this->input->post('type',TRUE);
+	            /* $mdata['med_type'] = $this->input->post('type',TRUE);
 			 	$mdata['group_id'] = $this->input->post('group_id',TRUE);
 			 	$mdata['mg'] = ($this->input->post('mg',TRUE));
 			 	$mdata['dose'] = ($this->input->post('dose',TRUE));
 			 	$mdata['day'] = ($this->input->post('day'));
 			 	$mdata['comments'] = ($this->input->post('comments',TRUE));
 			 	$mdata['appointment_id'] = $pdata['appointment_id'];
+			 	$mdata['prescription_id'] = $p; */
+
+			    $mdata['med_type'] = $this->input->post('type',TRUE);
+			 	$mdata['group_id'] = $this->input->post('group_id',TRUE);
+			 	$mdata['mg'] = ($this->input->post('mg',TRUE));
+			 	$mdata['dose'] = ($this->input->post('dose',TRUE));
+			 	$mdata['day'] = ($this->input->post('day',TRUE));
+			 	$mdata['comments'] = ($this->input->post('comments',TRUE));
+			 	$mdata['appointment_id'] = $pdata['appointment_id'];
 			 	$mdata['prescription_id'] = $p;
 
+			//echo "<pre>";print_r($mdata);die();
+			 	
 			$n = count($mdata['group_id']);
 			for($i=0; $i<$n; $i++) {
-			 
+
+
 			 	if(empty($mdata['group_id'][$i])) {
 			 		$md_name['group_name'] = $this->input->post('group_name',TRUE);
 				 	$create_by = $this->session->userdata('doctor_id',TRUE);
@@ -129,27 +157,29 @@ class Generic_controller extends CI_Controller {
 	 	 			if( ! empty($query)) {
 						$mdata['group_id'] = $query->med_group_id;
 					} else {
-						$medicine_group = array(
-						'group_name' => $md_name['group_name']
-					);
+						//$medicine_group = array('group_name' => $md_name['group_name']);
+						$medicine_group['group_name'] = $md_name['group_name'][$i];
 
 					# insert medicine_group id in medicine_group_info table
+					
 					$this->db->insert('medicine_group_tbl',$medicine_group);
 					# medicine_group id
 					$mdata['group_id'] = $this->db->insert_id();
+					
 					$action_link = $mdata['group_id'];
 					$user_id = $this->session->userdata('log_id');
-					$action_title = 'Add medicine group during update genric Prescriptiion ('.$mdata['appointment_id'].')';
-					$action_description = 'User add medician group during update generic Prescriptiion';
+					$action_title = 'Add medicine group during add  Prescriptiion ('.$mdata['appointment_id'].')';
+					$action_description = 'User add medician group during add Prescriptiion';
 					$add_date = date('Y-m-d h:i:s');
 					$sql_int = "insert into user_action_log (user_id,action_title,action_description,action_link,add_date) values ('$user_id','$action_title','$action_description','$action_link','$add_date')";
 					$this->db->query($sql_int);
+				
 					}
 			 	} else {
 			 		$mdata['group_id'] = $mdata['group_id'][$i];
 			 	}
 
-	            $gen_data = array(
+	            $data = array(
 	                'prescription_id'=> $mdata['prescription_id'],
 	                'appointment_id'=> $mdata['appointment_id'],
 	                'group_id'=> $mdata['group_id'],
@@ -159,13 +189,12 @@ class Generic_controller extends CI_Controller {
 	                'medicine_type' => $mdata['med_type'][$i],
 	                'medicine_com'=>$mdata['comments'][$i]
 	            );
-	            $this->db->where('prescription_id',$prescription_id)->delete('generic_tbl');
-	           
-	            $this->db->insert('generic_tbl', $gen_data);
+	            
+	            $this->db->insert('generic_tbl', $data);
 				$action_link = $this->db->insert_id();
 				$user_id = $this->session->userdata('log_id');
-				$action_title = 'Add generic Prescriptiion ('.$mdata['appointment_id'].')';
-				$action_description = 'User add generic Prescriptiion';
+				$action_title = 'Add generic prescription ('.$mdata['appointment_id'].')';
+				$action_description = 'User add generic prescription';
 				$add_date = date('Y-m-d h:i:s');
 				$sql_int = "insert into user_action_log (user_id,action_title,action_description,action_link,add_date) values ('$user_id','$action_title','$action_description','$action_link','$add_date')";
 				$this->db->query($sql_int);
@@ -221,13 +250,6 @@ class Generic_controller extends CI_Controller {
 		            $this->db->where('prescription_id',$prescription_id)->delete('test_assign_for_patine');
 
 	            	$this->db->insert('test_assign_for_patine', $data);
-					$action_link = $this->db->insert_id();
-					$user_id = $this->session->userdata('log_id');
-					$action_title = 'Add test during update generic Prescriptiion ('.$mdata['appointment_id'].')';
-					$action_description = 'User add test during update generic Prescriptiion';
-					$add_date = date('Y-m-d h:i:s');
-					$sql_int = "insert into user_action_log (user_id,action_title,action_description,action_link,add_date) values ('$user_id','$action_title','$action_description','$action_link','$add_date')";
-					$this->db->query($sql_int);
 				}
 			}
 
@@ -267,19 +289,16 @@ class Generic_controller extends CI_Controller {
 	            $this->db->where('prescription_id',$prescription_id)->delete('advice_prescriptiion');
 	            	
 	            $this->db->insert('advice_prescriptiion',$advice_data);
-				$action_link = $this->db->insert_id();
-				$user_id = $this->session->userdata('log_id');
-				$action_title = 'Add advice during update generic Prescriptiion ('.$mdata['appointment_id'].')';
-				$action_description = 'User add advice during update generic Prescriptiion';
-				$add_date = date('Y-m-d h:i:s');
-				$sql_int = "insert into user_action_log (user_id,action_title,action_description,action_link,add_date) values ('$user_id','$action_title','$action_description','$action_link','$add_date')";
-				$this->db->query($sql_int);
 			}
 		}
 	 	$d['appointment_id'] = $pdata['appointment_id'];
 	 	$d['prescription_id'] = $p;
     	$this->session->set_userdata($d);
-	 	redirect("admin/Generic_controller/prescription");
+	 	//redirect("admin/Generic_controller/prescription");
+		
+		$this->session->set_flashdata('message','<div class="alert alert-success msg">Prescription has been update successfully.</div>');
+	 	redirect("admin/Prescription_controller/prescription_list");
+		
 	}
 
 
@@ -429,7 +448,7 @@ class Generic_controller extends CI_Controller {
 			 	$mdata['prescription_id'] = $p;
 
 			 	
-			 $n = count($mdata['group_id']);
+			$n = count($mdata['group_id']);
 			for($i=0; $i<$n; $i++) {
 
 
@@ -595,7 +614,11 @@ class Generic_controller extends CI_Controller {
 	 	$d['appointment_id'] = $pdata['appointment_id'];
 	 	$d['prescription_id'] = $p;
     	$this->session->set_userdata($d);
-	 	redirect("admin/Generic_controller/prescription");
+		
+	 	//redirect("admin/Generic_controller/prescription");
+		
+		$this->session->set_flashdata('message','<div class="alert alert-success msg">Prescription has been add successfully.</div>');
+	 	redirect("admin/Prescription_controller/prescription_list");
 	}
 
 
@@ -695,7 +718,9 @@ class Generic_controller extends CI_Controller {
 	public function generic($prescription_id=NULL)
 	{
 	 	// patient info
-		$data['patient_info'] = $this->prescription_model->gereric_by_id($prescription_id);	    
+		$data['patient_info'] = $this->prescription_model->gereric_by_id($prescription_id);	
+
+		//echo "<pre>";print_r($data['patient_info']);die();		
 	   
 	    // test query
 	    $data['t_info'] = $this->db->select('*')

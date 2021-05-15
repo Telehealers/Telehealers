@@ -79,7 +79,8 @@
                                         <input type="text" name="degree" value="<?php echo html_escape(@$doctor_info->degrees); ?>" class="form-control" placeholder="<?php echo display('degrees');?>">
                                     </div>
                                 </div>
-
+					
+								<?php if(isset($doctor_info->department)){?>	
                                 <div class="form-group">
                                     <label class="col-md-3 control-label"> <span class="text-danger"> * </span> <?php echo display('department');?> </label>
                                     <div class="col-md-7">	
@@ -100,7 +101,7 @@
 									</div>
 									
                                 </div>
-								
+								<?php } ?>
 
                                 <div class="form-group">
                                     <label class="col-md-3 control-label"><?php echo display('specialist');?></label>
@@ -229,12 +230,50 @@
                                          <span>[ jpg,png,jpeg,gif and max size is 1MB]</span>
                                     </div>
                                 </div>
+								
+								<?php if(isset($doctor_info->picture3)){?>
+								<div class="form-group">
+                                    <label class="col-md-3 control-label">Signature</label>
+                                    <div class="col-md-7">
+									<?php
+									if($doctor_info->picture3!=""){
+										$Signature = $doctor_info->picture3;
+										$sign= str_replace('[removed]','data:image/png;base64,',$Signature); 
+										?><img src="<?php echo $sign; ?>" width="200" ><?php
+									}
+									?>
+                                        <div id="signature-pad" class="signature-pad" style="border:1px solid #CCC; width:302px;">
+											<div class="signature-pad--body">
+											  <canvas></canvas>
+											</div>
+										
+											<div class="signature-pad--footer">
+											  <div class="description">Sign above</div>
+
+											  <div class="signature-pad--actions">
+												<div>
+												  <button type="button" class="button clear" data-action="clear">Clear</button>
+												  <button type="button" class="button" data-action="change-color">Change color</button>
+												  <button type="button" class="button" data-action="undo">Undo</button>
+
+												</div>
+												<div>
+												  <button type="button" class="button save" data-action="save-png">Save Signature</button>
+												</div>
+											  </div>
+											</div>
+										</div>	
+										<input type="hidden" id="d_img_sig" name="d_img_sig" />
+										<div id="dataURL"><img src="" width="200" ><div>
+                                    </div>
+                                </div>
 
                                 <input type='hidden' name="doctor_id" value="<?php echo html_escape(@$doctor_info->doctor_id); ?>">
                                 <input type='hidden' name="image" value="<?php echo html_escape(@$doctor_info->picture); ?>">
 								<input type='hidden' name="image2" value="<?php echo html_escape(@$doctor_info->picture2); ?>">
                             </div>
-
+						</div>
+								<?php } ?>
                             <div class="form-group row">
                                 <div class="col-sm-offset-3 col-sm-6">
                                     <button type="submit" class="btn btn-success"><?php echo display('submit')?></button>
@@ -250,4 +289,4 @@
     </div>            
     </section>
 </div>
-
+  
