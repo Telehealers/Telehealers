@@ -3296,7 +3296,8 @@ INSERT INTO `web_pages_tbl` (`id`, `name`, `details`, `sequence`, `date`, `icon`
 (158, 'footer_picture', NULL, NULL, NULL, NULL, 'http://telehealers.in/./assets/uploads/images/telehe1.png', NULL, 1),
 (159, 'footer_picture', NULL, NULL, NULL, NULL, 'http://telehealers.in/./assets/uploads/images/telehe1.png', NULL, 1),
 (160, 'footer_picture', NULL, NULL, NULL, NULL, 'http://telehealers.in/./assets/uploads/images/telehe1.png', NULL, 1),
-(161, 'footer_picture', NULL, NULL, NULL, NULL, 'http://telehealers.in/./assets/uploads/images/telehe1.png', NULL, 1);
+(161, 'footer_picture', NULL, NULL, NULL, NULL, 'http://telehealers.in/./assets/uploads/images/telehe1.png', NULL, 1),
+(162, 'fabicon', NULL, NULL, NULL, NULL, 'https://www.telehealers.in/./assets/uploads/images/favico2.png', NULL, 1);
 
 -- --------------------------------------------------------
 

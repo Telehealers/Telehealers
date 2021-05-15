@@ -216,12 +216,65 @@ function createVideoCallRoom($doctor_name, $doctor_email, $patient_name, $patien
 	$superpro_response = curl_exec($curl_session);
 	if (!$superpro_response) {
 		//TODO: Proper bad request handling below.
-		throw new Exception('Bad videocall API.'));
+		throw new Exception('Bad videocall API.');
 	}
 	curl_close($curl_session);
 	$superpro_data = json_decode($superpro_response);
 	return $superpro_data->videoCallUrl ;
 	
+}
+#-----------------------------------------------
+#   Input: Client & Dr. Details in HTML in <p>...</p> format.
+#	Returns: Email msg for a video-call.
+#-----------------------------------------------
+function createVideoCallInformationMail($participantInfoHTML) {
+	return '<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #f1f1f1;">
+		<center style="width: 100%; background-color: #f1f1f1;">
+			<div style="display: none; font-size: 1px;max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
+				&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
+			</div>
+			<div style="max-width: 600px; margin: 0 auto;" class="email-container">
+				<!-- BEGIN BODY -->
+				<table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
+					<tbody><tr>
+						<td valign="top" class="bg_white" style="padding: 1em 2.5em 0 2.5em;">
+							<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+								<tbody><tr>
+									<td class="logo" style="text-align: left;">
+										<h1>
+											<a href="http://telehealers.in/">
+											<img src="http://telehealers.in/assets/uploads/images/telehe2.png">    
+											</a>
+										</h1>
+									</td>
+								</tr>
+							</tbody></table>
+						</td>
+					</tr>
+					<tr>
+						</tr></tbody></table><table class="bg_white" role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+							<tbody><tr style="border-bottom: 1px solid rgba(0,0,0,.05);">
+								<td valign="middle" width="100%" style="text-align:left; padding: 0 2.5em;">
+									<div class="product-entry">
+										<div class="text">
+											'.$participantInfoHTML.'
+										</div>
+									</div>
+								</td>
+							</tr>
+						</tbody></table>
+					
+				
+				<table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
+					<tbody><tr>
+						<td class="bg_white" style="text-align: center;">
+							<p>Receive these email? You can <a href="#" style="color: rgba(0,0,0,.8);">Unsubscribe here</a></p>
+						</td>
+					</tr>
+				</tbody></table>
+			</div>
+		</center>
+	</body></html>' ;
 }
 
 #-----------------------------------------------
@@ -475,81 +528,31 @@ function createVideoCallRoom($doctor_name, $doctor_email, $patient_name, $patien
 				$config['wordwrap'] = TRUE;
 				$config['mailtype'] = $email_config->mailtype; 
 				$this->email->initialize($config);*/
-				$message = '<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #f1f1f1;">
-    <center style="width: 100%; background-color: #f1f1f1;">
-        <div style="display: none; font-size: 1px;max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
-            &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
-        </div>
-        <div style="max-width: 600px; margin: 0 auto;" class="email-container">
-            <!-- BEGIN BODY -->
-            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
-                <tbody><tr>
-                    <td valign="top" class="bg_white" style="padding: 1em 2.5em 0 2.5em;">
-                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-                            <tbody><tr>
-                                <td class="logo" style="text-align: left;">
-                                    <h1>
-                                        <a href="http://telehealers.in/">
-                                        <img src="http://telehealers.in/assets/uploads/images/telehe2.png">    
-                                        </a>
-                                    </h1>
-                                </td>
-                            </tr>
-                        </tbody></table>
-                    </td>
-                </tr>
-                <tr>
-                    </tr></tbody></table><table class="bg_white" role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-                        <tbody><tr style="border-bottom: 1px solid rgba(0,0,0,.05);">
-                            <td valign="middle" width="100%" style="text-align:left; padding: 0 2.5em;">
-                                <div class="product-entry">
-                                    <div class="text">
-                                        <p>Hey <strong>'.$info->patient_name.'</strong>,</p>
-                                        <p>Our staff member has confirmed you for a '.$service1.' ('.$service2.') appointment on '.date('d F Y',strtotime($info->date)).' with Dr. '.$dData->doctor_name.' at '.$venue_address.'. If you have questions before your appointment,
-                                            use the contact details below to get in touch with us.</p>
-										<h2 style="text-align:center;font-weight:600;color:#356d82">Videocall Details:</h2>
-										<p>Superpro video call link: '.$superpro_meeting_url.',</p>
-                                        <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Appointment ID - ('.$appointment_id.')</h2><h1></h1>
-                                        <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Other Details:</h2><h1></h1>
-                                        <p>Location Name: '.$venue_name.'</p>
-                                        <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Service Details:</h2><h1></h1>
-                                        <p>Service Name: '.$service1.'</p>
-                                        <p>Service Type: '.$service2.',</p>
-										<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Doctor Details:</h2><h1></h1>
-                                        <p>Name: '.$doctor_name.'</p>
-                                        <p>Designation: '.$designation.',</p>
-										<p>Specialist: '.$specialist.',</p>
-										<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Patient Details:</h2>
-                                        <p>Name: '.$info->patient_name.'</p>
-                                        <p>ID: '.$info->patient_id.',</p>
-										<p>Email: '.$info->patient_email.',</p>
-										<p>Phone: '.$info->patient_phone.',</p>
-										<p>Age: '.$info->age.',</p>
-										<p>Gender: '.$info->sex.',</p>
-										<p>Patient Complaint: '.$info->sequence.',</p>
-										<p>Appointment Date: '.$appointment_date.',</p>
-										<p>Appointment ID: '.$appointment_id.',</p>
-										
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody></table>
-                
-            
-            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
-                <tbody><tr>
-                    <td class="bg_white" style="text-align: center;">
-                        <p>Receive these email? You can <a href="#" style="color: rgba(0,0,0,.8);">Unsubscribe here</a></p>
-                    </td>
-                </tr>
-            </tbody></table>
-
-        </div>
-    </center>
-
-
-</body></html>';
+				$message = createVideoCallRoom('<p>Hey <strong>'.$info->patient_name.'</strong>,</p>
+					<p>Our staff member has confirmed you for a '.$service1.' ('.$service2.') appointment on '.date('d F Y',strtotime($info->date)).' with Dr. '.$dData->doctor_name.' at '.$venue_address.'. If you have questions before your appointment,
+						use the contact details below to get in touch with us.</p>
+					<h2 style="text-align:center;font-weight:600;color:#356d82">Videocall Details:</h2>
+					<p>Superpro video call link: '.$superpro_meeting_url.',</p>
+					<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Appointment ID - ('.$appointment_id.')</h2><h1></h1>
+					<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Other Details:</h2><h1></h1>
+					<p>Location Name: '.$venue_name.'</p>
+					<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Service Details:</h2><h1></h1>
+					<p>Service Name: '.$service1.'</p>
+					<p>Service Type: '.$service2.',</p>
+					<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Doctor Details:</h2><h1></h1>
+					<p>Name: '.$doctor_name.'</p>
+					<p>Designation: '.$designation.',</p>
+					<p>Specialist: '.$specialist.',</p>
+					<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Patient Details:</h2>
+					<p>Name: '.$info->patient_name.'</p>
+					<p>ID: '.$info->patient_id.',</p>
+					<p>Email: '.$info->patient_email.',</p>
+					<p>Phone: '.$info->patient_phone.',</p>
+					<p>Age: '.$info->age.',</p>
+					<p>Gender: '.$info->sex.',</p>
+					<p>Patient Complaint: '.$info->sequence.',</p>
+					<p>Appointment Date: '.$appointment_date.',</p>
+					<p>Appointment ID: '.$appointment_id.',</p>');
 
                     $ci->email->from('info@telehealers.in', 'telehealers');
 					$list = array($info->patient_email);
@@ -839,67 +842,17 @@ function createVideoCallRoom($doctor_name, $doctor_email, $patient_name, $patien
 			$this->db->insert('log_info', $log_data);	
 			$log_id = $this->db->insert_id();	
 			$p_log_id = $log_id;
-			$message = '<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #f1f1f1;">
-    <center style="width: 100%; background-color: #f1f1f1;">
-        <div style="display: none; font-size: 1px;max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
-            &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
-        </div>
-        <div style="max-width: 600px; margin: 0 auto;" class="email-container">
-            <!-- BEGIN BODY -->
-            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
-                <tbody><tr>
-                    <td valign="top" class="bg_white" style="padding: 1em 2.5em 0 2.5em;">
-                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-                            <tbody><tr>
-                                <td class="logo" style="text-align: left;">
-                                    <h1>
-                                        <a href="https://telehealers.in/">
-                                        <img src="https://telehealers.in/assets/uploads/images/telehe2.png">    
-                                        </a>
-                                    </h1>
-                                </td>
-                            </tr>
-                        </tbody></table>
-                    </td>
-                </tr>
-                <tr>
-                    </tr></tbody></table><table class="bg_white" role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-                        <tbody><tr style="border-bottom: 1px solid rgba(0,0,0,.05);">
-                            <td valign="middle" width="100%" style="text-align:left; padding: 0 2.5em;">
-                                <div class="product-entry">
-                                    <div class="text">
-                                        <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Dear '.$p_name.':</h2>
-										<p>Thanks for choosing telehealers.in</p>
-										<p>Kindly visit Your dashboard using registered mobile number.</p>
-										<p>Url:  https://telehealers.in/Userlogin</p>
-                                        <p>Name: '.$p_name.'</p>
-                                        <p>ID: '.$patient_id.'</p>
-										<p>Email: '.$p_email.'</p>
-										<p>&nbsp;</p>
-										<p>Keep in touch during this tough time! </p>
-										<p>Kindly write us back without any hasitation if you find any issues at support@telehealers.in</p>
-                                        
-										
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody></table>
-                
-            
-            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
-                <tbody><tr>
-                    <td class="bg_white" style="text-align: center;">
-                        <p>Receive these email? You can <a href="#" style="color: rgba(0,0,0,.8);">Unsubscribe here</a></p>
-                    </td>
-                </tr>
-            </tbody></table>
-
-        </div>
-    </center>
-
-
-</body></html>';
+			$message = createVideoCallInformationMail('
+				<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Dear '.$p_name.':</h2>
+				<p>Thanks for choosing telehealers.in</p>
+				<p>Kindly visit Your dashboard using registered mobile number.</p>
+				<p>Url:  https://telehealers.in/Userlogin</p>
+				<p>Name: '.$p_name.'</p>
+				<p>ID: '.$patient_id.'</p>
+				<p>Email: '.$p_email.'</p>
+				<p>&nbsp;</p>
+				<p>Keep in touch during this tough time! </p>
+				<p>Kindly write us back without any hasitation if you find any issues at support@telehealers.in</p>');
 
 			$ci->email->from('info@telehealers.in', 'telehealers');
 			$list = array($p_email);
@@ -1074,75 +1027,26 @@ function createVideoCallRoom($doctor_name, $doctor_email, $patient_name, $patien
 		
 		
 		
-		$message = '<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #f1f1f1;">
-    <center style="width: 100%; background-color: #f1f1f1;">
-        <div style="display: none; font-size: 1px;max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
-            &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
-        </div>
-        <div style="max-width: 600px; margin: 0 auto;" class="email-container">
-            <!-- BEGIN BODY -->
-            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
-                <tbody><tr>
-                    <td valign="top" class="bg_white" style="padding: 1em 2.5em 0 2.5em;">
-                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-                            <tbody><tr>
-                                <td class="logo" style="text-align: left;">
-                                    <h1>
-                                        <a href="http://telehealers.in/">
-                                        <img src="http://telehealers.in/assets/uploads/images/telehe2.png">    
-                                        </a>
-                                    </h1>
-                                </td>
-                            </tr>
-                        </tbody></table>
-                    </td>
-                </tr>
-                <tr>
-                    </tr></tbody></table><table class="bg_white" role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-                        <tbody><tr style="border-bottom: 1px solid rgba(0,0,0,.05);">
-                            <td valign="middle" width="100%" style="text-align:left; padding: 0 2.5em;">
-                                <div class="product-entry">
-                                    <div class="text">
-                                        <p>Hey <strong>'.$p_name.'</strong>,</p>
-                                        <p>Our staff member has confirmed you for a '.$service2.' appointment on '.date('jS F Y',strtotime($date)).' with Dr. '.$doctor_name.'. If you have questions before your appointment,
-                                            use the contact form with appointment ID to get in touch with us.</p>
-										<h2 style="text-align:left;font-weight:600;color:#356d82">Videocall Details:</h2> 
-										<p>Superpro video call link: '.$superpro_meeting_url.',</p>
-                                        <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Appointment ID - ('.$appointment_id.')</h2><h1></h1>
-                                        <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Doctor Details:</h2><h1></h1>
-                                        <p>Name: '.$doctor_name.'</p>
-                                        <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Patient Details:</h2>
-                                        <p>Name: '.$p_name.'</p>
-                                        <p>ID: '.$patient_id.'</p>
-										<p>Email: '.$p_email.'</p>
-										<p>Phone: '.$p_phone.'</p>
-										<p>Age: '.$p_age.'</p>
-										<p>Gender: '.$p_gender.',</p>
-										<p>Tell us your symptom or health problem: '.$p_cc.'</p>
-										<p>Appointment Date: '.date('jS F Y',strtotime($date)).'</p>
-										<p>Appointment Time: '.date('h:i A', strtotime($sequence)).'</p>
-										<p>Appointment ID: '.$appointment_id.'</p>
-										
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody></table>
-                
-            
-            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
-                <tbody><tr>
-                    <td class="bg_white" style="text-align: center;">
-                        <p>Receive these email? You can <a href="#" style="color: rgba(0,0,0,.8);">Unsubscribe here</a></p>
-                    </td>
-                </tr>
-            </tbody></table>
-
-        </div>
-    </center>
-
-
-</body></html>';
+		$message = createVideoCallInformationMail('
+			<p>Hey <strong>'.$p_name.'</strong>,</p>
+			<p>Our staff member has confirmed you for a '.$service2.' appointment on '.date('jS F Y',strtotime($date)).' with Dr. '.$doctor_name.'. If you have questions before your appointment,
+				use the contact form with appointment ID to get in touch with us.</p>
+			<h2 style="text-align:left;font-weight:600;color:#356d82">Videocall Details:</h2> 
+			<p>Superpro video call link: '.$superpro_meeting_url.',</p>
+			<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Appointment ID - ('.$appointment_id.')</h2><h1></h1>
+			<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Doctor Details:</h2><h1></h1>
+			<p>Name: '.$doctor_name.'</p>
+			<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Patient Details:</h2>
+			<p>Name: '.$p_name.'</p>
+			<p>ID: '.$patient_id.'</p>
+			<p>Email: '.$p_email.'</p>
+			<p>Phone: '.$p_phone.'</p>
+			<p>Age: '.$p_age.'</p>
+			<p>Gender: '.$p_gender.',</p>
+			<p>Tell us your symptom or health problem: '.$p_cc.'</p>
+			<p>Appointment Date: '.date('jS F Y',strtotime($date)).'</p>
+			<p>Appointment Time: '.date('h:i A', strtotime($sequence)).'</p>
+			<p>Appointment ID: '.$appointment_id.'</p>');
 
 		$ci->email->from('info@telehealers.in', 'telehealers');
 		$list = array($p_email);
@@ -1338,75 +1242,26 @@ function createVideoCallRoom($doctor_name, $doctor_email, $patient_name, $patien
 		
 		
 		
-		$message = '<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #f1f1f1;">
-    <center style="width: 100%; background-color: #f1f1f1;">
-        <div style="display: none; font-size: 1px;max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
-            &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
-        </div>
-        <div style="max-width: 600px; margin: 0 auto;" class="email-container">
-            <!-- BEGIN BODY -->
-            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
-                <tbody><tr>
-                    <td valign="top" class="bg_white" style="padding: 1em 2.5em 0 2.5em;">
-                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-                            <tbody><tr>
-                                <td class="logo" style="text-align: left;">
-                                    <h1>
-                                        <a href="http://telehealers.in/">
-                                        <img src="http://telehealers.in/assets/uploads/images/telehe2.png">    
-                                        </a>
-                                    </h1>
-                                </td>
-                            </tr>
-                        </tbody></table>
-                    </td>
-                </tr>
-                <tr>
-                    </tr></tbody></table><table class="bg_white" role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-                        <tbody><tr style="border-bottom: 1px solid rgba(0,0,0,.05);">
-                            <td valign="middle" width="100%" style="text-align:left; padding: 0 2.5em;">
-                                <div class="product-entry">
-                                    <div class="text">
-                                        <p>Hey <strong>'.$p_name.'</strong>,</p>
-                                        <p>Our staff member has confirmed you for a '.$service1.' appointment on '.date('jS F Y',strtotime($date)).' with Dr. '.$doctor_name.'. If you have questions before your appointment,
-                                            use the contact form with appointment ID to get in touch with us.</p>
-										<h2 style="text-align:left;font-weight:600;color:#356d82">Videocall Details:</h2> 
-										<p>Superpro video call link: '.$superpro_meeting_url.',</p>
-                                        <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Appointment ID - ('.$appointment_id.')</h2><h1></h1>
-                                        <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Doctor Details:</h2><h1></h1>
-                                        <p>Name: '.$doctor_name.'</p>
-                                        <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Patient Details:</h2>
-                                        <p>Name: '.$p_name.'</p>
-                                        <p>ID: '.$patient_id.'</p>
-										<p>Email: '.$p_email.'</p>
-										<p>Phone: '.$p_phone.'</p>
-										<p>Age: '.$p_age.'</p>
-										<p>Gender: '.$p_gender.',</p>
-										<p>Tell us your symptom or health problem: '.$problem.'</p>
-										<p>Appointment Date: '.date('jS F Y',strtotime($date)).'</p>
-										<p>Appointment Time: '.date('h:i A', strtotime($sequence)).'</p>
-										<p>Appointment ID: '.$appointment_id.'</p>
-										
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody></table>
-                
-            
-            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
-                <tbody><tr>
-                    <td class="bg_white" style="text-align: center;">
-                        <p>Receive these email? You can <a href="#" style="color: rgba(0,0,0,.8);">Unsubscribe here</a></p>
-                    </td>
-                </tr>
-            </tbody></table>
-
-        </div>
-    </center>
-
-
-</body></html>';
+		$message = createVideoCallInformationMail('
+			<p>Hey <strong>'.$p_name.'</strong>,</p>
+			<p>Our staff member has confirmed you for a '.$service1.' appointment on '.date('jS F Y',strtotime($date)).' with Dr. '.$doctor_name.'. If you have questions before your appointment,
+				use the contact form with appointment ID to get in touch with us.</p>
+			<h2 style="text-align:left;font-weight:600;color:#356d82">Videocall Details:</h2> 
+			<p>Superpro video call link: '.$superpro_meeting_url.',</p>
+			<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Appointment ID - ('.$appointment_id.')</h2><h1></h1>
+			<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Doctor Details:</h2><h1></h1>
+			<p>Name: '.$doctor_name.'</p>
+			<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Patient Details:</h2>
+			<p>Name: '.$p_name.'</p>
+			<p>ID: '.$patient_id.'</p>
+			<p>Email: '.$p_email.'</p>
+			<p>Phone: '.$p_phone.'</p>
+			<p>Age: '.$p_age.'</p>
+			<p>Gender: '.$p_gender.',</p>
+			<p>Tell us your symptom or health problem: '.$problem.'</p>
+			<p>Appointment Date: '.date('jS F Y',strtotime($date)).'</p>
+			<p>Appointment Time: '.date('h:i A', strtotime($sequence)).'</p>
+			<p>Appointment ID: '.$appointment_id.'</p>');
 
 		$ci->email->from('info@telehealers.in', 'telehealers');
 		$list = array($p_email);
