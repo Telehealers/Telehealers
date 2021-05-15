@@ -215,9 +215,12 @@ function createVideoCallRoom($doctor_name, $doctor_email, $patient_name, $patien
 	));
 	$superpro_response = curl_exec($curl_session);
 	if (!$superpro_response) {
-		//TODO: Proper bad request handling below.
-		throw new Exception('Bad videocall API.');
+		log_message('error',$e->getMessage());
+		show_404();
 	}
+
+
+	
 	curl_close($curl_session);
 	$superpro_data = json_decode($superpro_response);
 	return $superpro_data->videoCallUrl ;
