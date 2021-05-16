@@ -213,10 +213,14 @@ function createVideoCallRoom($doctor_name, $doctor_email, $patient_name, $patien
 		'Content-Type: application/json'
 		),
 	));
-	$superpro_response = curl_exec($curl_session);
-	if (!$superpro_response) {
-		log_message('error',$e->getMessage());
-		show_404();
+	try{
+		$superpro_response = curl_exec($curl_session);
+		if (!$superpro_response) {
+			throw new Exception("Video call api not working", 1);
+	}}			
+	catch(\Exception $e){
+			log_message('error',$e->getMessage());
+			show_404();
 	}
 
 
