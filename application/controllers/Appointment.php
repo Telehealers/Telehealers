@@ -213,10 +213,14 @@ function createVideoCallRoom($doctor_name, $doctor_email, $patient_name, $patien
 		'Content-Type: application/json'
 		),
 	));
-	$superpro_response = curl_exec($curl_session);
-	if (!$superpro_response) {
-		log_message('error',$e->getMessage());
-		show_404();
+	try{
+		$superpro_response = curl_exec($curl_session);
+		if (!$superpro_response) {
+			throw new Exception("Video call api not working", 1);
+	}}			
+	catch(\Exception $e){
+			log_message('error',$e->getMessage());
+			show_404();
 	}
 
 
@@ -845,7 +849,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 			$this->db->insert('log_info', $log_data);	
 			$log_id = $this->db->insert_id();	
 			$p_log_id = $log_id;
-			$message = createVideoCallInformationMail('
+			$message = $this->createVideoCallInformationMail('
 				<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Dear '.$p_name.':</h2>
 				<p>Thanks for choosing telehealers.in</p>
 				<p>Kindly visit Your dashboard using registered mobile number.</p>
@@ -1030,7 +1034,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		
 		
 		
-		$message = createVideoCallInformationMail('
+		$message = $this->createVideoCallInformationMail('
 			<p>Hey <strong>'.$p_name.'</strong>,</p>
 			<p>Our staff member has confirmed you for a '.$service2.' appointment on '.date('jS F Y',strtotime($date)).' with Dr. '.$doctor_name.'. If you have questions before your appointment,
 				use the contact form with appointment ID to get in touch with us.</p>
@@ -1245,7 +1249,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		
 		
 		
-		$message = createVideoCallInformationMail('
+		$message = $this->createVideoCallInformationMail('
 			<p>Hey <strong>'.$p_name.'</strong>,</p>
 			<p>Our staff member has confirmed you for a '.$service1.' appointment on '.date('jS F Y',strtotime($date)).' with Dr. '.$doctor_name.'. If you have questions before your appointment,
 				use the contact form with appointment ID to get in touch with us.</p>
