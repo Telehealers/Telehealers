@@ -83,6 +83,12 @@
                                     <i class="fa fa-edit"></i> </a>
 									<a  class="btn btn-xs btn-danger" href="<?php echo base_url();?>admin/Doctor_controller/delete_doctor/<?php echo html_escape($value['log_id']) ;?>" onclick="return confirm('Are you want to delete?');">
                                     <i class="fa fa-trash"></i> </a>
+									<?php if($this->session->userdata('log_id')==1){ ?>
+									<?php if($value['approve']==1){?>
+									<a  class="btn btn-xs btn-success" href="<?php echo base_url();?>admin/Doctor_controller/approve_doctor/<?php echo html_escape($value['log_id']) ;?>" onclick="return confirm('Are you want to approve?');">
+                                    Approve</a>
+									<?php } ?>
+									<?php } ?>
                                 </td> 
                             </tr>
                             <?php

@@ -39,6 +39,29 @@
 						 <input type="hidden" name="p_id" id="p_id" value="<?php echo $p_id;?>" >
                             <div class="form-body">
                                 <div class="form-group">
+                                    <label class="col-md-3 control-label"><span class="text-danger">*</span>Doctor:</label>
+                                    <div class="col-md-5">
+									<select name="doctor_id" id="doctor_id" required>
+										<option value="">Select Doctor</option>
+                                        <?php 
+										if(is_array($d_data) && count($d_data)>0){
+											foreach($d_data as $val){
+												$sql = "select doctor_name from doctor_tbl where doctor_id = '".$val."'";
+												$res = $this->db->query($sql);
+												$result = $res->result_array();
+												$doctor_name = $result[0]['doctor_name'];
+												?>
+												<option value="<?php echo $val; ?>"><?php echo $doctor_name; ?></option>
+												<?php
+											}
+										}
+										?>
+										</select>
+                                    </div>
+                                </div>
+                            </div>
+							 <div class="form-body">
+                                <div class="form-group">
                                     <label class="col-md-3 control-label"><span class="text-danger">*</span>Upload Report :</label>
                                     <div class="col-md-5">
                                         <input type="file" name="doc_name" id="doc_name" class="form-control" required />
@@ -72,6 +95,7 @@
                         <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables">
                             <thead>
                                 <tr class="center">
+									<th class="all">Doctor</th>
                                     <th class="all">Reports</th>
 									<th class="all">Add Date</th>
                                     <th class="all"><?php echo display('action');?> </th>
@@ -81,8 +105,13 @@
                             <tbody>
                                 <?php 
                                     foreach ($patient_info as $value) {
+										$sql = "select doctor_name from doctor_tbl where doctor_id = '".$value['doctor_id']."'";
+										$res = $this->db->query($sql);
+										$result = $res->result_array();
+										$doctor_name = $result[0]['doctor_name'];
                                 ?>
                                 <tr>
+									<td><?php echo $doctor_name; ?></td>
                                     <td><a href="<?php echo html_escape($value['document']);?>" target="_blank">View</a></td>
 									<td><?php echo html_escape($value['add_date']);?></td>
                                     <td class="text-right">

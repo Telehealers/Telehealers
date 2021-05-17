@@ -271,6 +271,11 @@ class Ajax_controller extends CI_Controller {
       $this->ajax_model->get_appointment($venue_id,$date,$doctor_id);
   }
   
+  public function get_schedul2($venue_id =NULL, $date=NULL, $doctor_id=NULL)
+  {
+      $this->ajax_model->get_appointment($venue_id,$date,$doctor_id);
+  }
+  
   #------------------------------------------------
   #       action set
   #------------------------------------------------

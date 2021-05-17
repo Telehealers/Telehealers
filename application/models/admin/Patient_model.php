@@ -44,8 +44,13 @@ public function get_by_id_patient($id){
       ->from("patient_tbl")
 	  ->where('doctor_id',$id)
       ->get();
-      $result = $query->result();
-      return $result;
+    $result = $query->result();
+	$sql = "select a.* from patient_tbl as a, appointment_tbl as b where b.doctor_id = '$id' and b.patient_id = a. patient_id";
+	$res = $this->db->query($sql);
+	//$result = $res->result_array();
+	$result = $query->result();
+	//echo $sql;die();
+    return $result;
 }
 
 public function get_referral_patient($id){
@@ -85,15 +90,29 @@ public function get_patient_inde_info($patient_id)
 
  public function get_patient_doc_info($patient_id){	
 
- $SQL = 'select * from patient_doc_tbl where patient_id = "'.$patient_id.'"';
+	$SQL = 'select * from patient_doc_tbl where patient_id = "'.$patient_id.'"';
 
- $query = $this->db->query($SQL);	
+	$query = $this->db->query($SQL);	
 
- $result = $query->result_array();	
+	$result = $query->result_array();	
 
- return $result;	  
+	return $result;	  
 
  }
+ 
+ 
+ public function get_patient_doc_info_by_doctor_id($patient_id, $doctor_id){	
+
+	$SQL = 'select * from patient_doc_tbl where patient_id = "'.$patient_id.'" and doctor_id = "'.$doctor_id.'"';
+
+	$query = $this->db->query($SQL);	
+
+	$result = $query->result_array();	
+
+	return $result;	  
+
+ }
+ 
  
  public function 
  

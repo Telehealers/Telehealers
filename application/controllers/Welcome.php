@@ -896,6 +896,7 @@ public function registration()
 	public function getdoctorforappointment(){
 		$servicestype = $this->input->post('servicestype',TRUE);
 		$lang_set_val = $this->input->post('lang_set_val',TRUE);
+		$doctors='';
 		//echo "lang_set_val--".$lang_set_val;die();
 		$sql = "select id,doctors from servicetype where servicetype = '".$servicestype."'";
 		$res = $this->db->query($sql);
@@ -915,7 +916,13 @@ public function registration()
 		//$doctors_arr=array(58);
 		//echo "<pre>";
 		if($lang_set_val!=""){
+			$lang_set_arr_new = array();
 			$lang_set_arr = explode(',',$lang_set_val);
+			if(is_array($lang_set_arr) && count($lang_set_arr)>0){
+				foreach($lang_set_arr as $val){
+					$lang_set_arr_new[] = trim($val);
+				}
+			}
 			//echo "<pre>";print_r($lang_set_arr);die();
 			if(is_array($doctors_arr) && count($doctors_arr)>0){
 				foreach($doctors_arr as $doc){
@@ -928,7 +935,7 @@ public function registration()
 						if($language!=""){
 							$language_arr = explode(',',$language);
 							foreach($language_arr as $val){
-								if(in_array(trim($val),$lang_set_arr)){
+								if(in_array(trim($val),$lang_set_arr_new)){
 									$with_lng[] = $doc;
 								}else{
 									$without_lng[] = $doc;
@@ -939,13 +946,19 @@ public function registration()
 						}
 					}	
 				}
-			}
-			$doctors_arr_2=array();
-			foreach($with_lng as $val){
-				$doctors_arr_2[] = $val;
-			}
-			foreach($without_lng as $val){
-				$doctors_arr_2[] = $val;
+				$doctors_arr_2=array();
+				//echo "<pre>";print_r($with_lng);die();
+				foreach($with_lng as $val){
+					$doctors_arr_2[] = $val;
+				}
+				foreach($without_lng as $val){
+					$doctors_arr_2[] = $val;
+				}
+			}else{
+				$doctors_arr_2=array();
+				foreach($doctors_arr as $val){
+					$doctors_arr_2[] = $val;
+				}
 			}
 		}else{
 			$doctors_arr_2=array();

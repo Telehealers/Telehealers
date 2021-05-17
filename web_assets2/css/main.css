@@ -213,7 +213,7 @@ a:hover {
 .appointment_shw .app_text {
     background-color: #fff !important;
 }
-
+.text_new{width:100%; clear:both; margin:30px 0px;}
 
 /* *********************************************************header-css-start*************************************************** */
 
@@ -370,7 +370,42 @@ a:hover {
     }
 }
 
+.link_btn:focus {
+    outline: none;
+    box-shadow: none;
+}
+.text_green{color:green;}
+.link_btn {
+    font-size: 14px;
+    color: #fff;
+    width: 205px;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 11px 0px;
+	padding:10px 25px;
+	margin-top:20px;	
+    border: none;
+    border-radius: 30px;
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+    -ms-border-radius: 30px;
+    -o-border-radius: 30px;
+    background-color: #202c45;
+    transition: 0.5s ease-in-out;
+    -webkit-transition: 0.5s ease-in-out;
+    -moz-transition: 0.5s ease-in-out;
+    -ms-transition: 0.5s ease-in-out;
+    -o-transition: 0.5s ease-in-out;
+}
 
+.link_btn:hover {
+    background-color: #009c8c;
+    transition: 0.5s ease-in-out;
+    -webkit-transition: 0.5s ease-in-out;
+    -moz-transition: 0.5s ease-in-out;
+    -ms-transition: 0.5s ease-in-out;
+    -o-transition: 0.5s ease-in-out;
+}
 /* ***********************************Mobile_menu_css_IN_HEADER**************************** */
 
 .header .menubar .navbar .buttonmenu {

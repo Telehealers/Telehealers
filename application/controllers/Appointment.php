@@ -54,31 +54,8 @@ class Appointment extends CI_Controller {
 	public function index($patient_id=NULL)
 	{
 	    
-		/* $ci = get_instance();
-		$ci->load->library('email');
-		$config['protocol'] = "tls";
-		$config['smtp_host'] = "smtp-relay.sendinblue.com";
-		$config['smtp_port'] = "587";
-		$config['smtp_user'] = "ravi@wishtech.com.br"; 
-		$config['smtp_pass'] = "UnW0wjEBALXxq4C5";
-		$config['charset'] = "utf-8";
-		$config['mailtype'] = "html";
-		$config['newline'] = "\r\n";
-		$ci->email->initialize($config);
-		$ci->email->from('raghuveer@ecomsolver.com', 'telehealers');
-		$list = array('raghu10raj@gmail.com');
-		$ci->email->to($list);
-		$this->email->reply_to('raghuveer@ecomsolver.com', 'Explendid Videos');
-		$ci->email->subject('This is an email test');
-		$ci->email->message('It is working. Great!');
-		if($ci->email->send()){
-			echo "mail send...";
-		}else{
-			echo "mail not send...";
-		} */
-
+		$email_config = $this->email_model->email_config();
 		
-
         //get_schedule_list
         $data['schedule'] = $this->schedule_model->get_schedule_list();
         //setup information
@@ -750,13 +727,22 @@ function createVideoCallInformationMail($participantInfoHTML) {
 	
 	public function confirmation(){
 		
-			$ci = get_instance();
+		$ci = get_instance();
 		$ci->load->library('email');
-        $config['protocol'] = "tls";
-        $config['smtp_host'] = "inpro8.fcomet.com";
-        $config['smtp_port'] = "465";
-        $config['smtp_user'] = "info@telehealers.in"; 
-        $config['smtp_pass'] = "Ajay@1234%";
+		
+		$email_config = $this->email_model->email_config();
+		if(is_array($email_config) && count($email_config)>0){
+			$protocol = $email_config->protocol;
+			$smtp_host = $email_config->mailpath;
+			$smtp_port = $email_config->port;
+			$smtp_user = $email_config->sender;
+			$smtp_pass = $email_config->mailtype;
+		}
+        $config['protocol'] = $protocol;
+        $config['smtp_host'] = $smtp_host;
+        $config['smtp_port'] = $smtp_port;
+        $config['smtp_user'] = $smtp_user; 
+        $config['smtp_pass'] = $smtp_pass;
         $config['charset'] = "utf-8";
         $config['mailtype'] = "html";
         $config['newline'] = "\r\n";
@@ -890,8 +876,8 @@ function createVideoCallInformationMail($participantInfoHTML) {
 				if($p_gender==""){
 					$p_gender = $sex;
 				} */
-				$sql_u = "update patient_tbl set patient_name = '$p_name', patient_phone = '$p_phone', sex = '$p_gender', age = '$p_age' where patient_email = '$p_email'";	
-				$this->db->query($sql_u);
+				//$sql_u = "update patient_tbl set patient_name = '$p_name', patient_phone = '$p_phone', sex = '$p_gender', age = '$p_age' where patient_email = '$p_email'";	
+				//$this->db->query($sql_u);
 			}
 		
 		}else{
@@ -997,18 +983,12 @@ function createVideoCallInformationMail($participantInfoHTML) {
 			}
 		}	
 		
-		$sql_rk = "select * from token2 where id = '1'";
-		$res_rk = $this->db->query($sql_rk);
-		$result_rk = $res_rk->result_array();
-		if(is_array($result_rk) && count($result_rk)>0){
-			$refershToken = $result_rk[0]['refersh_token'];
-		}
-		
 		$sql_tk = "select * from token where id = '1'";
 		$res_tk = $this->db->query($sql_tk);
 		$result_tk = $res_tk->result_array();
 		if(is_array($result_tk) && count($result_tk)>0){
 			$accessToken = $result_tk[0]['access_token'];
+			$refershToken = $result_tk[0]['refersh_token'];
 		}
 		
 		if($refershToken!="" && $accessToken!=""){
@@ -1115,11 +1095,20 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		
 		$ci = get_instance();
 		$ci->load->library('email');
-        $config['protocol'] = "tls";
-        $config['smtp_host'] = "inpro8.fcomet.com";
-        $config['smtp_port'] = "465";
-        $config['smtp_user'] = "info@telehealers.in"; 
-        $config['smtp_pass'] = "Ajay@1234%";
+		
+        $email_config = $this->email_model->email_config();
+		if(is_array($email_config) && count($email_config)>0){
+			$protocol = $email_config->protocol;
+			$smtp_host = $email_config->mailpath;
+			$smtp_port = $email_config->port;
+			$smtp_user = $email_config->sender;
+			$smtp_pass = $email_config->mailtype;
+		}
+        $config['protocol'] = $protocol;
+        $config['smtp_host'] = $smtp_host;
+        $config['smtp_port'] = $smtp_port;
+        $config['smtp_user'] = $smtp_user; 
+        $config['smtp_pass'] = $smtp_pass;
         $config['charset'] = "utf-8";
         $config['mailtype'] = "html";
         $config['newline'] = "\r\n";
@@ -1346,6 +1335,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
                 redirect('Welcome');
             } 
     }
+	
 	public function save_appointment_info()
     {
         $data['info'] = $this->home_view_model->Home_satup();

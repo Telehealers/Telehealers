@@ -275,7 +275,10 @@ class Prescription_controller extends CI_Controller {
 		
 		$d['appointment_id'] = $this->input->post('appointment_id',TRUE);
     	$this->session->set_userdata($d);
-	 	redirect("prescription");
+		$this->session->set_flashdata('message','<div class="alert alert-success msg">Prescription has been add successfully.</div>');
+	 	redirect("admin/Prescription_controller/prescription_list");
+		
+		//redirect("prescription");
 	}		 
 
 
@@ -808,7 +811,11 @@ class Prescription_controller extends CI_Controller {
 	 	$pdata['create_date_time'] = date("Y-m-d H:i:s");
 
 		$pres_id = $this->input->post('prescription_id',TRUE);
-	 	$this->db->where('prescription_id',$pres_id)->delete('prescription');
+	 	
+		//$this->db->where('prescription_id',$pres_id)->delete('prescription');
+		
+		$sql_p = "delete from prescription where prescription_id = '$pres_id'";
+		$res_p = $this->db->query($sql_p);
 
 	 	$this->db->insert('prescription',$pdata);
 		$user_id = $this->session->userdata('log_id');
@@ -1010,6 +1017,7 @@ class Prescription_controller extends CI_Controller {
 	}
 	
 	
+	
 	public function send_prescription($p_id){
 		
 		// patient info
@@ -1062,25 +1070,23 @@ class Prescription_controller extends CI_Controller {
 			$data['default'] = $this->load->view('generic_pattern/default',$data,true); 
 			
 			
-			
-		
-		
-		
-		
-			
-			
-			
 		//echo "p_id--".$p_id;die();
 		$ci = get_instance();
 		$ci->load->library('email');
-		$config['protocol'] = "tls";
-		$config['smtp_host'] = "inpro8.fcomet.com";
-		$config['smtp_port'] = "465";
-		$config['smtp_user'] = "info@telehealers.in"; 
-		$config['smtp_pass'] = "Ajay@1234%";
-		$config['charset'] = "utf-8";
-		$config['mailtype'] = "html";
-		$config['newline'] = "\r\n";
+		$email_config = $this->email_model->email_config();
+		$protocol = $email_config->protocol;
+		$smtp_host = $email_config->mailpath;
+		$smtp_port = $email_config->port;
+		$smtp_user = $email_config->sender;
+		$smtp_pass = $email_config->mailtype;
+		$config['protocol'] = $protocol;
+        $config['smtp_host'] = $smtp_host;
+        $config['smtp_port'] = $smtp_port;
+        $config['smtp_user'] = $smtp_user; 
+        $config['smtp_pass'] = $smtp_pass;
+        $config['charset'] = "utf-8";
+        $config['mailtype'] = "html";
+        $config['newline'] = "\r\n";
 		$ci->email->initialize($config);
 		
 		$patient_id='';
@@ -1117,6 +1123,10 @@ class Prescription_controller extends CI_Controller {
 			$temperature = $result_p[0]['temperature'];
 			$create_date_time = $result_p[0]['create_date_time'];
 			$prescription_type = $result_p[0]['prescription_type'];
+			if($create_date_time!=""){
+				//$create_date_time = date_format($create_date_time,"d-M-Y l");	
+			}
+			
 		}
 		
 		
@@ -1135,7 +1145,8 @@ class Prescription_controller extends CI_Controller {
 			$app_date = date('jS F Y',strtotime($date));
 		}
 		
-		
+		$picture2='';
+		$picture3='';
 		if($patient_id!="" && $doctor_id!=""){
 			$sql = "select * from patient_tbl where patient_id = '".$patient_id."' ";
 			$res = $this->db->query($sql);
@@ -1150,12 +1161,348 @@ class Prescription_controller extends CI_Controller {
 			$res_doc = $this->db->query($sql_doc);
 			$result_doc = $res_doc->result_array();
 			if(is_array($result_doc) && count($result_doc)>0){
+				$picture2 = $result_doc[0]['picture2'];
+				$picture3 = $result_doc[0]['picture3'];
 				$doctor_name = $result_doc[0]['doctor_name'];
 				$doc_id = $result_doc[0]['doc_id'];
 				$degrees = $result_doc[0]['degrees'];
 			}
 			
 			
+			//echo "path...".APPPATH;die();
+		
+		$pdf = new Pdf('P', 'mm', 'A4', true, 'UTF-8', false);
+		// create new PDF document
+		//$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+
+		// set default header data
+		$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH);
+
+		// set header and footer fonts
+		$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+		$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+
+		// set default monospaced font
+		$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+		// set margins
+		$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+		$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+		$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+
+		// set auto page breaks
+		$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+		// set image scale factor
+		$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+		// set some language-dependent strings (optional)
+		if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
+			require_once(dirname(__FILE__).'/lang/eng.php');
+			$pdf->setLanguageArray($l);
+		}
+
+		// ---------------------------------------------------------
+
+		// set font
+		$pdf->SetFont('dejavusans', '', 10);
+
+		// add a page
+		$pdf->AddPage();
+
+/* set background image  */
+
+	$bMargin = $pdf->getBreakMargin();
+	$auto_page_break = $pdf->getAutoPageBreak();
+	$pdf->SetAutoPageBreak(false, 0);
+	$img_file = 'https://www.telehealers.in//web_assets2/images/aajay.jpg';
+	$pdf->Image($img_file, 0, 14.5, 210, 280, '', '', '', false, 300, '', false, false, 0);
+	$pdf->SetAutoPageBreak($auto_page_break, $bMargin);
+	$pdf->setPageMark();
+
+/* top header start */
+
+	/* section one */
+	$newDate='';
+	if($create_date_time!=""){
+		$date1 =  date_create($create_date_time);
+		$newDate = date_format($date1,"d-M-Y l");
+	}
+	
+	$html = '<span color="white">Date : '.$newDate.'<br />';
+	$pdf->SetFillColor(4,158,141);
+	$pdf->SetTextColor(255, 255, 255);
+	$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+	$pdf->writeHTMLCell($w=0, $h=0, $x=12, $y=18, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+	
+	/* section two */
+	
+	$html = '<span color="white">Patient Id: '.$patient_id.', Appointment Id: '.$appointment_id.'</span><br />';
+	$pdf->SetTextColor(255, 255, 255);
+	$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+	$pdf->writeHTMLCell($w=0, $h=0, $x=90, $y=18, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+	
+	/* section three */
+
+	$html = '<span color="white"></span><br />';
+	$pdf->SetFont('dejavusans', '', 14);
+	$pdf->SetTextColor(255, 255, 255);
+	$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+	$pdf->writeHTMLCell($w=0, $h=0, $x=170, $y=17, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+
+/* top header end */
+
+/* doctor details */
+	/* section one */
+	$html = '<span color="black">'.$doctor_name.'- ('.$doc_id.')</span>';
+	$pdf->SetFont('dejavusans', '', 12);
+	$pdf->SetTextColor(0, 0, 0);
+	$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+	$pdf->writeHTMLCell($w=0, $h=0, $x=105, $y=30, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+
+	/* section two  */
+	$html = '<span color="black">'.$degrees.'</span>';
+	$pdf->SetFont('dejavusans', '', 9);
+	$pdf->SetTextColor(0, 0, 0);
+	$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+	$pdf->writeHTMLCell($w=0, $h=0, $x=105, $y=38, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+
+
+	/* sectoin three */
+	$html = '<span color="black">COVID Telehealer</span><br /><span>Online</span>';
+	$pdf->SetFont('dejavusans', '', 9);
+	$pdf->SetTextColor(0, 0, 0);
+	$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+	$pdf->writeHTMLCell($w=0, $h=0, $x=105, $y=50, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+
+/* header two patient details */
+
+	$html = '<span color="white">Patient Name: '.$patient_name.',   Age : '.$patient_age.',  Gender : '.$patient_sex.',  Patient Weight : '.$weight.',  Patient BP : '.$pressure.'</span><br />';
+	$pdf->SetFont('dejavusans', '', 10);
+	$pdf->SetFillColor(4,158,141);
+	$pdf->SetTextColor(255, 255, 255);
+	$pdf->writeHTMLCell(210, 11, 0, +61, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+	$pdf->writeHTMLCell($w=0, $h=0, $x=12, $y=64, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+
+/* complaint section  */
+	$html = '<span color="#049e8d">Patient complaint</span>';
+	$pdf->SetFont('dejavusans', '', 12);
+	$pdf->SetTextColor(4,158,141);
+	$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+	$pdf->writeHTMLCell($w=0, $h=0, $x=4, $y=75, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+
+		$cc =  explode(",",$problem);
+		$html = '';
+		for ($i=0; $i<count($cc); $i++) {
+			 $html .= '<span color="grey">'.trim(html_escape(@$cc[$i])).'</span><br>';
+		}
+		$html = $html;
+		$pdf->SetFont('dejavusans', '', 10);
+		$pdf->SetTextColor(0,0,0);
+		$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+		$pdf->writeHTMLCell($w=60, $h=0, $x=8, $y=85, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+
+/* history section */
+	$html = '<span color="#049e8d">History</span>';
+	$pdf->SetFont('dejavusans', '', 12);
+	$pdf->SetTextColor(4,158,141);
+	$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+	$pdf->writeHTMLCell($w=0, $h=0, $x=4, $y=105, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+
+		$cc =  explode(",",$history);
+		$html = '';
+		for ($i=0; $i<count($cc); $i++) {
+			 $html .= '<span color="grey">'.trim(html_escape(@$cc[$i])).'</span><br>';
+		}
+		$html = $html;
+		$pdf->SetFont('dejavusans', '', 10);
+		$pdf->SetTextColor(0,0,0);
+		$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+		$pdf->writeHTMLCell($w=60, $h=0, $x=8, $y=115, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+
+
+/* temp section */
+	$html = '<span color="#049e8d">Temperature : '.$temperature.'°C</span>';
+	$pdf->SetFont('dejavusans', '', 12);
+	$pdf->SetTextColor(4,158,141);
+	$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+	$pdf->writeHTMLCell($w=0, $h=0, $x=4, $y=125, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+
+		$html = '<span color="#049e8d">O/Ex</span>';
+		$pdf->SetFont('dejavusans', '', 10);
+		$pdf->SetTextColor(4,158,141);
+		$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+		$pdf->writeHTMLCell($w=0, $h=0, $x=4, $y=135, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+	
+			$html = '<span color="grey">. '.$oex.'</span>';
+			$pdf->SetFont('dejavusans', '', 10);
+			$pdf->SetTextColor(0,0,0);
+			$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+			$pdf->writeHTMLCell($w=60, $h=0, $x=8, $y=142, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+	
+		$html = '<span color="#049e8d">PD</span>';
+		$pdf->SetFont('dejavusans', '', 10);
+		$pdf->SetTextColor(4,158,141);
+		$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+		$pdf->writeHTMLCell($w=0, $h=0, $x=4, $y=150, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+
+
+			$html = '<span color="grey">. '.$pd.'</span>';
+			$pdf->SetFont('dejavusans', '', 10);
+			$pdf->SetTextColor(0,0,0);
+			$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+			$pdf->writeHTMLCell($w=60, $h=0, $x=8, $y=157, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+
+
+
+/* test section */
+	$html = '<span color="#049e8d">Test</span>';
+	$pdf->SetFont('dejavusans', '', 12);
+	$pdf->SetTextColor(4,158,141);
+	$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+	$pdf->writeHTMLCell($w=0, $h=0, $x=4, $y=167, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+
+		$i=0; 
+		$ex=165;
+		$htmlc = '<span color="black">';
+		foreach ($data['t_info'] as $value2) {
+			
+		$i++;
+		$htmlc .= '<span color="grey"> '.$i.'. '.$value2->test_name.' - '.$value2->test_assign_description.'</span><br />';
+		}
+		$htmlc .= '';								
+		
+		$html = $htmlc;
+		$pdf->SetFont('dejavusans', '', 10);
+		$pdf->SetTextColor(0,0,0);
+		$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+		$pdf->writeHTMLCell($w=60, $h=0, $x=10, $y=175, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+		$ex = $ex + 10;
+
+/* advice section */
+	$html = '<span color="#049e8d">Advice</span>';
+	$pdf->SetFont('dejavusans', '', 12);
+	$pdf->SetTextColor(4,158,141);
+	$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+	$pdf->writeHTMLCell($w=0, $h=0, $x=4, $y=200, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+		
+		$i=0; 
+		$ex=165;
+		$htmlc = '<span color="black">';
+		foreach ($data['a_info'] as $value2) {
+			
+		$i++;
+		$htmlc .= '<span color="grey"> '.$i.'. '.$value2->advice.'</span><br />';
+		}
+		$htmlc .= '';								
+		
+		$html = $htmlc;
+		
+		//$html = '<span color="black">. advice here </span><br /><span>. advice here</span>';
+		$pdf->SetFont('dejavusans', '', 10);
+		$pdf->SetTextColor(0,0,0);
+		$pdf->writeHTMLCell(10, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+		$pdf->writeHTMLCell($w=60, $h=0, $x=8, $y=210, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+		
+/* advice section */
+	//$html = '<span color="black" style="width:120px;">SL</span><span color="black">Type</span><span color="black">Generic name</span><span color="black">Mg/Ml</span><span color="black">Dose</span><span color="black">Day</span><span color="black">Comments</span>';
+	
+	$html = '<table cellspacing="4" cellpadding="4" border="" style="border:solid 1px #ccc;">
+    <tr style="border:none;">
+        <td align="center" style="border-right:1px solid #ccc; width:30px;  position: relative;">SL</td>
+        <td align="center" style="border-right:1px solid #ccc; width:50px; padding:5px 5px;">Type</td>
+        <td align="center" style="border-right:1px solid #ccc; width:120px; padding:5px 5px;">Generic name</td>
+        <td align="center" style="border-right:1px solid #ccc; width:50px; padding:5px 5px;">Mg/Ml</td>
+        <td align="center" style="border-right:1px solid #ccc; width:50px; padding:5px 5px;">Dose</td>
+        <td align="center" style="border-right:1px solid #ccc; width:50px; padding:5px 5px;">Day</td>
+        <td align="center" style="width:90px; padding:5px 5px;">Comments</td>
+    </tr></table>';
+
+	$pdf->SetFont('dejavusans', '', 11);
+	$pdf->SetTextColor(0,0,0);
+	$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+	$pdf->writeHTMLCell($w=0, $h=0, $x=70, $y=75, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+	
+		$html = '<table cellspacing="4" cellpadding="4" border="" style="border:solid 1px #ccc;">'; 
+		
+		$i=0; 
+		$j=85;
+		foreach ($data['patient_info'] as $value1) {
+			$i++;
+			$j = $j + 15;
+		$html .= ' <tr style="border:none; padding-top: 10px; padding-bottom:10px;">
+        <td align="center" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; width:30px; position: relative; ">'.$i.'</td>
+        <td align="center" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; width:50px; padding:5px 5px;">'.$value1->medicine_type.'</td>
+        <td align="center" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; width:120px; padding:5px 5px;">'.$value1->group_name.'</td>
+        <td align="center" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; width:50px; padding:5px 5px;">'.$value1->mg.'</td>
+        <td align="center" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; width:50px; padding:5px 5px;"> '.$value1->dose.'</td>
+        <td align="center" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; width:50px; padding:5px 5px;">'.$value1->day.'</td>
+        <td align="center" style="border-bottom:1px solid #ccc; width:90px; padding:5px 5px;">'.$value1->medicine_com.'</td>
+    </tr>';
+		
+		} 
+		
+		$html .= '</table>';
+		
+		$pdf->SetFont('dejavusans', '', 9);
+		$pdf->SetTextColor(0,0,0);
+		$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+		$pdf->writeHTMLCell($w=0, $h=0, $x=70, $y=85, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+		
+		$html = $pres_comments;
+		
+		$pdf->SetFont('dejavusans', '', 9);
+		$pdf->SetTextColor(0,0,0);
+		$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+		$pdf->writeHTMLCell($w=0, $h=0, $x=70, $y=$j, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+		
+		
+
+				
+	/* Sign of doctor  */
+	if($picture3 !=""){
+		
+	$sign= str_replace('[removed]','data:image/png;base64,',$picture3); 
+	
+	$img = '<img src="@' . preg_replace('#^data:image/[^;]+;base64,#', '', $sign) . '">';
+	
+	//$pdf->writeHTML($img, 5157, 227, 430, 420, 'PNG', 'http://www.tcpdf.org', '', true, 50, '', false, false, 0, false, false, false);
+	//$pdf->writeHTML($img,157, 227, 30, 20, true, false, true, false, '');
+	
+	$img = base64_decode(preg_replace('#^data:image/[^;]+;base64,#', '', $sign));
+    
+	$pdf->Image("@".$img, 155, 218, 36, 36);
+	
+	//$pdf->Image('https://www.telehealers.in/./assets/uploads/doctor/Whats2.jpeg', 157, 227, 30, 20, 'JPG', 'http://www.tcpdf.org', '', true, 150, '', false, false, 0, false, false, false);
+		
+		$html = '<span>------------------------</span><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>Signature</span>';
+		$pdf->SetFont('dejavusans', '', 14);
+		$pdf->SetTextColor(0,0,0);
+		$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+		$pdf->writeHTMLCell($w=0, $h=0, $x=150, $y=245, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);	
+		
+	}else{
+		
+		$html = '<span>------------------------</span><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>Signature</span>';
+		$pdf->SetFont('dejavusans', '', 14);
+		$pdf->SetTextColor(0,0,0);
+		$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+		$pdf->writeHTMLCell($w=0, $h=0, $x=150, $y=245, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);	
+		
+	}	
+
+		//$pdf->Output('example_051.pdf', 'I');
+		
+		$rand = rand(1000,9999);
+		$date = date('Y-m-d');
+		$filename = $patient_id.'-'.$date.'-'.$rand;
+		$filename2 = $patient_id.'-'.$date.'-'.$rand.'.pdf';
+		
+		$pdf->Output('/home/telehea2/telehealers.in/ppdf/'.$filename.'.pdf', 'FD');
+		
+		$sql_pdf = "update prescription set pdf = '$filename2' where prescription_id = '$p_id'";
+		$this->db->query($sql_pdf);
+		
 			
 			$message = '<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #f1f1f1;">
     <center style="width: 100%; background-color: #f1f1f1;">
@@ -1190,7 +1537,7 @@ class Prescription_controller extends CI_Controller {
 										<p>Thanks for choosing telehealers.in</p>
 										<p>We hope your consultation was well with '.$doctor_name.' </p>
                                         <p>Here you will find attachment of Prescription with this email</p>
-										<p>Please download your Prescription from <a href="https://telehealers.in/admin/Generic_controller/generic/'.$p_id.'" target="_blank">Here</a></p>
+										<p>Please download your Prescription from <a href="https://telehealers.in/Userlogin" target="_blank">Here</a></p>
 										<p>&nbsp;</p>
 										
                                         <p>Also you can login to the website to view it</p>
@@ -1225,22 +1572,25 @@ class Prescription_controller extends CI_Controller {
 
 </body></html>';
 
-		//$start = $data['v_info']->start_time;
-		//$end =  $data['v_info']->end_time;
-		//$pp_time = $data['v_info']->per_patient_time;
-		//$patient_time = date('h:i A', strtotime($start));
-		//$end_time = date('h:i A', strtotime($end));
+		
 		$img_url = 'https://www.telehealers.in/assets/uploads/images/telehe.png';
 		$img_url2 = 'https://www.telehealers.in/web_assets2/images/aajay.jpg';
 			
+		//$file_path = 'https://www.telehealers.in/ppdf/'.$filename2;	
+		$file_path = '/home/telehea2/telehealers.in/ppdf/'.$filename2;	
 		$message2 = '';
-
+		
+		//$patient_email = 'raghuveer@ecomsolver.com';
+		
+		//echo $patient_email;die();
+		
 		$ci->email->from('info@telehealers.in', 'telehealers');
 		$list = array($patient_email);
 		$ci->email->to($list);
 		$this->email->reply_to('info@telehealers.in', 'telehealers');
 		$ci->email->subject('Prescription Information');
 		$ci->email->message($message);
+		$this->email->attach($file_path);
 		$ci->email->send();
 		
 		$ci->email->from('info@telehealers.in', 'telehealers');
@@ -1250,55 +1600,508 @@ class Prescription_controller extends CI_Controller {
 		$ci->email->subject('Prescription Information');
 		$ci->email->message($message);
 		$ci->email->send();
+		
 		}
-		 $this->session->set_flashdata('message','<div class="alert alert-success">
+		 
+		$this->session->set_flashdata('message','<div class="alert alert-success">
                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                 <strong>Prescription has been sent successfully!</strong>
               </div>');
+			  
+		//die();	  
 		redirect("admin/Prescription_controller/prescription_list");
 	}
 	
+	
 	public function send_prescription2($p_id){
+		
+		$info = $this->db->where('name','timezone')->get('web_pages_tbl')->row();
+        date_default_timezone_set(@$info->details);
+		
+		@$venue_id = '3';
+		@$prescription_id = $p_id; 
+
+		$data['patient_info'] = $this->prescription_model->prescription_by_id($prescription_id);
+	    
+	    // test query
+	     $data['t_info'] = $this->db->select('*')
+	     ->from('test_assign_for_patine')
+	     ->join('test_name_tbl', 'test_name_tbl.test_id = test_assign_for_patine.test_id')
+	     ->where('test_assign_for_patine.prescription_id',$prescription_id)
+	     ->get()
+	     ->result();
+	     
+	    // advice query
+	      $data['a_info'] = $this->db->select('advice_prescriptiion.*,doctor_advice.*')
+	     ->from('advice_prescriptiion')
+	     ->join('doctor_advice', 'doctor_advice.advice_id = advice_prescriptiion.advice_id')
+	     ->where('advice_prescriptiion.prescription_id',$prescription_id)
+	     ->get()
+	     ->result();
+     	  //venue info
+          $data['v_info'] = $this->db->select('prescription.venue_id,venue_tbl.*')
+         ->from('prescription')
+         ->join('venue_tbl', 'venue_tbl.venue_id = prescription.venue_id')
+         ->where('prescription.prescription_id',$prescription_id)
+         ->get()
+         ->row();
+
+
+			$data['chember_time'] = $this->db->select('*')
+        ->from('schedul_setup_tbl')
+        ->where('venue_id', @$venue_id->venue_id)
+        ->limit(1)
+        ->get()
+        ->row();
+
+        $data['pattern'] = $this->db->select('*')
+		->from('print_pattern')
+		->where('doctor_id',$this->session->userdata('doctor_id'))
+		->where('venue_id',@$venue_id->venue_id)
+		->get()
+		->row();
+
+        if($data['pattern']!==NULL){
+			$data['others'] = $this->load->view('pattern/'.$data['pattern']->pattern_no.'',$data,true);
+		}
+		$data['default'] = $this->load->view('pattern/default',$data,true); 
+			
+			
 		//echo "p_id--".$p_id;die();
 		$ci = get_instance();
 		$ci->load->library('email');
-		$config['protocol'] = "tls";
-		$config['smtp_host'] = "inpro8.fcomet.com";
-		$config['smtp_port'] = "465";
-		$config['smtp_user'] = "info@telehealers.in"; 
-		$config['smtp_pass'] = "Ajay@1234%";
-		$config['charset'] = "utf-8";
-		$config['mailtype'] = "html";
-		$config['newline'] = "\r\n";
+		$email_config = $this->email_model->email_config();
+		$protocol = $email_config->protocol;
+		$smtp_host = $email_config->mailpath;
+		$smtp_port = $email_config->port;
+		$smtp_user = $email_config->sender;
+		$smtp_pass = $email_config->mailtype;
+		$config['protocol'] = $protocol;
+        $config['smtp_host'] = $smtp_host;
+        $config['smtp_port'] = $smtp_port;
+        $config['smtp_user'] = $smtp_user; 
+        $config['smtp_pass'] = $smtp_pass;
+        $config['charset'] = "utf-8";
+        $config['mailtype'] = "html";
+        $config['newline'] = "\r\n";
 		$ci->email->initialize($config);
+		
+		
+		
 		
 		$patient_id='';
 		$doctor_id='';
 		$app_id='';
+		$appointment_id='';
+		$sequence='';
+		$date='';
+		$app_date='';
+		$degrees='';
+		$weight='';
+		$pressure='';
+		$problem='';
+		$oex='';
+		$pd='';
+		$history='';
+		$temperature='';
+		$create_date_time='';
+		$prescription_type='';
 		
 		$sql_p = "select * from prescription where prescription_id = '".$p_id."' ";
 		$res_p = $this->db->query($sql_p);
 		$result_p = $res_p->result_array();
 		if(is_array($result_p) && count($result_p)>0){
 			$patient_id = $result_p[0]['patient_id'];
-			$app_id = $result_p[0]['app_id'];
+			$app_id = $result_p[0]['appointment_id'];
 			$doctor_id = $result_p[0]['doctor_id'];
+			$pres_comments = $result_p[0]['pres_comments'];
+			$weight = $result_p[0]['weight'];
+			$pressure = $result_p[0]['pressure'];
+			$problem = $result_p[0]['problem'];
+			$oex = $result_p[0]['oex'];
+			$pd = $result_p[0]['pd'];
+			$history = $result_p[0]['history'];
+			$temperature = $result_p[0]['temperature'];
+			$create_date_time = $result_p[0]['create_date_time'];
+			$prescription_type = $result_p[0]['prescription_type'];
+			
 		}
 		if($patient_id!="" && $doctor_id!="" && $app_id!=""){
+		
+		if($app_id!=""){
+			$sql_ap = "select * from appointment_tbl where appointment_id = '".$app_id."' ";
+			//echo $sql_ap;
+			$res_ap = $this->db->query($sql_ap);
+			$result_ap = $res_ap->result_array();
+			if(is_array($result_ap) && count($result_ap)>0){
+				$sequence = $result_ap[0]['sequence'];
+				$date = $result_ap[0]['date'];
+			}
+		}
+		if($sequence!=""){
+			$sequence = date('h:i A', strtotime($sequence));
+			$app_date = date('jS F Y',strtotime($date));
+		}
+		
+		$picture2='';
+		$picture3='';
+		if($patient_id!="" && $doctor_id!=""){
 			$sql = "select * from patient_tbl where patient_id = '".$patient_id."' ";
 			$res = $this->db->query($sql);
 			$result = $res->result_array();
 			if(is_array($result) && count($result)>0){
 				$patient_name = $result[0]['patient_name'];
 				$patient_email = $result[0]['patient_email'];
+				$patient_age = $result[0]['age'];
+				$patient_sex = $result[0]['sex'];
 			}
 			$sql_doc = "select * from doctor_tbl where doctor_id = '".$doctor_id."' ";
 			$res_doc = $this->db->query($sql_doc);
 			$result_doc = $res_doc->result_array();
 			if(is_array($result_doc) && count($result_doc)>0){
+				$picture2 = $result_doc[0]['picture2'];
+				$picture3 = $result_doc[0]['picture3'];
 				$doctor_name = $result_doc[0]['doctor_name'];
 				$doc_id = $result_doc[0]['doc_id'];
+				$degrees = $result_doc[0]['degrees'];
 			}
+		}	
+			
+				//echo "path...".APPPATH;die();
+		
+		$pdf = new Pdf('P', 'mm', 'A4', true, 'UTF-8', false);
+		// create new PDF document
+		//$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+
+		// set default header data
+		$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH);
+
+		// set header and footer fonts
+		$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+		$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+
+		// set default monospaced font
+		$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+		// set margins
+		$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+		$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+		$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+
+		// set auto page breaks
+		$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+		// set image scale factor
+		$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+		// set some language-dependent strings (optional)
+		if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
+			require_once(dirname(__FILE__).'/lang/eng.php');
+			$pdf->setLanguageArray($l);
+		}
+
+		// ---------------------------------------------------------
+
+		// set font
+		$pdf->SetFont('dejavusans', '', 10);
+
+		// add a page
+		$pdf->AddPage();
+
+/* set background image  */
+
+	$bMargin = $pdf->getBreakMargin();
+	$auto_page_break = $pdf->getAutoPageBreak();
+	$pdf->SetAutoPageBreak(false, 0);
+	$img_file = 'https://www.telehealers.in//web_assets2/images/aajay.jpg';
+	$pdf->Image($img_file, 0, 14.5, 210, 280, '', '', '', false, 300, '', false, false, 0);
+	$pdf->SetAutoPageBreak($auto_page_break, $bMargin);
+	$pdf->setPageMark();
+
+/* top header start */
+
+	/* section one */
+	$newDate='';
+	if($create_date_time!=""){
+		$date1 =  date_create($create_date_time);
+		$newDate = date_format($date1,"d-M-Y l");
+	}
+	
+	$html = '<span color="white">Date : '.$newDate.'<br />';
+	$pdf->SetFillColor(4,158,141);
+	$pdf->SetTextColor(255, 255, 255);
+	$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+	$pdf->writeHTMLCell($w=0, $h=0, $x=12, $y=18, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+	
+	/* section two */
+	
+	$html = '<span color="white">Patient Id: '.$patient_id.', Appointment Id: '.$app_id.'</span><br />';
+	$pdf->SetTextColor(255, 255, 255);
+	$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+	$pdf->writeHTMLCell($w=0, $h=0, $x=90, $y=18, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+	
+	/* section three */
+
+	$html = '<span color="white"></span><br />';
+	$pdf->SetFont('dejavusans', '', 14);
+	$pdf->SetTextColor(255, 255, 255);
+	$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+	$pdf->writeHTMLCell($w=0, $h=0, $x=170, $y=17, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+
+/* top header end */
+
+/* doctor details */
+	/* section one */
+	$html = '<span color="black">'.$doctor_name.'- ('.$doc_id.')</span>';
+	$pdf->SetFont('dejavusans', '', 12);
+	$pdf->SetTextColor(0, 0, 0);
+	$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+	$pdf->writeHTMLCell($w=0, $h=0, $x=105, $y=30, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+
+	/* section two  */
+	$html = '<span color="black">'.$degrees.'</span>';
+	$pdf->SetFont('dejavusans', '', 9);
+	$pdf->SetTextColor(0, 0, 0);
+	$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+	$pdf->writeHTMLCell($w=0, $h=0, $x=105, $y=38, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+
+
+	/* sectoin three */
+	$html = '<span color="black">COVID Telehealer</span><br /><span>Online</span>';
+	$pdf->SetFont('dejavusans', '', 9);
+	$pdf->SetTextColor(0, 0, 0);
+	$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+	$pdf->writeHTMLCell($w=0, $h=0, $x=105, $y=50, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+
+/* header two patient details */
+
+	$html = '<span color="white">Patient Name: '.$patient_name.',   Age : '.$patient_age.',  Gender : '.$patient_sex.',  Patient Weight : '.$weight.',  Patient BP : '.$pressure.'</span><br />';
+	$pdf->SetFont('dejavusans', '', 10);
+	$pdf->SetFillColor(4,158,141);
+	$pdf->SetTextColor(255, 255, 255);
+	$pdf->writeHTMLCell(210, 11, 0, +61, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+	$pdf->writeHTMLCell($w=0, $h=0, $x=12, $y=64, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+
+/* complaint section  */
+	$html = '<span color="#049e8d">Patient complaint</span>';
+	$pdf->SetFont('dejavusans', '', 12);
+	$pdf->SetTextColor(4,158,141);
+	$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+	$pdf->writeHTMLCell($w=0, $h=0, $x=4, $y=75, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+
+		$cc =  explode(",",$problem);
+		$html = '';
+		for ($i=0; $i<count($cc); $i++) {
+			 $html .= '<span color="grey">'.trim(html_escape(@$cc[$i])).'</span><br>';
+		}
+		$html = $html;
+		$pdf->SetFont('dejavusans', '', 10);
+		$pdf->SetTextColor(0,0,0);
+		$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+		$pdf->writeHTMLCell($w=60, $h=0, $x=8, $y=85, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+
+/* history section */
+	$html = '<span color="#049e8d">History</span>';
+	$pdf->SetFont('dejavusans', '', 12);
+	$pdf->SetTextColor(4,158,141);
+	$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+	$pdf->writeHTMLCell($w=0, $h=0, $x=4, $y=105, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+
+		$cc =  explode(",",$history);
+		$html = '';
+		for ($i=0; $i<count($cc); $i++) {
+			 $html .= '<span color="grey">'.trim(html_escape(@$cc[$i])).'</span><br>';
+		}
+		$html = $html;
+		$pdf->SetFont('dejavusans', '', 10);
+		$pdf->SetTextColor(0,0,0);
+		$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+		$pdf->writeHTMLCell($w=60, $h=0, $x=8, $y=115, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+
+
+/* temp section */
+	$html = '<span color="#049e8d">Temperature : '.$temperature.'°C</span>';
+	$pdf->SetFont('dejavusans', '', 12);
+	$pdf->SetTextColor(4,158,141);
+	$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+	$pdf->writeHTMLCell($w=0, $h=0, $x=4, $y=125, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+
+		$html = '<span color="#049e8d">O/Ex</span>';
+		$pdf->SetFont('dejavusans', '', 10);
+		$pdf->SetTextColor(4,158,141);
+		$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+		$pdf->writeHTMLCell($w=0, $h=0, $x=4, $y=135, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+	
+			$html = '<span color="grey">. '.$oex.'</span>';
+			$pdf->SetFont('dejavusans', '', 10);
+			$pdf->SetTextColor(0,0,0);
+			$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+			$pdf->writeHTMLCell($w=60, $h=0, $x=8, $y=142, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+	
+		$html = '<span color="#049e8d">PD</span>';
+		$pdf->SetFont('dejavusans', '', 10);
+		$pdf->SetTextColor(4,158,141);
+		$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+		$pdf->writeHTMLCell($w=0, $h=0, $x=4, $y=150, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+
+
+			$html = '<span color="grey">. '.$pd.'</span>';
+			$pdf->SetFont('dejavusans', '', 10);
+			$pdf->SetTextColor(0,0,0);
+			$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+			$pdf->writeHTMLCell($w=60, $h=0, $x=8, $y=157, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+
+
+
+/* test section */
+	$html = '<span color="#049e8d">Test</span>';
+	$pdf->SetFont('dejavusans', '', 12);
+	$pdf->SetTextColor(4,158,141);
+	$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+	$pdf->writeHTMLCell($w=0, $h=0, $x=4, $y=167, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+
+		$i=0; 
+		$ex=165;
+		$htmlc = '<span color="black">';
+		foreach ($data['t_info'] as $value2) {
+			
+		$i++;
+		$htmlc .= '<span color="grey"> '.$i.'. '.$value2->test_name.' - '.$value2->test_assign_description.'</span><br />';
+		}
+		$htmlc .= '';								
+		
+		$html = $htmlc;
+		$pdf->SetFont('dejavusans', '', 10);
+		$pdf->SetTextColor(0,0,0);
+		$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+		$pdf->writeHTMLCell($w=60, $h=0, $x=10, $y=175, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+		$ex = $ex + 10;
+
+/* advice section */
+	$html = '<span color="#049e8d">Advice</span>';
+	$pdf->SetFont('dejavusans', '', 12);
+	$pdf->SetTextColor(4,158,141);
+	$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+	$pdf->writeHTMLCell($w=0, $h=0, $x=4, $y=184, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+		
+		$i=0; 
+		$ex=165;
+		$htmlc = '<span color="black">';
+		foreach ($data['a_info'] as $value2) {
+			
+		$i++;
+		$htmlc .= '<span color="grey"> '.$i.'. '.$value2->advice.'</span><br />';
+		}
+		$htmlc .= '';								
+		
+		$html = $htmlc;
+		
+		//$html = '<span color="black">. advice here </span><br /><span>. advice here</span>';
+		$pdf->SetFont('dejavusans', '', 10);
+		$pdf->SetTextColor(0,0,0);
+		$pdf->writeHTMLCell(10, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+		$pdf->writeHTMLCell($w=60, $h=0, $x=8, $y=194, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+		
+/* advice section */
+	//$html = '<span color="black" style="width:120px;">SL</span><span color="black">Type</span><span color="black">Generic name</span><span color="black">Mg/Ml</span><span color="black">Dose</span><span color="black">Day</span><span color="black">Comments</span>';
+	
+	$html = '<table cellspacing="4" cellpadding="4" border="" style="border:solid 1px #ccc;">
+    <tr style="border:none;">
+        <td align="center" style="border-right:1px solid #ccc; width:30px;  position: relative;">SL</td>
+        <td align="center" style="border-right:1px solid #ccc; width:50px; padding:5px 5px;">Type</td>
+        <td align="center" style="border-right:1px solid #ccc; width:120px; padding:5px 5px;">Medicine name</td>
+        <td align="center" style="border-right:1px solid #ccc; width:50px; padding:5px 5px;">Mg/Ml</td>
+        <td align="center" style="border-right:1px solid #ccc; width:50px; padding:5px 5px;">Dose</td>
+        <td align="center" style="border-right:1px solid #ccc; width:50px; padding:5px 5px;">Day</td>
+        <td align="center" style="width:90px; padding:5px 5px;">Comments</td>
+    </tr></table>';
+
+	$pdf->SetFont('dejavusans', '', 11);
+	$pdf->SetTextColor(0,0,0);
+	$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+	$pdf->writeHTMLCell($w=0, $h=0, $x=70, $y=75, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+	
+		$html = '<table cellspacing="4" cellpadding="4" border="" style="border:solid 1px #ccc;">'; 
+		
+		$i=0; 
+		$j=85;
+		foreach ($data['patient_info'] as $value1) {
+			$i++;
+			$j = $j + 15;
+		$html .= ' <tr style="border:none; padding-top: 10px; padding-bottom:10px;">
+        <td align="center" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; width:30px; position: relative; ">'.$i.'</td>
+        <td align="center" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; width:50px; padding:5px 5px;">'.$value1->medicine_type.'</td>
+        <td align="center" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; width:120px; padding:5px 5px;">'.$value1->medicine_name.'</td>
+        <td align="center" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; width:50px; padding:5px 5px;">'.$value1->mg.'</td>
+        <td align="center" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; width:50px; padding:5px 5px;"> '.$value1->dose.'</td>
+        <td align="center" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; width:50px; padding:5px 5px;">'.$value1->day.'</td>
+        <td align="center" style="border-bottom:1px solid #ccc; width:90px; padding:5px 5px;">'.$value1->medicine_com.'</td>
+    </tr>';
+		
+		} 
+		
+		$html .= '</table>';
+		
+		$pdf->SetFont('dejavusans', '', 9);
+		$pdf->SetTextColor(0,0,0);
+		$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+		$pdf->writeHTMLCell($w=0, $h=0, $x=70, $y=85, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+		
+		$html = $pres_comments;
+		
+		$pdf->SetFont('dejavusans', '', 9);
+		$pdf->SetTextColor(0,0,0);
+		$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+		$pdf->writeHTMLCell($w=0, $h=0, $x=70, $y=$j, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);
+		
+		
+
+				
+	/* Sign of doctor  */
+	if($picture3 !=""){
+		
+	$sign= str_replace('[removed]','data:image/png;base64,',$picture3); 
+	
+	$img = '<img src="@' . preg_replace('#^data:image/[^;]+;base64,#', '', $sign) . '">';
+	
+	//$pdf->writeHTML($img, 5157, 227, 430, 420, 'PNG', 'http://www.tcpdf.org', '', true, 50, '', false, false, 0, false, false, false);
+	//$pdf->writeHTML($img,157, 227, 30, 20, true, false, true, false, '');
+	
+	$img = base64_decode(preg_replace('#^data:image/[^;]+;base64,#', '', $sign));
+    
+	$pdf->Image("@".$img, 155, 218, 36, 36);
+	
+	//$pdf->Image('https://www.telehealers.in/./assets/uploads/doctor/Whats2.jpeg', 157, 227, 30, 20, 'JPG', 'http://www.tcpdf.org', '', true, 150, '', false, false, 0, false, false, false);
+		
+		$html = '<span>------------------------</span><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>Signature</span>';
+		$pdf->SetFont('dejavusans', '', 14);
+		$pdf->SetTextColor(0,0,0);
+		$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+		$pdf->writeHTMLCell($w=0, $h=0, $x=150, $y=245, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);	
+		
+	}else{
+		
+		$html = '<span>------------------------</span><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>Signature</span>';
+		$pdf->SetFont('dejavusans', '', 14);
+		$pdf->SetTextColor(0,0,0);
+		$pdf->writeHTMLCell(210, 11, 0, +14, '', '', '', $html, 'LRTB', 1, 1, true, 'C', true);
+		$pdf->writeHTMLCell($w=0, $h=0, $x=150, $y=245, $html, $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true);	
+		
+	}	
+
+		//$pdf->Output('example_051.pdf', 'I');
+		
+		$rand = rand(1000,9999);
+		$date = date('Y-m-d');
+		$filename = $patient_id.'-'.$date.'-'.$rand;
+		$filename2 = $patient_id.'-'.$date.'-'.$rand.'.pdf';
+		$pdf->Output('/home/telehea2/telehealers.in/ppdf/'.$filename.'.pdf', 'FD');
+		
+		$sql_pdf = "update prescription set pdf = '$filename2' where prescription_id = '$p_id'";
+		$this->db->query($sql_pdf);
+		
+		//die();	
+			
 			$message = '<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #f1f1f1;">
     <center style="width: 100%; background-color: #f1f1f1;">
         <div style="display: none; font-size: 1px;max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
@@ -1332,7 +2135,7 @@ class Prescription_controller extends CI_Controller {
 										<p>Thanks for choosing telehealers.in</p>
 										<p>We hope your consultation was well with '.$doctor_name.' </p>
                                         <p>Here you will find attachment of Prescription with this email</p>
-										<p>Please download your Prescription from <a href="https://telehealers.in/admin/Prescription_controller/my_prescription/'.$app_id.'" target="_blank">Here</a></p>
+										<p>Please download your Prescription from <a href="https://telehealers.in/Userlogin" target="_blank">Here</a></p>
 										<p>&nbsp;</p>
 										
                                         <p>Also you can login to the website to view it</p>
@@ -1366,12 +2169,17 @@ class Prescription_controller extends CI_Controller {
 
 </body></html>';
 
+		$file_path = '/home/telehea2/telehealers.in/ppdf/'.$filename2;	
+
+
+		//$patient_email = 'raghuveer@ecomsolver.com';
 		$ci->email->from('info@telehealers.in', 'telehealers');
 		$list = array($patient_email);
 		$ci->email->to($list);
 		$this->email->reply_to('info@telehealers.in', 'telehealers');
 		$ci->email->subject('Prescription Information');
 		$ci->email->message($message);
+		$this->email->attach($file_path);
 		$ci->email->send();
 		
 		$ci->email->from('info@telehealers.in', 'telehealers');
@@ -1382,11 +2190,13 @@ class Prescription_controller extends CI_Controller {
 		$ci->email->message($message);
 		$ci->email->send();
 		}
-		 $this->session->set_flashdata('message','<div class="alert alert-success">
+		$this->session->set_flashdata('message','<div class="alert alert-success">
                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                 <strong>Prescription has been sent successfully!</strong>
               </div>');
+		//die(); 
 		redirect("admin/Prescription_controller/prescription_list");
 	}
+	
 
 }

@@ -267,18 +267,21 @@
                         <p id="link"><?php echo base_url();?></p>						
                     </div>
                     <div class="col-sm-5 f2">							
-                        <p id="signature"><?php echo display('Signature');?></p>
+                        
 
-						<?php if(isset($value->picture2) && $value->picture2 !=""){ ?>
-
+						<?php if(isset($value->picture3) && $value->picture3 !=""){
 						
-						<?php $signature = $value->picture2; ?>						
-						<?php if($signature!=""){?>						
-						<img src="<?php echo $signature; ?>" style="width:120px; margin-left:100px;">
-						<?php } ?>
+						$signature = $value->picture3;
+						
+						$sign = str_replace('[removed]','data:image/png;base64,',$signature); 
+
+						 ?>
+						 
+						<img src="<?php echo $sign; ?>" style="width:210px; margin-left:55px;">
+						
 
 						<?php } ?>
-						
+						<p id="signature" <?php if(isset($value->picture3) && $value->picture3 !=""){ ?> style="margin-top:0;" <?php } ?>><?php echo display('Signature');?></p>
                     </div>
                 </div>
                 
@@ -296,4 +299,18 @@
     </div>
 	</div>
 
-
+<style>
+@page {
+    size: auto;
+    margin: 0;
+}
+@print {
+    @page :footer {
+        display: none
+    }
+  
+    @page :header {
+        display: none
+    }
+}
+</style>

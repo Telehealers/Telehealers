@@ -175,3 +175,5 @@ Stack trace:
   thrown in /home/ecomsolv/telehealers.in/zoom/generate_token.php on line 22
 [24-Apr-2021 08:58:36 America/Chicago] PHP Parse error:  syntax error, unexpected '$refersh_token' (T_VARIABLE), expecting ')' in /home/ecomsolv/telehealers.in/zoom/generate_token.php on line 28
 [24-Apr-2021 08:58:37 America/Chicago] PHP Parse error:  syntax error, unexpected '$refersh_token' (T_VARIABLE), expecting ')' in /home/ecomsolv/telehealers.in/zoom/generate_token.php on line 28
+[14-May-2021 18:46:52 Australia/Sydney] PHP Parse error:  syntax error, unexpected '<', expecting end of file in /home/telehea2/telehealers.in/zoom/create.php on line 42
+[14-May-2021 18:46:54 Australia/Sydney] PHP Parse error:  syntax error, unexpected '<', expecting end of file in /home/telehea2/telehealers.in/zoom/create.php on line 42

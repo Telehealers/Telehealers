@@ -17,6 +17,8 @@ class Doctor_controller extends CI_Controller {
 	       redirect('logout');
 	    }
 	  $this->load->model('admin/Doctor_model','doctor_model');
+	   $this->load->model('admin/email/Email_model','email_model');
+        $this->load->library('email');
 	}
 
   /*
@@ -165,7 +167,8 @@ class Doctor_controller extends CI_Controller {
 					'about_me' => $this->input->post('about_me',TRUE),
 					'service_place' => $this->input->post('service_place',TRUE),
 					'picture' => $image,
-					'picture2' => $image2
+					'picture2' => $image2,
+					'picture3' => $this->input->post('d_img_sig',TRUE)
 				);
                
 
@@ -374,6 +377,8 @@ class Doctor_controller extends CI_Controller {
 		$this->form_validation->set_rules('name', 'Name', 'trim|required|xss_clean');
 
 		$this->form_validation->set_rules('phone', 'Phone Number', 'trim|required|min_length[9]|max_length[15]');
+		
+		$this->form_validation->set_rules('phone', 'Phone Number', 'trim|required|min_length[10]|max_length[10]|is_unique[doctor_tbl.doctor_phone]');
 
 		$this->form_validation->set_rules('email', 'Email', 'valid_email|is_unique[log_info.email]');
 
@@ -581,6 +586,149 @@ class Doctor_controller extends CI_Controller {
 		  $this->session->set_flashdata('message',"<div class='alert alert-success msg'>".display('delete_msg')."</div>");
 		  redirect('admin/Doctor_controller/doctor_list');
 	  }
+	  
+	public function approve_doctor($log_id)
+	{
+		$sql_ud = "update doctor_tbl set approve = '2' where log_id = '$log_id'";
+		$this->db->query($sql_ud);
+		
+		$sql = "select email from log_info where log_id = '".$log_id."'";
+		$res = $this->db->query($sql);
+		$result = $res->result_array();
+		$doctor_email = $result[0]['email'];
+		
+		$sql2 = "select doctor_name from doctor_tbl where log_id = '".$log_id."'";
+		$res2 = $this->db->query($sql2);
+		$result2 = $res2->result_array();
+		$doctor_name = $result2[0]['doctor_name'];
+		
+		$ci = get_instance();
+		$ci->load->library('email');
+        $email_config = $this->email_model->email_config();
+		if(is_array($email_config) && count($email_config)>0){
+			$protocol = $email_config->protocol;
+			$smtp_host = $email_config->mailpath;
+			$smtp_port = $email_config->port;
+			$smtp_user = $email_config->sender;
+			$smtp_pass = $email_config->mailtype;
+		}
+        $config['protocol'] = $protocol;
+        $config['smtp_host'] = $smtp_host;
+        $config['smtp_port'] = $smtp_port;
+        $config['smtp_user'] = $smtp_user; 
+        $config['smtp_pass'] = $smtp_pass;
+        $config['charset'] = "utf-8";
+        $config['mailtype'] = "html";
+        $config['newline'] = "\r\n";
+		$ci->email->initialize($config);
+		
+		$message = '<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #f1f1f1;">
+    <center style="width: 100%; background-color: #f1f1f1;">
+        <div style="display: none; font-size: 1px;max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
+            &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
+        </div>
+        <div style="max-width: 600px; margin: 0 auto;" class="email-container">
+            <!-- BEGIN BODY -->
+            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
+                <tbody><tr>
+                    <td valign="top" class="bg_white" style="padding: 1em 2.5em 0 2.5em;">
+                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                            <tbody><tr>
+                                <td class="logo" style="text-align: left;">
+                                    <h1>
+                                        <a href="https://telehealers.in/">
+                                        <img src="https://telehealers.in/assets/uploads/images/telehe2.png">    
+                                        </a>
+                                    </h1>
+                                </td>
+                            </tr>
+                        </tbody></table>
+                    </td>
+                </tr>
+                <tr>
+                    </tr></tbody></table><table class="bg_white" role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                        <tbody><tr style="border-bottom: 1px solid rgba(0,0,0,.05);">
+                            <td valign="middle" width="100%" style="text-align:left; padding: 0 2.5em;">
+                                <div class="product-entry">
+                                    <div class="text">
+                                        <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Hi '.$doctor_name.',</h2>
+										<pYour account is activated now. </p>
+										<p>&nbsp;</p>
+										<p>You can start using it, You will receive messages, emails for keeping you updated with the platform information, appointments, community news.</p>
+										<p>Telehealers`s IT experts are available to ensure you get familiar with the platform</p>
+										<p>&nbsp;</p>
+										<p>If you need any improvement in the platform write us back at support@telehealers.in.
+Your feedback/requests are valuable to improve this platform.</p>
+										<p>&nbsp;</p>
+										<p>Take care!</p>
+										<p>Telehealers Team</p>
+										<p>&nbsp;</p>
+								    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody></table>
+                
+            
+            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
+                <tbody><tr>
+                    <td class="bg_white" style="text-align: center;">
+                    </td>
+                </tr>
+            </tbody></table>
 
+        </div>
+    </center>
+
+
+</body></html>';
+
+			$to_email = 'raghuveer@ecomsolver.com';
+			$ci->email->from('info@telehealers.in', 'telehealers');
+			$list = array($to_email);
+			$ci->email->to($list);
+			$this->email->reply_to('info@telehealers.in', 'telehealers');
+			$ci->email->subject('Doctor accept term & condition on telehealers.in');
+			$ci->email->message($message);
+			$ci->email->send();
+		
+		
+		$this->session->set_flashdata('message',"<div class='alert alert-success msg'>Doctor has been approve</div>");
+		redirect('admin/Doctor_controller/doctor_list');
+	} 
+	
+	public function approveDoctor()
+	{
+		$data['title'] = "Doctor approve";
+		
+		$content='';
+		$sql = "select * from doctor_content where id = '1'";
+		$res = $this->db->query($sql);
+		$result = $res->result_array();
+		if(is_array($result) && count($result)>0){
+			$content = $result[0]['content'];
+		}
+
+		$data['content'] = $content;
+
+		$this->load->view('admin/_header',$data);
+
+		$this->load->view('admin/_left_sideber');
+
+		$this->load->view('admin/doctor/approveDoctor');
+
+		$this->load->view('admin/_footer');
+		
+	} 
+
+	public function approveDoctorSave(){
+		$content = $this->input->post('content',TRUE);
+		$desc_str = addslashes($content);
+		$sql_ud = "update doctor_content set content = '$desc_str' where id = '1'";
+		$this->db->query($sql_ud);
+		$this->session->set_flashdata('message',"<div class='alert alert-success msg'>Content has been update successfully.</div>");
+		redirect('admin/Doctor_controller/approveDoctor');
+		
+	}
 
 }
