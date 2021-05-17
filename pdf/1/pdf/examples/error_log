@@ -1,0 +1,32 @@
+[12-May-2021 14:33:37 Australia/Sydney] PHP Parse error:  syntax error, unexpected '/', expecting end of file in /home/telehea2/telehealers.in/pdf/1/pdf/examples/example_051.php on line 213
+[12-May-2021 14:33:40 Australia/Sydney] PHP Parse error:  syntax error, unexpected '/', expecting end of file in /home/telehea2/telehealers.in/pdf/1/pdf/examples/example_051.php on line 213
+[12-May-2021 14:41:53 Australia/Sydney] PHP Warning:  A non-numeric value encountered in /home/telehea2/telehealers.in/pdf/1/pdf/tcpdf.php on line 6968
+[12-May-2021 14:41:53 Australia/Sydney] PHP Warning:  A non-numeric value encountered in /home/telehea2/telehealers.in/pdf/1/pdf/tcpdf.php on line 6969
+[12-May-2021 14:41:53 Australia/Sydney] PHP Warning:  imagecreatetruecolor(): Invalid image dimensions in /home/telehea2/telehealers.in/pdf/1/pdf/tcpdf.php on line 7042
+[12-May-2021 14:41:53 Australia/Sydney] PHP Warning:  imagecolorallocate() expects parameter 1 to be resource, boolean given in /home/telehea2/telehealers.in/pdf/1/pdf/include/tcpdf_images.php on line 109
+[12-May-2021 14:41:53 Australia/Sydney] PHP Warning:  imagefill() expects parameter 1 to be resource, boolean given in /home/telehea2/telehealers.in/pdf/1/pdf/include/tcpdf_images.php on line 110
+[12-May-2021 14:41:53 Australia/Sydney] PHP Warning:  imagecolortransparent() expects parameter 1 to be resource, boolean given in /home/telehea2/telehealers.in/pdf/1/pdf/include/tcpdf_images.php on line 111
+[12-May-2021 14:41:53 Australia/Sydney] PHP Warning:  imagecopyresampled() expects parameter 1 to be resource, boolean given in /home/telehea2/telehealers.in/pdf/1/pdf/tcpdf.php on line 7046
+[12-May-2021 14:41:53 Australia/Sydney] PHP Warning:  imageinterlace() expects parameter 1 to be resource, boolean given in /home/telehea2/telehealers.in/pdf/1/pdf/include/tcpdf_images.php on line 126
+[12-May-2021 14:41:53 Australia/Sydney] PHP Warning:  imagepng() expects parameter 1 to be resource, boolean given in /home/telehea2/telehealers.in/pdf/1/pdf/include/tcpdf_images.php on line 128
+[12-May-2021 14:41:53 Australia/Sydney] PHP Warning:  imagedestroy() expects parameter 1 to be resource, boolean given in /home/telehea2/telehealers.in/pdf/1/pdf/include/tcpdf_images.php on line 130
+[12-May-2021 14:42:41 Australia/Sydney] PHP Warning:  A non-numeric value encountered in /home/telehea2/telehealers.in/pdf/1/pdf/tcpdf.php on line 6968
+[12-May-2021 14:42:41 Australia/Sydney] PHP Warning:  A non-numeric value encountered in /home/telehea2/telehealers.in/pdf/1/pdf/tcpdf.php on line 6969
+[12-May-2021 14:42:41 Australia/Sydney] PHP Warning:  imagecreatetruecolor(): Invalid image dimensions in /home/telehea2/telehealers.in/pdf/1/pdf/tcpdf.php on line 7042
+[12-May-2021 14:42:41 Australia/Sydney] PHP Warning:  imagecolorallocate() expects parameter 1 to be resource, boolean given in /home/telehea2/telehealers.in/pdf/1/pdf/include/tcpdf_images.php on line 109
+[12-May-2021 14:42:41 Australia/Sydney] PHP Warning:  imagefill() expects parameter 1 to be resource, boolean given in /home/telehea2/telehealers.in/pdf/1/pdf/include/tcpdf_images.php on line 110
+[12-May-2021 14:42:41 Australia/Sydney] PHP Warning:  imagecolortransparent() expects parameter 1 to be resource, boolean given in /home/telehea2/telehealers.in/pdf/1/pdf/include/tcpdf_images.php on line 111
+[12-May-2021 14:42:41 Australia/Sydney] PHP Warning:  imagecopyresampled() expects parameter 1 to be resource, boolean given in /home/telehea2/telehealers.in/pdf/1/pdf/tcpdf.php on line 7046
+[12-May-2021 14:42:41 Australia/Sydney] PHP Warning:  imageinterlace() expects parameter 1 to be resource, boolean given in /home/telehea2/telehealers.in/pdf/1/pdf/include/tcpdf_images.php on line 126
+[12-May-2021 14:42:41 Australia/Sydney] PHP Warning:  imagepng() expects parameter 1 to be resource, boolean given in /home/telehea2/telehealers.in/pdf/1/pdf/include/tcpdf_images.php on line 128
+[12-May-2021 14:42:41 Australia/Sydney] PHP Warning:  imagedestroy() expects parameter 1 to be resource, boolean given in /home/telehea2/telehealers.in/pdf/1/pdf/include/tcpdf_images.php on line 130
+[12-May-2021 14:43:08 Australia/Sydney] PHP Warning:  A non-numeric value encountered in /home/telehea2/telehealers.in/pdf/1/pdf/tcpdf.php on line 6968
+[12-May-2021 14:43:08 Australia/Sydney] PHP Warning:  A non-numeric value encountered in /home/telehea2/telehealers.in/pdf/1/pdf/tcpdf.php on line 6969
+[12-May-2021 14:43:08 Australia/Sydney] PHP Warning:  imagecreatetruecolor(): Invalid image dimensions in /home/telehea2/telehealers.in/pdf/1/pdf/tcpdf.php on line 7042
+[12-May-2021 14:43:08 Australia/Sydney] PHP Warning:  imagecolorallocate() expects parameter 1 to be resource, boolean given in /home/telehea2/telehealers.in/pdf/1/pdf/include/tcpdf_images.php on line 109
+[12-May-2021 14:43:08 Australia/Sydney] PHP Warning:  imagefill() expects parameter 1 to be resource, boolean given in /home/telehea2/telehealers.in/pdf/1/pdf/include/tcpdf_images.php on line 110
+[12-May-2021 14:43:08 Australia/Sydney] PHP Warning:  imagecolortransparent() expects parameter 1 to be resource, boolean given in /home/telehea2/telehealers.in/pdf/1/pdf/include/tcpdf_images.php on line 111
+[12-May-2021 14:43:08 Australia/Sydney] PHP Warning:  imagecopyresampled() expects parameter 1 to be resource, boolean given in /home/telehea2/telehealers.in/pdf/1/pdf/tcpdf.php on line 7046
+[12-May-2021 14:43:08 Australia/Sydney] PHP Warning:  imageinterlace() expects parameter 1 to be resource, boolean given in /home/telehea2/telehealers.in/pdf/1/pdf/include/tcpdf_images.php on line 126
+[12-May-2021 14:43:08 Australia/Sydney] PHP Warning:  imagepng() expects parameter 1 to be resource, boolean given in /home/telehea2/telehealers.in/pdf/1/pdf/include/tcpdf_images.php on line 128
+[12-May-2021 14:43:08 Australia/Sydney] PHP Warning:  imagedestroy() expects parameter 1 to be resource, boolean given in /home/telehea2/telehealers.in/pdf/1/pdf/include/tcpdf_images.php on line 130

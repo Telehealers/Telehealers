@@ -102,10 +102,12 @@ public function get_appointment($venue_id=NULL,$date=NULL,$doctor_id=NULL)
 
      else{ 
 
-        $re = $this->chackSchedulDate_doctor($venue_id,$date,$doctor_id);    
+		//echo $date;die();
+        $re = $this->chackSchedulDate_doctor($venue_id,$date,$doctor_id);  
+		
 
         if($re==TRUE){
-
+			
             $result1 = $this->chackSchedulDate($venue_id,$date,$doctor_id);
           
             if($result1==TRUE){
@@ -169,7 +171,7 @@ public function get_appointment($venue_id=NULL,$date=NULL,$doctor_id=NULL)
             }               
 
           }else{
-
+			
              echo'<div class="col-md-12">
 
                 <div class="alert alert-danger">
@@ -246,13 +248,13 @@ public function get_appointment($venue_id=NULL,$date=NULL,$doctor_id=NULL)
    public function chackSchedulDate_doctor($venue_id,$date,$doctor_id)
 
    {    
-
+		
       $timestamp = strtotime($date);
 
       $day1 = date('D', $timestamp);
 
       $day = $this->hash_model->day_to_de($day1);
-
+	//echo $day;die();	
     #  get serial set id from serial_setup table #
 
             $this->db->select('schedul_id');
@@ -263,12 +265,14 @@ public function get_appointment($venue_id=NULL,$date=NULL,$doctor_id=NULL)
 			
 			$this->db->where('venue_id', $venue_id);
             
-
             $this->db->where('day', $day);
 
             $query_result = $this->db->get();
+			
+			//echo "<pre>";print_r($query_result);die();
 
-            if($query_result->num_rows()==1){
+            //if($query_result->num_rows()==1){
+			if($query_result->num_rows()>0){
 
               $r = $query_result->row();
 

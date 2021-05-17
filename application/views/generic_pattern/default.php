@@ -259,20 +259,24 @@
 
 					<?php //echo "signature--".$value->picture2; ?>
 					<?php 
-					if(isset($value->picture2) && $value->picture2 !=""){
+					if(isset($value->picture3) && $value->picture3 !=""){
+						
+						$signature = $value->picture3;
+						
+						$sign = str_replace('[removed]','data:image/png;base64,',$signature); 
 						
 						?>
-						<?php $signature = $value->picture2; ?>
+						<?php  ?>
 
-						<?php if($signature!=""){?>		
+						
 
-						<img src="<?php echo $signature; ?>" style="width:120px; margin-left:100px;">						
+						<img src="<?php echo $sign; ?>" style="width:210px; margin-left:55px;">						
 						<br><br>
-						<?php } ?>		
+				
 
 						<?php } ?>
 						
-						<p id="signature"><?php echo display('Signature');?></p>																				
+						<p id="signature" <?php if(isset($value->picture3) && $value->picture3 !=""){ ?> style="margin-top:0;" <?php } ?>><?php echo display('Signature');?></p>																				
                 </div>           
             </div>
 	            <div class="col-sm-12 footer1">
@@ -289,3 +293,18 @@
         </div>
 </div>
 
+<style>
+@page {
+    size: auto;
+    margin: 0;
+}
+@print {
+    @page :footer {
+        display: none
+    }
+  
+    @page :header {
+        display: none
+    }
+}
+</style>
