@@ -731,6 +731,11 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		$ci->load->library('email');
 		
 		$email_config = $this->email_model->email_config();
+		$protocol = NULL;
+		$smtp_host = NULL;
+		$smtp_port = NULL;
+		$smtp_user = NULL;
+		$smtp_pass = NULL;
 		if(is_array($email_config) && count($email_config)>0){
 			$protocol = $email_config->protocol;
 			$smtp_host = $email_config->mailpath;
