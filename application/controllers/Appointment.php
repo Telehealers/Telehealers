@@ -200,6 +200,7 @@ function createVideoCallRoom($doctor_name, $doctor_email, $patient_name, $patien
 			show_404();
 	}
 
+<<<<<<< HEAD
 
 	
 	curl_close($curl_session);
@@ -265,6 +266,8 @@ function createVideoCallInformationMail($participantInfoHTML) {
 #    save appointmaent 
 #----------------------------------------------  
 
+=======
+>>>>>>> 9df9bc55152fe8f093c70e9a4af075c2e041d4cf
  public function appointment(){ 
 		$this->form_validation->set_rules('p_date', 'Date', 'trim|required');
 		//$this->form_validation->set_rules('patient_id', 'Patient Id', 'trim|required');
@@ -678,12 +681,15 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		
 		if($refershToken!="" && $accessToken!=""){
 <<<<<<< HEAD
+<<<<<<< HEAD
 			/** Video call room creation **/				
 			$superpro_meeting_url = $this->createVideoCallRoom(
 				$doctor_name, $doctor_email,
 				$p_name, $p_email);
 			$meeting_pass = '';
 =======
+=======
+>>>>>>> 9df9bc55152fe8f093c70e9a4af075c2e041d4cf
 			
 			try {
 				$client = new GuzzleHttp\Client(['base_uri' => 'https://zoom.us']);
@@ -712,6 +718,9 @@ function createVideoCallInformationMail($participantInfoHTML) {
 				$meeting_pass = '';
 				$zoom_meeting_url = '';
 			}
+<<<<<<< HEAD
+>>>>>>> 9df9bc55152fe8f093c70e9a4af075c2e041d4cf
+=======
 >>>>>>> 9df9bc55152fe8f093c70e9a4af075c2e041d4cf
 		}else{
 			$meeting_pass = '';
