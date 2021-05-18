@@ -53,46 +53,9 @@ public function add_medicine()
 			redirect('admin/Setup_controller/add_medicine');
 		} else {
 
-			//company name insert
-			if(empty($this->input->post('company_id',TRUE))) {
-				$company  = array('company_name' =>$this->input->post('company_name',TRUE));
-				
-				$this->db->insert('medicine_company_info',$company);
-							
-				$company_id = $this->db->insert_id();
-				
-				$action_link = $company_id;
-				$user_id = $this->session->userdata('log_id');
-				$action_title = 'Add medicine company';
-				$action_description = 'User add medicine company';
-				$add_date = date('Y-m-d h:i:s');
-				$sql_int = "insert into user_action_log (user_id,action_title,action_description,action_link,add_date) values ('$user_id','$action_title','$action_description','$action_link','$add_date')";
-				$this->db->query($sql_int);
-				
-					
-			 	} else {
-			 		$company_id = $this->input->post('company_id',TRUE);
-			 	}
-			 //group name insert	
-			if(empty($this->input->post('group_id',TRUE))) {
-				$group['group_name'] = $this->input->post('group_name',TRUE);
-				$this->db->insert('medicine_group_tbl',$group);
-				$group_id = $this->db->insert_id();
-				$action_link = $group_id;
-				$user_id = $this->session->userdata('log_id');
-				$action_title = 'Add medicine group';
-				$action_description = 'User add medicine group';
-				$add_date = date('Y-m-d h:i:s');
-				$sql_int = "insert into user_action_log (user_id,action_title,action_description,action_link,add_date) values ('$user_id','$action_title','$action_description','$action_link','$add_date')";
-				$this->db->query($sql_int);	
-			 	} else {
-			 		$group_id = $this->input->post('group_id',TRUE);
-			 	}
-
+			
 			$medicine = array(
 				'medicine_name' => $this->input->post('medicine_name',TRUE),
-				'med_company_id' => $company_id,
-				'med_group_id' => $group_id,
 				'med_description' => $this->input->post('description',TRUE)
 			);
 			$this->db->insert('medecine_info',$medicine);
@@ -254,19 +217,9 @@ public function advice()
 #--------------------------------
 	public function delete_medicine($id=NULL)
 	{
-		$sql_medi = "select * from medecine_info where medicine_id = '".$id."' ";
-		$query_medi = $this->db->query($sql_medi);
-		$result_medi = $query_medi->result_array();
-		$medicine_name = $result_medi[0]['medicine_name'];
 		$this->db->where('medicine_id',$id)->delete('medecine_info');
-		$user_id = $this->session->userdata('log_id');
-			$action_title = 'Delete medecine';
-			$action_description = 'User delete medecine ('.$medicine_name.')';
-			$add_date = date('Y-m-d h:i:s');
-			$sql_int = "insert into user_action_log (user_id,action_title,action_description,add_date) values ('$user_id','$action_title','$action_description','$add_date')";
-			$this->db->query($sql_int);
-		$this->session->set_flashdata('exception','<div class="alert alert-danger msg">'.display('delete_msg').'</div><br>');
-		redirect('Medicine_List');
+		$this->session->set_flashdata('message','<div class="alert alert-success msg">'.display('delete_msg').'</div><br>');
+		redirect('admin/Setup_controller/medicine_List');
 	}
 
 #--------------------------------
@@ -288,8 +241,6 @@ public function advice()
 	{
 		$medicine = array(
 			'medicine_name' => $this->input->post('medicine_name',TRUE),
-			'med_company_id' => $this->input->post('company_id',TRUE),
-			'med_group_id' => $this->input->post('group_id',TRUE),
 			'med_description' => $this->input->post('description',TRUE)
 		);
 		$id = $this->input->post('id',TRUE);
@@ -371,5 +322,13 @@ public function advice()
 		$this->session->set_flashdata('exception','<div class="alert alert-success msg">'.display('delete_msg').'</div><br>');
 		redirect('admin/Setup_controller/add_medicine_group');
 	}
+	
+		/* public function delete_medicine($medicine_id=NULL)
+		{
+			$this->db->where('medicine_id',$medicine_id)
+			->delete('medecine_info');
+			$this->session->set_flashdata('exception','<div class="alert alert-success msg">'.display('delete_msg').'</div><br>');
+			redirect('admin/Setup_controller/medicine_List');
+		} */
 
 }		

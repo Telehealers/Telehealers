@@ -1,0 +1,32 @@
+version: "2"
+services:
+    db:
+        image: mysql
+        ports: 
+            # TODO: Remove this port for better security in development environment.
+            - ${SQL_MACHINE_PORT}:3306 
+        environment:
+            MYSQL_DATABASE: ${DB_NAME}
+            MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
+        volumes:
+            - ./:/docker-entrypoint-initdb.d
+            - persistent:/var/lib/mysql
+    php-ssl:
+        build:
+            context: .
+            dockerfile: PHPDockerfile
+        ports:
+            - ${HTTPS_MACHINE_PORT}:443
+        volumes:
+            - ./:/var/www/html
+            - ${APACHE_LOG_VOLUME}:/var/log/apache2
+        restart: always
+        environment:
+            DB_USERNAME: ${DB_USERNAME}
+            DB_PASSWORD : ${DB_PASSWORD}
+            DB_NAME : ${DB_NAME}
+            DB_HOSTNAME : 'db'
+            SUPERPRO_AUTH_TOKEN: ${SUPERPRO_AUTH_TOKEN}
+            SUPERPRO_CREATE_VIDEOCALL_API_ENDPOINT: ${SUPERPRO_CREATE_VIDEOCALL_API_ENDPOINT}
+volumes:
+    persistent:
