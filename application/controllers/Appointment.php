@@ -8,41 +8,41 @@ class Appointment extends CI_Controller {
 |   constructor funcion
 |--------------------------------------
 */ 
-	public function __construct() 
-	{
-		parent::__construct();
-		$this->load->library('email');
-		
-		$info= $this->db->select('*')->from('web_pages_tbl')->where('name','website_on_off')->get()->row();
-    
-        if($info->details=='off'){
-          redirect('login');
-        }
-        //Load Home_view_model
-        $this->load->model('web/Home_view_model','home_view_model');
-        //Load Overview model
-        $this->load->model('admin/Overview_model','overview_model');
-        //Load venue model
-        $this->load->model('admin/Venue_model','venue_model');
-        //load appointment model
-        $this->load->model('admin/Appointment_model','appointment_model');
-        //Load Basic model
-        $this->load->model('admin/basic_model','basic_model');
-        //Load Schedule model
-        $this->load->model('admin/Schedule_model','schedule_model');
-        //Load Patient model
-        $this->load->model('admin/Patient_model','patient_model');
-        // Load sms setup model
-        $this->load->model('admin/Sms_setup_model','sms_setup_model');
-		// Load Doctor model
-		$this->load->model('admin/Doctor_model','doctor_model');
-        //
-        $this->load->library('Smsgateway');
-		$this->load->library('session');
-        //
-        $this->load->model('admin/email/Email_model','email_model');
-        $this->load->library('email');
-  }
+public function __construct() 
+{
+	parent::__construct();
+	$this->load->library('email');
+	
+	$info= $this->db->select('*')->from('web_pages_tbl')->where('name','website_on_off')->get()->row();
+
+	if($info->details=='off'){
+		redirect('login');
+	}
+	//Load Home_view_model
+	$this->load->model('web/Home_view_model','home_view_model');
+	//Load Overview model
+	$this->load->model('admin/Overview_model','overview_model');
+	//Load venue model
+	$this->load->model('admin/Venue_model','venue_model');
+	//load appointment model
+	$this->load->model('admin/Appointment_model','appointment_model');
+	//Load Basic model
+	$this->load->model('admin/basic_model','basic_model');
+	//Load Schedule model
+	$this->load->model('admin/Schedule_model','schedule_model');
+	//Load Patient model
+	$this->load->model('admin/Patient_model','patient_model');
+	// Load sms setup model
+	$this->load->model('admin/Sms_setup_model','sms_setup_model');
+	// Load Doctor model
+	$this->load->model('admin/Doctor_model','doctor_model');
+	//
+	$this->load->library('Smsgateway');
+	$this->load->library('session');
+	//
+	$this->load->model('admin/email/Email_model','email_model');
+	$this->load->library('email');
+}
 
 
 
@@ -261,325 +261,6 @@ function createVideoCallInformationMail($participantInfoHTML) {
 #    save appointmaent 
 #----------------------------------------------  
 
-  public function appointment_old()
-  {
-		$ci = get_instance();
-		$ci->load->library('email');
-        $config['protocol'] = "tls";
-        $config['smtp_host'] = "inpro8.fcomet.com";
-        $config['smtp_port'] = "465";
-        $config['smtp_user'] = "info@telehealers.in"; 
-        $config['smtp_pass'] = "Ajay@1234%";
-        $config['charset'] = "utf-8";
-        $config['mailtype'] = "html";
-        $config['newline'] = "\r\n";
-		$ci->email->initialize($config);
-		
-		
-    $this->form_validation->set_rules('p_date', 'Date', 'trim|required');
-    //$this->form_validation->set_rules('patient_id', 'Patient Id', 'trim|required');
-    $this->form_validation->set_rules('venue_id', 'venue', 'trim|required'); 
-    $this->form_validation->set_rules('sequence', 'sequence', 'trim|required');
-	
-	 if($this->input->post('doctor_id')){
-		 $doctor_id = $this->input->post('doctor_id');
-	 }else{
-		 $doctor_id = '1';
-	 }
-	 if($this->input->post('service5') != ""){
-		 $doctor_id = $this->input->post('service5');
-	 }else{
-		 $doctor_id = '1';
-	 }
-
-	$p_name = $this->input->post('p_name',TRUE);
-	$p_email = $this->input->post('p_email',TRUE);
-	$p_phone = $this->input->post('p_phone',TRUE);
-	$p_age = $this->input->post('p_age',TRUE);
-	$p_gender = $this->input->post('p_gender',TRUE);
-	$create_date = date('Y-m-d h:i:s');
-	$patient_id = "P".date('y').strtoupper($this->randstrGenapp(5));
-	$birth_date = '';
-	 $savedata =  array(
-	'patient_id'    => $patient_id,
-	'patient_name' => $p_name,
-	'patient_email' => $p_email,
-	'patient_phone' => $p_phone, 
-	'birth_date' => $birth_date,
-	'doctor_id' => $doctor_id,
-	'sex' => $p_gender,
-	'age' => $p_age,
-	'blood_group' => '',
-	'address' => '',
-	'picture' => '',
-	'create_date'=>$create_date
-	);
-	$savedata = $this->security->xss_clean($savedata); 
-	$this->patient_model->save_patient($savedata);
-	
-	$service1 = $this->input->post('service1',TRUE);
-	$service2 = $this->input->post('service2',TRUE);
-	
-
-      if($this->form_validation->run()==true){
-          
-            date_default_timezone_set("Europe/Rome");
-            $h = date('h')-1;
-            $get_by = $this->session->userdata('log_id');
-
-          	$appointment_id = "A".date('y').strtoupper($this->randstrGenapp(5));
-          	$saveData = array(
-            'date' => $this->input->post('p_date',TRUE),
-            'patient_id' => $patient_id,
-            'appointment_id' =>$appointment_id,
-            'schedul_id' => $this->input->post('schedul_id',TRUE),
-            'sequence' => $this->input->post('sequence',TRUE),
-            'venue_id' => $this->input->post('venue_id',TRUE),
-            'doctor_id' => $doctor_id,
-            'problem' => $this->input->post('problem',TRUE),
-            'service' => $this->input->post('service1',TRUE),
-            'servicetype' => $this->input->post('service2',TRUE),
-			'get_date_time' => date("Y-m-d h:i:s"),
-            'get_by' => 'Won'
-            );
-			
-			$venue_id = $this->input->post('venue_id',TRUE);
-			$sql = "select * from venue_tbl where venue_id = '".$venue_id."'";
-			$res = $this->db->query($sql);
-			$result = $res->result_array();
-			//echo "<pre>";print_r($result);die();
-			if(is_array($result) && count($result)>0){
-				$venue_name = $result[0]['venue_name'];
-				$venue_contact = $result[0]['venue_contact'];
-				$venue_address = $result[0]['venue_address'];
-			}
-			$per_patient_time = '30';
-			$schedul_id = $this->input->post('schedul_id',TRUE);
-			$sql_sh = "select * from schedul_setup_tbl where schedul_id = '".$schedul_id."'";
-			$res_sh = $this->db->query($sql_sh);
-			$result_sh = $res_sh->result_array();
-			//echo "<pre>";print_r($result);die();
-			if(is_array($result_sh) && count($result_sh)>0){
-				$per_patient_time = $result_sh[0]['per_patient_time'];
-			}
-			
-
-			$sql = "select * from doctor_tbl where doctor_id = '".$doctor_id."'";
-			$res = $this->db->query($sql);
-			$result = $res->result_array();
-			if(is_array($result) && count($result)>0){
-				$doctor_name = $result[0]['doctor_name'];
-				$doc_id = $result[0]['doc_id'];
-				$log_id = $result[0]['log_id'];
-				$department = $result[0]['department'];
-				$designation = $result[0]['designation'];
-				$degrees = $result[0]['degrees'];
-				$specialist = $result[0]['specialist'];
-			}
-			if($log_id>0){
-				$sql_doc = "select * from log_info where log_id = '".$log_id."'";
-				$res_doc = $this->db->query($sql_doc);
-				$result_doc = $res_doc->result_array();
-				if(is_array($result_doc) && count($result_doc)>0){
-					$doctor_email = $result_doc[0]['email'];
-				}
-			}	
-						
-
-           $check = $this->appointment_model->Check_appointment($this->input->post('date'),$this->input->post('patient_id',TRUE));
-           if(!empty($check)){
-              $this->session->set_flashdata('exception',"<div class='alert alert-danger msg'>".display('appointment_error_msg')."</div>");
-              redirect('Welcome');
-           }else{
-
-            $this->appointment_model->SaveAppoin($saveData);               
-        
-            #-------------------------------
-            // sms information save
-            $info = $this->basic_model->get_appointment_print_result($appointment_id);
-            $start = $info->start_time;
-            $appointment_date = $info->date.' '.date('h:i:s', strtotime($start));
-            $save_sms_info_details = array(
-                'patient_id'        =>  $info->patient_id,
-                'doctor_id'         =>  $info->doctor_id,
-                'phone_no'          =>  $info->patient_phone,
-                'appointment_date'  =>  $appointment_date,
-                'appointment_id'    =>  $appointment_id
-                ); 
-            $this->appointment_model->Save_sms_info($save_sms_info_details);
-            #------------------------------- 
-            #-------------------------------
-            $sms_gateway_info = $this->db->select("*")->from('sms_gateway')->where('default_status',1)->get()->row();
-            // messate teamplate
-            $teamplate_info = $this->db->select("*")->from('sms_teamplate')->where('default_status',1)->get()->row();
-            // doctor
-            $dData = $this->db->get_where('doctor_tbl', ['doctor_id =' => 1])->row();
-            #---------------------------
-            // sms_setting    
-                if(!empty($teamplate_info) && !empty($sms_gateway_info)) {
-
-                    $template = $this->smsgateway->template([
-                         'doctor_name'      => $dData->doctor_name,
-                         'appointment_id'   => $appointment_id,
-                         'patient_name'     => $info->patient_name,
-                         'patient_id'       => $info->patient_id,
-                         'sequence'         => $info->sequence, 
-                         'appointment_date' => date('d F Y',strtotime($info->date)),
-                         'message'          => $teamplate_info->teamplate
-
-                    ]); 
-                      
-                    $this->smsgateway->send([
-                         'apiProvider' => $sms_gateway_info->provider_name,
-                         'username'    => $sms_gateway_info->user,
-                         'password'    => $sms_gateway_info->password,
-                         'from'        => $sms_gateway_info->authentication,
-                         'to'          => $info->patient_phone,
-                         'message'     => $template
-                    ]);
-
-                    #------------------------------
-                    // save delivary data
-                    $save_coustom = array(
-                        'gateway'     => $sms_gateway_info->provider_name,
-                        'reciver'     => $info->patient_phone,
-                        'message'     => $template       
-                    );
-                    $this->db->insert('custom_sms_info',$save_coustom);
-                }
-                #------------------------------ 
-				
-				
-
-				
-                #-----------------------------------------
-                  # email sending option
-                #-----------------------------------------
-                $email_config = $this->email_model->email_config();
-                // Email information save in email_info table
-                $start = $info->start_time;
-                $appointment_date = $info->date.' '.date('h:i:s', strtotime($start));
-              
-                $save_email_info = array(
-                'patient_id'                => $info->patient_id,
-                'doctor_id'                 => $info->doctor_id,
-                'patient_phone'             => $info->patient_phone,
-                'patient_email'             => $info->patient_email,
-                'appointment_date'          => $appointment_date,
-                'appointment_id'            => $appointment_id
-                ); 
-                $this->appointment_model->Save_email_info($save_email_info);
-                #-------------------------------
-                if($email_config->at_appointment==1){
-                 // gate email template
-                $email_temp_info = $this->db->select("*")->from('email_template')->where('default_status',1)->get()->row();
-              
-                if(!empty($email_temp_info) && !empty($info->patient_email)) {     
-              
-					$message = $this->template([
-						'doctor_name'      => $dData->doctor_name,
-						'appointment_id'   => $appointment_id,
-						'patient_name'     => $info->patient_name,
-						'patient_id'       => $info->patient_id,
-						'sequence'         => $info->sequence, 
-						'appointment_date' => date('d F Y',strtotime($info->date)),
-						'message'          => $email_temp_info->email_template
-					]); 
-
-                #----------------------------
-                    //$config = array();
-
-					
-				
-				$sql_tk = "select * from token where id = '1'";
-				$res_tk = $this->db->query($sql_tk);
-				$result_tk = $res_tk->result_array();
-				if(is_array($result_tk) && count($result_tk)>0){
-					$accessToken = $result_tk[0]['access_token'];
-				}
-				/** Video call room creation **/				
-				$superpro_meeting_url = $this->createVideoCallRoom(
-					$dData->doctor_name, $dData->doctor_email,
-					$info->patient_name, $info->patient_emil);
-
-				/* $config['protocol'] = $email_config->protocol;
-				$config['mailpath'] = 'smtp-relay.sendinblue.com';
-				$config['charset'] = 'utf-8';
-				$config['wordwrap'] = TRUE;
-				$config['mailtype'] = $email_config->mailtype; 
-				$this->email->initialize($config);*/
-				$message = createVideoCallRoom('<p>Hey <strong>'.$info->patient_name.'</strong>,</p>
-					<p>Our staff member has confirmed you for a '.$service1.' ('.$service2.') appointment on '.date('d F Y',strtotime($info->date)).' with Dr. '.$dData->doctor_name.' at '.$venue_address.'. If you have questions before your appointment,
-						use the contact details below to get in touch with us.</p>
-					<h2 style="text-align:center;font-weight:600;color:#356d82">Videocall Details:</h2>
-					<p>Superpro video call link: '.$superpro_meeting_url.',</p>
-					<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Appointment ID - ('.$appointment_id.')</h2><h1></h1>
-					<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Other Details:</h2><h1></h1>
-					<p>Location Name: '.$venue_name.'</p>
-					<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Service Details:</h2><h1></h1>
-					<p>Service Name: '.$service1.'</p>
-					<p>Service Type: '.$service2.',</p>
-					<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Doctor Details:</h2><h1></h1>
-					<p>Name: '.$doctor_name.'</p>
-					<p>Designation: '.$designation.',</p>
-					<p>Specialist: '.$specialist.',</p>
-					<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Patient Details:</h2>
-					<p>Name: '.$info->patient_name.'</p>
-					<p>ID: '.$info->patient_id.',</p>
-					<p>Email: '.$info->patient_email.',</p>
-					<p>Phone: '.$info->patient_phone.',</p>
-					<p>Age: '.$info->age.',</p>
-					<p>Gender: '.$info->sex.',</p>
-					<p>Patient Complaint: '.$info->sequence.',</p>
-					<p>Appointment Date: '.$appointment_date.',</p>
-					<p>Appointment ID: '.$appointment_id.',</p>');
-
-                    $ci->email->from('info@telehealers.in', 'telehealers');
-					$list = array($info->patient_email);
-					$ci->email->to($list);
-					$this->email->reply_to('info@telehealers.in', 'telehealers');
-					$ci->email->subject('Appointment Information');
-					$ci->email->message($message);
-					$ci->email->send();
-					
-					$ci->email->from('info@telehealers.in', 'telehealers');
-					$list = array($doctor_email);
-					$ci->email->to($list);
-					$this->email->reply_to('info@telehealers.in', 'telehealers');
-					$ci->email->subject('Appointment Information');
-					$ci->email->message($message);
-					$ci->email->send();
-					
-					
-                #-----------------------------
-                    // save email delivary data
-                    $save_email = array(
-                      'delivery_date_time '=> date("Y-m-d h:i:s"),
-                      'reciver_email '=> $info->patient_email,
-                      'message'     => $message       
-                    );
-                    $this->db->insert('email_delivery',$save_email);
-                    }
-
-                }   
-            #------------------------------
-            # End Email Sending option
-            #-------------------------------  
-            }
-           
-            $sdata = array();
-            $sdata['patient_id'] = $this->input->post('p_id',TRUE);
-            $sdata['date'] = $this->input->post('date',TRUE);
-            $sdata['appointment_id'] = $appointment_id;
-            $this->session->set_userdata($sdata);
-            $this->session->set_flashdata('message','<div class="alert alert-success msg">'.display('get_appointment_msg').'</div>');
-            redirect('Appointment/print_appointment_info');
-
-         }else{
-        	   redirect('Appointment');
-         }
-    }
-
 	public function appointment(){ 
 		$this->form_validation->set_rules('p_date', 'Date', 'trim|required');
 		//$this->form_validation->set_rules('patient_id', 'Patient Id', 'trim|required');
@@ -649,20 +330,19 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		
 		$create_date = date('Y-m-d h:i:s');
 		
-		$birth_date = '';
-		 $patient_info =  array(
-		'patient_id'    => $patient_id,
-		'patient_name' => $p_name,
-		'patient_email' => $p_email,
-		'patient_phone' => $p_phone, 
-		'birth_date' => $birth_date,
-		'doctor_id' => $doctor_id,
-		'sex' => $p_gender,
-		'age' => $p_age,
-		'blood_group' => '',
-		'address' => '',
-		'picture' => '',
-		'create_date'=>$create_date
+		$patient_info =  array(
+			'patient_id'    => $patient_id,
+			'patient_name' => $p_name,
+			'patient_email' => $p_email,
+			'patient_phone' => $p_phone, 
+			'birth_date' => '',
+			'doctor_id' => $doctor_id,
+			'sex' => $p_gender,
+			'age' => $p_age,
+			'blood_group' => '',
+			'address' => '',
+			'picture' => '',
+			'create_date'=>$create_date
 		);
 		
 		
@@ -892,19 +572,19 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		$create_date = date('Y-m-d h:i:s');
 		$birth_date='';
 		$savedata =  array(
-		'patient_id'    => $patient_id,
-		'patient_name' => $p_name,
-		'patient_email' => $p_email,
-		'log_id' => $log_id,
-		'patient_phone' => $p_phone, 
-		'birth_date' => $birth_date,
-		'doctor_id' => $doctor_id,
-		'sex' => $p_gender,
-		'age' => $p_age,
-		'blood_group' => '',
-		'address' => '',
-		'picture' => '',
-		'create_date'=>$create_date
+			'patient_id'    => $patient_id,
+			'patient_name' => $p_name,
+			'patient_email' => $p_email,
+			'log_id' => $log_id,
+			'patient_phone' => $p_phone, 
+			'birth_date' => $birth_date,
+			'doctor_id' => $doctor_id,
+			'sex' => $p_gender,
+			'age' => $p_age,
+			'blood_group' => '',
+			'address' => '',
+			'picture' => '',
+			'create_date'=>$create_date
 		);
 		$savedata = $this->security->xss_clean($savedata);
 		if($patient_exist==0){
@@ -949,18 +629,18 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		$date = $this->input->post('p_date',TRUE);
 		
 		$appointmentData = array(
-		'date' => $this->input->post('p_date',TRUE),
-		'patient_id' => $patient_id,
-		'appointment_id' =>$appointment_id,
-		'schedul_id' => $schedul_id,
-		'sequence' => $sequence,
-		'venue_id' => $this->input->post('venue_id',TRUE),
-		'doctor_id' => $doctor_id,
-		'problem' => $this->input->post('problem',TRUE),
-		'service' => $service1,
-		'servicetype' => $service2,
-		'get_date_time' => date("Y-m-d h:i:s"),
-		'get_by' => 'Won'
+			'date' => $this->input->post('p_date',TRUE),
+			'patient_id' => $patient_id,
+			'appointment_id' =>$appointment_id,
+			'schedul_id' => $schedul_id,
+			'sequence' => $sequence,
+			'venue_id' => $this->input->post('venue_id',TRUE),
+			'doctor_id' => $doctor_id,
+			'problem' => $this->input->post('problem',TRUE),
+			'service' => $service1,
+			'servicetype' => $service2,
+			'get_date_time' => date("Y-m-d h:i:s"),
+			'get_by' => 'Won'
 		);
 		
 		$p_cc = $this->input->post('problem',TRUE);
@@ -988,24 +668,11 @@ function createVideoCallInformationMail($participantInfoHTML) {
 			}
 		}	
 		
-		$sql_tk = "select * from token where id = '1'";
-		$res_tk = $this->db->query($sql_tk);
-		$result_tk = $res_tk->result_array();
-		if(is_array($result_tk) && count($result_tk)>0){
-			$accessToken = $result_tk[0]['access_token'];
-			$refershToken = $result_tk[0]['refersh_token'];
-		}
-		
-		if($refershToken!="" && $accessToken!=""){
-			/** Video call room creation **/				
-			$superpro_meeting_url = $this->createVideoCallRoom(
-				$doctor_name, $doctor_email,
-				$p_name, $p_email);
-			$meeting_pass = '';
-		}else{
-			$meeting_pass = '';
-			$superpro_meeting_url = '';
-		}
+		/** Video call room creation **/				
+		$superpro_meeting_url = $this->createVideoCallRoom(
+			$doctor_name, $doctor_email,
+			$p_name, $p_email);
+		$meeting_pass = '';
 
 		$symt1 = $superpro_meeting_url;
 		$symt2 = $meeting_pass;
@@ -1027,7 +694,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 			<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Patient Details:</h2>
 			<p>Name: '.$p_name.'</p>
 			<p>ID: '.$patient_id.'</p>
-			<p>Email: '.$p_email.'</p>
+			<p>Email: '.$p_email.'.Enter this in videocall link to join.</p>
 			<p>Phone: '.$p_phone.'</p>
 			<p>Age: '.$p_age.'</p>
 			<p>Gender: '.$p_gender.',</p>
@@ -1054,21 +721,21 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		
 		
 		$appointmentData = array(
-		'date' => $this->input->post('p_date',TRUE),
-		'patient_id' => $patient_id,
-		'doctor_name' => $doctor_name,
-		'appointment_id' =>$appointment_id,
-		'schedul_id' => $schedul_id,
-		'sequence' => $sequence,
-		'venue_id' => $this->input->post('venue_id',TRUE),
-		'venue_name' => $venue_name,
-		'doctor_id' => $doctor_id,
-		'problem' => $this->input->post('problem',TRUE),
-		'service' => $service1,
-		'servicetype' => $service2,
-		'get_date_time' => date("Y-m-d h:i:s"),
-		'get_by' => 'Won',
-		'fees' => '0'
+			'date' => $this->input->post('p_date',TRUE),
+			'patient_id' => $patient_id,
+			'doctor_name' => $doctor_name,
+			'appointment_id' =>$appointment_id,
+			'schedul_id' => $schedul_id,
+			'sequence' => $sequence,
+			'venue_id' => $this->input->post('venue_id',TRUE),
+			'venue_name' => $venue_name,
+			'doctor_id' => $doctor_id,
+			'problem' => $this->input->post('problem',TRUE),
+			'service' => $service1,
+			'servicetype' => $service2,
+			'get_date_time' => date("Y-m-d h:i:s"),
+			'get_by' => 'Won',
+			'fees' => '0'
 		);
 
 		$data['appointmentData'] = $appointmentData; 	
@@ -1100,8 +767,13 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		
 		$ci = get_instance();
 		$ci->load->library('email');
-		
-        $email_config = $this->email_model->email_config();
+		//Necessary variable initialization
+		$protocol = NULL;
+		$smtp_host = NULL;
+		$smtp_port = NULL;
+		$smtp_user = NULL;
+		$smtp_pass = NULL;
+        $email_config = NULL;
 		if(is_array($email_config) && count($email_config)>0){
 			$protocol = $email_config->protocol;
 			$smtp_host = $email_config->mailpath;
@@ -1186,6 +858,15 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		$sql = "select * from doctor_tbl where doctor_id = '".$doctor_id."'";
 		$res = $this->db->query($sql);
 		$result = $res->result_array();
+		// Intialization of doctor info variable
+		// Necessary, do not remove.
+		$doctor_name = NULL;
+		$doc_id = NULL;
+		$log_id = NULL;
+		$department = NULL;
+		$designation = NULL;
+		$degrees = NULL;
+		$specialist = NULL;
 		if(is_array($result) && count($result)>0){
 				$doctor_name = $result[0]['doctor_name'];
 				$doc_id = $result[0]['doc_id'];
@@ -1211,23 +892,12 @@ function createVideoCallInformationMail($participantInfoHTML) {
 			$refershToken = $result_rk[0]['refersh_token'];
 		}
 		
-		$sql_tk = "select * from token where id = '1'";
-		$res_tk = $this->db->query($sql_tk);
-		$result_tk = $res_tk->result_array();
-		if(is_array($result_tk) && count($result_tk)>0){
-			$accessToken = $result_tk[0]['access_token'];
-		}
-		
-		if($refershToken!="" && $accessToken!=""){
-			/** Video call room creation **/				
-			$superpro_meeting_url = $this->createVideoCallRoom(
-				$doctor_name, $doctor_email,
-				$p_name, $p_email);
-			$meeting_pass = '';
-		}else{
-			$meeting_pass = '';
-			$superpro_meeting_url = '';
-		}
+
+		/** Video call room creation **/				
+		$superpro_meeting_url = $this->createVideoCallRoom(
+			$doctor_name, $doctor_email,
+			$p_name, $p_email);
+		$meeting_pass = '';
 		
 		
 		
@@ -1251,7 +921,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 			<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Patient Details:</h2>
 			<p>Name: '.$p_name.'</p>
 			<p>ID: '.$patient_id.'</p>
-			<p>Email: '.$p_email.'</p>
+			<p>Email: '.$p_email.'.Enter this in videocall link to join.</p>
 			<p>Phone: '.$p_phone.'</p>
 			<p>Age: '.$p_age.'</p>
 			<p>Gender: '.$p_gender.',</p>
