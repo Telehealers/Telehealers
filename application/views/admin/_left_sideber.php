@@ -213,7 +213,7 @@ if($user_type==1){
 
                         <li class="treeview setup_data">
                             <a href="#">
-                                <i class="fa fa-bar-chart-o fa-fw"></i><span> <?php echo display('setup_data')?> </span>
+                                <i class="fa fa-bar-chart-o fa-fw"></i><span> Medicine </span>
                                 <span class="pull-right-container">
                                     <i class="fa fa-angle-left pull-right"></i>
                                 </span>
@@ -222,8 +222,8 @@ if($user_type==1){
                             <ul class="treeview-menu">
                                 <li><a href="<?php echo base_url();?>admin/Setup_controller/add_medicine" class="nav-link"> <?php echo display('add_medicine')?></a></li>
                                 <li><a href="<?php echo base_url();?>admin/Setup_controller/medicine_List" class="nav-link"> <?php echo display('medicine_List')?></a></li>
-                                <li> <a href="<?php echo base_url();?>admin/Setup_controller/add_medicine_company" class="nav-link"> <?php echo display('add_company')?></a></li>
-                                <li> <a href="<?php echo base_url();?>admin/Setup_controller/add_medicine_group" class="nav-link"></i> <?php echo display('add_group')?></a></li>
+                                <!--<li> <a href="<?php echo base_url();?>admin/Setup_controller/add_medicine_company" class="nav-link"> <?php echo display('add_company')?></a></li>
+                                <li> <a href="<?php echo base_url();?>admin/Setup_controller/add_medicine_group" class="nav-link"></i> <?php echo display('add_group')?></a></li>-->
                                 <li> <a href="<?php echo base_url();?>admin/Setup_controller/advice" class="nav-link"> <?php echo display('add_advice')?></a></li>
                                 <li> <a href="<?php echo base_url();?>admin/Disease_test_controller/add_new_test" class="nav-link"> <?php echo display('add_test_name')?></a></li>
                                 <li>  <a href="<?php echo base_url();?>admin/Disease_test_controller/test_list" class="nav-link"> <?php echo display('test_list')?></a></li>
@@ -611,7 +611,7 @@ if($user_type==1){
 
                      <li class="treeview setup_data">
                         <a href="#">
-                           <i class="fa fa-bar-chart-o fa-fw"></i> <?php echo display('setup_data')?>
+                           <i class="fa fa-bar-chart-o fa-fw"></i> Medicine
                                 <span class="pull-right-container">
                                     <i class="fa fa-angle-left pull-right"></i>
                                 </span>
@@ -619,8 +619,8 @@ if($user_type==1){
                      <ul class="treeview-menu">
                         <li><a href="<?php echo base_url();?>admin/Setup_controller/add_medicine" class="nav-link"> <?php echo display('add_medicine')?></a></li>
                         <li><a href="<?php echo base_url();?>admin/Setup_controller/medicine_List" class="nav-link"> <?php echo display('medicine_List')?></a></li>
-                        <li> <a href="<?php echo base_url();?>admin/Setup_controller/add_medicine_company" class="nav-link"> <?php echo display('add_company')?></a></li>
-                        <li> <a href="<?php echo base_url();?>admin/Setup_controller/add_medicine_group" class="nav-link"></i> <?php echo display('add_group')?></a></li>
+                        <!--<li> <a href="<?php echo base_url();?>admin/Setup_controller/add_medicine_company" class="nav-link"> <?php echo display('add_company')?></a></li>
+                        <li> <a href="<?php echo base_url();?>admin/Setup_controller/add_medicine_group" class="nav-link"></i> <?php echo display('add_group')?></a></li>-->
                         <li> <a href="<?php echo base_url();?>admin/Setup_controller/advice" class="nav-link"> <?php echo display('add_advice')?></a></li>
                         <li> <a href="<?php echo base_url();?>admin/Disease_test_controller/add_new_test" class="nav-link"> <?php echo display('add_test_name')?></a></li>
                         <li>  <a href="<?php echo base_url();?>admin/Disease_test_controller/test_list" class="nav-link"> <?php echo display('test_list')?></a></li>
@@ -753,7 +753,7 @@ if($user_type==1){
 
                      <li class="treeview setup_data">
                         <a href="#">
-                           <i class="fa fa-bar-chart-o fa-fw"></i> <?php echo display('setup_data')?>
+                           <i class="fa fa-bar-chart-o fa-fw"></i> Medicine
                                 <span class="pull-right-container">
                                     <i class="fa fa-angle-left pull-right"></i>
                                 </span>
@@ -761,8 +761,8 @@ if($user_type==1){
                      <ul class="treeview-menu">
                         <li><a href="<?php echo base_url();?>admin/Setup_controller/add_medicine" class="nav-link"> <?php echo display('add_medicine')?></a></li>
                         <li><a href="<?php echo base_url();?>admin/Setup_controller/medicine_List" class="nav-link"> <?php echo display('medicine_List')?></a></li>
-                        <li> <a href="<?php echo base_url();?>admin/Setup_controller/add_medicine_company" class="nav-link"> <?php echo display('add_company')?></a></li>
-                        <li> <a href="<?php echo base_url();?>admin/Setup_controller/add_medicine_group" class="nav-link"></i> <?php echo display('add_group')?></a></li>
+                       <!-- <li> <a href="<?php echo base_url();?>admin/Setup_controller/add_medicine_company" class="nav-link"> <?php echo display('add_company')?></a></li>
+                        <li> <a href="<?php echo base_url();?>admin/Setup_controller/add_medicine_group" class="nav-link"></i> <?php echo display('add_group')?></a></li>-->
                         <li> <a href="<?php echo base_url();?>admin/Setup_controller/advice" class="nav-link"> <?php echo display('add_advice')?></a></li>
                         <li> <a href="<?php echo base_url();?>admin/Disease_test_controller/add_new_test" class="nav-link"> <?php echo display('add_test_name')?></a></li>
                         <li>  <a href="<?php echo base_url();?>admin/Disease_test_controller/test_list" class="nav-link"> <?php echo display('test_list')?></a></li>

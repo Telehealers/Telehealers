@@ -190,6 +190,7 @@
 		   $('#bb_app').removeClass("btn_disable");
 		   $('#message_id').html('');
 		   $('#message_id').removeClass('alert alert-danger');
+		   setSlot();
         } 
 
         // load slider

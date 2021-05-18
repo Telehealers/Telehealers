@@ -1147,7 +1147,7 @@ public function registration()
             $this->session->set_flashdata('exception',"<div class='alert alert-success'>".display('register_msg')." <strong>Patient Id : ".$patient_id."</strong></div>");
             redirect('Welcome');
         } else {
-          $this->session->set_flashdata('exception',"<div class='alert alert-danger'>Some fild are messiong, Please Try again.</div>");
+          $this->session->set_flashdata('exception',"<div class='alert alert-danger'>Some field are messiong, Please Try again.</div>");
           redirect('Welcome');
         }
 }

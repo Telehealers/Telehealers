@@ -29,13 +29,11 @@
                     </div>
                 </div>
 
-                    <div class="panel-body">
+                    <div class="panel-body">					<?php					$mag = $this->session->flashdata('message');					echo $mag;										?>
                         <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables">
                              <thead>
                                 <tr class="center">
                                     <th class="all"><?php echo display('medicine_name');?></th>
-                                    <th class="all"><?php echo display('company_name');?></th>
-                                    <th class="all"><?php echo display('group_name');?></th>
                                     <th class="all"><?php echo display('medicine_description');?></th>
                                     <th class="all"><?php echo display('action');?> </th>
                                 </tr>
@@ -47,12 +45,10 @@
                                 ?>
                                     <tr>
                                         <td><?php echo html_escape($value->medicine_name);?></td>
-                                        <td><?php echo html_escape($value->company_name);?></td>
-                                        <td><?php echo html_escape($value->group_name);?></td>
                                         <td><?php echo html_escape($value->med_description);?></td>
                                         <td class="text-right">
                                             <a href="<?php echo base_url();?>admin/Setup_controller/edit_medicine/<?php echo html_escape($value->medicine_id);?>" class="btn btn-xs btn-info">
-                                            <i class="fa fa-edit"></i> </a>
+                                            <i class="fa fa-edit"></i> </a>																						 <a onclick="return confirm('Are you want to delete?');" class="btn btn-xs btn-danger" data-toggle="tooltip" title="Delete" href="<?php echo base_url();?>admin/Setup_controller/delete_medicine/<?php echo html_escape($value->medicine_id); ?>"><i class="fa fa-trash" aria-hidden="true"></i></a>
                                         </td>
                                     </tr>
                                 <?php } ?>
