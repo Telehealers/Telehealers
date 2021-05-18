@@ -559,6 +559,10 @@ $(document).ready(function(){
 			$('.multi_step_form .book_popup_4').remove();
 		}	
 	});
+	
+	$(document).on("change","#p_email",function(){
+	    setSlot();
+	});
 	$(document).on("change","#p_email_old",function(){
 		var email = $(this).val();
 		base_url = $('#base_url').val();
@@ -896,6 +900,7 @@ function setSlot(){
 					$('#bb_app').addClass("btn_disable");
 					$('#message_id').addClass('alert alert-danger');
 					$('#message_id').html('Sorry You already get apointment in this date');
+					$('#p_date').val('');
 				}else{
 					$('#bb_app').attr("disabled", false);
 					$('#bb_app').removeClass("btn_disable");

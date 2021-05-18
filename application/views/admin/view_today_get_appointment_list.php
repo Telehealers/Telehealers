@@ -60,19 +60,47 @@
                                      ->num_rows();
 
                                     @$sequence_time = $value->sequence-1; 
+                                    
                                     $time = ($sequence_time * $value->per_patient_time);
-                                    $serial_time =date('h:i A', strtotime($value->start_time)+$time*60);																						$SQL = 'select doctor_name from doctor_tbl where doctor_id != "'.$value->doctor_id.'"';											$query = $this->db->query($SQL);									$result2 = $query->result_array();									$doctor_name = '-';									if(is_array($result2) && count($result2)>0){										$doctor_name = $result2[0]['doctor_name'];									}									
+                                    
+                                    $serial_time =date('h:i A', strtotime($value->start_time)+$time*60);
+                                    
+                                    $SQL2 = 'select doctor_name from doctor_tbl where doctor_id = "'.$value->doctor_id.'"';	
+                                    
+                                    $query2 = $this->db->query($SQL2);					
+                                    
+                                    $result2 = $query2->result_array();					
+                                    
+                                    $doctor_name = '-';								
+                                    
+                                    if(is_array($result2) && count($result2)>0){	
+                                        
+                                        $doctor_name = $result2[0]['doctor_name'];	
+                                        
+                                        
+                                    }							
+                                    
+                                    
                                 ?>
+                                
 
-                                    <tr <?php echo ($result>0)?'class="green"':''?> >									<td><?php echo html_escape($doctor_name);?></td>
+
+                                    <tr <?php echo ($result>0)?'class="green"':''?> >
+                                    <td><?php echo html_escape($doctor_name);?></td>
                                     <td><?php echo html_escape($value->patient_name);?></td>
                                     <td><?php echo html_escape($value->patient_id);?></td>
                                     <td><?php echo html_escape($value->patient_phone);?></td>
                                     <td><?php echo html_escape($value->problem);?></td>
                                     <td><?php echo html_escape($value->appointment_id);?></td>
                                     <td><?php echo html_escape($value->venue_name);?></td>
-                                    <td><?php echo html_escape($serial_time);?></td>
-                                    <td><?php echo html_escape($value->date);?></td>
+                                    <td><?php
+		$app_time = date('h:i A', strtotime($value->sequence));
+		?>
+									<?php echo $app_time ;?></td>
+                                    <td><?php
+		$app_date = date('jS F Y',strtotime($value->date));
+		?>
+									<?php echo  $app_date; ?></td>
                                     <td>
                                         <?php echo '<a class="btn btn-sm btn-primary" href="javascript:void(0)" title="send sms" onclick="sms_send('."'".$value->appointment_id."'".')"><i class="fa fa-envelope-o" aria-hidden="true"></i> SMS</a>';?>
                                     </td>

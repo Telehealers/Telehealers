@@ -20,10 +20,10 @@
 
 // ** MySQL settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-define( 'DB_NAME', 'telehea2_telehealers' );
+define( 'DB_NAME', 'telehea2_telehealers_new' );
 
 /** MySQL database username */
-define( 'DB_USER', 'telehea2_telehealers' );
+define( 'DB_USER', 'telehea2_telehealers_new' );
 
 /** MySQL database password */
 define( 'DB_PASSWORD', '#&$H3enA1Shd(*3!()' );
