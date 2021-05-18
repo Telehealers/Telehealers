@@ -702,7 +702,7 @@ public function registration()
             $this->session->set_flashdata('exception',"<div class='alert alert-success'>".display('register_msg')." <strong>Patient Id : ".$patient_id."</strong></div>");
             redirect('Welcome');
         } else {
-          $this->session->set_flashdata('exception',"<div class='alert alert-danger'>Some fild are messiong, Please Try again.</div>");
+          $this->session->set_flashdata('exception',"<div class='alert alert-danger'>Some field are messiong, Please Try again.</div>");
           redirect('Welcome');
         }
 }
@@ -901,7 +901,7 @@ public function registration()
 		$sql = "select id,doctors from servicetype where servicetype = '".$servicestype."'";
 		$res = $this->db->query($sql);
 		$result = $res->result_array();
-		
+        $doctors=NULL;
 		if(is_array($result) && count($result)>0){
 			$service_id = $result[0]['id'];
 			$doctors    = $result[0]['doctors'];

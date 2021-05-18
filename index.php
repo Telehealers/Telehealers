@@ -321,7 +321,7 @@ Check Database Connection
 ----------------------------
 *********/
 include('application/config/database.php');
-$mysqli = new mysqli($db['default']['hostname'],$db['default']['username'],$db['default']['password'],$db['default']['database']);
+$mysqli = new mysqli(getenv("DB_HOSTNAME"),getenv("DB_USERNAME"),getenv("DB_PASSWORD"),getenv("DB_NAME"));
 
 // Check connection
 if ($mysqli -> connect_errno) {

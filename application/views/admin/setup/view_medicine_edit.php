@@ -51,27 +51,6 @@
                                     </div>
                                 </div>
                                 <input type="hidden" name="id" value="<?php  echo html_escape($medicine->medicine_id);?>"> 
-
-                               
-                                <div class="form-group">
-                                    <label class="col-md-3 control-label"><span class="text-danger">*</span><?php echo display('company_name');?> :</label>
-                                    <div class="col-md-5">
-                                        <input type="text" id="search-box" class="form-control" value="<?php  echo html_escape($medicine->company_name); ?>" placeholder="<?php echo display('company_name');?>" required />
-                                        <input type="hidden"  name="company_id" id="search-company_id" value="<?php  echo html_escape($medicine->med_company_id); ?>" />
-                                        <div id="suggesstion-box"></div>
-                                    </div>
-                                </div>
-
-                                
-                                <div class="form-group">
-                                    <label class="col-md-3 control-label"><span class="text-danger">*</span><?php echo display('group_name');?> :</label>
-                                    <div class="col-md-5">
-                                       <input type="text" name="group_id" id="search-group" value="<?php  echo html_escape($medicine->group_name); ?>" class="form-control" placeholder="<?php echo display('group_name');?>" required />
-                                       <input type="hidden" name="group_id" id="search-group_id" value="<?php  echo html_escape($medicine->med_group_id); ?>" />
-                                       <div id="suggesstion-group"></div>
-                                    </div>
-                                </div>
-
                                 <div class="form-group">
                                     <label class="col-md-3 control-label"><?php echo display('medicine_description');?> :</label>
                                     <div class="col-md-5">

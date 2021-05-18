@@ -50,25 +50,7 @@
                                 </div>
 
                                
-                                <div class="form-group">
-                                    <label class="col-md-3 control-label"><span class="text-danger">*</span><?php echo display('company_name');?> :</label>
-                                    <div class="col-md-6">
-                                        <input type="text" class="form-control" autocomplete="off" id="search-box" placeholder="<?php echo display('company_name');?>" data-toggle="tooltip" title="Company Name" name="company_name" required />
-                                        <input type="hidden" autocomplete="off"  name="company_id" id="search-company_id" value="" />
-                                        <div id="suggesstion-box"></div>
-                                    </div>
-                                </div>
-
-                                
-                                <div class="form-group">
-                                    <label class="col-md-3 control-label"><?php echo display('group_name');?> :</label>
-                                    <div class="col-md-6">
-                                       <input type="text" name="group_name" autocomplete="off" id="search-group" class="form-control" data-toggle="tooltip" title="Group Name " placeholder="<?php echo display('group_name');?>" required />
-                                       <input type="hidden" autocomplete="off" name="group_id" id="search-group_id" value="" />
-                                       <div id="suggesstion-group"></div>
-                                    </div>
-                                </div>
-
+                             
                                 <div class="form-group">
                                     <label class="col-md-3 control-label"><?php echo display('medicine_description');?> :</label>
                                     <div class="col-md-6">
