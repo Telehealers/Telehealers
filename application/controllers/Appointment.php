@@ -8,41 +8,41 @@ class Appointment extends CI_Controller {
 |   constructor funcion
 |--------------------------------------
 */ 
-	public function __construct() 
-	{
-		parent::__construct();
-		$this->load->library('email');
-		
-		$info= $this->db->select('*')->from('web_pages_tbl')->where('name','website_on_off')->get()->row();
-    
-        if($info->details=='off'){
-          redirect('login');
-        }
-        //Load Home_view_model
-        $this->load->model('web/Home_view_model','home_view_model');
-        //Load Overview model
-        $this->load->model('admin/Overview_model','overview_model');
-        //Load venue model
-        $this->load->model('admin/Venue_model','venue_model');
-        //load appointment model
-        $this->load->model('admin/Appointment_model','appointment_model');
-        //Load Basic model
-        $this->load->model('admin/basic_model','basic_model');
-        //Load Schedule model
-        $this->load->model('admin/Schedule_model','schedule_model');
-        //Load Patient model
-        $this->load->model('admin/Patient_model','patient_model');
-        // Load sms setup model
-        $this->load->model('admin/Sms_setup_model','sms_setup_model');
-		// Load Doctor model
-		$this->load->model('admin/Doctor_model','doctor_model');
-        //
-        $this->load->library('Smsgateway');
-		$this->load->library('session');
-        //
-        $this->load->model('admin/email/Email_model','email_model');
-        $this->load->library('email');
-  }
+public function __construct() 
+{
+	parent::__construct();
+	$this->load->library('email');
+	
+	$info= $this->db->select('*')->from('web_pages_tbl')->where('name','website_on_off')->get()->row();
+
+	if($info->details=='off'){
+		redirect('login');
+	}
+	//Load Home_view_model
+	$this->load->model('web/Home_view_model','home_view_model');
+	//Load Overview model
+	$this->load->model('admin/Overview_model','overview_model');
+	//Load venue model
+	$this->load->model('admin/Venue_model','venue_model');
+	//load appointment model
+	$this->load->model('admin/Appointment_model','appointment_model');
+	//Load Basic model
+	$this->load->model('admin/basic_model','basic_model');
+	//Load Schedule model
+	$this->load->model('admin/Schedule_model','schedule_model');
+	//Load Patient model
+	$this->load->model('admin/Patient_model','patient_model');
+	// Load sms setup model
+	$this->load->model('admin/Sms_setup_model','sms_setup_model');
+	// Load Doctor model
+	$this->load->model('admin/Doctor_model','doctor_model');
+	//
+	$this->load->library('Smsgateway');
+	$this->load->library('session');
+	//
+	$this->load->model('admin/email/Email_model','email_model');
+	$this->load->library('email');
+}
 
 
 
@@ -153,11 +153,115 @@ function randstrGenapp($len)
     }
     return $result;
 }
+
+#-----------------------------------------------
+#   Superpro API: Create call room.
+#	Returns Video call link.
+#-----------------------------------------------
+function createVideoCallRoom($doctor_name, $doctor_email, $patient_name, $patient_email) {
+	$curl_session = curl_init();
+	curl_setopt_array($curl_session, array(
+		CURLOPT_URL => getenv('SUPERPRO_CREATE_VIDEOCALL_API_ENDPOINT'),
+		CURLOPT_RETURNTRANSFER => true,
+		CURLOPT_ENCODING => '',
+		CURLOPT_MAXREDIRS => 10,
+		CURLOPT_TIMEOUT => 0,
+		CURLOPT_FOLLOWLOCATION => true,
+		CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+		CURLOPT_RETURNTRANSFER => true,
+		CURLOPT_CUSTOMREQUEST => 'POST',
+		CURLOPT_POSTFIELDS =>'{
+		"usersAdd":[
+			{
+				"name":"'.$doctor_name.'",
+				"email":"'.$doctor_email.'",
+				"role":"host"
+			},
+			{
+				"name":"'.$patient_name.'",
+				"email":"'.$patient_email.'",
+				"role":"aud"
+			}
+		]
+	}
+	',
+		CURLOPT_HTTPHEADER => array(
+		'Authorization: Bearer '.getenv('SUPERPRO_AUTH_TOKEN'),
+		'Content-Type: application/json'
+		),
+	));
+	$superpro_response = curl_exec($curl_session);
+	if (!$superpro_response) {
+		log_message('error',$e->getMessage());
+		show_404();
+	}
+
+
+	
+	curl_close($curl_session);
+	$superpro_data = json_decode($superpro_response);
+	return $superpro_data->videoCallUrl ;
+	
+}
+#-----------------------------------------------
+#   Input: Client & Dr. Details in HTML in <p>...</p> format.
+#	Returns: Email msg for a video-call.
+#-----------------------------------------------
+function createVideoCallInformationMail($participantInfoHTML) {
+	return '<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #f1f1f1;">
+		<center style="width: 100%; background-color: #f1f1f1;">
+			<div style="display: none; font-size: 1px;max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
+				&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
+			</div>
+			<div style="max-width: 600px; margin: 0 auto;" class="email-container">
+				<!-- BEGIN BODY -->
+				<table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
+					<tbody><tr>
+						<td valign="top" class="bg_white" style="padding: 1em 2.5em 0 2.5em;">
+							<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+								<tbody><tr>
+									<td class="logo" style="text-align: left;">
+										<h1>
+											<a href="http://telehealers.in/">
+											<img src="http://telehealers.in/assets/uploads/images/telehe2.png">    
+											</a>
+										</h1>
+									</td>
+								</tr>
+							</tbody></table>
+						</td>
+					</tr>
+					<tr>
+						</tr></tbody></table><table class="bg_white" role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+							<tbody><tr style="border-bottom: 1px solid rgba(0,0,0,.05);">
+								<td valign="middle" width="100%" style="text-align:left; padding: 0 2.5em;">
+									<div class="product-entry">
+										<div class="text">
+											'.$participantInfoHTML.'
+										</div>
+									</div>
+								</td>
+							</tr>
+						</tbody></table>
+					
+				
+				<table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
+					<tbody><tr>
+						<td class="bg_white" style="text-align: center;">
+							<p>Receive these email? You can <a href="#" style="color: rgba(0,0,0,.8);">Unsubscribe here</a></p>
+						</td>
+					</tr>
+				</tbody></table>
+			</div>
+		</center>
+	</body></html>' ;
+}
+
 #-----------------------------------------------
 #    save appointmaent 
 #----------------------------------------------  
 
- public function appointment(){ 
+	public function appointment(){ 
 		$this->form_validation->set_rules('p_date', 'Date', 'trim|required');
 		//$this->form_validation->set_rules('patient_id', 'Patient Id', 'trim|required');
 		$this->form_validation->set_rules('venue_id', 'venue', 'trim|required'); 
@@ -226,20 +330,19 @@ function randstrGenapp($len)
 		
 		$create_date = date('Y-m-d h:i:s');
 		
-		$birth_date = '';
-		 $patient_info =  array(
-		'patient_id'    => $patient_id,
-		'patient_name' => $p_name,
-		'patient_email' => $p_email,
-		'patient_phone' => $p_phone, 
-		'birth_date' => $birth_date,
-		'doctor_id' => $doctor_id,
-		'sex' => $p_gender,
-		'age' => $p_age,
-		'blood_group' => '',
-		'address' => '',
-		'picture' => '',
-		'create_date'=>$create_date
+		$patient_info =  array(
+			'patient_id'    => $patient_id,
+			'patient_name' => $p_name,
+			'patient_email' => $p_email,
+			'patient_phone' => $p_phone, 
+			'birth_date' => '',
+			'doctor_id' => $doctor_id,
+			'sex' => $p_gender,
+			'age' => $p_age,
+			'blood_group' => '',
+			'address' => '',
+			'picture' => '',
+			'create_date'=>$create_date
 		);
 		
 		
@@ -308,6 +411,11 @@ function randstrGenapp($len)
 		$ci->load->library('email');
 		
 		$email_config = $this->email_model->email_config();
+		$protocol = NULL;
+		$smtp_host = NULL;
+		$smtp_port = NULL;
+		$smtp_user = NULL;
+		$smtp_pass = NULL;
 		if(is_array($email_config) && count($email_config)>0){
 			$protocol = $email_config->protocol;
 			$smtp_host = $email_config->mailpath;
@@ -408,67 +516,17 @@ function randstrGenapp($len)
 			$this->db->insert('log_info', $log_data);	
 			$log_id = $this->db->insert_id();	
 			$p_log_id = $log_id;
-			$message = '<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #f1f1f1;">
-    <center style="width: 100%; background-color: #f1f1f1;">
-        <div style="display: none; font-size: 1px;max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
-            &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
-        </div>
-        <div style="max-width: 600px; margin: 0 auto;" class="email-container">
-            <!-- BEGIN BODY -->
-            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
-                <tbody><tr>
-                    <td valign="top" class="bg_white" style="padding: 1em 2.5em 0 2.5em;">
-                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-                            <tbody><tr>
-                                <td class="logo" style="text-align: left;">
-                                    <h1>
-                                        <a href="https://telehealers.in/">
-                                        <img src="https://telehealers.in/assets/uploads/images/telehe2.png">    
-                                        </a>
-                                    </h1>
-                                </td>
-                            </tr>
-                        </tbody></table>
-                    </td>
-                </tr>
-                <tr>
-                    </tr></tbody></table><table class="bg_white" role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-                        <tbody><tr style="border-bottom: 1px solid rgba(0,0,0,.05);">
-                            <td valign="middle" width="100%" style="text-align:left; padding: 0 2.5em;">
-                                <div class="product-entry">
-                                    <div class="text">
-                                        <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Dear '.$p_name.':</h2>
-										<p>Thanks for choosing telehealers.in</p>
-										<p>Kindly visit Your dashboard using registered mobile number.</p>
-										<p>Url:  https://telehealers.in/Userlogin</p>
-                                        <p>Name: '.$p_name.'</p>
-                                        <p>ID: '.$patient_id.'</p>
-										<p>Email: '.$p_email.'</p>
-										<p>&nbsp;</p>
-										<p>Keep in touch during this tough time! </p>
-										<p>Kindly write us back without any hasitation if you find any issues at support@telehealers.in</p>
-                                        
-										
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody></table>
-                
-            
-            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
-                <tbody><tr>
-                    <td class="bg_white" style="text-align: center;">
-                        <p>Receive these email? You can <a href="#" style="color: rgba(0,0,0,.8);">Unsubscribe here</a></p>
-                    </td>
-                </tr>
-            </tbody></table>
-
-        </div>
-    </center>
-
-
-</body></html>';
+			$message = $this->createVideoCallInformationMail('
+				<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Dear '.$p_name.':</h2>
+				<p>Thanks for choosing telehealers.in</p>
+				<p>Kindly visit Your dashboard using registered mobile number.</p>
+				<p>Url:  https://telehealers.in/Userlogin</p>
+				<p>Name: '.$p_name.'</p>
+				<p>ID: '.$patient_id.'</p>
+				<p>Email: '.$p_email.'</p>
+				<p>&nbsp;</p>
+				<p>Keep in touch during this tough time! </p>
+				<p>Kindly write us back without any hasitation if you find any issues at support@telehealers.in</p>');
 
 			$ci->email->from('info@telehealers.in', 'telehealers');
 			$list = array($p_email);
@@ -514,19 +572,19 @@ function randstrGenapp($len)
 		$create_date = date('Y-m-d h:i:s');
 		$birth_date='';
 		$savedata =  array(
-		'patient_id'    => $patient_id,
-		'patient_name' => $p_name,
-		'patient_email' => $p_email,
-		'log_id' => $log_id,
-		'patient_phone' => $p_phone, 
-		'birth_date' => $birth_date,
-		'doctor_id' => $doctor_id,
-		'sex' => $p_gender,
-		'age' => $p_age,
-		'blood_group' => '',
-		'address' => '',
-		'picture' => '',
-		'create_date'=>$create_date
+			'patient_id'    => $patient_id,
+			'patient_name' => $p_name,
+			'patient_email' => $p_email,
+			'log_id' => $log_id,
+			'patient_phone' => $p_phone, 
+			'birth_date' => $birth_date,
+			'doctor_id' => $doctor_id,
+			'sex' => $p_gender,
+			'age' => $p_age,
+			'blood_group' => '',
+			'address' => '',
+			'picture' => '',
+			'create_date'=>$create_date
 		);
 		$savedata = $this->security->xss_clean($savedata);
 		if($patient_exist==0){
@@ -571,18 +629,18 @@ function randstrGenapp($len)
 		$date = $this->input->post('p_date',TRUE);
 		
 		$appointmentData = array(
-		'date' => $this->input->post('p_date',TRUE),
-		'patient_id' => $patient_id,
-		'appointment_id' =>$appointment_id,
-		'schedul_id' => $schedul_id,
-		'sequence' => $sequence,
-		'venue_id' => $this->input->post('venue_id',TRUE),
-		'doctor_id' => $doctor_id,
-		'problem' => $this->input->post('problem',TRUE),
-		'service' => $service1,
-		'servicetype' => $service2,
-		'get_date_time' => date("Y-m-d h:i:s"),
-		'get_by' => 'Won'
+			'date' => $this->input->post('p_date',TRUE),
+			'patient_id' => $patient_id,
+			'appointment_id' =>$appointment_id,
+			'schedul_id' => $schedul_id,
+			'sequence' => $sequence,
+			'venue_id' => $this->input->post('venue_id',TRUE),
+			'doctor_id' => $doctor_id,
+			'problem' => $this->input->post('problem',TRUE),
+			'service' => $service1,
+			'servicetype' => $service2,
+			'get_date_time' => date("Y-m-d h:i:s"),
+			'get_by' => 'Won'
 		);
 		
 		$p_cc = $this->input->post('problem',TRUE);
@@ -610,51 +668,13 @@ function randstrGenapp($len)
 			}
 		}	
 		
-		$sql_tk = "select * from token where id = '1'";
-		$res_tk = $this->db->query($sql_tk);
-		$result_tk = $res_tk->result_array();
-		if(is_array($result_tk) && count($result_tk)>0){
-			$accessToken = $result_tk[0]['access_token'];
-			$refershToken = $result_tk[0]['refersh_token'];
-		}
-		
-		if($refershToken!="" && $accessToken!=""){
-			
-			try {
-				$client = new GuzzleHttp\Client(['base_uri' => 'https://zoom.us']);
-				$date_g = '12-07-2021';
-				$sequence_g = '6:15 PM';
-				$app_date_time = date('Y-m-d',strtotime($date)).'T'.$sequence.":00";
-				$meeting_pass = '123456768';
-				
-				$response_z = $client->request('POST', '/v2/users/me/meetings', [
-					"headers" => [
-						"Authorization" => "Bearer $accessToken"
-					],
-					'json' => [
-						"topic" => "Appointment Meeting - $appointment_id",
-						"type" => 2,
-						"start_time" => $app_date_time,
-						"duration" => $per_patient_time, // 30 mins
-						"timezone" => 'Asia/Calcutta', // 30 mins
-						"password" => $meeting_pass
-					]
-				]);
+		/** Video call room creation **/				
+		$superpro_meeting_url = $this->createVideoCallRoom(
+			$doctor_name, $doctor_email,
+			$p_name, $p_email);
+		$meeting_pass = '';
 
-				$data_zoom = json_decode($response_z->getBody());
-				$zoom_meeting_url = $data_zoom->join_url;
-			} catch(Exception $e) {
-				$meeting_pass = '';
-				$zoom_meeting_url = '';
-			}
-		}else{
-			$meeting_pass = '';
-			$zoom_meeting_url = '';
-		}
-		
-		
-		
-		$symt1 = $zoom_meeting_url;
+		$symt1 = $superpro_meeting_url;
 		$symt2 = $meeting_pass;
 		
 		$sql_m = "update appointment_tbl set symt1 = '".$symt1."',symt2 = '".$symt2."' where appointment_id = '$appointment_id'";
@@ -662,76 +682,26 @@ function randstrGenapp($len)
 		
 		
 		
-		$message = '<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #f1f1f1;">
-    <center style="width: 100%; background-color: #f1f1f1;">
-        <div style="display: none; font-size: 1px;max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
-            &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
-        </div>
-        <div style="max-width: 600px; margin: 0 auto;" class="email-container">
-            <!-- BEGIN BODY -->
-            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
-                <tbody><tr>
-                    <td valign="top" class="bg_white" style="padding: 1em 2.5em 0 2.5em;">
-                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-                            <tbody><tr>
-                                <td class="logo" style="text-align: left;">
-                                    <h1>
-                                        <a href="http://telehealers.in/">
-                                        <img src="http://telehealers.in/assets/uploads/images/telehe2.png">    
-                                        </a>
-                                    </h1>
-                                </td>
-                            </tr>
-                        </tbody></table>
-                    </td>
-                </tr>
-                <tr>
-                    </tr></tbody></table><table class="bg_white" role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-                        <tbody><tr style="border-bottom: 1px solid rgba(0,0,0,.05);">
-                            <td valign="middle" width="100%" style="text-align:left; padding: 0 2.5em;">
-                                <div class="product-entry">
-                                    <div class="text">
-                                        <p>Hey <strong>'.$p_name.'</strong>,</p>
-                                        <p>Our staff member has confirmed you for a '.$service2.' appointment on '.date('jS F Y',strtotime($date)).' with Dr. '.$doctor_name.'. If you have questions before your appointment,
-                                            use the contact form with appointment ID to get in touch with us.</p>
-										<h2 style="text-align:left;font-weight:600;color:#356d82">Zoom Meeting Details:</h2> 
-										<p>Zoom meeting URL: '.$zoom_meeting_url.',</p>
-										<p>Zoom meeting Password: '.$meeting_pass.',</p>	
-                                        <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Appointment ID - ('.$appointment_id.')</h2><h1></h1>
-                                        <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Doctor Details:</h2><h1></h1>
-                                        <p>Name: '.$doctor_name.'</p>
-                                        <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Patient Details:</h2>
-                                        <p>Name: '.$p_name.'</p>
-                                        <p>ID: '.$patient_id.'</p>
-										<p>Email: '.$p_email.'</p>
-										<p>Phone: '.$p_phone.'</p>
-										<p>Age: '.$p_age.'</p>
-										<p>Gender: '.$p_gender.',</p>
-										<p>Tell us your symptom or health problem: '.$p_cc.'</p>
-										<p>Appointment Date: '.date('jS F Y',strtotime($date)).'</p>
-										<p>Appointment Time: '.date('h:i A', strtotime($sequence)).'</p>
-										<p>Appointment ID: '.$appointment_id.'</p>
-										
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody></table>
-                
-            
-            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
-                <tbody><tr>
-                    <td class="bg_white" style="text-align: center;">
-                        <p>Receive these email? You can <a href="#" style="color: rgba(0,0,0,.8);">Unsubscribe here</a></p>
-                    </td>
-                </tr>
-            </tbody></table>
-
-        </div>
-    </center>
-
-
-</body></html>';
+		$message = $this->createVideoCallInformationMail('
+			<p>Hey <strong>'.$p_name.'</strong>,</p>
+			<p>Our staff member has confirmed you for a '.$service2.' appointment on '.date('jS F Y',strtotime($date)).' with Dr. '.$doctor_name.'. If you have questions before your appointment,
+				use the contact form with appointment ID to get in touch with us.</p>
+			<h2 style="text-align:left;font-weight:600;color:#356d82">Videocall Details:</h2> 
+			<p>Superpro video call link: '.$superpro_meeting_url.',</p>
+			<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Appointment ID - ('.$appointment_id.')</h2><h1></h1>
+			<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Doctor Details:</h2><h1></h1>
+			<p>Name: '.$doctor_name.'</p>
+			<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Patient Details:</h2>
+			<p>Name: '.$p_name.'</p>
+			<p>ID: '.$patient_id.'</p>
+			<p>Email: '.$p_email.'.Enter this in videocall link to join.</p>
+			<p>Phone: '.$p_phone.'</p>
+			<p>Age: '.$p_age.'</p>
+			<p>Gender: '.$p_gender.',</p>
+			<p>Tell us your symptom or health problem: '.$p_cc.'</p>
+			<p>Appointment Date: '.date('jS F Y',strtotime($date)).'</p>
+			<p>Appointment Time: '.date('h:i A', strtotime($sequence)).'</p>
+			<p>Appointment ID: '.$appointment_id.'</p>');
 
 		$ci->email->from('info@telehealers.in', 'telehealers');
 		$list = array($p_email);
@@ -751,21 +721,21 @@ function randstrGenapp($len)
 		
 		
 		$appointmentData = array(
-		'date' => $this->input->post('p_date',TRUE),
-		'patient_id' => $patient_id,
-		'doctor_name' => $doctor_name,
-		'appointment_id' =>$appointment_id,
-		'schedul_id' => $schedul_id,
-		'sequence' => $sequence,
-		'venue_id' => $this->input->post('venue_id',TRUE),
-		'venue_name' => $venue_name,
-		'doctor_id' => $doctor_id,
-		'problem' => $this->input->post('problem',TRUE),
-		'service' => $service1,
-		'servicetype' => $service2,
-		'get_date_time' => date("Y-m-d h:i:s"),
-		'get_by' => 'Won',
-		'fees' => '0'
+			'date' => $this->input->post('p_date',TRUE),
+			'patient_id' => $patient_id,
+			'doctor_name' => $doctor_name,
+			'appointment_id' =>$appointment_id,
+			'schedul_id' => $schedul_id,
+			'sequence' => $sequence,
+			'venue_id' => $this->input->post('venue_id',TRUE),
+			'venue_name' => $venue_name,
+			'doctor_id' => $doctor_id,
+			'problem' => $this->input->post('problem',TRUE),
+			'service' => $service1,
+			'servicetype' => $service2,
+			'get_date_time' => date("Y-m-d h:i:s"),
+			'get_by' => 'Won',
+			'fees' => '0'
 		);
 
 		$data['appointmentData'] = $appointmentData; 	
@@ -797,8 +767,13 @@ function randstrGenapp($len)
 		
 		$ci = get_instance();
 		$ci->load->library('email');
-		
-        $email_config = $this->email_model->email_config();
+		//Necessary variable initialization
+		$protocol = NULL;
+		$smtp_host = NULL;
+		$smtp_port = NULL;
+		$smtp_user = NULL;
+		$smtp_pass = NULL;
+        $email_config = NULL;
 		if(is_array($email_config) && count($email_config)>0){
 			$protocol = $email_config->protocol;
 			$smtp_host = $email_config->mailpath;
@@ -883,6 +858,15 @@ function randstrGenapp($len)
 		$sql = "select * from doctor_tbl where doctor_id = '".$doctor_id."'";
 		$res = $this->db->query($sql);
 		$result = $res->result_array();
+		// Intialization of doctor info variable
+		// Necessary, do not remove.
+		$doctor_name = NULL;
+		$doc_id = NULL;
+		$log_id = NULL;
+		$department = NULL;
+		$designation = NULL;
+		$degrees = NULL;
+		$specialist = NULL;
 		if(is_array($result) && count($result)>0){
 				$doctor_name = $result[0]['doctor_name'];
 				$doc_id = $result[0]['doc_id'];
@@ -908,54 +892,16 @@ function randstrGenapp($len)
 			$refershToken = $result_rk[0]['refersh_token'];
 		}
 		
-		$sql_tk = "select * from token where id = '1'";
-		$res_tk = $this->db->query($sql_tk);
-		$result_tk = $res_tk->result_array();
-		if(is_array($result_tk) && count($result_tk)>0){
-			$accessToken = $result_tk[0]['access_token'];
-		}
-		
-		if($refershToken!="" && $accessToken!=""){
-			$client = new GuzzleHttp\Client(['base_uri' => 'https://zoom.us']);
-			
-			//$app_date_time = date('Y-m-d',strtotime($date)).'T'.$sequence;
-			
-			//$app_date_time = date('jS F Y',strtotime($date)).' - '.date('h:i A', strtotime($sequence));
-			
-			$date_g = '12-07-2021';
-			$sequence_g = '6:15 PM';
-			//$app_date_time = '2021-06-20T16:45:00Z';
-			//$app_date_time = '2021-05-15T12:00:00Z';
-			//2021-05-05T19:00Z
-			$app_date_time = date('Y-m-d',strtotime($date)).'T'.$sequence.":00";
-			//die();
 
-			$meeting_pass = '123456768';
-			
-			$response_z = $client->request('POST', '/v2/users/me/meetings', [
-				"headers" => [
-					"Authorization" => "Bearer $accessToken"
-				],
-				'json' => [
-					"topic" => "Appointment Meeting - $appointment_id",
-					"type" => 2,
-					"start_time" => $app_date_time,
-					"duration" => $per_patient_time, // 30 mins
-					"timezone" => 'Asia/Calcutta', // 30 mins
-					"password" => $meeting_pass
-				]
-			]);
-
-			$data_zoom = json_decode($response_z->getBody());
-			$zoom_meeting_url = $data_zoom->join_url;
-		}else{
-			$meeting_pass = '';
-			$zoom_meeting_url = '';
-		}
+		/** Video call room creation **/				
+		$superpro_meeting_url = $this->createVideoCallRoom(
+			$doctor_name, $doctor_email,
+			$p_name, $p_email);
+		$meeting_pass = '';
 		
 		
 		
-		$symt1 = $zoom_meeting_url;
+		$symt1 = $superpro_meeting_url;
 		$symt2 = $meeting_pass;
 		
 		$sql_m = "update appointment_tbl set symt1 = '".$symt1."',symt2 = '".$symt2."' where appointment_id = '$appointment_id'";
@@ -963,76 +909,26 @@ function randstrGenapp($len)
 		
 		
 		
-		$message = '<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #f1f1f1;">
-    <center style="width: 100%; background-color: #f1f1f1;">
-        <div style="display: none; font-size: 1px;max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
-            &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
-        </div>
-        <div style="max-width: 600px; margin: 0 auto;" class="email-container">
-            <!-- BEGIN BODY -->
-            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
-                <tbody><tr>
-                    <td valign="top" class="bg_white" style="padding: 1em 2.5em 0 2.5em;">
-                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-                            <tbody><tr>
-                                <td class="logo" style="text-align: left;">
-                                    <h1>
-                                        <a href="http://telehealers.in/">
-                                        <img src="http://telehealers.in/assets/uploads/images/telehe2.png">    
-                                        </a>
-                                    </h1>
-                                </td>
-                            </tr>
-                        </tbody></table>
-                    </td>
-                </tr>
-                <tr>
-                    </tr></tbody></table><table class="bg_white" role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-                        <tbody><tr style="border-bottom: 1px solid rgba(0,0,0,.05);">
-                            <td valign="middle" width="100%" style="text-align:left; padding: 0 2.5em;">
-                                <div class="product-entry">
-                                    <div class="text">
-                                        <p>Hey <strong>'.$p_name.'</strong>,</p>
-                                        <p>Our staff member has confirmed you for a '.$service1.' appointment on '.date('jS F Y',strtotime($date)).' with Dr. '.$doctor_name.'. If you have questions before your appointment,
-                                            use the contact form with appointment ID to get in touch with us.</p>
-										<h2 style="text-align:left;font-weight:600;color:#356d82">Zoom Meeting Details:</h2> 
-										<p>Zoom meeting URL: '.$zoom_meeting_url.',</p>
-										<p>Zoom meeting Password: '.$meeting_pass.',</p>	
-                                        <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Appointment ID - ('.$appointment_id.')</h2><h1></h1>
-                                        <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Doctor Details:</h2><h1></h1>
-                                        <p>Name: '.$doctor_name.'</p>
-                                        <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Patient Details:</h2>
-                                        <p>Name: '.$p_name.'</p>
-                                        <p>ID: '.$patient_id.'</p>
-										<p>Email: '.$p_email.'</p>
-										<p>Phone: '.$p_phone.'</p>
-										<p>Age: '.$p_age.'</p>
-										<p>Gender: '.$p_gender.',</p>
-										<p>Tell us your symptom or health problem: '.$problem.'</p>
-										<p>Appointment Date: '.date('jS F Y',strtotime($date)).'</p>
-										<p>Appointment Time: '.date('h:i A', strtotime($sequence)).'</p>
-										<p>Appointment ID: '.$appointment_id.'</p>
-										
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody></table>
-                
-            
-            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
-                <tbody><tr>
-                    <td class="bg_white" style="text-align: center;">
-                        <p>Receive these email? You can <a href="#" style="color: rgba(0,0,0,.8);">Unsubscribe here</a></p>
-                    </td>
-                </tr>
-            </tbody></table>
-
-        </div>
-    </center>
-
-
-</body></html>';
+		$message = $this->createVideoCallInformationMail('
+			<p>Hey <strong>'.$p_name.'</strong>,</p>
+			<p>Our staff member has confirmed you for a '.$service1.' appointment on '.date('jS F Y',strtotime($date)).' with Dr. '.$doctor_name.'. If you have questions before your appointment,
+				use the contact form with appointment ID to get in touch with us.</p>
+			<h2 style="text-align:left;font-weight:600;color:#356d82">Videocall Details:</h2> 
+			<p>Superpro video call link: '.$superpro_meeting_url.',</p>
+			<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Appointment ID - ('.$appointment_id.')</h2><h1></h1>
+			<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Doctor Details:</h2><h1></h1>
+			<p>Name: '.$doctor_name.'</p>
+			<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Patient Details:</h2>
+			<p>Name: '.$p_name.'</p>
+			<p>ID: '.$patient_id.'</p>
+			<p>Email: '.$p_email.'.Enter this in videocall link to join.</p>
+			<p>Phone: '.$p_phone.'</p>
+			<p>Age: '.$p_age.'</p>
+			<p>Gender: '.$p_gender.',</p>
+			<p>Tell us your symptom or health problem: '.$problem.'</p>
+			<p>Appointment Date: '.date('jS F Y',strtotime($date)).'</p>
+			<p>Appointment Time: '.date('h:i A', strtotime($sequence)).'</p>
+			<p>Appointment ID: '.$appointment_id.'</p>');
 
 		$ci->email->from('info@telehealers.in', 'telehealers');
 		$list = array($p_email);

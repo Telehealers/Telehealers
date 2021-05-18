@@ -901,7 +901,7 @@ public function registration()
 		$sql = "select id,doctors from servicetype where servicetype = '".$servicestype."'";
 		$res = $this->db->query($sql);
 		$result = $res->result_array();
-		
+        $doctors=NULL;
 		if(is_array($result) && count($result)>0){
 			$service_id = $result[0]['id'];
 			$doctors    = $result[0]['doctors'];

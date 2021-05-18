@@ -1,16 +1,18 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+    defined('BASEPATH') OR exit('No direct script access allowed');
 
 $active_group = 'default';
 $query_builder = TRUE;
 $active_record = TRUE;
-
+$db_user=getenv('DB_USERNAME');
+$db_name=getenv('DB_NAME');
+$db_pwd=getenv('DB_PASSWORD');
 $db['default'] = array(
     'dsn'   => '',
-    'hostname' => 'localhost',
-    'username' => 'telehea2_telehealers_new',
-    'password' => '#&$H3enA1Shd(*3!()',
-    'database' => 'telehea2_telehealers_new',
+    'hostname' => getenv('DB_HOSTNAME'),
+    'username' => getenv('DB_USERNAME'),
+    'password' => getenv('DB_PASSWORD'),
+    'database' => getenv('DB_NAME'),
     'dbdriver' => 'mysqli',
     'dbprefix' => '',
     'pconnect' => FALSE,

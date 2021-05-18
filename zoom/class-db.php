@@ -1,14 +1,10 @@
 <?php
 class DB {
-    private $dbHost     = 'localhost';
-    private $dbUsername = 'telehea2_telehealers_new';
-    private $dbPassword = '#&$H3enA1Shd(*3!()';
-    private $dbName     = 'telehea2_telehealers_new';
-  
+    
     public function __construct(){
         if(!isset($this->db)){
             // Connect to the database
-            $conn = new mysqli($this->dbHost, $this->dbUsername, $this->dbPassword, $this->dbName);
+            $conn = new mysqli(getenv('DB_HOSTNAME'), getenv('DB_USERNAME'),getenv('DB_PASSWORD'),getenv('DB_NAME'));
             if($conn->connect_error){
                 die("Failed to connect with MySQL: " . $conn->connect_error);
             }else{
