@@ -50,7 +50,7 @@
                                         <li class="active">
                                             <a href="<?php echo base_url()?>#home">Home</a>
                                         </li>
-										<li><a href="<?php echo base_url()?>appointment">Book an Appointment</a></li>
+										<li><a href="<?php echo base_url()?>appointment">Book Appointment</a></li>
                                         <li><a href="<?php echo base_url()?>contact">Contact Us</a></li>
 										<?php if($this->session->userdata('user_type')==3){?>
 										
