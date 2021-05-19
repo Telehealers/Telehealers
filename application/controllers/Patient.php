@@ -917,7 +917,7 @@ public function registration()
 	
 	public function checkUser(){
 		$phone = $this->input->post('phone',TRUE);
-		$sql_doc = "select * from patient_tbl where patient_phone = '".$phone."'";
+		$sql_doc ="SELECT * FROM `patient_tbl` WHERE `patient_phone` LIKE '".$phone."'"; 
 		$res_doc = $this->db->query($sql_doc);
 		$result_doc = $res_doc->result_array();
 		if(is_array($result_doc) && count($result_doc)>0){
