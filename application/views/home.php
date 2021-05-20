@@ -69,64 +69,7 @@ $hello = GeraHash(5);
 </style>
 <body>
     <?php $this->load->view('header.php')?>
-
-
-    <section class="home_new_slider mb-5">
-            <div id="Home_slider" class="owl-carousel owl-theme">
-                <div class="item">
-                    <div class="product-thumb">
-                        <div class="carousel-thumb">
-                            <div class="slider_content">
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="img_box">
-                                                <img src="<?php echo base_url();?>web_assets2/images/banner_new_1.png" alt="#">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="product-thumb">
-                        <div class="carousel-thumb">
-                            <div class="slider_content">
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="img_box">
-                                                <a href="https://www.telehealers.in/appointment" class="desktop_img"><img src="<?php echo base_url();?>web_assets2/images/banner_new_2.png" alt="#"></a>
-                                                <a href="https://www.telehealers.in/appointment" class="mobile_img"><img src="<?php echo base_url();?>web_assets2/images/banner_new_4.png" alt="#"></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="product-thumb">
-                        <div class="carousel-thumb">
-                            <div class="slider_content">
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="img_box">
-                                                <a href="https://www.telehealers.in/appointment"><img src="<?php echo base_url();?>web_assets2/images/banner_new_3.png" alt="#"></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+    <? $this->load->view('homeslider.php')?>
 <section id="home" class="meat_our_team">
         <div class="container">
             <div class="row">
@@ -263,12 +206,9 @@ $hello = GeraHash(5);
         ?>
 
         <div class="panel-body" style="padding: 50px 130px 10px 130px;background:#f9f9f9">
-        <div class="row">
-        <div >
-        <button class="loginBtn loginBtn--facebook">Login with Facebook</button>
-         <button class="loginBtn loginBtn--google">Login with Google  </button>
-     </div>
-        </div>
+            <div class="row">
+                Please register to book an appointment
+            </div>    
         <hr>
             <?php
                 $attributes = array('role'=>'form');
@@ -283,7 +223,7 @@ $hello = GeraHash(5);
                     <!-- new input fields added -- abinash  -->
                     <div class="form-group">
                         <div id="meserr" style="color:red;"></div>
-                        <input class="form-control" id="phone" placeholder="Mobile Number" name="phone" type="text" required  />
+                        <input class="form-control" id="phone1" placeholder="Mobile Number" name="phone" type="text" required  />
                          <span class="text-danger"></span>
                     </div>
                     <div class="form-group">
@@ -314,17 +254,19 @@ $hello = GeraHash(5);
                     </div>
                     </div>
                     </div>
-                     <div class="form-group" id="otp_field" style="display:none;">
-                     <div id="meserr" style="color:red;"></div>
-                        <input class="form-control" id="otp" placeholder="Enter Otp" name="otp" type="text" required pattern="[1-9]{1}[0-9]{9}" />
+                     <div class="form-group" id="otp_field1" style="display:none;">
+                     <div id="meserr1" style="color:red;"></div>
+                        <input class="form-control" id="otp1" placeholder="Enter Otp" name="otp" type="text" required pattern="[1-9]{1}[0-9]{9}" />
                          <span class="text-danger"></span>
                     </div>
 
                     <!-- end of line -->
-    <div id="otpmess" style="color:green;"></div>
-    <button type="button" id="register" style="display:none;" class="btn btn-lg btn-success btn-block">Register</button>
-                    <button type="button" id="sendOtp" class="btn btn-lg btn-success btn-block">Send OTP</button>
+    <div id="otpmess1" style="color:green;"></div>
+    <button type="button" id="register" class="btn btn-lg btn-success btn-block">Register</button>
 
+    <button type="button" id="auth" class="btn btn-lg btn-success btn-block" style="display:none;">Authenticate</button>
+                    <!-- <button type="button" id="sendOtp_register" class="btn btn-lg btn-success btn-block">Send OTP</button>
+ -->
                     <input type="hidden" id="base_url" value="<?php echo base_url()?>">
             </form>
         </div>
@@ -783,6 +725,17 @@ $(document).ready(function(){
 			return false;
 		}
 	});
+    $("#phone1").keypress (function (event) {
+        var charLength = $(this).val().length;
+        if(charLength < 11){
+            if ((event.which < 32) || (event.which > 126)){
+                return true;
+            }
+            return jQuery.isNumeric ($(this).val () + String.fromCharCode (event.which));
+        }else{
+            return false;
+        }
+    });
 	$("#otp").keypress (function (event) {
 		var charLength = $(this).val().length;
 		if(charLength < 4){
@@ -836,7 +789,7 @@ $(document).ready(function(){
 			$('#meserr').html(msg);
 		}else{
 			$('#meserr').html('');
-			$.ajax({
+			$.ajax({ 
 				url:base_url+'index.php/Patient/userLogin',
 				method: 'post',
 				data: {phone:phone,otp:otp},
@@ -847,7 +800,7 @@ $(document).ready(function(){
 					}else if(response==1){
 						$('#meserr').html('You enter wrong Otp');
 					}else{
-						window.location.href = 'Patient';
+                       window.location.href = 'Patient';
 					}
 					//$('#q_succ_msg').html('Your details has been submited successfully.');
 					//$('#q_succ_msg').html(response);
@@ -855,9 +808,85 @@ $(document).ready(function(){
 			});
 		}
 	});
+    $('#auth').click(function (){
+        var base_url = $('#base_url').val();
+        var phone = $('#phone1').val();
+        var otp = $('#otp1').val();
+        var msg = '';
+        if(phone==""){
+            msg += 'Please enter mobile number<br>';
+        }
+        if(otp==""){
+            msg += 'Please enter Otp<br>';
+        }
+        if(msg!=""){
+            $('#meserr1').html(msg);
+        }else{
+            $('#meserr1').html('');
+            $.ajax({
+                url:base_url+'index.php/Patient/userLogin',
+                method: 'post',
+                data: {phone:phone,otp:otp},
+                type: 'POST',
+                success: function(response){
+                    if(response==0){
+                        $('#meserr1').html('Incorrect Mobile number');
+                    }else if(response==1){
+                        $('#meserr1').html('You enter wrong Otp');
+                    }else{
+                       window.location.href = 'Patient';
+                    }
+                    //$('#q_succ_msg').html('Your details has been submited successfully.');
+                    //$('#q_succ_msg').html(response);
+                }
+            });
+        }
+    });
 
+    $('#register').click(function(){
+        var name    = $('#name').val();
+        var email     = $('#email').val();
+        var age      = $('#age').val();
+        var phone      = $('#phone1').val();
+        var baseUrl =$('#base_url').val();
+        var gender = document.querySelector('input[name="inlineRadioOptions"]:checked').value;
+            console.log(gender);
+      
+            $.ajax({
+                url:baseUrl+'index.php/Welcome/registration',
+                method: 'post',
+                data: {name:name, email:email,age:age , phone: phone,gender:gender},
+                type: 'POST',
+                success: function(response){
+                   if (response==0) {
+                        // this user already exists , show error to user that number is already registered , please log in 
+                   }
+                   else if(response==1){
+                    // new user has been created , 
+                    $.ajax({
+                        url:baseUrl+'index.php/Patient/checkUser',
+                        method: 'post',
+                        data: {phone:phone},
+                        type: 'POST',
+                        success: function(response){
+                        if(response==0){
+                            $('#meserr').html('Incorrect Mobile number');
+                        }else{
+                            $('#otpmess1').html('Otp sent on your mobile number...');
+                        }
+                        $('#otp_field1').css('display','block');
+                        $('#auth').css('display','block');
+                        $('#register').hide();
+                    }})
+
+
+                    
+                   }
+
+                }
+            });
+        });
 });
-
 
 function preventBack() {
 window.history.forward();
