@@ -25,6 +25,9 @@
                                 <li>
                                     <a href="<?php echo (!empty(html_escape($info->google->details))?html_escape($info->google->details):null); ?>" target="_blank"><i class="fab fa-instagram"></i></a>
                                 </li>
+                                <!-- <li>
+                                    <a href="<?php echo (!empty(html_escape($info->google->details))?html_escape($info->google->details):null); ?>" target="_blank"><i class="fab fa-instagram"></i></a>
+                                </li> -->
 
                             </ul>
                         </div>

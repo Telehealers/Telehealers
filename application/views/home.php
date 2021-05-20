@@ -141,7 +141,7 @@ $hello = GeraHash(5);
         book an appointment
       </button>-->
                     <a class="popup_btn d-inline-block" href="<?php echo base_url();?>appointment">Book An Appointment</a>
-                    <!-- <button class="btn btn-primary btn-lg popup_btn d-inline-block" data-toggle="modal" data-target="#myModal">Login</button> -->
+                    <button class="btn btn-primary btn-lg popup_btn d-inline-block" data-toggle="modal" data-target="#myModal">Login</button>
                   <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
