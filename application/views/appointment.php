@@ -12,11 +12,14 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="<?php echo base_url();?>web_assets2/css/main.css">
 	<link href="<?php echo base_url()?>assets/plugins/jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
-	
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.js"></script>
 	<link rel="stylesheet" href="<?php echo base_url();?>web_assets2/appointment/css/main.css">
     <link rel="stylesheet" href="<?php echo base_url();?>web_assets2/appointment/css/style.css">
+    <link rel="stylesheet" href="<?php echo base_url();?>web_assets2/appointment/css/calendar_style.css">
+
 	<link rel="" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js">
-	
+
    <title><?php echo $meta_info[0]['page_title']; ?></title>
 	<meta name="keywords" content="<?php echo $meta_info[0]['meta_keywords']; ?>">
 	<meta name="description" content="<?php echo $meta_info[0]['meta_description']; ?>">
@@ -57,19 +60,19 @@ $hello = GeraHash(5);
 ?>
 <style>
     .owl-carousel .owl-item img{width:65%;}
-    
+
 </style>
 <body>
 
     <?php $this->load->view('header.php')?>
 
-    
-	
-	
-    
+
+
+
+
 
    <section class="multi_step_form appointment_page" style="min-height:400px; background-color:#FFF;">
-		<?php 
+		<?php
 			$mag = $this->session->flashdata('exception');
 			if($mag !=''){
 
@@ -77,13 +80,13 @@ $hello = GeraHash(5);
 		}
 			$patient_id = $this->session->flashdata('patient_id');
 			$attributes = array('id' => 'msform', 'name'=>'app_form', 'onsubmit'=>'return validateForm()');
-			
-			//echo form_open('Appointment/appointment', $attributes);  
-			echo form_open('Appointment/confirmation', $attributes);  
 
-					
+			//echo form_open('Appointment/appointment', $attributes);
+			echo form_open('Appointment/confirmation', $attributes);
+
+
 		?>
-                        
+
                             <div class="heading">
                                 <h2>Book an Appointment</h2>
                                 <!--<p>In order to use this service, you have to complete this verification process</p>-->
@@ -94,7 +97,7 @@ $hello = GeraHash(5);
 								<!--<p>We will send you a SMS. Input the code to verify.</p>-->
 								<div class="mb-5 more_btns">
 									<ul>
-									<?php 
+									<?php
 									$i=0;
 									if(is_array($service) && count($service)>0){
 										foreach($service as $val){
@@ -116,17 +119,17 @@ $hello = GeraHash(5);
 									<input type="checkbox" name="lang_set" id="lang_set" value="<?php echo $val;?>">&nbsp;<?php echo $val;?> &nbsp;&nbsp;&nbsp;&nbsp;
 									<?php }} ?>
 								</div>
-								<button onClick="addService()" id="add_service" type="button" class="next action-button">Continue</button>  
+								<button onClick="addService()" id="add_service" type="button" class="next action-button">Continue</button>
 							</fieldset>
-                            
+
 							<fieldset id="book_popup_3" class="mt-5">
                                 <h3>Appointment Type</h3>
-                                
+
                                 <div class="mb-5 more_btns">
 									<ul>
 										<!--<li>
 											<button type="button" class="btn_choose_sent bg_btn_chose_1">
-												<input type="radio" name="app_val" value="1" checked />Immediately 
+												<input type="radio" name="app_val" value="1" checked />Immediately
 											</button>
 										</li>-->
 										<li>
@@ -137,15 +140,15 @@ $hello = GeraHash(5);
 									</ul>
 								</div>
                                 <button type="button" class="action-button previous_button">Back</button>
-								<button id="app_type" onClick="setDoctor()" type="button" class="next action-button">Continue</button>  
+								<button id="app_type" onClick="setDoctor()" type="button" class="next action-button">Continue</button>
 								<div id="app_type_btn" style="display:none;"><button id="app_type_btn2" type="button" class="next action-button">Continue</button> </div>
 							</fieldset>
-							
-							
+
+
 							<fieldset id="book_popup_6" class="mt-5">
                                 <!--<h3>Book an Appointment</h3>-->
                                 <!--<p>We will send you a SMS. Input the code to verify.</p>-->
-								
+
 								<input type="hidden" name="service1" id="service1" value="" >
 								<input type="hidden" name="service2" id="service2" value="" >
 								<input type="hidden" name="service3" id="service3" value="" >
@@ -176,7 +179,7 @@ $hello = GeraHash(5);
 													<option><?php echo $i; ?> Year</option>
 													<?php } ?>
 												</select>-->
-											<input placeholder="Age" type="number" min="1" max="130" name="p_age" id="p_age" required="required">	
+											<input placeholder="Age" type="number" min="1" max="130" name="p_age" id="p_age" required="required">
 										</div>
                                         </div>
                                         <div class="col-md-6">
@@ -200,7 +203,7 @@ $hello = GeraHash(5);
                                     </div>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="input-group" id="loadsche">
                                         <select style="padding:10px;" onchange="loadSchedul()" class="form-control" required name="venue_id" id="venue_id" required>
 											<option value="">--Select Mode--</option>
@@ -215,27 +218,126 @@ $hello = GeraHash(5);
                                     </div>
                                     <div class="input-group">
                                         <input type="checkbox" class="term_con_btn" name="term_condition" value="1" disabled checked="checked" id="term_condition">&nbsp;&nbsp;<a href="<?php echo base_url();?>terms" target="_blank" style="text-decoration:underline;">I agree to the Tele medicine Terms & Conditions</a>
-                                    </div> 
+                                    </div>
                                 </div>
                             <input type="hidden" name="existing_user" id="existing_user" value="">
 							<button type="button" class="action-button previous_button">Back</button>
-							<button type="submit" id="bb_app" onClick="return setSlot()" class="action-button"><?php echo display('appointment');?></button>  
-							
+							<button type="submit" id="bb_app" onClick="return setSlot()" class="action-button"><?php echo display('appointment');?></button>
+
 						</fieldset>
                         <?php echo form_close();?>
                     </section>
 
-    
+                    <section>
+                      <div class="booking_style" style="background: white;">
+                        <div class="row">
+                          <div class="col-12 text-center" >
+                          <h2>Book Appointment</h2>
+                          </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-6 col-md-6 col-lg-4">
+                        <div class="card border-0">
+                        </div>
+                        </div>
+                          <div class="col-sm-6 col-md-6 col-lg-8">
+                          <div class="card border-0">
+                <form autocomplete="off">
+                    <div class="card-header bg-dark">
+                        <div class="mx-0 mb-0 row justify-content-sm-center justify-content-start px-1"> <input type="text" id="dp1" class="datepicker inputStyle" placeholder="Pick Date" name="date" readonly><span class="fa fa-calendar"></span> </div>
+                    </div>
+                    <div class="card-body p-3 p-sm-5">
+                        <div class="row text-center mx-0">
+                            <div class="col-md-2 col-4 my-1 px-2">
+                                <div class="cell py-1">9:00AM</div>
+                            </div>
+                            <div class="col-md-2 col-4 my-1 px-2">
+                                <div class="cell py-1">9:30AM</div>
+                            </div>
+                            <div class="col-md-2 col-4 my-1 px-2">
+                                <div class="cell py-1">9:45AM</div>
+                            </div>
+                            <div class="col-md-2 col-4 my-1 px-2">
+                                <div class="cell py-1">10:00AM</div>
+                            </div>
+                            <div class="col-md-2 col-4 my-1 px-2">
+                                <div class="cell py-1">10:30AM</div>
+                            </div>
+                            <div class="col-md-2 col-4 my-1 px-2">
+                                <div class="cell py-1">10:45AM</div>
+                            </div>
+                        </div>
+                        <div class="row text-center mx-0">
+                            <div class="col-md-2 col-4 my-1 px-2">
+                                <div class="cell py-1">11:00AM</div>
+                            </div>
+                            <div class="col-md-2 col-4 my-1 px-2">
+                                <div class="cell py-1">11:30AM</div>
+                            </div>
+                            <div class="col-md-2 col-4 my-1 px-2">
+                                <div class="cell py-1">11:45AM</div>
+                            </div>
+                            <div class="col-md-2 col-4 my-1 px-2">
+                                <div class="cell py-1">12:00PM</div>
+                            </div>
+                            <div class="col-md-2 col-4 my-1 px-2">
+                                <div class="cell py-1">12:30PM</div>
+                            </div>
+                            <div class="col-md-2 col-4 my-1 px-2">
+                                <div class="cell py-1">12:45PM</div>
+                            </div>
+                        </div>
+                        <div class="row text-center mx-0">
+                            <div class="col-md-2 col-4 my-1 px-2">
+                                <div class="cell py-1">1:00PM</div>
+                            </div>
+                            <div class="col-md-2 col-4 my-1 px-2">
+                                <div class="cell py-1">1:30PM</div>
+                            </div>
+                            <div class="col-md-2 col-4 my-1 px-2">
+                                <div class="cell py-1">1:45PM</div>
+                            </div>
+                            <div class="col-md-2 col-4 my-1 px-2">
+                                <div class="cell py-1">2:00PM</div>
+                            </div>
+                            <div class="col-md-2 col-4 my-1 px-2">
+                                <div class="cell py-1">2:30PM</div>
+                            </div>
+                            <div class="col-md-2 col-4 my-1 px-2">
+                                <div class="cell py-1">2:45PM</div>
+                            </div>
+                        </div>
+                        <div class="row text-center mx-0">
+                            <div class="col-md-2 col-4 my-1 px-2">
+                                <div class="cell py-1">3:00PM</div>
+                            </div>
+                            <div class="col-md-2 col-4 my-1 px-2">
+                                <div class="cell py-1">3:30PM</div>
+                            </div>
+                            <div class="col-md-2 col-4 my-1 px-2">
+                                <div class="cell py-1">4:15PM</div>
+                            </div>
+                            <div class="col-md-2 col-4 my-1 px-2">
+                                <div class="cell py-1">5:00PM</div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </section>
 					<section id="home1" class="home_slider mb-5">
         <div class="container">
             <div id="home_main_slider" class="owl-carousel owl-theme">
-			<?php 
+			<?php
                   foreach ($slider as  $value) {
                 ?>
                 <div class="item">
                     <div class="product-item">
                         <div class="carousel-thumb">
-						
+
                             <div class="row">
                                 <div class="col-lg-12 order_2">
                                     <div class="slider_img" style="text-align:center;">
@@ -248,27 +350,27 @@ $hello = GeraHash(5);
 					    </div>
                     </div>
                 </div>
-			 <?php } ?>	
+			 <?php } ?>
 		    </div>
         </div>
     </section>
-	
 
-    
 
-    
 
-    
-	
-	
-	
+
+
+
+
+
+
+
     <?php $this->load->view('footer.php')?>
-	
-	
+
+
 	<div id="patient_type" style="display:none;">
 	<fieldset id="book_popup_4" class="book_popup_4 mt-5">
                                 <h3>Covid Consultancy</h3>
-                               
+
                                 <div class="quwstions">
                                     <div class="form">
                                         <div class="question_answer">
@@ -314,11 +416,11 @@ $hello = GeraHash(5);
                                             </div>
                                         </div>
                                     </div>
-                                    
-                                    
+
+
                                 </div>
                                 <button type="button" class="action-button previous_button">Back</button>
-								<button type="button" onclick="setstm()" class="next action-button">Continue</button>  
+								<button type="button" onclick="setstm()" class="next action-button">Continue</button>
 							</fieldset>
 							</div>
 <div id="userdiv" style="display:none;">
@@ -339,17 +441,17 @@ $hello = GeraHash(5);
 			</ul>
 		</div>
 		<button type="button" class="action-button previous_button">Back</button>
-		<button type="button" id="add_patient2" onClick="setform()" class="next action-button">Continue</button> 
+		<button type="button" id="add_patient2" onClick="setform()" class="next action-button">Continue</button>
 	</fieldset>
-</div>			
+</div>
 <div id="doctor_type" style="display:none;">
 <fieldset id="book_popup_5" class="mt-5 doctor_section">
 <h3>Select Doctor</h3><br>
 <div class="doctors_list">
-	
+
 </div>
 <button type="button" class="action-button previous_button">Back</button>
-<button type="button" onClick="addDoctor()" class="next action-button">Continue</button>  
+<button type="button" onClick="addDoctor()" class="next action-button">Continue</button>
 </fieldset>
 </div>
 
@@ -359,11 +461,11 @@ $hello = GeraHash(5);
 		<!--<p>We will send you a SMS. Input the code to verify.</p>-->
 		<div class="mb-5 more_btns">
 		<ul id="service_type">
-			
+
 		</ul>
 		</div>
 		<button type="button" class="action-button previous_button">Back</button>
-		<button id="add_servicetype" type="button" class="next action-button">Continue</button>  
+		<button id="add_servicetype" type="button" class="next action-button">Continue</button>
 	</fieldset>
 </div>
 <input type="hidden" id="base_url" value="<?php echo base_url()?>">
@@ -373,21 +475,21 @@ $hello = GeraHash(5);
     <script src='https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.2/js/intlTelInput.js'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js'></script>
-    
+
     <script src="<?php echo base_url();?>web_assets2/js/owl.carousel.min.js"></script>
     <script src="<?php echo base_url();?>web_assets2/js/main.js"></script>
     <script src="<?php echo base_url();?>web_assets2/js/all.min.js"></script>
 	<script src="<?php echo base_url()?>assets/plugins/jquery-ui-1.12.1/jquery-ui.min.js" type="text/javascript"></script>
     <script src="<?php echo base_url();?>web_assets2/js/custom.js" type="text/javascript"></script>
 	<script src="<?php echo base_url();?>web_assets2/js/home_footer.js"></script>
-	
-	
-    
+
+
+
     <script src="<?php echo base_url();?>web_assets2/appointment/js/script.js"></script>
-	
+
 <script>
 $(document).ready(function(){
-	
+
 	$('#p_name').keypress(function (e) {
 		var charLength = $(this).val().length;
 		var regex = new RegExp("^[a-zA-Z ]+$");
@@ -396,7 +498,7 @@ $(document).ready(function(){
 			if(charLength < 21){
 			return true;
 			}
-		}  
+		}
 		return false;
 	});
 	$('#p_phone').keypress(function (e) {
@@ -404,17 +506,17 @@ $(document).ready(function(){
 		if(charLength < 10){
 			return true;
 		}else{
-			return false;	
-		} 
+			return false;
+		}
 	});
-	
-	
+
+
 
 	$("#p_phone").keypress (function (event) {
-        if ((event.which < 32) || (event.which > 126)) return true; 
+        if ((event.which < 32) || (event.which > 126)) return true;
         return jQuery.isNumeric ($(this).val () + String.fromCharCode (event.which));
     });
-	
+
 	$('#contact_us').click(function(){
 		var full_name    = $('#full_name').val();
 		var email_id     = $('#email_id').val();
@@ -424,7 +526,7 @@ $(document).ready(function(){
 		var captcha_code = $('#captcha_code').val();
 		var base_url = $('#base_url').val();
 		var msg = '';
-		
+
 		if(full_name==""){
 			msg += 'Please enter full name.<br>';
 		}
@@ -435,7 +537,7 @@ $(document).ready(function(){
             if(email_id.match(mailformat))
             {}else{
                 msg += 'You have entered an Invalid Email ID.<br>';
-            }  
+            }
 		}
 		if(subject==""){
 			msg += 'Please enter subject.<br>';
@@ -476,11 +578,11 @@ $(document).ready(function(){
 				}
 			});
         }
-		
+
 	});
-	
-	
-    $(document).on("click","#add_service", function(){		
+
+
+    $(document).on("click","#add_service", function(){
 		var services =	$('input[name="service"]:checked').val();
 		var base_url = $('#base_url').val();
 	//	$('.multi_step_form .book_popup_11').remove();
@@ -504,15 +606,15 @@ $(document).ready(function(){
 				$('#service_type').html(response);
 			}
 		});
-		$('#service1').val(services);	
+		$('#service1').val(services);
 	});
-	
-	
-	$(document).on("click","#add_servicetype", function(){	
+
+
+	$(document).on("click","#add_servicetype", function(){
 		var servicestype =	$('input[name="servicetype"]:checked').val();
 		var base_url = $('#base_url').val();
 		var lang_set_val =	$('#service3').val();
-		
+
 		$('#service2').val(servicestype);
 		//alert(lang_set_val)
 		if(servicestype==""){
@@ -537,29 +639,29 @@ $(document).ready(function(){
 			success: function(response){
 				//alert(response);
 				$('#book_popup_5 .doctors_list').html(response);
-								
+
 			}
 		});
 	});
-	
-	
+
+
 	$(document).on("click","#app_type", function(){
-	    	
+
 	});
-	
-    $(document).on("click",".add_patient2", function(){   
+
+    $(document).on("click",".add_patient2", function(){
 	    $('.multi_step_form .book_popup_4').remove();
 		var p_type =	$('input[name="p_type"]:checked').val();
 		//alert(p_type);
 		if(p_type == 1){
 			var getHtml = $('#patient_type').html();
 			$(getHtml).insertAfter('#book_popup_11');
-		}	
+		}
 		if(p_type == 2){
 			$('.multi_step_form .book_popup_4').remove();
-		}	
+		}
 	});
-	
+
 	$(document).on("change","#p_email",function(){
 	    setSlot();
 	});
@@ -577,11 +679,11 @@ $(document).ready(function(){
 				    if(response==1){
 				        $('#email_msg').html('<span style="color:red;float:left;">This email ID already Used!</span><span style="color:green;float:right;cursor:pointer;font-size:10px;" onclick="setfields()">To change in existing details like age, name, sex, click here</span>');
 				        $('#bb_app').hide();
-				        
+
 				    }else if(response==2){
 				        $('#email_msg').html('<span style="color:red;float:left;">This email ID already Used!</span><span style="color:green;float:right;cursor:pointer;font-size:10px;" onclick="setfields()">To change in existing details like age, name, sex, click here</span>');
 				        $('#bb_app').hide();
-				        
+
 				    }else{
 				        $('#bb_app').show();
     					var p_data = response.split(',');
@@ -615,11 +717,21 @@ $(document).ready(function(){
 					$('#existing_user').val(0);
 				}
 				//$('#book_popup_5 .doctors_list').html(response);
-								
+
 			}
 		});
 	});
 	$( ".datepicker3" ).datepicker({ minDate: 0});
+  $('.datepicker').datepicker({
+format: 'dd-mm-yyyy',
+autoclose: true,
+startDate: '0d'
+});
+
+$('.cell').click(function(){
+$('.cell').removeClass('select');
+$(this).addClass('select');
+});
 });
 
 $( document ).ajaxComplete(function() {
@@ -629,24 +741,24 @@ $( document ).ajaxComplete(function() {
         var animating; //flag to prevent quick multi-click glitches
 
 
-	
-	/*$(".add_patient2").click(function () {	
+
+	/*$(".add_patient2").click(function () {
 		var p_type =	$('input[name="p_type"]:checked').val();
 		//alert(p_type);
 		if(p_type == 1){
 			var getHtml = $('#patient_type').html();
 			$(getHtml).insertAfter('#book_popup_11');
-		}	
+		}
 		if(p_type == 2){
 			$('.multi_step_form .book_popup_4').remove();
-		}	
+		}
 	});
 	*/
-	
-		
-	
-	
-	
+
+
+
+
+
 		$(document).on("click",".next1", function(){
             if (animating) return false;
             animating = true;
@@ -689,15 +801,15 @@ $( document ).ajaxComplete(function() {
                 easing: 'easeInOutBack'
             });
         });
-		
+
 		$(document).on("click",".previous_button", function(){
 			$('#message_id').html('');
-		});	
+		});
 		$(document).on("click",".previous_button1", function(){
             if (animating) return false;
             animating = true;
-			
-			
+
+
 
             current_fs = $(this).parent();
             previous_fs = $(this).parent().prev();
@@ -736,11 +848,11 @@ $( document ).ajaxComplete(function() {
                 easing: 'easeInOutBack'
             });
         });
-		
+
 		$(".submit").click(function () {
             return false;
         })
-		
+
 });
 function setform(){
 	//alert('hello...');
@@ -752,10 +864,10 @@ function setform(){
 		$(getHtml).insertAfter('#book_popup_11');
 		//$('#add_patient2').addClass('next');
 		//$('#add_patient2').trigger('click');
-	}	
+	}
 	if(p_type == 2){
 		$('.multi_step_form .book_popup_4').remove();
-	}	
+	}
 }
 function setDoctor(){
 	//$('#app_type').addClass('next');
@@ -772,7 +884,7 @@ function setDoctor(){
 		//$('#app_type_btn #app_type_btn2').trigger('click');
 		$('#appDate').show();
 		$('#loadsche').show();
-	}	
+	}
 	if(p_type == 1){
 		$('.multi_step_form #book_popup_5').remove();
 		$('#appDate').hide();
@@ -793,7 +905,7 @@ function setDoctor(){
 				if(response==0){
 					$('#bb_app').hide();
 					$('#message_id').html('<span style="color:red;">No doctor available at this time please make a Schedule Appointment.</span>');
-					
+
 				}else{
 					//$('#message_id').html(response);
 					$('#bb_app').show();
@@ -814,16 +926,16 @@ function setDoctor(){
 function setstm(){
 	//var symptoms =	$('input[name="symptoms"]:checked').val();
 	//var energy = symptoms.join(',');
-	
-	const selectedValues = $('input[name="symptoms"]:checked').map( function () { 
-        return $(this).val(); 
+
+	const selectedValues = $('input[name="symptoms"]:checked').map( function () {
+        return $(this).val();
     })
     .get()
     .join(', ');
 	//alert(selectedValues);
 	$('#service3').val(selectedValues);
-	const selectedValues2 = $('input[name="comorbidity"]:checked').map( function () { 
-        return $(this).val(); 
+	const selectedValues2 = $('input[name="comorbidity"]:checked').map( function () {
+        return $(this).val();
     })
     .get()
     .join(', ');
@@ -839,24 +951,24 @@ function resetVenue(){
 	$('.schedul1').html('');
 	$('#ui-datepicker-div').hide();
 	var r = $('#p_date').val();
-	
+
 	//alert(r);
 }
 function addService(){
 	var services =	$('input[name="service"]:checked').val();
-	
-	const selectedValues = $('input[name="lang_set"]:checked').map( function () { 
-        return $(this).val(); 
+
+	const selectedValues = $('input[name="lang_set"]:checked').map( function () {
+        return $(this).val();
     })
     .get()
     .join(', ');
 	//alert(selectedValues);
 	$('#service3').val(selectedValues);
-	
-	
+
+
 	if(services=="Consultation for COVID-19"){
 		$('.multi_step_form #book_popup_2').remove();
-		setTimeout(function(){ 
+		setTimeout(function(){
 			$('#add_servicetype').trigger('click');
 		}, 1000);
 	}else{
@@ -883,7 +995,7 @@ function setSlot(){
 			$('#bb_app').addClass("btn_disable");
 			$('#msg_c').html('<div class="col-md-12"><div class="alert alert-danger">Please select appointment time slot</div></div>');
 			return false;
-		}	
+		}
 	}
 	if(p_email!="" || p_date!=""){
 		//alert(p_email+' / '+p_date);
@@ -905,14 +1017,14 @@ function setSlot(){
 					$('#bb_app').attr("disabled", false);
 					$('#bb_app').removeClass("btn_disable");
 					$('#message_id').removeClass('alert alert-danger');
-					$('#message_id').html('');	
+					$('#message_id').html('');
 				}
 				//$('#service_type').html(response);
 			}
 		});
 	}
-	
-	
+
+
 }
 function setfields(){
 	$('#p_name').attr("disabled", false);
@@ -921,13 +1033,13 @@ function setfields(){
 	$('#p_age').attr("disabled", false);
 }
 
-function preventBack() { 
-window.history.forward(); 
-}  
-setTimeout("preventBack()", 0);  
-window.onunload = function () { null };  
+function preventBack() {
+window.history.forward();
+}
+setTimeout("preventBack()", 0);
+window.onunload = function () { null };
 
 
-</script>	
+</script>
 </body>
 </html>

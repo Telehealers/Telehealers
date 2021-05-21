@@ -1,4 +1,4 @@
-<?php 
+<?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 include APPPATH.'../zoom/config.php';
 
@@ -7,42 +7,42 @@ class Appointment extends CI_Controller {
 |--------------------------------------
 |   constructor funcion
 |--------------------------------------
-*/ 
-public function __construct() 
-{
-	parent::__construct();
-	$this->load->library('email');
-	
-	$info= $this->db->select('*')->from('web_pages_tbl')->where('name','website_on_off')->get()->row();
+*/
+	public function __construct()
+	{
+		parent::__construct();
+		$this->load->library('email');
 
-	if($info->details=='off'){
-		redirect('login');
-	}
-	//Load Home_view_model
-	$this->load->model('web/Home_view_model','home_view_model');
-	//Load Overview model
-	$this->load->model('admin/Overview_model','overview_model');
-	//Load venue model
-	$this->load->model('admin/Venue_model','venue_model');
-	//load appointment model
-	$this->load->model('admin/Appointment_model','appointment_model');
-	//Load Basic model
-	$this->load->model('admin/basic_model','basic_model');
-	//Load Schedule model
-	$this->load->model('admin/Schedule_model','schedule_model');
-	//Load Patient model
-	$this->load->model('admin/Patient_model','patient_model');
-	// Load sms setup model
-	$this->load->model('admin/Sms_setup_model','sms_setup_model');
-	// Load Doctor model
-	$this->load->model('admin/Doctor_model','doctor_model');
-	//
-	$this->load->library('Smsgateway');
-	$this->load->library('session');
-	//
-	$this->load->model('admin/email/Email_model','email_model');
-	$this->load->library('email');
-}
+		$info= $this->db->select('*')->from('web_pages_tbl')->where('name','website_on_off')->get()->row();
+
+        if($info->details=='off'){
+          redirect('login');
+        }
+        //Load Home_view_model
+        $this->load->model('web/Home_view_model','home_view_model');
+        //Load Overview model
+        $this->load->model('admin/Overview_model','overview_model');
+        //Load venue model
+        $this->load->model('admin/Venue_model','venue_model');
+        //load appointment model
+        $this->load->model('admin/Appointment_model','appointment_model');
+        //Load Basic model
+        $this->load->model('admin/basic_model','basic_model');
+        //Load Schedule model
+        $this->load->model('admin/Schedule_model','schedule_model');
+        //Load Patient model
+        $this->load->model('admin/Patient_model','patient_model');
+        // Load sms setup model
+        $this->load->model('admin/Sms_setup_model','sms_setup_model');
+		// Load Doctor model
+		$this->load->model('admin/Doctor_model','doctor_model');
+        //
+        $this->load->library('Smsgateway');
+		$this->load->library('session');
+        //
+        $this->load->model('admin/email/Email_model','email_model');
+        $this->load->library('email');
+  }
 
 
 
@@ -53,9 +53,9 @@ public function __construct()
 */
 	public function index($patient_id=NULL)
 	{
-	    
+
 		$email_config = $this->email_model->email_config();
-		
+
         //get_schedule_list
         $data['schedule'] = $this->schedule_model->get_schedule_list();
         //setup information
@@ -63,7 +63,7 @@ public function __construct()
         //get doctor_info
         $data['doctor_info'] = $this->home_view_model->doctor_info();
         //load slider
-        $data['slider'] = $this->home_view_model->Slider(); 
+        $data['slider'] = $this->home_view_model->Slider();
         //total_appointment
         $data['total_appointment'] = $this->overview_model->total_appointment();
         //total_patient
@@ -81,12 +81,12 @@ public function __construct()
         $data['post'] = $this->home_view_model->get_all_post();
 		//get venue list
         $data['venue'] = $this->venue_model->get_venue_list();
-		
+
 		$data['service'] = $this->db->get('service')->result();
-		
+
 		//get doctor list for appointmaent
 		$data['doctor_info_for_appo'] = $this->doctor_model->getDoctorListByselect();
-		
+
 		$language_arr = array();
 		$language_str = $this->doctor_model->getDoctorListByselect();
 		if(is_array($language_str) && count($language_str)>0){
@@ -96,13 +96,13 @@ public function __construct()
 					$lan_arr = explode(',',$lan_str);
 					foreach($lan_arr as $lang){
 						$language_arr[] = trim($lang);
-					}	
-				}				
+					}
+				}
 			}
 		}
 		$language_arr = array_unique($language_arr);
-		//echo "<pre>";print_r($language_arr);die();	
-		
+		//echo "<pre>";print_r($language_arr);die();
+
 		$data['language_arr'] = $language_arr;
 
         $meta_sql = "select * from metadata where id = '4'";
@@ -141,8 +141,8 @@ public function __construct()
 
 #-----------------------------------------------
 #    random coad genaretor of appointmaent id
-#----------------------------------------------  
-function randstrGenapp($len) 
+#----------------------------------------------
+function randstrGenapp($len)
 {
     $result = "";
     $chars = "abcdefghijklmnopqrstuvwxyz0123456789";
@@ -197,11 +197,11 @@ function createVideoCallRoom($doctor_name, $doctor_email, $patient_name, $patien
 	}
 
 
-	
+
 	curl_close($curl_session);
 	$superpro_data = json_decode($superpro_response);
 	return $superpro_data->videoCallUrl ;
-	
+
 }
 #-----------------------------------------------
 #   Input: Client & Dr. Details in HTML in <p>...</p> format.
@@ -223,7 +223,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 									<td class="logo" style="text-align: left;">
 										<h1>
 											<a href="http://telehealers.in/">
-											<img src="http://telehealers.in/assets/uploads/images/telehe2.png">    
+											<img src="http://telehealers.in/assets/uploads/images/telehe2.png">
 											</a>
 										</h1>
 									</td>
@@ -243,8 +243,8 @@ function createVideoCallInformationMail($participantInfoHTML) {
 								</td>
 							</tr>
 						</tbody></table>
-					
-				
+
+
 				<table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
 					<tbody><tr>
 						<td class="bg_white" style="text-align: center;">
@@ -258,17 +258,17 @@ function createVideoCallInformationMail($participantInfoHTML) {
 }
 
 #-----------------------------------------------
-#    save appointmaent 
-#----------------------------------------------  
+#    save appointmaent
+#----------------------------------------------
 
-	public function appointment(){ 
+ public function appointment(){
 		$this->form_validation->set_rules('p_date', 'Date', 'trim|required');
 		//$this->form_validation->set_rules('patient_id', 'Patient Id', 'trim|required');
-		$this->form_validation->set_rules('venue_id', 'venue', 'trim|required'); 
+		$this->form_validation->set_rules('venue_id', 'venue', 'trim|required');
 		$this->form_validation->set_rules('sequence', 'sequence', 'trim|required');
-		
+
 		$sequence = $this->input->post('sequence',TRUE);
-		
+
 		$app_type_val = $this->input->post('app_type_val',TRUE);
 		$service1 = $this->input->post('service1',TRUE);
 		$service2 = $this->input->post('service2',TRUE);
@@ -278,7 +278,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		}else{
 			$doctor_id = $this->input->post('doctor_id');
 		}
-		//echo $doctor_id.'/'.$sequence;die(); 
+		//echo $doctor_id.'/'.$sequence;die();
 		/* if($this->input->post('doctor_id')){
 			$doctor_id = $this->input->post('doctor_id');
 		}else{
@@ -289,7 +289,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		}else{
 			$doctor_id = '1';
 		} */
-		
+
 
 		$p_name = $this->input->post('p_name',TRUE);
 		$p_email = $this->input->post('p_email',TRUE);
@@ -320,33 +320,34 @@ function createVideoCallInformationMail($participantInfoHTML) {
 				if($p_gender==""){
 					$p_gender = $sex;
 				}
-				$sql_u = "update patient_tbl set patient_name = '$p_name', patient_phone = '$p_phone', sex = '$p_gender', age = '$p_age' where patient_email = '$p_email'";	
+				$sql_u = "update patient_tbl set patient_name = '$p_name', patient_phone = '$p_phone', sex = '$p_gender', age = '$p_age' where patient_email = '$p_email'";
 				$this->db->query($sql_u);
 			}
-		
+
 		}else{
 			$patient_id = "P".date('y').strtoupper($this->randstrGenapp(5));
 		}
-		
+
 		$create_date = date('Y-m-d h:i:s');
-		
-		$patient_info =  array(
-			'patient_id'    => $patient_id,
-			'patient_name' => $p_name,
-			'patient_email' => $p_email,
-			'patient_phone' => $p_phone, 
-			'birth_date' => '',
-			'doctor_id' => $doctor_id,
-			'sex' => $p_gender,
-			'age' => $p_age,
-			'blood_group' => '',
-			'address' => '',
-			'picture' => '',
-			'create_date'=>$create_date
+
+		$birth_date = '';
+		 $patient_info =  array(
+		'patient_id'    => $patient_id,
+		'patient_name' => $p_name,
+		'patient_email' => $p_email,
+		'patient_phone' => $p_phone,
+		'birth_date' => $birth_date,
+		'doctor_id' => $doctor_id,
+		'sex' => $p_gender,
+		'age' => $p_age,
+		'blood_group' => '',
+		'address' => '',
+		'picture' => '',
+		'create_date'=>$create_date
 		);
-		
-		
-	
+
+
+
 		$data['patient_info'] = $patient_info;
 		$data['service1'] = $service1;
 		$data['service2'] = $service2;
@@ -376,11 +377,11 @@ function createVideoCallInformationMail($participantInfoHTML) {
 			$doctor_name = $result[0]['doctor_name'];
 			$fees = $result[0]['fees'];
 		}
-				
+
 		$appointment_id = "A".date('y').strtoupper($this->randstrGenapp(5));
 		$appointmentData = array(
             'doctor_name' => $doctor_name,
-            'fees' => $fees, 
+            'fees' => $fees,
             'date' => $this->input->post('p_date',TRUE),
             'patient_id' => $patient_id,
             'appointment_id' =>$appointment_id,
@@ -396,20 +397,20 @@ function createVideoCallInformationMail($participantInfoHTML) {
 			'per_patient_time' => $per_patient_time,
             'get_by' => 'Won'
         );
-		$data['appointmentData'] = $appointmentData;	
-		
+		$data['appointmentData'] = $appointmentData;
+
 		//echo "<pre>";print_r($data);die();
 		$data['info'] = $this->home_view_model->Home_satup();
-		
-		$this->load->view('public/process_appointment_info',$data); 
-		
+
+		$this->load->view('public/process_appointment_info',$data);
+
 	}
-	
+
 	public function confirmation(){
-		
+
 		$ci = get_instance();
 		$ci->load->library('email');
-		
+
 		$email_config = $this->email_model->email_config();
 		$protocol = NULL;
 		$smtp_host = NULL;
@@ -426,20 +427,20 @@ function createVideoCallInformationMail($participantInfoHTML) {
         $config['protocol'] = $protocol;
         $config['smtp_host'] = $smtp_host;
         $config['smtp_port'] = $smtp_port;
-        $config['smtp_user'] = $smtp_user; 
+        $config['smtp_user'] = $smtp_user;
         $config['smtp_pass'] = $smtp_pass;
         $config['charset'] = "utf-8";
         $config['mailtype'] = "html";
         $config['newline'] = "\r\n";
 		$ci->email->initialize($config);
-		
+
 		$this->form_validation->set_rules('p_date', 'Date', 'trim|required');
 		//$this->form_validation->set_rules('patient_id', 'Patient Id', 'trim|required');
-		$this->form_validation->set_rules('venue_id', 'venue', 'trim|required'); 
+		$this->form_validation->set_rules('venue_id', 'venue', 'trim|required');
 		$this->form_validation->set_rules('sequence', 'sequence', 'trim|required');
-		
+
 		$sequence = $this->input->post('sequence',TRUE);
-		
+
 		$app_type_val = $this->input->post('app_type_val',TRUE);
 		$service1 = $this->input->post('service1',TRUE);
 		$service2 = $this->input->post('service2',TRUE);
@@ -447,15 +448,15 @@ function createVideoCallInformationMail($participantInfoHTML) {
 			$doctor_id = $this->input->post('doc_idd',TRUE);
 			$sequence = $this->input->post('slot_idd',TRUE);
 			$schedul_id = $this->input->post('sh_idd',TRUE);
-			
+
 		}else{
 			$doctor_id = $this->input->post('doctor_id');
 			$schedul_id = $this->input->post('schedul_id',TRUE);
 		}
-		
-		
-		//echo $doctor_id."/".$sequence."/".$schedul_id;die(); 
-		//echo $schedul_id;die(); 
+
+
+		//echo $doctor_id."/".$sequence."/".$schedul_id;die();
+		//echo $schedul_id;die();
 		/* if($this->input->post('doctor_id')){
 			$doctor_id = $this->input->post('doctor_id');
 		}else{
@@ -466,7 +467,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		}else{
 			$doctor_id = '1';
 		} */
-		
+
 		$p_name = $this->input->post('p_name',TRUE);
 		$p_email = $this->input->post('p_email',TRUE);
 		$p_phone = $this->input->post('p_phone',TRUE);
@@ -475,7 +476,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		//$existing_user = $this->input->post('existing_user',TRUE);
 		$existing_user = 0;
 		$patient_id = "P".date('y').strtoupper($this->randstrGenapp(5));
-		
+
 		$patient_exist=0;
 		$sql_log = "select * from log_info where email = '$p_email'";
 		$res_log = $this->db->query($sql_log);
@@ -500,11 +501,11 @@ function createVideoCallInformationMail($participantInfoHTML) {
 					'sex' => $p_age,
 					'age' => $p_gender,
 					'doctor_id' => $doctor_id
-				);	
+				);
 				$this->db->insert('patient_tbl', $patient_data);
 			}
 		}else{
-		    
+
 			//$log_id=0;
 			$p_password = md5('PTele@123!');
 			$pass_p = 'PTele@123!';
@@ -512,21 +513,71 @@ function createVideoCallInformationMail($participantInfoHTML) {
 				'email' => $p_email,
 				'password' => $p_password,
 				'user_type' => '3'
-			);	
-			$this->db->insert('log_info', $log_data);	
-			$log_id = $this->db->insert_id();	
+			);
+			$this->db->insert('log_info', $log_data);
+			$log_id = $this->db->insert_id();
 			$p_log_id = $log_id;
-			$message = $this->createVideoCallInformationMail('
-				<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Dear '.$p_name.':</h2>
-				<p>Thanks for choosing telehealers.in</p>
-				<p>Kindly visit Your dashboard using registered mobile number.</p>
-				<p>Url:  https://telehealers.in/Userlogin</p>
-				<p>Name: '.$p_name.'</p>
-				<p>ID: '.$patient_id.'</p>
-				<p>Email: '.$p_email.'</p>
-				<p>&nbsp;</p>
-				<p>Keep in touch during this tough time! </p>
-				<p>Kindly write us back without any hasitation if you find any issues at support@telehealers.in</p>');
+			$message = '<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #f1f1f1;">
+    <center style="width: 100%; background-color: #f1f1f1;">
+        <div style="display: none; font-size: 1px;max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
+            &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
+        </div>
+        <div style="max-width: 600px; margin: 0 auto;" class="email-container">
+            <!-- BEGIN BODY -->
+            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
+                <tbody><tr>
+                    <td valign="top" class="bg_white" style="padding: 1em 2.5em 0 2.5em;">
+                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                            <tbody><tr>
+                                <td class="logo" style="text-align: left;">
+                                    <h1>
+                                        <a href="https://telehealers.in/">
+                                        <img src="https://telehealers.in/assets/uploads/images/telehe2.png">
+                                        </a>
+                                    </h1>
+                                </td>
+                            </tr>
+                        </tbody></table>
+                    </td>
+                </tr>
+                <tr>
+                    </tr></tbody></table><table class="bg_white" role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                        <tbody><tr style="border-bottom: 1px solid rgba(0,0,0,.05);">
+                            <td valign="middle" width="100%" style="text-align:left; padding: 0 2.5em;">
+                                <div class="product-entry">
+                                    <div class="text">
+                                        <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Dear '.$p_name.':</h2>
+										<p>Thanks for choosing telehealers.in</p>
+										<p>Kindly visit Your dashboard using registered mobile number.</p>
+										<p>Url:  https://telehealers.in/Userlogin</p>
+                                        <p>Name: '.$p_name.'</p>
+                                        <p>ID: '.$patient_id.'</p>
+										<p>Email: '.$p_email.'</p>
+										<p>&nbsp;</p>
+										<p>Keep in touch during this tough time! </p>
+										<p>Kindly write us back without any hasitation if you find any issues at support@telehealers.in</p>
+
+
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody></table>
+
+
+            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
+                <tbody><tr>
+                    <td class="bg_white" style="text-align: center;">
+                        <p>Receive these email? You can <a href="#" style="color: rgba(0,0,0,.8);">Unsubscribe here</a></p>
+                    </td>
+                </tr>
+            </tbody></table>
+
+        </div>
+    </center>
+
+
+</body></html>';
 
 			$ci->email->from('info@telehealers.in', 'telehealers');
 			$list = array($p_email);
@@ -536,8 +587,8 @@ function createVideoCallInformationMail($participantInfoHTML) {
 			$ci->email->message($message);
 			$ci->email->send();
 		}
-		
-		
+
+
 		if($existing_user==1){
 			$sql_p = "select * from patient_tbl where patient_email = '$p_email'";
 			$res_p = $this->db->query($sql_p);
@@ -561,39 +612,39 @@ function createVideoCallInformationMail($participantInfoHTML) {
 				if($p_gender==""){
 					$p_gender = $sex;
 				} */
-				//$sql_u = "update patient_tbl set patient_name = '$p_name', patient_phone = '$p_phone', sex = '$p_gender', age = '$p_age' where patient_email = '$p_email'";	
+				//$sql_u = "update patient_tbl set patient_name = '$p_name', patient_phone = '$p_phone', sex = '$p_gender', age = '$p_age' where patient_email = '$p_email'";
 				//$this->db->query($sql_u);
 			}
-		
+
 		}else{
-			
+
 		}
-		
+
 		$create_date = date('Y-m-d h:i:s');
 		$birth_date='';
 		$savedata =  array(
-			'patient_id'    => $patient_id,
-			'patient_name' => $p_name,
-			'patient_email' => $p_email,
-			'log_id' => $log_id,
-			'patient_phone' => $p_phone, 
-			'birth_date' => $birth_date,
-			'doctor_id' => $doctor_id,
-			'sex' => $p_gender,
-			'age' => $p_age,
-			'blood_group' => '',
-			'address' => '',
-			'picture' => '',
-			'create_date'=>$create_date
+		'patient_id'    => $patient_id,
+		'patient_name' => $p_name,
+		'patient_email' => $p_email,
+		'log_id' => $log_id,
+		'patient_phone' => $p_phone,
+		'birth_date' => $birth_date,
+		'doctor_id' => $doctor_id,
+		'sex' => $p_gender,
+		'age' => $p_age,
+		'blood_group' => '',
+		'address' => '',
+		'picture' => '',
+		'create_date'=>$create_date
 		);
 		$savedata = $this->security->xss_clean($savedata);
 		if($patient_exist==0){
-			$this->patient_model->save_patient($savedata);	
+			$this->patient_model->save_patient($savedata);
 		}
-		
-		
+
+
 		//echo 'schedul_id--'.$schedul_id;die();
-	
+
 		$data['patient_info'] = $savedata;
 		$data['service1'] = $service1;
 		$data['service2'] = $service2;
@@ -608,7 +659,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 			$venue_address = $result[0]['venue_address'];
 		}
 		$per_patient_time = '30';
-		
+
 		$sql_sh = "select * from schedul_setup_tbl where schedul_id = '".$schedul_id."'";
 		$res_sh = $this->db->query($sql_sh);
 		$result_sh = $res_sh->result_array();
@@ -623,11 +674,11 @@ function createVideoCallInformationMail($participantInfoHTML) {
 			$doctor_name = $result[0]['doctor_name'];
 			$fees = $result[0]['fees'];
 		}
-				
+
 		$appointment_id = "A".date('y').strtoupper($this->randstrGenapp(5));
-		
+
 		$date = $this->input->post('p_date',TRUE);
-		
+
 		$appointmentData = array(
 			'date' => $this->input->post('p_date',TRUE),
 			'patient_id' => $patient_id,
@@ -642,11 +693,11 @@ function createVideoCallInformationMail($participantInfoHTML) {
 			'get_date_time' => date("Y-m-d h:i:s"),
 			'get_by' => 'Won'
 		);
-		
+
 		$p_cc = $this->input->post('problem',TRUE);
 
 		$this->appointment_model->SaveAppoin($appointmentData);
-		
+
 		$sql = "select * from doctor_tbl where doctor_id = '".$doctor_id."'";
 		$res = $this->db->query($sql);
 		$result = $res->result_array();
@@ -666,42 +717,130 @@ function createVideoCallInformationMail($participantInfoHTML) {
 			if(is_array($result_doc) && count($result_doc)>0){
 				$doctor_email = $result_doc[0]['email'];
 			}
-		}	
-		
-		/** Video call room creation **/				
-		$superpro_meeting_url = $this->createVideoCallRoom(
-			$doctor_name, $doctor_email,
-			$p_name, $p_email);
-		$meeting_pass = '';
+		}
 
-		$symt1 = $superpro_meeting_url;
+		$sql_tk = "select * from token where id = '1'";
+		$res_tk = $this->db->query($sql_tk);
+		$result_tk = $res_tk->result_array();
+		if(is_array($result_tk) && count($result_tk)>0){
+			$accessToken = $result_tk[0]['access_token'];
+			$refershToken = $result_tk[0]['refersh_token'];
+		}
+
+		if($refershToken!="" && $accessToken!=""){
+
+			try {
+				$client = new GuzzleHttp\Client(['base_uri' => 'https://zoom.us']);
+				$date_g = '12-07-2021';
+				$sequence_g = '6:15 PM';
+				$app_date_time = date('Y-m-d',strtotime($date)).'T'.$sequence.":00";
+				$meeting_pass = '123456768';
+
+				$response_z = $client->request('POST', '/v2/users/me/meetings', [
+					"headers" => [
+						"Authorization" => "Bearer $accessToken"
+					],
+					'json' => [
+						"topic" => "Appointment Meeting - $appointment_id",
+						"type" => 2,
+						"start_time" => $app_date_time,
+						"duration" => $per_patient_time, // 30 mins
+						"timezone" => 'Asia/Calcutta', // 30 mins
+						"password" => $meeting_pass
+					]
+				]);
+
+				$data_zoom = json_decode($response_z->getBody());
+				$zoom_meeting_url = $data_zoom->join_url;
+			} catch(Exception $e) {
+				$meeting_pass = '';
+				$zoom_meeting_url = '';
+			}
+		}else{
+			$meeting_pass = '';
+			$zoom_meeting_url = '';
+		}
+
+
+
+		$symt1 = $zoom_meeting_url;
 		$symt2 = $meeting_pass;
-		
+
 		$sql_m = "update appointment_tbl set symt1 = '".$symt1."',symt2 = '".$symt2."' where appointment_id = '$appointment_id'";
 		$this->db->query($sql_m);
-		
-		
-		
-		$message = $this->createVideoCallInformationMail('
-			<p>Hey <strong>'.$p_name.'</strong>,</p>
-			<p>Our staff member has confirmed you for a '.$service2.' appointment on '.date('jS F Y',strtotime($date)).' with Dr. '.$doctor_name.'. If you have questions before your appointment,
-				use the contact form with appointment ID to get in touch with us.</p>
-			<h2 style="text-align:left;font-weight:600;color:#356d82">Videocall Details:</h2> 
-			<p>Superpro video call link: '.$superpro_meeting_url.',</p>
-			<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Appointment ID - ('.$appointment_id.')</h2><h1></h1>
-			<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Doctor Details:</h2><h1></h1>
-			<p>Name: '.$doctor_name.'</p>
-			<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Patient Details:</h2>
-			<p>Name: '.$p_name.'</p>
-			<p>ID: '.$patient_id.'</p>
-			<p>Email: '.$p_email.'.Enter this in videocall link to join.</p>
-			<p>Phone: '.$p_phone.'</p>
-			<p>Age: '.$p_age.'</p>
-			<p>Gender: '.$p_gender.',</p>
-			<p>Tell us your symptom or health problem: '.$p_cc.'</p>
-			<p>Appointment Date: '.date('jS F Y',strtotime($date)).'</p>
-			<p>Appointment Time: '.date('h:i A', strtotime($sequence)).'</p>
-			<p>Appointment ID: '.$appointment_id.'</p>');
+
+
+
+		$message = '<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #f1f1f1;">
+    <center style="width: 100%; background-color: #f1f1f1;">
+        <div style="display: none; font-size: 1px;max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
+            &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
+        </div>
+        <div style="max-width: 600px; margin: 0 auto;" class="email-container">
+            <!-- BEGIN BODY -->
+            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
+                <tbody><tr>
+                    <td valign="top" class="bg_white" style="padding: 1em 2.5em 0 2.5em;">
+                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                            <tbody><tr>
+                                <td class="logo" style="text-align: left;">
+                                    <h1>
+                                        <a href="http://telehealers.in/">
+                                        <img src="http://telehealers.in/assets/uploads/images/telehe2.png">
+                                        </a>
+                                    </h1>
+                                </td>
+                            </tr>
+                        </tbody></table>
+                    </td>
+                </tr>
+                <tr>
+                    </tr></tbody></table><table class="bg_white" role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                        <tbody><tr style="border-bottom: 1px solid rgba(0,0,0,.05);">
+                            <td valign="middle" width="100%" style="text-align:left; padding: 0 2.5em;">
+                                <div class="product-entry">
+                                    <div class="text">
+                                        <p>Hey <strong>'.$p_name.'</strong>,</p>
+                                        <p>Our staff member has confirmed you for a '.$service2.' appointment on '.date('jS F Y',strtotime($date)).' with Dr. '.$doctor_name.'. If you have questions before your appointment,
+                                            use the contact form with appointment ID to get in touch with us.</p>
+										<h2 style="text-align:left;font-weight:600;color:#356d82">Zoom Meeting Details:</h2>
+										<p>Zoom meeting URL: '.$zoom_meeting_url.',</p>
+										<p>Zoom meeting Password: '.$meeting_pass.',</p>
+                                        <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Appointment ID - ('.$appointment_id.')</h2><h1></h1>
+                                        <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Doctor Details:</h2><h1></h1>
+                                        <p>Name: '.$doctor_name.'</p>
+                                        <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Patient Details:</h2>
+                                        <p>Name: '.$p_name.'</p>
+                                        <p>ID: '.$patient_id.'</p>
+										<p>Email: '.$p_email.'</p>
+										<p>Phone: '.$p_phone.'</p>
+										<p>Age: '.$p_age.'</p>
+										<p>Gender: '.$p_gender.',</p>
+										<p>Tell us your symptom or health problem: '.$p_cc.'</p>
+										<p>Appointment Date: '.date('jS F Y',strtotime($date)).'</p>
+										<p>Appointment Time: '.date('h:i A', strtotime($sequence)).'</p>
+										<p>Appointment ID: '.$appointment_id.'</p>
+
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody></table>
+
+
+            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
+                <tbody><tr>
+                    <td class="bg_white" style="text-align: center;">
+                        <p>Receive these email? You can <a href="#" style="color: rgba(0,0,0,.8);">Unsubscribe here</a></p>
+                    </td>
+                </tr>
+            </tbody></table>
+
+        </div>
+    </center>
+
+
+</body></html>';
 
 		$ci->email->from('info@telehealers.in', 'telehealers');
 		$list = array($p_email);
@@ -710,7 +849,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		$ci->email->subject('Appointment Information');
 		$ci->email->message($message);
 		$ci->email->send();
-		
+
 		$ci->email->from('info@telehealers.in', 'telehealers');
 		$list = array($doctor_email);
 		$ci->email->to($list);
@@ -718,8 +857,8 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		$ci->email->subject('Appointment Information');
 		$ci->email->message($message);
 		$ci->email->send();
-		
-		
+
+
 		$appointmentData = array(
 			'date' => $this->input->post('p_date',TRUE),
 			'patient_id' => $patient_id,
@@ -738,14 +877,14 @@ function createVideoCallInformationMail($participantInfoHTML) {
 			'fees' => '0'
 		);
 
-		$data['appointmentData'] = $appointmentData; 	
-		
+		$data['appointmentData'] = $appointmentData;
+
 		//echo "<pre>";print_r($data);die();
 		$data['info'] = $this->home_view_model->Home_satup();
-		
+
 		$app_time = date('h:i A', strtotime($sequence));
 		$app_date = date('jS F Y',strtotime($this->input->post('p_date',TRUE)));
-		
+
 		$mes = 'You have successfully registered and made an appointment with '.$doctor_name.' on '.$app_date.'-'.$app_time.'<br>Welcome to your patient dashboard here you can see all your appointments, prescriptions and tests that you upload to the portal. You can always login back using the registered mobile number - '.$p_phone;
 		$session_data = array(
 			'log_id' => $p_log_id,
@@ -760,20 +899,15 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		$this->session->set_userdata($session_data);
 		$this->session->set_flashdata('message',"<div class='alert alert-success'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>".$mes."</div>");
         redirect('Patient');
-		//$this->load->view('public/process_appointment_info',$data); 
+		//$this->load->view('public/process_appointment_info',$data);
 	}
-	
+
 	public function patientAppointment(){
-		
+
 		$ci = get_instance();
 		$ci->load->library('email');
-		//Necessary variable initialization
-		$protocol = NULL;
-		$smtp_host = NULL;
-		$smtp_port = NULL;
-		$smtp_user = NULL;
-		$smtp_pass = NULL;
-        $email_config = NULL;
+
+        $email_config = $this->email_model->email_config();
 		if(is_array($email_config) && count($email_config)>0){
 			$protocol = $email_config->protocol;
 			$smtp_host = $email_config->mailpath;
@@ -784,13 +918,13 @@ function createVideoCallInformationMail($participantInfoHTML) {
         $config['protocol'] = $protocol;
         $config['smtp_host'] = $smtp_host;
         $config['smtp_port'] = $smtp_port;
-        $config['smtp_user'] = $smtp_user; 
+        $config['smtp_user'] = $smtp_user;
         $config['smtp_pass'] = $smtp_pass;
         $config['charset'] = "utf-8";
         $config['mailtype'] = "html";
         $config['newline'] = "\r\n";
 		$ci->email->initialize($config);
-		
+
 		$p_date = $this->input->post('p_date',TRUE);
 		$patient_id = $this->input->post('patient_id',TRUE);
 		$schedul_id = $this->input->post('schedul_id',TRUE);
@@ -799,10 +933,10 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		$problem = $this->input->post('problem',TRUE);
 		$venue_id = '3';
 		$venue_name = 'Online';
-		
+
 		$app_type_val = $this->input->post('app_type_val',TRUE);
 		$service1 = 'Consultation for COVID-19';
-		
+
 		$sql_pat = "select * from patient_tbl where patient_id = '".$patient_id."'";
 		$res_pat = $this->db->query($sql_pat);
 		$result_pat = $res_pat->result_array();
@@ -813,8 +947,8 @@ function createVideoCallInformationMail($participantInfoHTML) {
 			$p_gender = $result_pat[0]['sex'];
 			$p_age = $result_pat[0]['age'];
 			$p_log_id = $result_pat[0]['log_id'];
-		}	
-		
+		}
+
 		$per_patient_time = '15';
 		$sql_sh = "select * from schedul_setup_tbl where schedul_id = '".$schedul_id."'";
 		$res_sh = $this->db->query($sql_sh);
@@ -823,7 +957,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		if(is_array($result_sh) && count($result_sh)>0){
 			$per_patient_time = $result_sh[0]['per_patient_time'];
 		}
-		
+
 		$sql = "select * from doctor_tbl where doctor_id = '".$doctor_id."'";
 		$res = $this->db->query($sql);
 		$result = $res->result_array();
@@ -831,11 +965,11 @@ function createVideoCallInformationMail($participantInfoHTML) {
 			$doctor_name = $result[0]['doctor_name'];
 			$fees = $result[0]['fees'];
 		}
-				
+
 		$appointment_id = "A".date('y').strtoupper($this->randstrGenapp(5));
-		
+
 		$date = $this->input->post('p_date',TRUE);
-		
+
 		$appointmentData = array(
 		'date' => $this->input->post('p_date',TRUE),
 		'patient_id' => $patient_id,
@@ -850,11 +984,11 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		'get_date_time' => date("Y-m-d h:i:s"),
 		'get_by' => 'Won'
 		);
-		
+
 		$p_cc = $problem;
 
 		$this->appointment_model->SaveAppoin($appointmentData);
-		
+
 		$sql = "select * from doctor_tbl where doctor_id = '".$doctor_id."'";
 		$res = $this->db->query($sql);
 		$result = $res->result_array();
@@ -883,52 +1017,140 @@ function createVideoCallInformationMail($participantInfoHTML) {
 			if(is_array($result_doc) && count($result_doc)>0){
 				$doctor_email = $result_doc[0]['email'];
 			}
-		}	
-		
+		}
+
 		$sql_rk = "select * from token2 where id = '1'";
 		$res_rk = $this->db->query($sql_rk);
 		$result_rk = $res_rk->result_array();
 		if(is_array($result_rk) && count($result_rk)>0){
 			$refershToken = $result_rk[0]['refersh_token'];
 		}
-		
 
-		/** Video call room creation **/				
-		$superpro_meeting_url = $this->createVideoCallRoom(
-			$doctor_name, $doctor_email,
-			$p_name, $p_email);
-		$meeting_pass = '';
-		
-		
-		
-		$symt1 = $superpro_meeting_url;
+		$sql_tk = "select * from token where id = '1'";
+		$res_tk = $this->db->query($sql_tk);
+		$result_tk = $res_tk->result_array();
+		if(is_array($result_tk) && count($result_tk)>0){
+			$accessToken = $result_tk[0]['access_token'];
+		}
+
+		if($refershToken!="" && $accessToken!=""){
+			$client = new GuzzleHttp\Client(['base_uri' => 'https://zoom.us']);
+
+			//$app_date_time = date('Y-m-d',strtotime($date)).'T'.$sequence;
+
+			//$app_date_time = date('jS F Y',strtotime($date)).' - '.date('h:i A', strtotime($sequence));
+
+			$date_g = '12-07-2021';
+			$sequence_g = '6:15 PM';
+			//$app_date_time = '2021-06-20T16:45:00Z';
+			//$app_date_time = '2021-05-15T12:00:00Z';
+			//2021-05-05T19:00Z
+			$app_date_time = date('Y-m-d',strtotime($date)).'T'.$sequence.":00";
+			//die();
+
+			$meeting_pass = '123456768';
+
+			$response_z = $client->request('POST', '/v2/users/me/meetings', [
+				"headers" => [
+					"Authorization" => "Bearer $accessToken"
+				],
+				'json' => [
+					"topic" => "Appointment Meeting - $appointment_id",
+					"type" => 2,
+					"start_time" => $app_date_time,
+					"duration" => $per_patient_time, // 30 mins
+					"timezone" => 'Asia/Calcutta', // 30 mins
+					"password" => $meeting_pass
+				]
+			]);
+
+			$data_zoom = json_decode($response_z->getBody());
+			$zoom_meeting_url = $data_zoom->join_url;
+		}else{
+			$meeting_pass = '';
+			$zoom_meeting_url = '';
+		}
+
+
+
+		$symt1 = $zoom_meeting_url;
 		$symt2 = $meeting_pass;
-		
+
 		$sql_m = "update appointment_tbl set symt1 = '".$symt1."',symt2 = '".$symt2."' where appointment_id = '$appointment_id'";
 		$this->db->query($sql_m);
-		
-		
-		
-		$message = $this->createVideoCallInformationMail('
-			<p>Hey <strong>'.$p_name.'</strong>,</p>
-			<p>Our staff member has confirmed you for a '.$service1.' appointment on '.date('jS F Y',strtotime($date)).' with Dr. '.$doctor_name.'. If you have questions before your appointment,
-				use the contact form with appointment ID to get in touch with us.</p>
-			<h2 style="text-align:left;font-weight:600;color:#356d82">Videocall Details:</h2> 
-			<p>Superpro video call link: '.$superpro_meeting_url.',</p>
-			<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Appointment ID - ('.$appointment_id.')</h2><h1></h1>
-			<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Doctor Details:</h2><h1></h1>
-			<p>Name: '.$doctor_name.'</p>
-			<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Patient Details:</h2>
-			<p>Name: '.$p_name.'</p>
-			<p>ID: '.$patient_id.'</p>
-			<p>Email: '.$p_email.'.Enter this in videocall link to join.</p>
-			<p>Phone: '.$p_phone.'</p>
-			<p>Age: '.$p_age.'</p>
-			<p>Gender: '.$p_gender.',</p>
-			<p>Tell us your symptom or health problem: '.$problem.'</p>
-			<p>Appointment Date: '.date('jS F Y',strtotime($date)).'</p>
-			<p>Appointment Time: '.date('h:i A', strtotime($sequence)).'</p>
-			<p>Appointment ID: '.$appointment_id.'</p>');
+
+
+
+		$message = '<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #f1f1f1;">
+    <center style="width: 100%; background-color: #f1f1f1;">
+        <div style="display: none; font-size: 1px;max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
+            &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
+        </div>
+        <div style="max-width: 600px; margin: 0 auto;" class="email-container">
+            <!-- BEGIN BODY -->
+            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
+                <tbody><tr>
+                    <td valign="top" class="bg_white" style="padding: 1em 2.5em 0 2.5em;">
+                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                            <tbody><tr>
+                                <td class="logo" style="text-align: left;">
+                                    <h1>
+                                        <a href="http://telehealers.in/">
+                                        <img src="http://telehealers.in/assets/uploads/images/telehe2.png">
+                                        </a>
+                                    </h1>
+                                </td>
+                            </tr>
+                        </tbody></table>
+                    </td>
+                </tr>
+                <tr>
+                    </tr></tbody></table><table class="bg_white" role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                        <tbody><tr style="border-bottom: 1px solid rgba(0,0,0,.05);">
+                            <td valign="middle" width="100%" style="text-align:left; padding: 0 2.5em;">
+                                <div class="product-entry">
+                                    <div class="text">
+                                        <p>Hey <strong>'.$p_name.'</strong>,</p>
+                                        <p>Our staff member has confirmed you for a '.$service1.' appointment on '.date('jS F Y',strtotime($date)).' with Dr. '.$doctor_name.'. If you have questions before your appointment,
+                                            use the contact form with appointment ID to get in touch with us.</p>
+										<h2 style="text-align:left;font-weight:600;color:#356d82">Zoom Meeting Details:</h2>
+										<p>Zoom meeting URL: '.$zoom_meeting_url.',</p>
+										<p>Zoom meeting Password: '.$meeting_pass.',</p>
+                                        <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Appointment ID - ('.$appointment_id.')</h2><h1></h1>
+                                        <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Doctor Details:</h2><h1></h1>
+                                        <p>Name: '.$doctor_name.'</p>
+                                        <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Patient Details:</h2>
+                                        <p>Name: '.$p_name.'</p>
+                                        <p>ID: '.$patient_id.'</p>
+										<p>Email: '.$p_email.'</p>
+										<p>Phone: '.$p_phone.'</p>
+										<p>Age: '.$p_age.'</p>
+										<p>Gender: '.$p_gender.',</p>
+										<p>Tell us your symptom or health problem: '.$problem.'</p>
+										<p>Appointment Date: '.date('jS F Y',strtotime($date)).'</p>
+										<p>Appointment Time: '.date('h:i A', strtotime($sequence)).'</p>
+										<p>Appointment ID: '.$appointment_id.'</p>
+
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody></table>
+
+
+            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
+                <tbody><tr>
+                    <td class="bg_white" style="text-align: center;">
+                        <p>Receive these email? You can <a href="#" style="color: rgba(0,0,0,.8);">Unsubscribe here</a></p>
+                    </td>
+                </tr>
+            </tbody></table>
+
+        </div>
+    </center>
+
+
+</body></html>';
 
 		$ci->email->from('info@telehealers.in', 'telehealers');
 		$list = array($p_email);
@@ -937,7 +1159,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		$ci->email->subject('Appointment Information');
 		$ci->email->message($message);
 		$ci->email->send();
-		
+
 		$ci->email->from('info@telehealers.in', 'telehealers');
 		$list = array($doctor_email);
 		$ci->email->to($list);
@@ -945,8 +1167,8 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		$ci->email->subject('Appointment Information');
 		$ci->email->message($message);
 		$ci->email->send();
-		
-		
+
+
 		$appointmentData = array(
 		'date' => $this->input->post('p_date',TRUE),
 		'patient_id' => $patient_id,
@@ -965,14 +1187,14 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		'fees' => '0'
 		);
 
-		$data['appointmentData'] = $appointmentData; 	
-		
+		$data['appointmentData'] = $appointmentData;
+
 		//echo "<pre>";print_r($data);die();
 		$data['info'] = $this->home_view_model->Home_satup();
-		
+
 		$app_time = date('h:i A', strtotime($sequence));
 		$app_date = date('jS F Y',strtotime($this->input->post('p_date',TRUE)));
-		
+
 		$mes = 'You have made an appointment with '.$doctor_name.' on '.$app_date.'-'.$app_time.'<br>Welcome to your patient dashboard here you can see all your appointments, prescriptions and tests that you upload to the portal. You can always login back using the registered mobile number - '.$p_phone;
 		$session_data = array(
 			'log_id' => $p_log_id,
@@ -987,15 +1209,15 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		$this->session->set_userdata($session_data);
 		$this->session->set_flashdata('message',"<div class='alert alert-success'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>".$mes."</div>");
         redirect('Patient');
-		//$this->load->view('public/process_appointment_info',$data); 
+		//$this->load->view('public/process_appointment_info',$data);
 	}
-	
- 
-/* 
+
+
+/*
 |--------------------------------------
 |     view  print_appointment_info
 |--------------------------------------
-*/ 
+*/
     public function print_appointment_info()
     {
         $data['info'] = $this->home_view_model->Home_satup();
@@ -1003,14 +1225,14 @@ function createVideoCallInformationMail($participantInfoHTML) {
 
         $data['print'] = $this->basic_model->get_appointment_print_result($appointment_id);
 
-    	
+
     		if($data){
-             	 $this->load->view('public/patient_appointment_info',$data); 
+             	 $this->load->view('public/patient_appointment_info',$data);
             }else{
                 redirect('Welcome');
-            } 
+            }
     }
-	
+
 	public function save_appointment_info()
     {
         $data['info'] = $this->home_view_model->Home_satup();
@@ -1018,18 +1240,18 @@ function createVideoCallInformationMail($participantInfoHTML) {
 
         $data['print'] = $this->basic_model->get_appointment_print_result($appointment_id);
 
-    	
+
     		if($data){
-             	 $this->load->view('public/save_appointment_info',$data); 
+             	 $this->load->view('public/save_appointment_info',$data);
             }else{
                 redirect('Welcome');
-            } 
+            }
     }
 /*
 |--------------------------------------
 |     print registration save
 |--------------------------------------
-*/   
+*/
 
 public function registration()
 {
@@ -1048,7 +1270,7 @@ public function registration()
               $config['remove_spaces'] = true;
               $config['max_filename']   = 10;
               $config['file_ext_tolower'] = true;
-              
+
               $this->load->library('upload', $config);
               if (!$this->upload->do_upload('picture')){
                   $this->session->set_flashdata('exception',"<div class='alert alert-danger msg'>".$this->upload->display_errors()."</div>");
@@ -1056,7 +1278,7 @@ public function registration()
               } else {
               $data = $this->upload->data();
               $image = base_url($config['upload_path'].$data['file_name']);
-                
+
                 #------------resize image------------#
                 $this->load->library('image_lib');
                 $config['image_library'] = 'gd2';
@@ -1078,13 +1300,13 @@ public function registration()
           $exists_user = $this->patient_model->exists_user(
               $this->input->post('phone',true),
               date('Y-m-d',strtotime($this->input->post('birth_date',true)))
-          ); 
+          );
           if($exists_user == true){
-              $this->session->set_flashdata('exception','<div class="alert alert-danger">'.display('exist_error_msg').'</div>');  
+              $this->session->set_flashdata('exception','<div class="alert alert-danger">'.display('exist_error_msg').'</div>');
               redirect('Welcome');
           }
 
-            $patient_id = $this->input->post('pat_id',TRUE); 
+            $patient_id = $this->input->post('pat_id',TRUE);
             $create_date = date('Y-m-d h:i:s');
             $birth_date = date('Y-m-d',strtotime($this->input->post('birth_date',TRUE)));
 
@@ -1092,7 +1314,7 @@ public function registration()
             'patient_id'    => $this->input->post('pat_id',TRUE),
             'patient_name' => $this->input->post('name',TRUE),
             'patient_email' => $this->input->post('email',true),
-            'patient_phone' => $this->input->post('phone',TRUE), 
+            'patient_phone' => $this->input->post('phone',TRUE),
             'birth_date' =>$birth_date,
             'sex' => $this->input->post('gender',TRUE),
             'blood_group' => $this->input->post('blood_group',TRUE),
@@ -1102,20 +1324,20 @@ public function registration()
             );
         #--------------------------------------
         # send email
-        #-------------------------------------- 
+        #--------------------------------------
           $email_config1 = $this->email_model->email_config();
             #-------------------------------
             if($email_config1->at_registration==1){
               // gate email template
               $email_temp_info = $this->db->select("*")->from('email_template')->where('default_status',1)->where('template_type',1)->get()->row();
-               if(!empty($email_temp_info)) {     
-              
+               if(!empty($email_temp_info)) {
+
                       $message = $this->template([
                          'patient_name'     => $this->input->post('name',TRUE),
-                         'patient_id'       => $this->input->post('pat_id',TRUE), 
+                         'patient_id'       => $this->input->post('pat_id',TRUE),
                          'date' => date("Y-m-d h:i:s"),
                          'message'          => $email_temp_info->email_template
-                     ]); 
+                     ]);
 
                 #----------------------------
                     $config['protocol'] = $email_config1->protocol;
@@ -1135,13 +1357,13 @@ public function registration()
                     $save_email = array(
                       'delivery_date_time '=> date("Y-m-d h:i:s"),
                       'reciver_email '=> $this->input->post('email',TRUE),
-                      'message'     => $message       
+                      'message'     => $message
                     );
                     $this->db->insert('email_delivery',$save_email);
-               } 
-            }           
-            
-            $savedata = $this->security->xss_clean($savedata); 
+               }
+            }
+
+            $savedata = $this->security->xss_clean($savedata);
             $this->patient_model->save_patient($savedata);
             $this->session->set_flashdata('patient_id',$patient_id);
             $this->session->set_flashdata('exception',"<div class='alert alert-success'>".display('register_msg')." <strong>Patient Id : ".$patient_id."</strong></div>");
@@ -1157,8 +1379,8 @@ public function registration()
         $newStr = $config1['message'];
         foreach ($config1 as $key => $value) {
             $newStr = str_replace("%$key%", $value, $newStr);
-        } 
-        return $newStr; 
+        }
+        return $newStr;
     }
 /*
 |---------------------------------
@@ -1188,7 +1410,7 @@ public function registration()
         ->row();
 		echo json_encode($result);
 	}
-	
+
 	public function contactEmail(){
 		//echo "test...here...";die();
 		$full_name = $this->input->post('full_name',TRUE);
@@ -1204,7 +1426,7 @@ public function registration()
 		$headers .= 'From: '.$from."\r\n".
 		'Reply-To: '.$from."\r\n" .
 		'X-Mailer: PHP/' . phpversion();
-		
+
 		$messagef = '<html><body>';
 		$messagef .= '<h1>telehealers.in from '.$full_name.'</h1>';
 		$messagef .= '<p style="font-size:18px;">Full Name: '.$full_name.'</p>';
@@ -1212,7 +1434,7 @@ public function registration()
 		$messagef .= '<p style="font-size:18px;">Subject: '.$subject.'</p>';
 		$messagef .= '<p style="font-size:18px;">Message: '.$message.'</p>';
 		$messagef .= '</body></html>';
-		
+
 		/* $config['protocol'] = $email_config1->protocol;
 		$config['mailpath'] = $email_config1->mailpath;
 		$config['charset'] = 'utf-8';
@@ -1224,19 +1446,19 @@ public function registration()
 		$this->email->subject($subject);
 		$this->email->message($messagef);
 		$this->email->send(); */
-		
+
 		// Sending email
 		if(mail($to, $subject, $messagef, $headers)){
 			echo 'Your details has been submited successfully.';
 		}else{
 			echo 'Mail send fail.';
 		}
-		
+
 		//echo $full_name.' '.$email_id.' '.$subject.' '.$message;
 	}
-	
+
 	public function getservicetype(){
-		
+
 		$services = $this->input->post('services',TRUE);
 		$sql = "select id from service where title = '".$services."'";
 		$res = $this->db->query($sql);
@@ -1259,16 +1481,16 @@ public function registration()
 					if($i==1){
 						$con .= '<li><button type="button" class="btn_choose_sent bg_btn_chose_1"><input type="radio" value="'.$servicetype.'" name="servicetype" checked="checked" />'.$servicetype.'</button></li>';
 					}else{
-						$con .= '<li><button type="button" class="btn_choose_sent bg_btn_chose_1"><input type="radio" value="'.$servicetype.'" name="servicetype" />'.$servicetype.'</button></li>';	
+						$con .= '<li><button type="button" class="btn_choose_sent bg_btn_chose_1"><input type="radio" value="'.$servicetype.'" name="servicetype" />'.$servicetype.'</button></li>';
 					}
-					
+
 				}
-			}	
+			}
 		}
 		echo $con;
 	}
 	public function getservicetypedoctor(){
-		
+
 		$servicestype = $this->input->post('servicestype',TRUE);
 		$sql = "select id,doctors from servicetype where title = '".$servicestype."'";
 		$res = $this->db->query($sql);
@@ -1289,7 +1511,7 @@ public function registration()
 					$doctors = $res['doctors'];
 					$con .= '<li><button type="button" class="btn_choose_sent bg_btn_chose_1"><input type="radio" name="servicetype" value="'.$servicetype.'" checked />'.$servicetype.'</button></li>';
 				}
-			}	
+			}
 		}
 		echo $con;
 	}
@@ -1323,14 +1545,14 @@ public function registration()
 					}else{
 						$con .= '<div class="col-md-6"><div class="doc_box"><span class="image_dr"><img src="https://telehealers.in/web_assets2/appointment/images/doctor.jpg" alt="#"></span><span class="content"><h5>Dr. '.$doctor_name.' </h5><p>'.$designation.'</p><div class="select_dr"><input type="radio" name="doctor_id" value="'.$doc.'">Take an Appointment</div></span></div></div>';
 					}
-					
-				} 
+
+				}
 			}
 		}
 		$con .= "</div>";
 		echo $con;
 	}
-	
+
 	public function getpromocodeprice(){
 		$coupon_code = $this->input->post('coupon_code',TRUE);
 		$sql = "select * from promocode where title = '".$coupon_code."'";
@@ -1344,7 +1566,7 @@ public function registration()
 			if($p_used==$p_limit){
 				echo "1";
 			}else{
-				echo $price;	
+				echo $price;
 			}
 		}else{
 			echo "0";
