@@ -264,7 +264,7 @@
 											</div>
 										</div>	
 										<input type="hidden" id="d_img_sig" name="d_img_sig" />
-										<div id="dataURL"><img src="" width="200" ><div>
+										<div id="dataURL"><img src="" width="200" ></div>
                                     </div>
                                 </div>
 
