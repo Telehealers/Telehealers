@@ -109,7 +109,9 @@
                                                                     <?php foreach($m_info as $medicine){?>
                                                                         <div class="form-group ">
                                                                              <div class="col-md-1 col-xs-12">
-                                                                                <input type="text"  class="form-control" name="type[]" value="<?php echo html_escape($medicine->medicine_type)?>" placeholder="<?php echo display('type')?>" />
+                                                                                <input type="text"  class="form-control" name="
+                                                                                type[]" value="<?php echo html_escape($medicine->medicine_type)?>" placeholder="<?php echo display(
+                                                                                'type')?>" />
                                                                                
                                                                             </div>
                                                                              <div class="col-md-3 col-xs-12">
@@ -159,12 +161,12 @@
                                                                     <?php foreach($t_info as $test){?>
                                                                         <div id="count_test1">
                                                                         <div class="form-group ">
-                                                                            <div class="col-md-5">
+                                                                            <div class="col-md-5 col-xs-12">
                                                                                 <input type="hidden" class="test_value" name="test_name[]" value="<?php echo html_escape($test->test_id)?>" />
                                                                                 <input placeholder="<?php echo display('test_name')?>"  value="<?php echo html_escape($test->test_name)?>" class="test_name form-control" name="te_name[]" autocomplete="off" >
                                                                                 <div id="test-box"></div>
                                                                             </div>
-                                                                            <div class="col-md-5"> 
+                                                                            <div class="col-md-5 col-xs-10"> 
                                                                                 <input placeholder="<?php echo display('description')?>" value="<?php echo html_escape($test->test_assign_description)?>" name="test_description[]" class="form-control" ><samp> <?php echo display('discription')?></samp>
                                                                             </div>
                                                                                 <a href="javascript:void(0);" class=" btn btn-danger remove_button" title="Remove field"><span class="glyphicon glyphicon-trash"></span></a>
@@ -200,7 +202,7 @@
                                                                 <?php foreach($a_info as $advice){?>
                                                                     <div id="count_advice1">
                                                                         <div class="form-group ">
-                                                                            <div class="col-md-10">
+                                                                            <div class="col-md-10 col-xs-10">
                                                                                 <input type="hidden" class="advice_value" value="<?php echo html_escape($advice->advice_id)?>" name="advice[]" value=""/>
                                                                                 <input placeholder="<?php echo display('advice')?>" value="<?php echo html_escape($advice->advice)?>" class="advice_name form-control" name="adv[]" autocomplete="off" >
                                                                                 <div  id="advice-box"></div>
