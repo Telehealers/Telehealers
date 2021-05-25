@@ -16,7 +16,9 @@
         </div>
     </section>
 
-    
+
+    <link rel="stylesheet" href="<?php echo base_url();?>web_assets2/css/prescription.css">
+
 
 
     <!-- Main content -->
