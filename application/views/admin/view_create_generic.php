@@ -180,7 +180,7 @@
                                                                          <div class="col-md-3">
                                                                             <input type="hidden" class="mdcn_value" name="group_id[]" value="" id="search-group_id" />
                                                                             <input type="text"  class="group_name form-control"  name="group_name[]" id="search-group" autocomplete="off" placeholder="Generic Name" />
-                                                                            <div id="suggesstion-box"></div>
+                                                                            <div id="suggestion-box"></div>
                                                                             
                                                                          </div>
 

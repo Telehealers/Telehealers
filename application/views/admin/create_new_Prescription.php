@@ -172,7 +172,7 @@
                                                                         <div class="col-md-3">
                                                                             <input type="hidden" class="mdcn_value" name="medicine_id[]" value="" />
                                                                             <input type="text"  class="mdcn_name form-control" name="md_name[]" autocomplete="off" placeholder="<?php echo display('medicine_name')?>" />
-                                                                            <div id="suggesstion-box"></div>
+                                                                            <div id="suggestion-box"></div>
                                                                         </div>
 
                                                                         <div class="col-md-2" ><input type="text"  class="form-control"  placeholder="<?php echo display('mgml')?>" name="mg[]" /></div> 

@@ -42,8 +42,8 @@ function loadePattern(pattern){
                 $("#search-box").css("background","#FFF url(<?php echo base_url();?>image/LoaderIcon.gif) no-repeat 165px");
             },
                 success: function(data){
-                    $("#suggesstion-box").show();
-                    $("#suggesstion-box").html(data);
+                    $("#suggestion-box").show();
+                    $("#suggestion-box").html(data);
                     $("#search-box").css("background","#FFF");
                 }
             });

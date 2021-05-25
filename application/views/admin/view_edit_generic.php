@@ -122,7 +122,7 @@
                                                                              <div class="col-md-3">
                                                                                 <input type="hidden" class="mdcn_value" name="group_id[]" value="<?php echo html_escape($medicine->group_id)?>" />
                                                                                 <input type="text"  class="mdcn_name form-control" name="group_name[]"  value="<?php echo html_escape($medicine->group_name)?>" autocomplete="off" placeholder="<?php echo display('group_name')?>" />
-                                                                                <div id="suggesstion-box"></div>
+                                                                                <div id="suggestion-box"></div>
                                                                              </div>
 
                                                                              <div class="col-md-2" ><input type="text"  class="form-control"  placeholder="<?php echo display('mgml')?>" value="<?php echo html_escape($medicine->mg)?>" name="mg[]" /></div> 

@@ -48,7 +48,7 @@
                      '<div class="col-md-3">'+
                      '<input type="hidden" class="mdcn_value" name="medicine_id[]" value="" />'+
                      '<input type="text"  class="mdcn_name form-control" name="md_name[]"  placeholder="<?php echo display('medicine_name')?>" autocomplete="off" required />'+
-                     '<div  id="suggesstion-box"></div>'+
+                     '<div  id="suggestion-box"></div>'+
                      '</div>'+
                      '<div class="col-md-2"><input type="text"  class="form-control "  placeholder="<?php echo display('mgml')?>" name="mg[]" value=""/></div>'+ 
                      '<div class="col-md-1"><input type="text"  class="form-control"  placeholder="<?php echo display('dose')?>" name="dose[]" /></div>'+
@@ -62,21 +62,20 @@
                     $(wrapper).append(fieldHTML); 
                 }
             });
-
-
-        $('table').on('keyup',".mdcn_name",function(){  
-            
-            var output = $(this).next(); 
-            $.ajax({
-            type: "GET",
-            url: base_url + 'admin/Ajax_controller/medicine_sajetion/',
-            data:'keyword='+$(this).val(), 
-                success: function(data){ 
-                    $(output).html(data); 
-                }
-            });
+        
+        $('#medicine_name').autocomplete({
+            source: '/admin/Ajax_controller/medicine_selection/',
+            minLength: 2,
+            select: function(event, ui) {
+                $('#medicine_name').val(ui.item.label);
+                $('#medicine_value').val(ui.item.value);
+                return false;
+            },
+            focus: function(event, ui) {
+                $('#medicine_name').val(ui.item.label);
+                return false; 
+            }
         });
-
  
 
         $('body').on('click','#country-list > li',function(){
