@@ -83,10 +83,11 @@ class Prescription_controller extends CI_Controller {
 #-----------------------------------------
 #			create new prescription 
 #-----------------------------------------
-	public function create_prescription($appointmaent_id = NULL)
+	public function create_prescription($appointment_id = NULL)
 	{
 		$data['title'] = "Create Prescription";
-		$data['patient_info'] = $this->prescription_model->patient_info($appointmaent_id);
+		$data['patient_info'] = $this->prescription_model->patient_info($appointment_id);
+		$data['doctor_info']=NULL;
 	 	$this->load->view('admin/_header',$data);
 		$this->load->view('admin/_left_sideber');
 		$this->load->view('admin/create_prescription');
@@ -104,9 +105,9 @@ class Prescription_controller extends CI_Controller {
 
 	 	$this->session->unset_userdata('appointment_id');
 	 	$this->session->unset_userdata('prescription_id'); 	
-
+	 	$appointment_id=$this->input->post('appointment_id',TRUE)?$this->input->post('appointment_id',TRUE): "A".date('y').strtoupper($this->randstrGen(2,4));
 	 	$pdata['patient_id'] = $this->input->post('patient_id',TRUE);
-	 	$pdata['appointment_id'] = $this->input->post('appointment_id',TRUE);
+	 	$pdata['appointment_id'] = $appointment_id;
 	 	$pdata['doctor_id'] = $this->session->userdata('doctor_id',TRUE);
 	 	$pdata['Pressure'] = $this->input->post('Pressure',TRUE);
 	 	$pdata['Weight'] = $this->input->post('Weight',TRUE);
@@ -140,7 +141,7 @@ class Prescription_controller extends CI_Controller {
 	 	$mdata['dose'] = ($this->input->post('dose',TRUE));
 	 	$mdata['day'] = ($this->input->post('day',TRUE));
 	 	$mdata['comments'] = ($this->input->post('comments',TRUE));
-	 	$mdata['appointment_id'] = $this->input->post('appointment_id',TRUE);
+	 	$mdata['appointment_id'] = $appointment_id;
 	 	$mdata['prescription_id'] = $prescription_id;
 
 
@@ -196,11 +197,11 @@ class Prescription_controller extends CI_Controller {
 		 	$tdata['prescription_id'] = $prescription_id;
 		 	$tdata['test_id'] = ($this->input->post('test_name',TRUE));
 		 	$tdata['test_description'] = ($this->input->post('test_description',TRUE));
-		 	$tdata['appointment_id'] = $this->input->post('appointment_id',TRUE);
+		 	$tdata['appointment_id'] = $appointment_id;
 			$test_name = $this->input->post('test_name',TRUE);
 			$te_name    = $this->input->post('te_name',TRUE);
 
-		if((sizeof($test_name) > 0 && !empty($test_name[0])) || (sizeof($te_name) > 0 && !empty($te_name[0]))){	 	
+		if((is_array($test_name) && sizeof($test_name) > 0 && !empty($test_name[0])) || (sizeof($te_name) > 0 && !empty($te_name[0]))){	 	
 		 	
 		 	for($i=0; $i<count($tdata['test_id']); $i++) {
 
@@ -245,11 +246,11 @@ class Prescription_controller extends CI_Controller {
 #---------------------------------------------------
 #			advice assign for patient
 #---------------------------------------------------
-		$a_data['appointment_id'] = $this->input->post('appointment_id',TRUE);
-		$a_data['prescription_id'] = $mdata['prescription_id'];
-	 	$a_data['advice'] = ($this->input->post('advice',TRUE));
- 		$num_advice = $this->input->post('advice',TRUE);
-	 	$num_adv    = $this->input->post('adv',TRUE);
+		$a_data['appointment_id'] = $appointment_id;
+		$a_data['prescription_id'] = $prescription_id;
+	 	$a_data['advice'] = ($this->input->post('advice',TRUE))?($this->input->post('advice',TRUE)):[];
+ 		$num_advice = $this->input->post('advice',TRUE)?$this->input->post('advice',TRUE):[];
+	 	$num_adv    = $this->input->post('adv',TRUE)?$this->input->post('adv',TRUE):[];
 		 if((sizeof($num_advice) > 0 && !empty($num_advice[0])) || (sizeof($num_adv) > 0 && !empty($num_adv[0]))){
 			for($i=0; $i<=count($a_data['advice']); $i++) {
 				if(empty($a_data['advice'][$i])) {
@@ -273,7 +274,7 @@ class Prescription_controller extends CI_Controller {
 			}
 		}
 		
-		$d['appointment_id'] = $this->input->post('appointment_id',TRUE);
+		$d['appointment_id'] = $appointment_id;	
     	$this->session->set_userdata($d);
 		$this->session->set_flashdata('message','<div class="alert alert-success msg">Prescription has been add successfully.</div>');
 	 	redirect("admin/Prescription_controller/prescription_list");
@@ -311,7 +312,7 @@ class Prescription_controller extends CI_Controller {
 		
 	 	$this->load->view('admin/_header',$data);
 		$this->load->view('admin/_left_sideber');
-		$this->load->view('admin/create_new_Prescription');
+		$this->load->view('admin/create_prescription');
 		$this->load->view('admin/_footer');
 	}
 
@@ -344,7 +345,7 @@ class Prescription_controller extends CI_Controller {
 #-----------------------------------------
 #	add new  prescription without ap id
 #----------------------------------------	
-	public function new_prescriptions_save()
+	public function new_prescriptions_f()
 	{
 
 		$info = $this->db->where('name','timezone')->get('web_pages_tbl')->row();
@@ -710,16 +711,13 @@ class Prescription_controller extends CI_Controller {
 	#		veiw my_prescription
 	#--------------------------------------------
 
-	public function my_prescription($appointment_id=NULL)
+	public function my_prescription($prescription_id=NULL)
 	{
 
 		$info = $this->db->where('name','timezone')->get('web_pages_tbl')->row();
           
         date_default_timezone_set(@$info->details);
 
-
-		@$venue_id = $this->db->select('prescription_id,venue_id')->from('prescription')->where('appointment_id',$appointment_id)->get()->row();
-		@$prescription_id = $venue_id->prescription_id; 
 
 		$data['patient_info'] = $this->prescription_model->prescription_by_id($prescription_id);
 	    
@@ -739,25 +737,12 @@ class Prescription_controller extends CI_Controller {
 	     ->get()
 	     ->result();
      	  //venue info
-          $data['v_info'] = $this->db->select('prescription.venue_id,venue_tbl.*')
-         ->from('prescription')
-         ->join('venue_tbl', 'venue_tbl.venue_id = prescription.venue_id')
-         ->where('prescription.prescription_id',$prescription_id)
-         ->get()
-         ->row();
+    
 
-
-			$data['chember_time'] = $this->db->select('*')
-        ->from('schedul_setup_tbl')
-        ->where('venue_id', @$venue_id->venue_id)
-        ->limit(1)
-        ->get()
-        ->row();
 
         $data['pattern'] = $this->db->select('*')
 		->from('print_pattern')
 		->where('doctor_id',$this->session->userdata('doctor_id'))
-		->where('venue_id',@$venue_id->venue_id)
 		->get()
 		->row();
 
@@ -777,11 +762,9 @@ class Prescription_controller extends CI_Controller {
 	 	$data['t_info'] = $this->represcription->re_test_data($prescription_id);
 	 	$data['a_info'] = $this->represcription->re_advice_data($prescription_id);
 	 	$data['m_info'] = $this->represcription->re_medicine($prescription_id);
-		$data['doctor_info'] = $this->doctor_model->getDoctorListByselect();
 	 	#---------------------------------
 	 	// doctor venue info
-	 	$doctor_id = 1;
-	 	@$data['venue'] = $this->db->select('venue_id,venue_name,create_id')->from('venue_tbl')->where('create_id',$doctor_id)->get()->result();
+
 		$this->load->view('admin/_header',$data);
 		$this->load->view('admin/_left_sideber');
 		$this->load->view('admin/view_edit_prescription');
@@ -794,14 +777,14 @@ class Prescription_controller extends CI_Controller {
 		 $info = $this->db->where('name','timezone')->get('web_pages_tbl')->row();
           
             date_default_timezone_set(@$info->details);
-
+        $pres_id = $this->input->post('prescription_id',TRUE);
 	 	$pdata['patient_id'] = $this->input->post('patient_id',TRUE);
 	 	$pdata['appointment_id'] = $this->input->post('appointment_id',TRUE);
-	 	$pdata['doctor_id'] = $this->input->post('doctor',TRUE);
+	 	$pdata['doctor_id'] = $this->input->post('doctor_id',TRUE);
 	 	$pdata['Pressure'] = $this->input->post('Pressure',TRUE);
 	 	$pdata['Weight'] = $this->input->post('Weight',TRUE);
 	 	$pdata['problem'] = $this->input->post('Problem',TRUE);
-	 	$pdata['venue_id'] = $this->input->post('venue_id',TRUE);
+	 	
 	 	$pdata['oex'] = $this->input->post('oex',TRUE);
 		$pdata['pd'] = $this->input->post('pd',TRUE);
 		$pdata['history'] = $this->input->post('history',TRUE);
@@ -809,11 +792,9 @@ class Prescription_controller extends CI_Controller {
 		$pdata['prescription_type'] = 1;
 	 	$pdata['pres_comments'] = $this->input->post('prescription_comment',TRUE);
 	 	$pdata['create_date_time'] = date("Y-m-d H:i:s");
+	 	$pdata['prescription_id'] = $pres_id;
 
-		$pres_id = $this->input->post('prescription_id',TRUE);
-	 	
-		//$this->db->where('prescription_id',$pres_id)->delete('prescription');
-		
+	 			
 		$sql_p = "delete from prescription where prescription_id = '$pres_id'";
 		$res_p = $this->db->query($sql_p);
 
@@ -821,28 +802,24 @@ class Prescription_controller extends CI_Controller {
 		$user_id = $this->session->userdata('log_id');
 		$action_title = 'Update prescription';
 		$action_description = 'User update Prescriptiion';
-		//$action_link = $pres_id;
-		$action_link = $this->db->insert_id();
+		$action_link = $pres_id;
+		//$action_link = $this->db->insert_id();
 		$add_date = date('Y-m-d h:i:s');
 		$sql_int = "insert into user_action_log (user_id,action_title,action_description,action_link,add_date) values ('$user_id','$action_title','$action_description','$action_link','$add_date')";
 		$this->db->query($sql_int);
-	    // get last insert id
-	    $prescription_id = $this->db->insert_id();
 	#----------------------------------------------------#
 			 	# medicine assign for patient 
 	#----------------------------------------------------#    
-	    $mdata['med_type'] = $this->input->post('type',TRUE);
-	 	$mdata['medicine_id'] = ($this->input->post('medicine_id',TRUE));
-	 	$mdata['mg'] = ($this->input->post('mg',TRUE));
-	 	$mdata['dose'] = ($this->input->post('dose',TRUE));
+	    $mdata['med_type'] = $this->input->post('type',TRUE)?$this->input->post('type',TRUE):[] ;
+	 	$mdata['medicine_id'] =($this->input->post('medicine_id',TRUE))?($this->input->post('medicine_id',TRUE)):[];
+	 	$mdata['mg'] = ($this->input->post('mg',TRUE))?($this->input->post('mg',TRUE)):[];
+	 	$mdata['dose'] = ($this->input->post('dose',TRUE))?($this->input->post('dose',TRUE)):[];
 	 	$mdata['day'] = ($this->input->post('day',TRUE));
 	 	$mdata['comments'] = ($this->input->post('comments',TRUE));
 	 	$mdata['appointment_id'] = $this->input->post('appointment_id',TRUE);
-	 	$mdata['prescription_id'] = $prescription_id;
+	 	$mdata['prescription_id'] = $pres_id;
 
 	 	 $this->db->where('prescription_id',$pres_id)->delete('medicine_prescription');
-
-
 			for($i=0; $i<count($mdata['medicine_id']); $i++) {
 
 			 	if(empty($mdata['medicine_id'][$i])) {
@@ -908,12 +885,12 @@ class Prescription_controller extends CI_Controller {
 			#----------------------------------------------------#
 					 	# test assign for patient
 			#----------------------------------------------------#		 	
-		 	$tdata['prescription_id'] = $prescription_id;
-		 	$tdata['test_id'] = ($this->input->post('test_name',TRUE));
-		 	$tdata['test_description'] = ($this->input->post('test_description',TRUE));
+		 	$tdata['prescription_id'] = $pres_id;
+		 	$tdata['test_id'] = ($this->input->post('test_name',TRUE))?($this->input->post('test_name',TRUE)):[];
+		 	$tdata['test_description'] = ($this->input->post('test_description',TRUE))?($this->input->post('test_description',TRUE)):[];
 		 	$tdata['appointment_id'] = $this->input->post('appointment_id',TRUE);
-			$test_name = $this->input->post('test_name',TRUE);
-			$te_name    = $this->input->post('te_name',TRUE);
+			$test_name = $this->input->post('test_name',TRUE)? $this->input->post('test_name',TRUE):[];
+			$te_name    = $this->input->post('te_name',TRUE)?$this->input->post('te_name',TRUE):[];
 
 		$this->db->where('prescription_id',$pres_id)->delete('test_assign_for_patine');
 
@@ -968,9 +945,9 @@ class Prescription_controller extends CI_Controller {
 
 			$a_data['appointment_id'] = $this->input->post('appointment_id',TRUE);
 			$a_data['prescription_id'] = $mdata['prescription_id'];
-		 	$a_data['advice'] = ($this->input->post('advice',TRUE));
-	 		$num_advice = $this->input->post('advice',TRUE);
-		 	$num_adv    = $this->input->post('adv',TRUE);
+		 	$a_data['advice'] = ($this->input->post('advice',TRUE))?($this->input->post('advice',TRUE)):[];
+	 		$num_advice = $this->input->post('advice',TRUE)?$this->input->post('advice',TRUE):[];
+		 	$num_adv    = $this->input->post('adv',TRUE)?$this->input->post('adv',TRUE):[];
 
 		 	$this->db->where('prescription_id',$pres_id)->delete('advice_prescriptiion');
 
@@ -1013,7 +990,7 @@ class Prescription_controller extends CI_Controller {
 
 	 	$d['appointment_id'] = $this->input->post('appointment_id');
     	$this->session->set_userdata($d);
-	 	redirect("prescription");
+	 	redirect("admin/Prescription_controller/my_prescription/".$pres_id);
 	}
 	
 	

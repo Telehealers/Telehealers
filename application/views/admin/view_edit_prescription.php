@@ -44,7 +44,7 @@
                         <!--  -->
                                 <div class="portlet-title">
                                     <div class="row">
-                                        <div class="col-md-8 col-xs-12">
+                                        <div class="col-md-12 col-xs-12">
                                             <div class="caption">
                                                 <span class="caption-subject font-green sbold uppercase"><?php echo display('name');?> : </span><?php echo html_escape(@$pres->patient_name);?>,&nbsp&nbsp&nbsp
                                                 <span class="caption-subject font-green sbold uppercase"><?php echo display('age');?> : </span>
@@ -55,18 +55,10 @@
                                                     echo @$diff->format("%Y-Y:%m-M:%d-D");
                                                 ?>,&nbsp&nbsp&nbsp 
                                                 <span class="caption-subject font-green sbold uppercase"><?php echo display('sex');?> : </span><?php echo html_escape(@$pres->sex);?>,&nbsp&nbsp&nbsp
-                                                <span class="caption-subject font-green sbold uppercase">Id : </span><?php echo html_escape(@$pres->patient_id);?>,&nbsp&nbsp&nbsp
+                                                <span class="caption-subject font-green sbold uppercase">Id : </span><?php echo html_escape(@$pres->patient_id);?>
                                             </div>
                                         </div>
 
-                                        <div class="col-md-4">
-                                            <select class="form-control" name="venue_id" required>
-                                                <option value="">--<?php echo display('select_venue');?>--</option>
-                                                <?php foreach($venue as $v_enue){
-                                                    echo '<option  value="'. html_escape($v_enue->venue_id).'" '.($pres->venue_id==$v_enue->venue_id?'selected':'').'>'.html_escape($v_enue->venue_name).'</option>';
-                                                } ?>
-                                            </select>  
-                                        </div>
 
                                     </div> <hr/>
 
@@ -74,8 +66,8 @@
                                     <input type="hidden" name="appointment_id" value="<?php echo html_escape($pres->appointment_id);?>">
                                     <input type="hidden" name="patient_id" value="<?php echo html_escape($pres->patient_id);?>">
                                     <input type="hidden" name="doctor_id" value="<?php echo html_escape($pres->doctor_id);?>">
-<div class="form-group">							<label class="col-md-3 control-label">Doctor :</label>							<div class="col-md-5">							<select name="doctor" id="doctor_id" class="form-control">								<?php foreach($doctor_info as $doctor){?>										<option value="<?php echo $doctor['doctor_id'];?>"><?php echo $doctor['doctor_name'];?> - <?php echo $doctor['email'];?></option>										<?php } ?>							</select>							</div>						</div>						
 
+                                            
                                     <div class="portlet-title">
                                          <div class="form-group ">
                                             <div class="col-md-6"><input type="text" class="form-control" value="<?php echo html_escape(@$pres->problem);?>"  placeholder="<?php echo display('patient_cc')?>" name="Problem" /></div>
