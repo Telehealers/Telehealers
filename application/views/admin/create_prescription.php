@@ -158,10 +158,10 @@
                                                                 <div class="col-md-1 col-xs-12">
                                                                      <input type="text"  class="form-control" name="type[]"  placeholder="Type" />
                                                                 </div>
-                                                                <div class="col-md-3 col-xs-12">
-                                                                    <input type="hidden" class="mdcn_value" name="medicine_id[]" value="" />
-                                                                    <input type="text"  class="mdcn_name form-control" name="md_name[]" autocomplete="off" placeholder="<?php echo display('medicine_name')?>" />
-                                                                    <div id="suggesstion-box"></div>
+                                                                <div class="col-md-3">
+                                                                    <input type="hidden" id="medicine_value" class="mdcn_value" name="medicine_id[]" value="" />
+                                                                    <input type="text"  id="medicine_name" class="mdcn_name form-control" name="md_name[]" autocomplete="off" placeholder="<?php echo display('medicine_name')?>" />
+                                                                    
                                                                 </div>
 
                                                                  <div class="col-md-2 col-xs-12" ><input type="text"  class="form-control"  placeholder="<?php echo display('mgml')?>L" name="mg[]"  /></div> 

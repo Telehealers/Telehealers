@@ -56,7 +56,7 @@ document.forms['n_p'].elements['venue_id'].value="<?php echo $this->session->use
                      '<div class="col-md-3">'+
                      '<input type="hidden" class="mdcn_value" name="group_id[]" value="" />'+
                      '<input type="text"  class="group_name form-control" name="group_name[]"  placeholder="<?php echo display('generic_name')?>" autocomplete="off" required />'+
-                     '<div id="suggesstion-box"></div>'+
+                     '<div id="suggestion-box"></div>'+
                      '</div>'+
 
                      

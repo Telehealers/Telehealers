@@ -68,7 +68,7 @@
                      '<div class="col-md-3 col-xs-12">'+
                      '<input type="hidden" class="mdcn_value" name="medicine_id[]" value="" />'+
                      '<input type="text"  class="mdcn_name form-control" name="md_name[]"  placeholder="<?php echo display('medicine_name')?>" autocomplete="off" required />'+
-                     '<div  id="suggesstion-box"></div>'+
+                     '<div  id="suggestion-box"></div>'+
                      '</div>'+
                      '<div class="col-md-2 col-xs-12"><input type="text"  class="form-control "  placeholder="<?php echo display('mgml')?>" name="mg[]" value=""/></div>'+ 
                      '<div class="col-md-1 col-xs-12"><input type="text"  class="form-control"  placeholder="<?php echo display('dose')?>" name="dose[]" /></div>'+
@@ -82,63 +82,20 @@
                     $(wrapper).append(fieldHTML); 
                 }
             });
-
         
-
-
-
-
-
-        var currentFocus=-1;
-        function dropdown(e){  
-
-          var x = document.getElementById('country-list');
-
-          if (x) x = x.children;
-          if (e.keyCode == 40) {
-            /*If the arrow DOWN key is pressed,
-            increase the currentFocus variable:*/
-            currentFocus++;
-           
-            /*and and make the current item more visible:*/
-            addActive(x,currentFocus);
-          } else if (e.keyCode == 38) { //up
-           // If the arrow UP key is pressed,
-           // decrease the currentFocus variable:
-            currentFocus--;
-            /*and and make the current item more visible:*/
-            addActive(x,currentFocus);
-          } else if (e.keyCode == 13) {
-            /*If the ENTER key is pressed, prevent the form from being submitted,*/
-            e.preventDefault();
-            if (currentFocus > -1) {
-              /*and simulate a click on the "active" item:*/
-              if (x) x[currentFocus].click();
+        $('#medicine_name').autocomplete({
+            source: '/admin/Ajax_controller/medicine_selection/',
+            minLength: 2,
+            select: function(event, ui) {
+                $('#medicine_name').val(ui.item.label);
+                $('#medicine_value').val(ui.item.value);
+                return false;
+            },
+            focus: function(event, ui) {
+                $('#medicine_name').val(ui.item.label);
+                return false; 
             }
-          }
-    
-      };
-      $('table').on('keydown',".mdcn_name",dropdown);
-
-
-        $('table').on('input',".mdcn_name",function(e){  
-           var output = $(this).next(); 
-            $.ajax({
-            type: "GET",
-            url: base_url + 'admin/Ajax_controller/medicine_sajetion/',
-            data:'keyword='+$(this).val(), 
-                success: function(data){ 
-                    $(output).html(data); 
-                }
-            });
-            currentFocus=-1
-          });
-      
-       
-        
-
-    
-
+        });
  
      
 

@@ -56,27 +56,34 @@ class Ajax_controller extends CI_Controller {
 
 
   #------------------------------------------------
-  #       medicine_sajetion
+  #       medicine_selection
   #------------------------------------------------
-  public function medicine_sajetion()
+  public function medicine_selection()
   {
-    if (!empty($_GET['keyword'])){
-      $keyword = $_GET['keyword']; 
+    if (!empty($_GET['term'])){
+      $keyword = $_GET['term']; 
       $result = $this->db->select('*')
       ->from('medecine_info')
       ->like('medicine_name', $keyword)
       ->get()
       ->result();
       
-         if(!empty($result)) {
-            echo  '<ul class="country-list" id="country-list">';
-            $i=1;
+      $medicines = array();
+      echo  '[';
+      if(!empty($result)) {
+            $addComa=false;
             foreach ($result as $value) {
-              echo '<li value="'.$value->medicine_id.'">'.$value->medicine_name.'</li>';
+              if ($addComa) {
+                echo ",";
+              }
+              $addComa = true;
+              array_push($medicines, $value);
+              echo '{"value":"'.$value->medicine_id.'", "label":"'.$value->medicine_name.'"}';
             }
-            echo '<ul>';
+            // echo '<ul>';
         }
-    }
+        echo ']';
+      }
   }
 
     #------------------------------------------------

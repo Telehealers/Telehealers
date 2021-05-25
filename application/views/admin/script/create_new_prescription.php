@@ -20,7 +20,7 @@
                      '<div class="col-md-3">'+
                      '<input type="hidden" class="mdcn_value" name="medicine_id[]" value="" />'+
                      '<input type="text"  class="mdcn_name form-control" name="md_name[]"  placeholder="<?php echo display('medicine_name')?>" autocomplete="off" required />'+
-                     '<div id="suggesstion-box"></div>'+
+                     '<div id="suggestion-box"></div>'+
                      '</div>'+
 
                      
@@ -38,19 +38,18 @@
             });
 
 
-        $('table').on('keyup',".mdcn_name",function(){  
-            var output = $(this).next(); 
-            var base_url = $("#base_url").val();
-            $.ajax({
-            'type': 'GET',
-            url: base_url + 'admin/Ajax_controller/medicine_sajetion/',
-            data:'keyword='+$(this).val(),
-                success: function(data){ 
-                    $(output).html(data); 
-                }
-            });
-        });
-
+        // $('table').on('keyup',".mdcn_name",function(){  
+        //     var output = $(this).next(); 
+        //     var base_url = $("#base_url").val();
+        //     $.ajax({
+        //     'type': 'GET',
+        //     url: base_url + 'admin/Ajax_controller/medicine_selection/',
+        //     data:'keyword='+$(this).val(),
+        //         success: function(data){ 
+        //             $(output).html(data); 
+        //         }
+        //     });
+        // });
  
 
         $('body').on('click','#country-list > li',function(){
