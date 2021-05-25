@@ -1,5 +1,26 @@
 
     <script type="text/javascript">
+
+      function addActive(x,currentFocus) {
+  
+    /*a function to classify an item as "active":*/
+    if (!x) return false;
+    /*start by removing the "active" class on all items:*/
+    removeActive(x,currentFocus);
+
+    if (currentFocus >= x.length) currentFocus = 0;
+    if (currentFocus < 0) currentFocus = (x.length - 1);
+    /*add class "autocomplete-active":*/
+
+    x[currentFocus].classList.add("autocomplete-active");
+  }
+  function removeActive(x) {
+    /*a function to remove the "active" class from all autocomplete items:*/
+      for (var i = x.length - 1; i >= 0; i--) {
+      x[i].classList.remove("autocomplete-active");
+    }
+  }
+
         function loadName(){
     'use strict';          
         var patient_id = document.getElementById('p_id').value;
@@ -29,7 +50,6 @@
     }
         $(document).ready(function(){
 
-            'use strict';
 
             var base_url = $('#base_url').val();
             var maxField = 50; 
@@ -42,18 +62,18 @@
                 if(x < maxField){ 
                     var fieldHTML = '<div id="count_'+(counter++)+'">'+
                     '<div class="form-group mdcn">'+
-                    '<div class="col-md-1" >'+
+                    '<div class="col-md-1 col-xs-12" >'+
                     '<input type="text"  class="form-control" name="type[]"  placeholder="<?php echo display('type')?>"  />'+
                     '</div>'+ 
-                     '<div class="col-md-3">'+
+                     '<div class="col-md-3 col-xs-12">'+
                      '<input type="hidden" class="mdcn_value" name="medicine_id[]" value="" />'+
                      '<input type="text"  class="mdcn_name form-control" name="md_name[]"  placeholder="<?php echo display('medicine_name')?>" autocomplete="off" required />'+
                      '<div  id="suggestion-box"></div>'+
                      '</div>'+
-                     '<div class="col-md-2"><input type="text"  class="form-control "  placeholder="<?php echo display('mgml')?>" name="mg[]" value=""/></div>'+ 
-                     '<div class="col-md-1"><input type="text"  class="form-control"  placeholder="<?php echo display('dose')?>" name="dose[]" /></div>'+
-                     '<div class="col-md-1"><input type="text"  class="form-control"  placeholder="<?php echo display('day')?>" name="day[]" /></div>'+
-                     '<div class="col-md-3"><input type="text"  class="form-control"  placeholder="<?php echo display('medicine_comment')?>" name="comments[]" /></div>'+ 
+                     '<div class="col-md-2 col-xs-12"><input type="text"  class="form-control "  placeholder="<?php echo display('mgml')?>" name="mg[]" value=""/></div>'+ 
+                     '<div class="col-md-1 col-xs-12"><input type="text"  class="form-control"  placeholder="<?php echo display('dose')?>" name="dose[]" /></div>'+
+                     '<div class="col-md-1 col-xs-12"><input type="text"  class="form-control"  placeholder="<?php echo display('day')?>" name="day[]" /></div>'+
+                     '<div class="col-md-3 col-xs-10"><input type="text"  class="form-control"  placeholder="<?php echo display('medicine_comment')?>" name="comments[]" /></div>'+ 
                    
                     '<a href="javascript:void(0);" class="btn btn-danger remove_button" title="Remove field"><span class="glyphicon glyphicon-trash"></span></a></div>'+
                     '</div>';  
@@ -77,6 +97,7 @@
             }
         });
  
+     
 
         $('body').on('click','#country-list > li',function(){
             var mdcn_name_val = $(this).val();
@@ -89,6 +110,7 @@
             $(target_text).val(mdcn_name_txt); //value passing
 
             $(this).parent().slideUp(300); 
+            $(this).parent().remove();
         });
 
         $(wrapper).on('click', '.remove_button', function(e){ 
@@ -106,7 +128,7 @@
         //<!-- ============================================= -->
    
         $(document).ready(function(){
-            'use strict';
+
 
             var base_url = $('#base_url').val();
 
@@ -120,12 +142,12 @@
                 if(x < maxField){
                   var fieldHTML = '<div id="count_test'+(counter++)+'">'+
                 '<div class="form-group ">'+
-                 '<div class="col-md-5">'+
+                 '<div class="col-md-5 col-xs-12">'+
                  '<input type="hidden" class="test_value" name="test_name[]" value="" />'+
                  ' <input placeholder="<?php echo display('test_name')?>" class="test_name form-control" name="te_name[]" autocomplete="off"  >'+
                  ' <div id="test-box"></div>'+
                  '</div>'+
-                 '<div class="col-md-5"> <input placeholder="Description" name="test_description[]" class="form-control"  rows="2"></div>'+
+                 '<div class="col-md-5 col-xs-10"> <input placeholder="Description" name="test_description[]" class="form-control"  rows="2"></div>'+
                 
                '<a href="javascript:void(0);" class="btn btn-danger remove_button" title="Remove field"><span class="glyphicon glyphicon-trash"></span></a></div>'+
                 '</div>';
@@ -134,8 +156,40 @@
                 }
 
             });
+        var currentFocus=-1;
+        function dropdown(e){  
 
-            $('table').on('keyup',".test_name",function(){  
+          var x = document.getElementById('country-list');
+
+          if (x) x = x.children;
+          if (e.keyCode == 40) {
+            /*If the arrow DOWN key is pressed,
+            increase the currentFocus variable:*/
+            currentFocus++;
+           
+            /*and and make the current item more visible:*/
+            addActive(x,currentFocus);
+          } else if (e.keyCode == 38) { //up
+           // If the arrow UP key is pressed,
+           // decrease the currentFocus variable:
+            currentFocus--;
+            /*and and make the current item more visible:*/
+            addActive(x,currentFocus);
+          } else if (e.keyCode == 13) {
+            /*If the ENTER key is pressed, prevent the form from being submitted,*/
+            e.preventDefault();
+            if (currentFocus > -1) {
+              /*and simulate a click on the "active" item:*/
+              if (x) x[currentFocus].click();
+            }
+          }
+    
+      };
+
+              $('table').on('keydown',".test_name",dropdown);
+
+
+            $('table').on('input',".test_name",function(){  
                 var output = $(this).next(); 
                 $.ajax({
                     type: "GET",
@@ -145,8 +199,12 @@
                         $(output).html(data); 
                     } 
                 });
+                currentFocus=-1;
             });
-        
+            
+    
+
+
             $('body').on('click','#country-list > li',function(){
                 var test_name_val = $(this).val();
                 var test_name_txt = $(this).text();
@@ -157,6 +215,7 @@
                 $(target_val).val(test_name_val); //value passing
                 $(target_text).val(test_name_txt); //value passing
                 $(this).parent().slideUp(300); 
+                $(this).parent().remove();
             });
 
 
@@ -186,7 +245,7 @@
                 if(x < maxField){
                   var fieldHTML = '<div id="count_add'+(counter++)+'">'+
                 '<div class="form-group ">'+
-                 '<div class="col-md-10">'+
+                 '<div class="col-md-10 col-xs-10">'+
                  '<input type="hidden" class="advice_value" name="advice[]" value="" />'+
                  ' <input placeholder="Advice" class="advice_name form-control" name="adv[]" autocomplete="off">'+
                  ' <div style="position:absolute;z-index:9999;" id="advice-box"></div>'+
@@ -200,7 +259,38 @@
 
             });
 
-            $('table').on('keyup',".advice_name",function(){  
+             var currentFocus=-1;
+            function dropdown(e){  
+
+              var x = document.getElementById('country-list');
+
+              if (x) x = x.children;
+              if (e.keyCode == 40) {
+                /*If the arrow DOWN key is pressed,
+                increase the currentFocus variable:*/
+                currentFocus++;
+               
+                /*and and make the current item more visible:*/
+                addActive(x,currentFocus);
+              } else if (e.keyCode == 38) { //up
+               // If the arrow UP key is pressed,
+               // decrease the currentFocus variable:
+                currentFocus--;
+                /*and and make the current item more visible:*/
+                addActive(x,currentFocus);
+              } else if (e.keyCode == 13) {
+                /*If the ENTER key is pressed, prevent the form from being submitted,*/
+                e.preventDefault();
+                if (currentFocus > -1) {
+                  /*and simulate a click on the "active" item:*/
+                  if (x) x[currentFocus].click();
+                }
+              }
+        
+          };
+
+            $('table').on('keydown',".advice_name",dropdown);
+            $('table').on('input',".advice_name",function(){  
                 var output = $(this).next(); 
                 $.ajax({
                     type: "GET",
@@ -210,8 +300,9 @@
                         $(output).html(data); 
                     } 
                 });
+                currentFocus=-1;
             });
-        
+                  
             $('body').on('click','#country-list > li',function(){
                 var advice_name_val = $(this).val();
                 var advice_name_txt = $(this).text();
@@ -222,6 +313,7 @@
                 $(target_val).val(advice_name_val); //value passing
                 $(target_text).val(advice_name_txt); //value passing
                 $(this).parent().slideUp(300); 
+                $(this).parent().remove();
             });
 
 
