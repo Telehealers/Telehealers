@@ -16,7 +16,8 @@
         </div>
     </section>
 
-    
+        <link rel="stylesheet" href="<?php echo base_url();?>web_assets2/css/prescription.css">
+
 
 
     <!-- Main content -->
@@ -108,19 +109,21 @@
                                                                     <?php foreach($m_info as $medicine){?>
                                                                         <div class="form-group ">
                                                                              <div class="col-md-1 col-xs-12">
-                                                                                <input type="text"  class="form-control" name="type[]" value="<?php echo html_escape($medicine->medicine_type)?>" placeholder="<?php echo display('type')?>" />
+                                                                                <input type="text"  class="form-control" name="
+                                                                                type[]" value="<?php echo html_escape($medicine->medicine_type)?>" placeholder="<?php echo display(
+                                                                                'type')?>" />
                                                                                
                                                                             </div>
-                                                                             <div class="col-md-3">
+                                                                             <div class="col-md-3 col-xs-12">
                                                                                 <input type="hidden" class="mdcn_value" name="medicine_id[]" value="<?php echo html_escape($medicine->medicine_id)?>" />
                                                                                 <input type="text"  class="mdcn_name form-control" name="md_name[]"  value="<?php echo html_escape($medicine->medicine_name)?>" autocomplete="off" placeholder="<?php echo display('medicine_name')?>" />
                                                                                 <div id="suggesstion-box"></div>
                                                                              </div>
 
-                                                                             <div class="col-md-2" ><input type="text"  class="form-control"  placeholder="<?php echo display('mgml')?>" value="<?php echo html_escape($medicine->mg)?>" name="mg[]" /></div> 
-                                                                             <div class="col-md-1" ><input type="text"  class="form-control"  placeholder="<?php echo display('dose')?>" name="dose[]" value="<?php echo html_escape($medicine->dose)?>" /></div>
-                                                                             <div class="col-md-1"><input type="text"  class="form-control"  placeholder="<?php echo display('day')?>" name="day[]" value="<?php echo html_escape($medicine->day)?>" /></div>
-                                                                             <div class="col-md-3"><input type="text"  class="form-control"  placeholder="<?php echo display('medicine_comment')?>" name="comments[]" value="<?php echo html_escape($medicine->medicine_com)?>" /></div> 
+                                                                             <div class="col-md-2 col-xs-12" ><input type="text"  class="form-control"  placeholder="<?php echo display('mgml')?>" value="<?php echo html_escape($medicine->mg)?>" name="mg[]" /></div> 
+                                                                             <div class="col-md-1 col-xs-12" ><input type="text"  class="form-control"  placeholder="<?php echo display('dose')?>" name="dose[]" value="<?php echo html_escape($medicine->dose)?>" /></div>
+                                                                             <div class="col-md-1 col-xs-12"><input type="text"  class="form-control"  placeholder="<?php echo display('day')?>" name="day[]" value="<?php echo html_escape($medicine->day)?>" /></div>
+                                                                             <div class="col-md-3 col-xs-10"><input type="text"  class="form-control"  placeholder="<?php echo display('medicine_comment')?>" name="comments[]" value="<?php echo html_escape($medicine->medicine_com)?>" /></div> 
                                                                             <a href="javascript:void(0);" class=" btn btn-danger remove_button" title="Remove field"><span class="glyphicon glyphicon-trash"></span></a>
                                                                         </div> 
                                                                      <?php }?>    
@@ -158,12 +161,12 @@
                                                                     <?php foreach($t_info as $test){?>
                                                                         <div id="count_test1">
                                                                         <div class="form-group ">
-                                                                            <div class="col-md-5">
+                                                                            <div class="col-md-5 col-xs-12">
                                                                                 <input type="hidden" class="test_value" name="test_name[]" value="<?php echo html_escape($test->test_id)?>" />
                                                                                 <input placeholder="<?php echo display('test_name')?>"  value="<?php echo html_escape($test->test_name)?>" class="test_name form-control" name="te_name[]" autocomplete="off" >
                                                                                 <div id="test-box"></div>
                                                                             </div>
-                                                                            <div class="col-md-5"> 
+                                                                            <div class="col-md-5 col-xs-10"> 
                                                                                 <input placeholder="<?php echo display('description')?>" value="<?php echo html_escape($test->test_assign_description)?>" name="test_description[]" class="form-control" ><samp> <?php echo display('discription')?></samp>
                                                                             </div>
                                                                                 <a href="javascript:void(0);" class=" btn btn-danger remove_button" title="Remove field"><span class="glyphicon glyphicon-trash"></span></a>
@@ -199,7 +202,7 @@
                                                                 <?php foreach($a_info as $advice){?>
                                                                     <div id="count_advice1">
                                                                         <div class="form-group ">
-                                                                            <div class="col-md-10">
+                                                                            <div class="col-md-10 col-xs-10">
                                                                                 <input type="hidden" class="advice_value" value="<?php echo html_escape($advice->advice_id)?>" name="advice[]" value=""/>
                                                                                 <input placeholder="<?php echo display('advice')?>" value="<?php echo html_escape($advice->advice)?>" class="advice_name form-control" name="adv[]" autocomplete="off" >
                                                                                 <div  id="advice-box"></div>
@@ -232,5 +235,5 @@
 </div> <!-- /.content-wrapper -->
 
 
-<?php $this->load->view('admin/script/edit_prescription.php');?>
+<?php $this->load->view('admin/script/create_prescription.php');?>
 
