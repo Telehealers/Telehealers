@@ -47,36 +47,77 @@
                                 <!--  -->
                                     <!-- patinet info -->
                                 <!--  -->
+                                <?php  if(is_array($doctor_info)){
+                                            ?>
+
+                                            <div class="col-xs-12">
+                                            <div class="portlet-title">
+                                            
+                                            <div class="form-group">    
+
+                                            <label class="col-md-3 control-label">Doctor :</label>  
+
+                                            <div class="col-md-5">                  
+
+                                            <select name="doctor" id="doctor_id" class="form-control">  
+
+                                            
+                                            <?php foreach($doctor_info as $doctor){?>   
+
+                                            <option value=<?php echo $doctor['doctor_id'];?>><?php echo $doctor['doctor_name'];?> - <?php echo $doctor['email'];?></option>   
+
+                                            <?php } }?>      
+
+                                            </select>       
+
+                                            </div>      
+
                                 <div class="portlet-title">
+                                    <?php if(is_array($patient_info) && count($patient_info)>0){?>
                                     <div class="row">
+                                         <div class="col-xs-12 pid" > 
+                                        <select class="form-control"  name="p_id" id="p_id" onChange="loadName(this.value)" required>
+                                            <option value="">Select Patient</option>
+                                            <?php foreach($patient_info as $val){?>
+                                            <option value="<?php echo $val->patient_id?>"><?php echo $val->patient_id?> (<?php echo $val->patient_name?>)</option>
+                                            <?php }}?>
+                                        </select>
+                                    </div>
+
                                          <div class="col-xs-12">
                                             <div class="caption">
-                                                <span class=""><b><?php echo display('patient_name')?> : </b></span><?php echo html_escape(@$patient_info->patient_name);?>,&nbsp&nbsp&nbsp
+                                                <span class=""><b><?php echo display('patient_name')?> : </b></span>
+                                                <span id="ptname"><?php 
+                                                if(!is_array($patient_info)){
+                                                    echo html_escape(@$patient_info->patient_name)   ;}?>,&nbsp&nbsp&nbsp
+                                                </span>
                                                 <span class=""><b><?php echo display('age')?> : </b></span>
-                                                <?php
-                                                    $date1=date_create(@$patient_info->birth_date);
-                                                    $date2= date_create( date('y-m-d'));
-                                                    $diff=date_diff($date1,$date2);
-                                                    echo @$diff->format("%Y-Y:%m-M:%d-D");
-                                                  ?>,&nbsp&nbsp&nbsp 
-                                                <span class=""><b><?php echo display('sex')?> : </b></span><?php echo html_escape(@$patient_info->sex);?>,&nbsp&nbsp&nbsp
-                                                <span class=""><b><?php echo display('patient_id')?> : </b></span><?php echo html_escape(@$patient_info->patient_id);?>,&nbsp&nbsp&nbsp
-                                                <span class=""><b><?php echo display('appointment_id')?> : </b></span><?php echo html_escape(@$patient_info->appointment_id);?>,&nbsp&nbsp&nbsp
-												
-                                            </div>
+                                                <span id="ptage"> <?php 
+                                                if(!is_array($patient_info)){
+                                                    echo html_escape(@$patient_info->age)   ;}?>,&nbsp&nbsp&nbsp </span>
+                                                <span class=""><b><?php echo display('sex')?> : </b></span>
+                                                <span id="ptsex"> <?php 
+                                                if(!is_array($patient_info)){
+                                                    echo html_escape(@$patient_info->sex)   ;}?>,&nbsp&nbsp&nbsp</span>
+
+                                                <span class=""><b><?php echo display('patient_id')?> : </b></span>
+                                                <span id="ptid"><?php 
+                                                if(!is_array($patient_info)){
+                                                    echo html_escape(@$patient_info->patient_id)   ;}?>&nbsp&nbsp&nbsp </span>
                                            
                                         </div>
                                     </div> <hr/>
 									<div class="row">
                                          <div class="col-xs-4">
-										 <input type="text" name="create_date" class="form-control datepicker1" placeholder="Create Date" "create_date">
+										 <input type="text" name="create_date" class="form-control datepicker1" placeholder="Create Date">
 										 </div>
 									</div>
-									
-									<br>
-                                     <input type="hidden" name="patient_id" value="<?php echo html_escape(@$patient_info->patient_id);?>"> 
+                                     <input type="hidden" name="patient_id" value="<?php
+                                     if(!is_array(@$patient_info)) echo html_escape(@$patient_info->patient_id);?>"> 
                                      <input type="hidden" name="appointment_id" value="<?php echo html_escape(@$patient_info->appointment_id);?>"> 
                                      <input type="hidden" name="venue_id" value="<?php echo html_escape(@$patient_info->venue_id);?>"> 
+									
+									<br>
                                     <div class="portlet-title">
                                          <div class="form-group ">
                                             <div class="col-md-6"><input type="text" class="form-control"  placeholder="<?php echo display('patient_cc')?>" name="Problem"  value=" <?php echo html_escape(@$patient_info->problem);?>"/></div>

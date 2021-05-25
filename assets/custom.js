@@ -154,33 +154,6 @@ function load_patient_id(){
 
 
 
-    // load patient name
-    function loadName(){
-		
-        'use strict';          
-        var patient_id = document.getElementById('patient_id').value;
-        var base_url = $("#base_url").val();
-		
-        if (patient_id!='') {
-            $('button[type=submit]').prop('disabled', true);
-            $.ajax({ 
-                'url': base_url + 'admin/Ajax_controller/get_patinet_name/'+patient_id.trim(),
-                'type': 'GET', 
-                'data': {'patient_id': patient_id },
-                'success': function(data) { 
-				   
-                    var container = $(".p_name");
-                    if(data==0){
-                        container.html("Didn't match. Please Enter Your Valid Id.");
-                    }else{ 
-                        container.html(data);
-                        $('button[type=submit]').prop('disabled', false);
-                    }
-                }
-            });
-        };
-    }
-
     // load load schedul
     function loadSchedul(){			
 	

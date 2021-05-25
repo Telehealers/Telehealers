@@ -1,5 +1,32 @@
 
     <script type="text/javascript">
+        function loadName(){
+    'use strict';          
+        var patient_id = document.getElementById('p_id').value;
+
+        if (patient_id!='') {
+            $.ajax({ 
+
+                'url': '<?php echo base_url();?>' + 'admin/Ajax_controller/load_patient_info/'+patient_id.trim(),
+                'type': 'GET',
+                'dataType': 'JSON',
+                'success': function(data){ 
+                        //$(".had").hide();
+                        document.getElementById("ptname").textContent=data.patient_name;
+                        document.getElementById("ptage").textContent=data.age;
+                        document.getElementById("ptsex").textContent=data.sex;
+                        document.getElementById("ptid").textContent=data.patient_id;
+                        document.getElementsByName("patient_id")[0].value=data.patient_id;
+
+                       
+                    
+                }
+            });
+        }else{
+            $(".had").show();
+            $(".p_name").hide();
+        };
+    }
         $(document).ready(function(){
 
             'use strict';
