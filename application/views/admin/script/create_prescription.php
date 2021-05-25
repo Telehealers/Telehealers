@@ -84,7 +84,7 @@
             });
         
         $('#medicine_name').autocomplete({
-            source: '/admin/Ajax_controller/medicine_selection/',
+            source: base_url + 'admin/Ajax_controller/medicine_selection/',
             minLength: 2,
             select: function(event, ui) {
                 $('#medicine_name').val(ui.item.label);
