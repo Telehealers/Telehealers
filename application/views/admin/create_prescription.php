@@ -153,19 +153,19 @@
                                                     <td>
                                                         <div class="field_wrapper">
                                                             <div class="form-group ">
-                                                                <div class="col-md-1">
+                                                                <div class="col-md-1 col-xs-12">
                                                                      <input type="text"  class="form-control" name="type[]"  placeholder="Type" />
                                                                 </div>
-                                                                <div class="col-md-3">
+                                                                <div class="col-md-3 col-xs-12">
                                                                     <input type="hidden" class="mdcn_value" name="medicine_id[]" value="" />
                                                                     <input type="text"  class="mdcn_name form-control" name="md_name[]" autocomplete="off" placeholder="<?php echo display('medicine_name')?>" />
                                                                     <div id="suggesstion-box"></div>
                                                                 </div>
 
-                                                                 <div class="col-md-2" ><input type="text"  class="form-control"  placeholder="<?php echo display('mgml')?>L" name="mg[]"  /></div> 
-                                                                 <div class="col-md-1" ><input type="text"  class="form-control"  placeholder="<?php echo display('dose')?>" name="dose[]"  /></div>
-                                                                 <div class="col-md-1"><input type="text"  class="form-control"  placeholder="<?php echo display('day')?>" name="day[]"  /></div>
-                                                                 <div class="col-md-3"><input type="text"  class="form-control"  placeholder="<?php echo display('medicine_comment')?>" name="comments[]"  /></div> 
+                                                                 <div class="col-md-2 col-xs-12" ><input type="text"  class="form-control"  placeholder="<?php echo display('mgml')?>L" name="mg[]"  /></div> 
+                                                                 <div class="col-md-1 col-xs-12" ><input type="text"  class="form-control"  placeholder="<?php echo display('dose')?>" name="dose[]"  /></div>
+                                                                 <div class="col-md-1 col-xs-12"><input type="text"  class="form-control"  placeholder="<?php echo display('day')?>" name="day[]"  /></div>
+                                                                 <div class="col-md-3 col-xs-10"><input type="text"  class="form-control"  placeholder="<?php echo display('medicine_comment')?>" name="comments[]"  /></div> 
                                                                 <a href="javascript:void(0);" class=" btn btn-danger remove_button" title="Remove field"><span class="glyphicon glyphicon-trash"></span></a>
                                                             </div> 
                                              
@@ -200,12 +200,12 @@
                                                             <div class="field_wrapper1">
                                                                 <div id="count_test1">
                                                                 <div class="form-group ">
-                                                                    <div class="col-md-5">
+                                                                    <div class="col-md-5 col-xs-12">
                                                                         <input type="hidden" class="test_value" name="test_name[]" value="" />
                                                                         <input placeholder="<?php echo display('test_name')?>"   class="test_name form-control" name="te_name[]" autocomplete="off" >
                                                                         <div id="test-box"></div>
                                                                     </div>
-                                                                    <div class="col-md-5"> 
+                                                                    <div class="col-md-5 col-xs-10"> 
                                                                         <input placeholder="<?php echo display('description')?>" name="test_description[]" class="form-control"> 
                                                                     </div>
                                                                         <a href="javascript:void(0);" class=" btn btn-danger remove_button" title="Remove field"><span class="glyphicon glyphicon-trash"></span></a>
@@ -237,7 +237,7 @@
                                                                  <div class="field_wrapper2">
                                                                     <div id="count_advice1">
                                                                         <div class="form-group ">
-                                                                            <div class="col-md-10">
+                                                                            <div class="col-md-10 col-xs-10">
                                                                                 <input type="hidden" class="advice_value" name="advice_name[]" value=""/>
                                                                                 <input placeholder="<?php echo display('advice')?>" class="advice_name form-control" name="adv[]" autocomplete="off" >
                                                                                 <div  id="advice-box"></div>
