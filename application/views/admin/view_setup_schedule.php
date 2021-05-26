@@ -129,7 +129,7 @@
                                     
                                     
                                     <div class="input-group ">
-                                        <input type="text" class="form-control" id="basic_example_1" autocomplete="off" placeholder="<?php echo display('start_time');?>" name="s_time">
+                                        <input type="text" class="form-control" id="basic_example_1" value="10:00" autocomplete="off" placeholder="<?php echo display('start_time');?>" name="s_time">
                                         <span class="input-group-addon">
                                             <span class="glyphicon glyphicon-time" ></span>
                                         </span>
@@ -138,7 +138,7 @@
                                     <span class="input-group-addon"> to </span>
 
                                     <div class="input-group ">
-                                        <input type="text" class="form-control" id="basic_example_2" autocomplete="off" placeholder="<?php echo display('end_time');?>" name="e_time" >
+                                        <input type="text" class="form-control" id="basic_example_2" value="22:00" autocomplete="off" placeholder="<?php echo display('end_time');?>" name="e_time" >
                                         <span class="input-group-addon">
                                             <span class="glyphicon glyphicon-time"></span>
                                         </span>
@@ -173,17 +173,6 @@
                             </div>
                                 <?php echo form_error('visible', '<div class=" text-danger">', '</div>'); ?>
                             </div>
-							
-							<div class="form-group">
-                                <label class="col-md-3 control-label "><span class="text-danger">*</span>Fees :</label>
-                                <div class="col-md-5">
-                                    <select class="form-control v_name" id="fees" name="fees">
-                                        <option value="1">Free</option>
-                                        <option value="2">Paid</option>
-                                    </select>
-                                </div>
-                            </div>
-							
                         </div>
                     </div>
 
