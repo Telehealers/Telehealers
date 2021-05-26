@@ -209,7 +209,6 @@
                                           id="summernote" class=" form-control" rows="4"><?php echo html_escape(@$doctor_info->about_me); ?>
                                          </textarea>
 
-                                        <span class="text-danger"><?php echo form_error('about_me'); ?> </span>
                                     </div>
                                 </div>
 
