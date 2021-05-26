@@ -5,7 +5,7 @@
  	 public function get_patient_name($patient_id) 
 
    {
-	 	  return $query = $this->db->select('patient_id,patient_name,birth_date,sex,patient_phone')
+	 	  return $query = $this->db->select('patient_id,patient_name,age,sex,patient_phone')
 
       ->from("patient_tbl")
 

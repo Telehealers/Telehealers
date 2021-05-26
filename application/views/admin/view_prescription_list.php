@@ -67,18 +67,10 @@
 								?>
 								</td>
                                 <td>
+                                    <a class="btn btn-xs btn-success" target="_blank" href="<?php echo base_url();?>admin/Prescription_controller/my_prescription/<?php echo html_escape($value->prescription_id); ?>"><i class="fa fa-eye"></i> View</a>
 
-                                <?php if($value->prescription_type==1){?>
-                                    <a class="btn btn-xs btn-success" target="_blank" href="<?php echo base_url();?>admin/Prescription_controller/my_prescription/<?php echo html_escape($value->appointment_id); ?>"><i class="fa fa-eye"></i> T</a>
-                                <?php } else{?>
-                                    <a class="btn btn-xs btn-success" target="_blank" href="<?php echo base_url();?>admin/Generic_controller/generic/<?php echo html_escape($value->prescription_id); ?>"><i class="fa fa-eye"></i> G</a>
-                                <?php } ?>
-
-                                <?php if($value->prescription_type==1){?>
                                  <a class="btn btn-xs btn-primary" href="<?php echo base_url();?>admin/Prescription_controller/edit_prescription/<?php echo $value->prescription_id; ?>/<?php echo html_escape($value->patient_id); ?>"><i class="fa fa-edit"></i> Edit</a>								 <a class="btn btn-xs btn-primary" href="<?php echo base_url();?>admin/Prescription_controller/send_prescription2/<?php echo $value->prescription_id; ?>" onclick="return confirm('Are you want to send prescription?');">Send Mail</a>
-                                <?php } else{?>
-                                 <a class="btn btn-xs btn-primary" href="<?php echo base_url();?>admin/Generic_controller/edit_generic/<?php echo html_escape($value->prescription_id); ?>/<?php echo html_escape($value->patient_id); ?>"><i class="fa fa-edit"></i> Edit</a>								  <a class="btn btn-xs btn-primary" href="<?php echo base_url();?>admin/Prescription_controller/send_prescription/<?php echo $value->prescription_id; ?>" onclick="return confirm('Are you want to send prescription?');">Send Mail</a>
-                                <?php } ?>
+                               
 
                                 </td>
                             </tr>

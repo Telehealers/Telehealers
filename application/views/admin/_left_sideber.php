@@ -127,7 +127,7 @@ if($user_type==1){
                             </a>
                             <ul class="treeview-menu">
                                 <!--<li><a href="<?php echo base_url();?>admin/Prescription_controller/create_new_prescription"><i class="fa fa-plus" aria-hidden="true"></i> <?php echo display('create_trade')?> </a></li>-->
-                                <li class=""><a href="<?php echo base_url();?>admin/Generic_controller/create_new_generic"><i class="fa fa-plus" aria-hidden="true"></i> <?php echo display('create_generic')?></a></li>
+                                <li class=""><a href="<?php echo base_url();?>admin/Prescription_controller/create_new_prescription"><i class="fa fa-plus" aria-hidden="true"></i> <?php echo display('create_generic')?></a></li>
                                 <li><a href="<?php echo base_url();?>admin/Prescription_controller/prescription_list"> <i class="fa fa-list" aria-hidden="true"></i> <?php echo display('prescription_list')?></a></li>
                             </ul>
                         </li>
@@ -553,8 +553,7 @@ if($user_type==1){
                                 </span>
                             </a>
                             <ul class="treeview-menu">
-                                <!--<li><a href="<?php echo base_url();?>admin/Prescription_controller/create_new_prescription"><i class="fa fa-plus" aria-hidden="true"></i> <?php echo display('create_trade')?> </a></li>-->
-                                <li class=""><a href="<?php echo base_url();?>admin/Generic_controller/create_new_generic"><i class="fa fa-plus" aria-hidden="true"></i> <?php echo display('create_generic')?></a></li>
+                                <li><a href="<?php echo base_url();?>admin/Prescription_controller/create_new_prescription"><i class="fa fa-plus" aria-hidden="true"></i> <?php echo display('create_generic')?> </a></li>
                                 <li><a href="<?php echo base_url();?>admin/Prescription_controller/prescription_list"> <i class="fa fa-list" aria-hidden="true"></i> <?php echo display('prescription_list')?></a></li>
                             </ul>
                         </li>
