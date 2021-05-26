@@ -68,19 +68,17 @@ class Ajax_controller extends CI_Controller {
       ->get()
       ->result();
       
-      $medicines = array();
       echo  '[';
       if(!empty($result)) {
             $addComa=false;
             foreach ($result as $value) {
               if ($addComa) {
                 echo ",";
+              } else {
+                $addComa = true;
               }
-              $addComa = true;
-              array_push($medicines, $value);
               echo '{"value":"'.$value->medicine_id.'", "label":"'.$value->medicine_name.'"}';
             }
-            // echo '<ul>';
         }
         echo ']';
       }
