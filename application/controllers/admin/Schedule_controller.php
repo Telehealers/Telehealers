@@ -116,7 +116,6 @@ class Schedule_controller extends CI_Controller {
 	    $this->form_validation->set_rules('e_time', 'End time', 'trim|required');
 	    $this->form_validation->set_rules('p_time', 'Per', 'trim|required');
 	    $this->form_validation->set_rules('visible', 'Visible', 'trim|required');
-	    $this->form_validation->set_rules('fees', 'Fees', 'trim|required');
 	      
 	      if ($this->form_validation->run()==true) {
 
@@ -130,8 +129,7 @@ class Schedule_controller extends CI_Controller {
 	     		'end_time' => $this->input->post('e_time',TRUE) , 
 	     		'day' => $d_name['day'][$i] , 
 	     		'per_patient_time' => $this->input->post('p_time',TRUE) , 
-	     		'visibility' => $this->input->post('visible',TRUE), 
-	     		'fees' => $this->input->post('fees',TRUE) 
+	     		'visibility' => $this->input->post('visible',TRUE)
 	     	);
 
 	       //$cdata['doctor_id'] = $this->session->userdata('doctor_id');      
@@ -245,8 +243,7 @@ class Schedule_controller extends CI_Controller {
          		'end_time' => $this->input->post('e_time',TRUE), 
          		'day' => $this->input->post('day',TRUE), 
          		'per_patient_time' => $this->input->post('p_time',TRUE), 
-         		'visibility' => $this->input->post('visible',TRUE), 
-         		'fees' => $this->input->post('fees',TRUE) 
+         		'visibility' => $this->input->post('visible',TRUE)
          		);
 
            $this->schedule_model->save_edit_schedul($savedata,$s_id);
