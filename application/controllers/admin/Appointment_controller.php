@@ -45,6 +45,7 @@ class Appointment_controller extends CI_Controller {
 		$user_type = $this->session->userdata('user_type');
 		if($user_type==1){
 			$doctor_id = $this->session->userdata('doctor_id');
+      $data['patient_info'] = $this->patient_model->get_by_id_patient($doctor_id);
 			if($doctor_id!="1"){
 				$data['doctor_info'] = $this->doctor_model->getDoctorListById($doctor_id);	
 			}else{
@@ -56,7 +57,7 @@ class Appointment_controller extends CI_Controller {
 		}
         $data['title'] = "Create New Appointment";
 		$data['venue_info'] = $this->venue_model->get_venue_list();
-		$data['patient_info'] = $this->patient_model->get_by_id_patient($doctor_id);
+		
 
 		$this->load->view('admin/_header',$data);
 		$this->load->view('admin/_left_sideber');
