@@ -1,5 +1,5 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
-include APPPATH.'../zoom/config.php';
+
 
 class Appointment_controller extends CI_Controller {
 
@@ -23,10 +23,14 @@ class Appointment_controller extends CI_Controller {
 	       $this->load->model('admin/Appointment_model','appointment_model');
 	      $this->load->model('admin/Venue_model','venue_model');
 	      $this->load->library('Smsgateway');
+
+
         $this->load->model('admin/Overview_model','overview_model');
         $this->load->model('admin/email/Email_model','email_model');
 		$this->load->model('admin/Doctor_model','doctor_model');
         $this->load->library('email');
+       	$this->load->model('admin/Patient_model','patient_model');
+
 		
 		
   }
@@ -52,8 +56,8 @@ class Appointment_controller extends CI_Controller {
 		}
         $data['title'] = "Create New Appointment";
 		$data['venue_info'] = $this->venue_model->get_venue_list();
-		
-		
+		$data['patient_info'] = $this->patient_model->get_by_id_patient($doctor_id);
+
 		$this->load->view('admin/_header',$data);
 		$this->load->view('admin/_left_sideber');
 		$this->load->view('admin/view_create_appointment');

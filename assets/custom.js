@@ -166,7 +166,7 @@ function load_patient_id(){
 		var doctor_id = $('#doctor_id').val();
 		
 		
-        var date     = $('#date').val();
+        var date     = $('#p_date').val();
 		
 		
         var base_url = $("#base_url").val();
@@ -181,7 +181,7 @@ function load_patient_id(){
 
 		}else{					
 
-		
+		venue_id=3;
 		$.ajax({
 			'url': base_url + 'admin/Ajax_controller/get_schedul/'+venue_id+'/'+date+'/'+doctor_id,
 			'type': 'GET', 
