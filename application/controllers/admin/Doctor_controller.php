@@ -65,7 +65,7 @@ class Doctor_controller extends CI_Controller {
 		$this->form_validation->set_rules('name','Name','trim|required');
 		$this->form_validation->set_rules('phone','Phone','trim|required');
 		$this->form_validation->set_rules('registration_number','Registration number','trim|required');
-        $this->form_validation->set_rules('about_me','About me','trim|required');
+
 
         $doctor_id = $this->input->post('doctor_id',TRUE);
 		
