@@ -75,7 +75,7 @@
  
                                 <label class="col-md-3 control-label"><span class="text-danger">*</span><?php echo display('patient')?> :</label>
                                 <div class="col-md-5">
-                                        <select class="form-control"  name="patient_id" id="patient_id" onChange="loadName(this.value)" required>
+                                        <select class="form-control"  name="patient_id" id="patient_id"  required>
                                             <option value="">Select Patient</option>
                                             <?php foreach($patient_info as $val){?>
                                             <option value="<?php echo $val->patient_id?>"><?php echo $val->patient_id?> (<?php echo $val->patient_name?>)</option>
