@@ -950,7 +950,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 
 		if($user_type==1){
 			$mes='successfully created appointment';
-			$this->session->set_flashdata('message',"<div class='alert alert-success'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>".$mes."</div>");
+			$this->session->set_flashdata('message',$mes);
 		redirect("admin/Appointment_controller/appointment_list");
 		}		
 		else{
