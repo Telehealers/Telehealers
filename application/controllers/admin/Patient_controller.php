@@ -754,9 +754,9 @@ class Patient_controller extends CI_Controller {
                                 <div class="product-entry">
                                     <div class="text">
                                         <p>Hey Dr. '.$doctor_name.',</p>
-                                        <p>Patient referral to you bt '.$doctor_name_f.'.</p>
+                                        <p>Patient referral to you by '.$doctor_name_f.'.</p>
                                         
-                                        <p>ID: '.$patient_id.',</p>
+                                        <p>ID: '.$patient_id.'</p>
 										
                                     </div>
                                 </div>

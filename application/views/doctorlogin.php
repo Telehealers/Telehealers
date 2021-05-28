@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="<?php echo base_url();?>web_assets2/appointment/css/style.css">
 	<link rel="" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js">
 	
-	<link rel="icon" href="<?php echo (!empty(html_escape($result->picture))?html_escape($result->picture):null); ?>" sizes="16x16"> 
+	 <link rel="icon" href="<?php echo (!empty(html_escape($info->fabicon->picture))?html_escape($info->fabicon->picture):null); ?>" type="image">
         <!-- Bootstrap -->
         <link href="<?php echo base_url();?>assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
         <!-- Pe-icon-7-stroke -->

@@ -1,3 +1,11 @@
+<div class="whatsapp_button">
+	<span><a target="_blank" href="https://api.whatsapp.com/send?phone=<?php echo $info->phone->details; ?>&text=Hi"><img src="<?php echo base_url();?>web_assets2/images/whatsapp.png" alt="#"></a></span>
+	<!--<div class="number_call">
+		<p>+91 123123123</p>
+	</div>-->
+</div>
+
+	
 <footer class="footer">
         <div class="container">
             <div class="row">
