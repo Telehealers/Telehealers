@@ -109,8 +109,7 @@
                                                                     <?php foreach($m_info as $medicine){?>
                                                                         <div class="form-group ">
                                                                              <div class="col-md-1 col-xs-12">
-                                                                                <input type="text"  class="form-control" name="
-                                                                                type[]" value="<?php echo html_escape($medicine->medicine_type)?>" placeholder="<?php echo display(
+                                                                                <input type="text"  class="form-control" name="type[]" value="<?php echo html_escape($medicine->medicine_type)?>" placeholder="<?php echo display(
                                                                                 'type')?>" />
                                                                                
                                                                             </div>
