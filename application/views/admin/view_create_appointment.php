@@ -45,7 +45,7 @@
                                  <strong>'.html_escape($mag).'</strong>
                             </div>';
                         }
-                        $attributes = array('class' => 'form-horizontal','target'=>'_blank','name'=>'p_info');
+                        $attributes = array('class' => 'form-horizontal','target'=>'_self','name'=>'p_info');
                         echo form_open_multipart('Appointment/patientAppointment', $attributes);                
                     ?>
                         <div class="form-body">	
