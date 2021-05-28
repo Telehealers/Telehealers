@@ -28,7 +28,7 @@
   gtag('config', 'G-Y9P95E4VWH');
 </script>
 	<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+/* var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
 (function(){
 var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
 s1.async=true;
@@ -36,7 +36,7 @@ s1.src='https://embed.tawk.to/608c0bf662662a09efc3afa9/1f4hgtf3e';
 s1.charset='UTF-8';
 s1.setAttribute('crossorigin','*');
 s0.parentNode.insertBefore(s1,s0);
-})();
+})(); */
 </script>
 </head>
 <?php
@@ -870,7 +870,9 @@ function setSlot(){
 	var time_slot = $('#serial_no').val();
 	var p_email = $('#p_email').val();
 	var p_date = $('#p_date').val();
+	var doc_id = $('#service5').val();
 	//p_date = '2021-05-08';
+	//alert(doc_id);
 	if(typeof time_slot === 'undefined'){
 		$('#bb_app').attr("disabled", true);
 		$('#bb_app').addClass("btn_disable");
@@ -891,7 +893,7 @@ function setSlot(){
 		$.ajax({
 			url:base_url+'index.php/Welcome/checkAppointment',
 			method: 'post',
-			data: {p_email:p_email,p_date:p_date},
+			data: {p_email:p_email,p_date:p_date,doc_id:doc_id},
 			type: 'POST',
 			success: function(response){
 				//alert(response);
@@ -911,8 +913,7 @@ function setSlot(){
 			}
 		});
 	}
-	
-	
+		
 }
 function setfields(){
 	$('#p_name').attr("disabled", false);

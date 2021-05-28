@@ -8,8 +8,8 @@
             <i class="pe-7s-world"></i>
         </div>
         <div class="header-title">
-            <h1><?php echo display('appointment_list');?></h1>
-            <small><?php echo display('appointment_list');?></small>
+            <h1>Appointment List Referral</h1>
+            <small>Appointment List Referral</small>
             <ol class="breadcrumb">
                 <li><a target="_blank" href="<?php echo base_url();?>"><i class="pe-7s-home"></i> <?php echo display('site_view')?></a></li>
                 <li class="active"><a href="<?php echo base_url();?>admin/Dashboard"><?php echo display('deashbord');?></a></li>
@@ -50,7 +50,8 @@
                          <table width="100%" class="table table-striped table-bordered table-hover" id="patient_list">
                             <thead>
                                 <tr>
-                                    <th class="all"><?php echo display('doctor_name'); ?></th>
+                                    <th class="all">Doctor Referral From</th>
+									<th class="all">Doctor Referral To</th>
 									<th class="all"><?php echo display('patient_name'); ?></th>
                                     <th class="all"><?php echo display('patient_id'); ?></th>
                                     <th class="all"><?php echo display('phone_number'); ?></th>
@@ -98,6 +99,7 @@
 									$sql2 = "select * from appointment_tbl where appointment_id= '".$value->appointment_id."'";
 									$res_doc = $this->db->query($sql2);
 									$result_doc = $res_doc->result_array();
+									$doctor_id='';
 									if(is_array($result_doc) && count($result_doc)>0){
 										$symt1 = $result_doc[0]['symt1'];
 										$symt2 = $result_doc[0]['symt2'];
@@ -114,6 +116,16 @@
 										$doctor_name = $result2[0]['doctor_name'];
 									}
 									
+									$doc_to = $value->referral_to;
+									$SQL_to = 'select doctor_name from doctor_tbl where doctor_id = "'.$doc_to.'"';
+		
+									$query_to = $this->db->query($SQL_to);
+
+									$result_to = $query_to->result_array();
+									$doctor_name_to = '-';
+									if(is_array($result_to) && count($result_to)>0){
+										$doctor_name_to = $result_to[0]['doctor_name'];
+									}
 									
 									
                                     ?>
@@ -121,6 +133,7 @@
                                 <tr>
 
                                     <td><?php echo html_escape($doctor_name);?></td>
+                                    <td><?php echo html_escape($doctor_name_to);?></td>
 									<td><?php echo html_escape($value->patient_name);?></td>
                                     <td><?php echo html_escape($value->patient_id);?></td>
                                     <td><?php echo html_escape($value->patient_phone);?></td>
@@ -157,9 +170,22 @@
                                         <?php } ?> 
                                         <a class="btn btn-xs btn-success" data-toggle="tooltip" title="View Appointment" target="_blank" href="<?php echo base_url();?>admin/Basic_controller/my_appointment/<?php echo html_escape($value->appointment_id); ?>"><i class="fa fa-print"></i></a>
                                         <!--<a class="btn btn-xs btn-info" data-toggle="tooltip" title="View History" target="_blank" href="<?php echo base_url();?>History_controller/patient_history/<?php echo html_escape($value->patient_id); ?>"><i class="fa fa-history" aria-hidden="true"></i></a>-->
-                                        <a class="btn btn-xs btn-danger" data-toggle="tooltip" title="Delete" href="<?php echo base_url();?>admin/Appointment_controller/delete_appointment/<?php echo html_escape($value->appointment_id); ?>"><i class="fa fa-trash" aria-hidden="true"></i></a>
-                                       <a class="btn btn-xs btn-primary" href="<?php echo base_url();?>admin/Appointment_controller/send_meet_url/<?php echo $value->appointment_id; ?>" onclick="return confirm('Are you want to send meeting url?');">Send Google Meet</a>
-									   <a class="btn btn-xs btn-primary" href="<?php echo base_url();?>admin/Appointment_controller/appointment_referral/<?php echo $value->appointment_id; ?>">Referral</a>
+                                        
+                                       <a class="btn btn-xs btn-primary" href="<?php echo base_url();?>admin/Appointment_controller/send_meet_url_referral/<?php echo $value->appointment_id; ?>" onclick="return confirm('Are you want to send meeting url?');">Send Google Meet</a>
+									   <?php 
+									   if($value->app_status==0){
+									  ?>
+									  <a class="btn btn-xs btn-primary" href="<?php echo base_url();?>admin/Appointment_controller/appointment_referral_accept/<?php echo $value->appointment_id; ?>" onclick="return confirm('Are you sure to Accept this appointment?');">Accept</a> | <a class="btn btn-xs btn-primary" href="<?php echo base_url();?>admin/Appointment_controller/appointment_referral_reject/<?php echo $value->appointment_id; ?>" onclick="return confirm('Are you sure to reject this appointment?');">Reject</a>
+									  <?php 
+									   }
+									   if($value->app_status==1){
+										   ?><a class="btn btn-xs btn-primary" href="javascript:void(0)">Accepted</a><?php
+									   }
+										if($value->app_status==2){
+										   ?><a class="btn btn-xs btn-primary" href="javascript:void(0)">Rejected</a><?php
+									   }									   
+									   ?>
+									   
                                     </td>
                                 </tr>
                                 <?php
