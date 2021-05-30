@@ -36,7 +36,8 @@ class Appointment extends CI_Controller {
         $this->load->model('admin/Sms_setup_model','sms_setup_model');
 	//	Load Doctor model
 		$this->load->model('admin/Doctor_model','doctor_model');
-        //
+       	$this->load->model('admin/Ajax_model','ajax_model');
+
         $this->load->library('Smsgateway');
 		$this->load->library('session');
         //
@@ -86,6 +87,9 @@ class Appointment extends CI_Controller {
 
 		// get doctor list for appointmaent
 		$data['doctor_info_for_appo'] = $this->doctor_model->getDoctorListByselect();
+		//get departments 
+		 $data['departments']=$this->ajax_model->getservicetype('Speciality Consultation');
+		
 
 		$language_arr = array();
 		$language_str = $this->doctor_model->getDoctorListByselect();

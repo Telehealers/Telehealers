@@ -443,7 +443,11 @@ input.range::-ms-fill-upper {
     <div class="row mb-3" id="department_type" style="display:none;padding: 0px 110px 0px 110px;">
     <div class="col-sm-12 col-md-4 col-lg-3">
     <div class="btn-group" id="elem">
-    <button class="btn-group__item btn-group__item" ></button>
+         <?php if(is_array($departments) && count($departments)>0){
+                foreach($departments as $val){
+                        ?><button class="btn-group__item btn-group__item" >
+                            <?php echo $val['servicetype']
+                                           ?></button><?php }} ?>        
    </div>
     </div>
     </div>
@@ -479,21 +483,8 @@ if(queryType == "covid"){
 }
 
 if(queryType == "non_covid"){
-  debugger;
-  console.log('non-covid case');
   document.getElementById('department_type').style.display = 'block';
-  var base_url = $('#base_url').val();
-  $.ajax({
-            url:base_url+'index.php/Welcome/getservicetype',
-            method: 'post',
-            data: {services:"Speciality Consultation"},
-            type: 'POST',
-            success: function(response){
-                //alert(response);
-                console.log(response);
-                $('#service_type').html(response);
-            }
-        });
+ 
 }
 
 })

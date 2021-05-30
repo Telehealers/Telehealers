@@ -788,26 +788,7 @@ public function registration()
 	// 	}
 	// 	echo $con;
 	// }
-  public function getservicetype(){
 
-    $services = $this->input->post('services',TRUE);
-    $sql = "select id from service where title = '".$services."'";
-    $res = $this->db->query($sql);
-    $result = $res->result_array();
-    if(is_array($result) && count($result)>0){
-        $service_id = $result[0]['id'];
-    }
-    $con = '';
-    if($service_id>0){
-        $sql_st = "select * from servicetype where service = '".$service_id."'";
-        $res_st = $this->db->query($sql_st);
-        $result_st = $res_st->result_array();
-        $i=0;
-       // $result
-//
-    print json_encode( $result_st);
-    }
-}
 
 
 	public function getservicetypedoctor(){
