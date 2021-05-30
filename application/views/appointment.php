@@ -1,5 +1,5 @@
 <?php
-    date_default_timezone_set(@$info->timezone->details);
+    // date_default_timezone_set(@$info->timezone->details);
 ?>
 <!doctype html>
 <html lang="en">
@@ -10,16 +10,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="icon" href="<?php echo (!empty(html_escape($info->fabicon->picture))?html_escape($info->fabicon->picture):null); ?>" type="image">
     <!-- Bootstrap CSS -->
+
     <link rel="stylesheet" href="<?php echo base_url();?>web_assets2/css/main.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 	<link href="<?php echo base_url()?>assets/plugins/jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+  <script src="https://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.js"></script>
 	<link rel="stylesheet" href="<?php echo base_url();?>web_assets2/appointment/css/main.css">
     <link rel="stylesheet" href="<?php echo base_url();?>web_assets2/appointment/css/style.css">
     <link rel="stylesheet" href="<?php echo base_url();?>web_assets2/appointment/css/calendar_style.css">
 
-	<link rel="" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"  crossorigin="anonymous"></script>
 
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js'></script> -->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.2/js/intlTelInput.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js'></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
    <title><?php echo $meta_info[0]['page_title']; ?></title>
 	<meta name="keywords" content="<?php echo $meta_info[0]['meta_keywords']; ?>">
 	<meta name="description" content="<?php echo $meta_info[0]['meta_description']; ?>">
@@ -61,672 +71,752 @@ $hello = GeraHash(5);
 <style>
     .owl-carousel .owl-item img{width:65%;}
 
+
+    input.range {
+  -webkit-appearance: none;
+  bottom: -10px;
+  position: relative;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+input.range:focus {
+  outline: 0;
+}
+input.range::-moz-focus-outer {
+  border: 0;
+}
+
+input.range::-webkit-slider-thumb {
+  box-shadow: 1px 1px 1px black, 0px 0px 1px black;
+  border: 0;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -7.5px;
+}
+
+input.range::-moz-range-thumb {
+  box-shadow: 1px 1px 1px black, 0px 0px 1px black;
+  border: 0;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+}
+input.range::-ms-thumb {
+  box-shadow: 1px 1px 1px black, 0px 0px 1px black;
+  border: 0;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+  height: 5px;
+}
+
+input.range::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 5px;
+  cursor: pointer;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0), 0px 0px 1px rgba(13, 13, 13, 0);
+  background: indigo;
+  border-radius: 20px;
+  border: 0;
+}
+
+input.range::-moz-range-track {
+  width: 100%;
+  height: 5px;
+  cursor: pointer;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0), 0px 0px 1px rgba(13, 13, 13, 0);
+  background: indigo;
+  border-radius: 20px;
+  border: 0;
+}
+
+input.range::-ms-track {
+  width: 100%;
+  height: 5px;
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+
+input.range::-ms-fill-lower,
+input.range::-ms-fill-upper {
+  background: indigo;
+  border: 0;
+  border-radius: 40px;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0), 0px 0px 1px rgba(13, 13, 13, 0);
+}
+
+.range__tick {
+  fill: #a0a0a0;
+}
+
+.range__tick:first-child {
+  -webkit-transform: translateX(2px);
+  -moz-transform: translateX(2px);
+  -ms-transform: translateX(2px);
+  -o-transform: translateX(2px);
+  transform: translateX(2px);
+}
+.range__tick:last-child {
+  -webkit-transform: translateX(-3px);
+  -moz-transform: translateX(-3px);
+  -ms-transform: translateX(-3px);
+  -o-transform: translateX(-3px);
+  transform: translateX(-3px);
+}
+
+.range__field {
+  border: 0;
+}
+#dLabel {
+    width: 240px;
+  height: 40px;
+  border-radius: 4px;
+  background-color: #fff;
+  border: solid 1px #cccccc;
+  text-align: left;
+  padding: 7.5px 15px;
+  color: #ccc;
+  letter-spacing: 0.7px;
+  /* margin-top: 25px; */
+
+
+}
+
+ /* .caret {
+    float: right;
+    margin-top: 9px;
+    display: block;
+  } */
+
+.dropdown-menu {
+  width: 240px;
+  padding: 0;
+  margin: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.dropdown button:hover, .dropdown button:focus {
+  border: none;
+  outline: 0;
+}
+
+.dropdown.open button#dLabel {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.23);
+  border: solid 1px #666;
+   border-bottom: none;
+}
+
+.dropdown.open ul {
+   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.23);
+  border: solid 1px #666;
+  border-top: none;
+  height: 200px;
+  overflow-y: scroll;
+}
+
+.dropdown-menu li {
+
+     line-height: 1.5;
+  letter-spacing: 0.7px;
+  color: #666;
+    font-size: 14px;
+  cursor: pointer;
+  padding: 7.5px 15px;
+  border-top: solid 1px #f3f3f3;
+
+
+
+}
+
+.dropdown-menu li:hover {
+  background-color: #ccc;
+}
+.labelStyle{
+  font-weight: 600;
+    font-size: 20px;
+    color: #6c757d;
+}
+
+
+/* style for buttons  */
+@import url('https://fonts.googleapis.com/css?family=Nunito+Sans:400&display=swap');
+/** base styles **/
+
+/** button group styles **/
+ .btn-group {
+	 border-radius: 1rem;
+	 box-shadow: -2.3px -2.3px 3.8px rgba(255, 255, 255, 0.2), -6.3px -6.3px 10.6px rgba(255, 255, 255, 0.3), -15.1px -15.1px 25.6px rgba(255, 255, 255, 0.4), -50px -50px 85px rgba(255, 255, 255, 0.07), 2.3px 2.3px 3.8px rgba(0, 0, 0, 0.024), 6.3px 6.3px 10.6px rgba(0, 0, 0, 0.035), 15.1px 15.1px 25.6px rgba(0, 0, 0, 0.046), 50px 50px 85px rgba(0, 0, 0, 0.07);
+}
+ .btn-group__item {
+	 border: none;
+	 min-width: 6rem;
+	 padding: 1rem 2rem;
+	 background-color: #eee;
+	 cursor: pointer;
+	 margin: 0;
+	 box-shadow: inset 0px 0px 0px -15px rebeccapurple;
+	 transition: all 300ms ease-out;
+}
+ .btn-group__item:last-child {
+	 border-top-right-radius: 1rem;
+	 border-bottom-right-radius: 1rem;
+}
+ .btn-group__item:first-child {
+	 border-top-left-radius: 1rem;
+	 border-bottom-left-radius: 1rem;
+}
+ .btn-group__item:hover, .btn-group__item:focus {
+	 color: rebeccapurple;
+	 box-shadow: inset 0px -20px 0px -15px rebeccapurple;
+}
+ .btn-group__item:focus {
+	 outline: none;
+}
+ .btn-group__item:after {
+	 content: '✔️';
+	 margin-left: 0.5rem;
+	 display: inline-block;
+	 color: rebeccapurple;
+	 position: absolute;
+	 transform: translatey(10px);
+	 opacity: 0;
+	 transition: all 200ms ease-out;
+}
+ .btn-group__item--active:after {
+	 opacity: 1;
+	 transform: translatey(-2px);
+}
+
+#outer {
+   float: left;
+   width: 250px;
+   overflow: hidden;
+   white-space: nowrap;
+   display: inline-block;
+ }
+
+ #left-button {
+   float: left;
+   width: 30px;
+   text-align: center;
+ }
+
+ #right-button {
+   float: left;
+   width: 30px;
+   text-align: center;
+ }
+
+ a {
+   text-decoration: none;
+   font-weight: bolder;
+   color: red;
+ }
+
+ #inner:first-child {
+   margin-left: 0;
+ }
+
+ label {
+   margin-left: 10px;
+ }
+
+ .hide {
+   display: none;
+ }
+
+
 </style>
 <body>
 
-    <?php $this->load->view('header.php')?>
-
-
-
-
-
-
-   <section class="multi_step_form appointment_page" style="min-height:400px; background-color:#FFF;">
-		<?php
-			$mag = $this->session->flashdata('exception');
-			if($mag !=''){
-
-			echo $mag;
-		}
-			$patient_id = $this->session->flashdata('patient_id');
-			$attributes = array('id' => 'msform', 'name'=>'app_form', 'onsubmit'=>'return validateForm()');
-
-			//echo form_open('Appointment/appointment', $attributes);
-			echo form_open('Appointment/confirmation', $attributes);
-
-
-		?>
-
-                            <div class="heading">
-                                <h2>Book an Appointment</h2>
-                                <!--<p>In order to use this service, you have to complete this verification process</p>-->
-                            </div>
-							<div id="message_id" class=""></div>
-							<fieldset id="book_popup_1">
-								<!--<h3>Select Your Consultancy</h3>-->
-								<!--<p>We will send you a SMS. Input the code to verify.</p>-->
-								<div class="mb-5 more_btns">
-									<ul>
-									<?php
-									$i=0;
-									if(is_array($service) && count($service)>0){
-										foreach($service as $val){
-											$i++;
-											?>
-											<li>
-												<button type="button" class="btn_choose_sent bg_btn_chose_1">
-													<input type="radio" name="service" value="<?php echo $val->title?>" <?php if($i==1){?>checked="checked" <?php } ?> /><?php echo $val->title?>
-												</button>
-											</li>
-											<?php
-										}
-									}
-									?>
-									</ul><br>
-									<?php if(is_array($language_arr) && count($language_arr)>0){
-										foreach($language_arr as $val){
-										?>
-									<input type="checkbox" name="lang_set" id="lang_set" value="<?php echo $val;?>">&nbsp;<?php echo $val;?> &nbsp;&nbsp;&nbsp;&nbsp;
-									<?php }} ?>
-								</div>
-								<button onClick="addService()" id="add_service" type="button" class="next action-button">Continue</button>
-							</fieldset>
-
-							<fieldset id="book_popup_3" class="mt-5">
-                                <h3>Appointment Type</h3>
-
-                                <div class="mb-5 more_btns">
-									<ul>
-										<!--<li>
-											<button type="button" class="btn_choose_sent bg_btn_chose_1">
-												<input type="radio" name="app_val" value="1" checked />Immediately
-											</button>
-										</li>-->
-										<li>
-											<button type="button" class="btn_choose_sent bg_btn_chose_1">
-												<input checked type="radio" name="app_val" value="2" />Schedule Appointment
-											</button>
-										</li>
-									</ul>
-								</div>
-                                <button type="button" class="action-button previous_button">Back</button>
-								<button id="app_type" onClick="setDoctor()" type="button" class="next action-button">Continue</button>
-								<div id="app_type_btn" style="display:none;"><button id="app_type_btn2" type="button" class="next action-button">Continue</button> </div>
-							</fieldset>
-
-
-							<fieldset id="book_popup_6" class="mt-5">
-                                <!--<h3>Book an Appointment</h3>-->
-                                <!--<p>We will send you a SMS. Input the code to verify.</p>-->
-
-								<input type="hidden" name="service1" id="service1" value="" >
-								<input type="hidden" name="service2" id="service2" value="" >
-								<input type="hidden" name="service3" id="service3" value="" >
-								<input type="hidden" name="service4" id="service4" value="" >
-								<input type="hidden" name="service5" id="service5" value="" >
-								<input type="hidden" name="app_type_val" id="app_type_val" value="" >
-								<input type="hidden" name="doc_idd" id="doc_idd" value="" >
-								<input type="hidden" name="slot_idd" id="slot_idd" value="" >
-								<input type="hidden" name="sh_idd" id="sh_idd" value="" >
-                                <div class="form">
-                                    <div class="form-row">
-                                        <div class="col-md-6">
-                                        <div class="input-group">
-											<input type="text" required name="p_name" id="p_name" placeholder="name">
-										</div>
-                                        </div>
-                                        <div class="col-md-6">
-                                             <div class="input-group">
-												<input type="email" required name="p_email" id="p_email" placeholder="email">
-												<div id="email_msg" style="width:100%;"></div>
-											</div>
-                                        </div>
-										<div class="col-md-6">
-                                        <div class="input-group">
-											<!--<select class="form-control" style="padding:10px;" name="p_age" required="required" id="p_age">
-													<option value="">Age</option>
-													<?php for($i=1;$i<=130;$i++){?>
-													<option><?php echo $i; ?> Year</option>
-													<?php } ?>
-												</select>-->
-											<input placeholder="Age" type="number" min="1" max="130" name="p_age" id="p_age" required="required">
-										</div>
-                                        </div>
-                                        <div class="col-md-6">
-                                             <div class="input-group">
-												<select class="form-control" style="padding:10px;" required="required" name="p_gender" id="p_gender">
-												    <option value="">Gender</option>
-													<option>Male</option>
-													<option>Female</option>
-													<option>Other</option>
-												</select>
-											</div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="input-group">
-											<input type="tel" required name="p_phone" id="p_phone" placeholder="phone">
-											</div>
-                                        </div>
-                                        <div class="col-md-6" id="appDate">
-                                            <div class="input-group">
-                                        <input onClick="resetVenue()" type="date" required name="p_date" class="datepicker3" id="p_date" placeholder="date">
-                                    </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="input-group" id="loadsche">
-                                        <select style="padding:10px;" onchange="loadSchedul()" class="form-control" required name="venue_id" id="venue_id" required>
-											<option value="">--Select Mode--</option>
-											<?php foreach ($venue as $value) {
-												echo '<option value="'.html_escape($value->venue_id).'">'.html_escape($value->venue_name).'</option>';
-											} ?>
-										</select>
-										<div class="schedul1" style="width:100%; float:left; clear:both; margin-top:20px;"></div>
-                                    </div>
-                                    <div class="input-group">
-                                        <textarea maxlength="200" type="message" name="problem" id="problem" placeholder="Tell us your symptom or health problem..." required="required"></textarea>
-                                    </div>
-                                    <div class="input-group">
-                                        <input type="checkbox" class="term_con_btn" name="term_condition" value="1" disabled checked="checked" id="term_condition">&nbsp;&nbsp;<a href="<?php echo base_url();?>terms" target="_blank" style="text-decoration:underline;">I agree to the Tele medicine Terms & Conditions</a>
-                                    </div>
-                                </div>
-                            <input type="hidden" name="existing_user" id="existing_user" value="">
-							<button type="button" class="action-button previous_button">Back</button>
-							<button type="submit" id="bb_app" onClick="return setSlot()" class="action-button"><?php echo display('appointment');?></button>
-
-						</fieldset>
-                        <?php echo form_close();?>
-                    </section>
-
-                    <section>
-                      <div class="booking_style" style="background: white;">
-                        <div class="row">
-                          <div class="col-12 text-center" >
-                          <h2>Book Appointment</h2>
-                          </div>
-                        </div>
-                        <div class="row">
-                        <div class="col-sm-6 col-md-6 col-lg-4">
-                        <div class="card border-0">
-                        </div>
-                        </div>
-                          <div class="col-sm-6 col-md-6 col-lg-8">
-                          <div class="card border-0">
-                <form autocomplete="off">
-                    <div class="card-header bg-dark">
-                        <div class="mx-0 mb-0 row justify-content-sm-center justify-content-start px-1"> <input type="text" id="dp1" class="datepicker inputStyle" placeholder="Pick Date" name="date" readonly><span class="fa fa-calendar"></span> </div>
-                    </div>
-                    <div class="card-body p-3 p-sm-5">
-                        <div class="row text-center mx-0">
-                            <div class="col-md-2 col-4 my-1 px-2">
-                                <div class="cell py-1">9:00AM</div>
-                            </div>
-                            <div class="col-md-2 col-4 my-1 px-2">
-                                <div class="cell py-1">9:30AM</div>
-                            </div>
-                            <div class="col-md-2 col-4 my-1 px-2">
-                                <div class="cell py-1">9:45AM</div>
-                            </div>
-                            <div class="col-md-2 col-4 my-1 px-2">
-                                <div class="cell py-1">10:00AM</div>
-                            </div>
-                            <div class="col-md-2 col-4 my-1 px-2">
-                                <div class="cell py-1">10:30AM</div>
-                            </div>
-                            <div class="col-md-2 col-4 my-1 px-2">
-                                <div class="cell py-1">10:45AM</div>
-                            </div>
-                        </div>
-                        <div class="row text-center mx-0">
-                            <div class="col-md-2 col-4 my-1 px-2">
-                                <div class="cell py-1">11:00AM</div>
-                            </div>
-                            <div class="col-md-2 col-4 my-1 px-2">
-                                <div class="cell py-1">11:30AM</div>
-                            </div>
-                            <div class="col-md-2 col-4 my-1 px-2">
-                                <div class="cell py-1">11:45AM</div>
-                            </div>
-                            <div class="col-md-2 col-4 my-1 px-2">
-                                <div class="cell py-1">12:00PM</div>
-                            </div>
-                            <div class="col-md-2 col-4 my-1 px-2">
-                                <div class="cell py-1">12:30PM</div>
-                            </div>
-                            <div class="col-md-2 col-4 my-1 px-2">
-                                <div class="cell py-1">12:45PM</div>
-                            </div>
-                        </div>
-                        <div class="row text-center mx-0">
-                            <div class="col-md-2 col-4 my-1 px-2">
-                                <div class="cell py-1">1:00PM</div>
-                            </div>
-                            <div class="col-md-2 col-4 my-1 px-2">
-                                <div class="cell py-1">1:30PM</div>
-                            </div>
-                            <div class="col-md-2 col-4 my-1 px-2">
-                                <div class="cell py-1">1:45PM</div>
-                            </div>
-                            <div class="col-md-2 col-4 my-1 px-2">
-                                <div class="cell py-1">2:00PM</div>
-                            </div>
-                            <div class="col-md-2 col-4 my-1 px-2">
-                                <div class="cell py-1">2:30PM</div>
-                            </div>
-                            <div class="col-md-2 col-4 my-1 px-2">
-                                <div class="cell py-1">2:45PM</div>
-                            </div>
-                        </div>
-                        <div class="row text-center mx-0">
-                            <div class="col-md-2 col-4 my-1 px-2">
-                                <div class="cell py-1">3:00PM</div>
-                            </div>
-                            <div class="col-md-2 col-4 my-1 px-2">
-                                <div class="cell py-1">3:30PM</div>
-                            </div>
-                            <div class="col-md-2 col-4 my-1 px-2">
-                                <div class="cell py-1">4:15PM</div>
-                            </div>
-                            <div class="col-md-2 col-4 my-1 px-2">
-                                <div class="cell py-1">5:00PM</div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </section>
-					<section id="home1" class="home_slider mb-5">
-        <div class="container">
-            <div id="home_main_slider" class="owl-carousel owl-theme">
-			<?php
-                  foreach ($slider as  $value) {
-                ?>
-                <div class="item">
-                    <div class="product-item">
-                        <div class="carousel-thumb">
-
-                            <div class="row">
-                                <div class="col-lg-12 order_2">
-                                    <div class="slider_img" style="text-align:center;">
-                                        <img src="<?php echo (!empty($value->picture)?$value->picture:null); ?>" alt="Better mental health begins with" style="display:inline-block; width:65%;" />
-                                        <br>
-                                    </div>
-                                     <!--<div class="slider_content" style="text-align:center; padding-top:0px;"><?php echo $value->details; ?></div>-->
-                                </div>
-                            </div>
-					    </div>
-                    </div>
-                </div>
-			 <?php } ?>
-		    </div>
-        </div>
-    </section>
-
-
-
-
-
-
-
-
-
-
-    <?php $this->load->view('footer.php')?>
-
-
-	<div id="patient_type" style="display:none;">
-	<fieldset id="book_popup_4" class="book_popup_4 mt-5">
-                                <h3>Covid Consultancy</h3>
-
-                                <div class="quwstions">
-                                    <div class="form">
-                                        <div class="question_answer">
-                                            <div class="input-group">
-                                                <label for="question">1:- List the symptoms present in last 14 days</label>
-                                                <ul>
-                                                    <li><input type="checkbox" name="symptoms" value="Fever" />Fever</li>
-                                                    <li><input type="checkbox" name="symptoms" value="Cough" />Cough</li>
-                                                    <li><input type="checkbox" name="symptoms" value="Running nose" />Running nose</li>
-                                                    <li><input type="checkbox" name="symptoms" value="Throat pain" />Throat pain</li>
-													<li><input type="checkbox" name="symptoms" value="Breathlessness" />Breathlessness</li>
-													<li><input type="checkbox" name="symptoms" value="Chest Pain" />Chest Pain</li>
-													<li><input type="checkbox" name="symptoms" value="Loss of small-taste" />Loss of small/taste</li>
-													<li><input type="checkbox" name="symptoms"  value="Diarrhoea" />Diarrhoea</li>
-													<li><input type="checkbox" name="symptoms" value="Abdominal Pain" />Abdominal Pain</li>
-													<li><input type="checkbox" name="symptoms" value="Bleeding Tendency"  />Bleeding Tendency</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form">
-                                        <div class="question_answer">
-                                            <div class="input-group">
-                                                <label for="question">2:- Comorbidity Present</label>
-                                                <ul>
-                                                    <li><input type="checkbox" name="comorbidity" value="Chronic lung" />Chronic lung</li>
-                                                    <li><input type="checkbox" name="comorbidity" value="Heart disease"/>Heart disease</li>
-                                                    <li><input type="checkbox" name="comorbidity" value="Liver disease"/>Liver disease</li>
-                                                    <li><input type="checkbox" name="comorbidity" value="Kidney disease"/>Kidney disease</li>
-													<li><input type="checkbox" name="comorbidity" value="Neurological disease"/>Neurological disease</li>
-													<li><input type="checkbox" name="comorbidity" value="Blood discover"/>Blood discover</li>
-													<li><input type="checkbox" name="comorbidity" value="Immunological"/>Immunological</li>
-													<li><input type="checkbox" name="comorbidity"value="Morbid obesity" />Morbid obesity</li>
-													<li><input type="checkbox" name="comorbidity" value="Malignancy"/>Malignancy</li>
-													<li><input type="checkbox" name="comorbidity" value="Uncontrolled HTN"/>Uncontrolled HTN</li>
-													<li><input type="checkbox" name="comorbidity" value="Dm"/>Dm</li>
-													<li><input type="checkbox" name="comorbidity" value="HIV"/>HIV</li>
-													<li><input type="checkbox" name="comorbidity" value="On long term immunosuppressant"/>On long term immunosuppressant </li>
-													<li><input type="checkbox" name="comorbidity" value="NSAIDS"/>NSAIDS</li>
-													<li><input type="checkbox" name="comorbidity" value="Pregnancy" />Pregnancy</li>
-													<li><input type="checkbox" name="comorbidity" value="Age>60 years" />Age>60 years</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                </div>
-                                <button type="button" class="action-button previous_button">Back</button>
-								<button type="button" onclick="setstm()" class="next action-button">Continue</button>
-							</fieldset>
-							</div>
-<div id="userdiv" style="display:none;">
-<fieldset id="book_popup_11" class="book_popup_11">
-		<h3>Patient Type</h3>
-		<div class="mb-5 more_btns">
-			<ul>
-				<li>
-					<button type="button" class="btn_choose_sent bg_btn_chose_1">
-						<input type="radio" checked="checked" name="p_type" value="1" />New Patient
-					</button>
-				</li>
-				<!--<li>
-					<button type="button" class="btn_choose_sent bg_btn_chose_2">
-						<input type="radio" name="p_type" value="2" />Old Patient
-					</button>
-				</li>-->
-			</ul>
-		</div>
-		<button type="button" class="action-button previous_button">Back</button>
-		<button type="button" id="add_patient2" onClick="setform()" class="next action-button">Continue</button>
-	</fieldset>
+    <div class="container" style="background: white;margin-top: 20px;border-radius: 10px;box-shadow: 4px 5px 8px #ababab;">
+    <div class="row pt-3 pb-3" >
+    <div class="col-sm-12 col-md-4 col-lg-4">
+    <div class="dropdown">
+  <button id="dLabel" class="dropdown-select float-right" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Select Language
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dLabel">
+    <?php if(is_array($language_arr) && count($language_arr)>0){
+                                        foreach($language_arr as $val){
+                                           ?>
+    <li ><?php echo $val;?></li>
+    <?php }}?>
+  </ul>
 </div>
-<div id="doctor_type" style="display:none;">
-<fieldset id="book_popup_5" class="mt-5 doctor_section">
-<h3>Select Doctor</h3><br>
-<div class="doctors_list">
-
 </div>
-<button type="button" class="action-button previous_button">Back</button>
-<button type="button" onClick="addDoctor()" class="next action-button">Continue</button>
+
+    <div class="col-sm-12 col-md-4 col-lg-4">
+    <div class="form-group">
+    <!-- <label for="exampleInputEmail1">Email address</label> -->
+    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Choose Appointment Date">
+    <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+  </div>
+    </div>
+    <div class="col-sm-12 col-md-4 col-lg-4" style="display:flex;margin-top: 1%;">
+    <div class="form-check" style="margin-left:30px">
+  <input class="form-check-input" type="radio" name="flexRadioDefault" value="covid" id="flexRadioDefault1" checked>
+  <label class="form-check-label" for="flexRadioDefault1">Covid</label>
+</div>
+<div class="form-check" style="margin-left:30px">
+  <input class="form-check-input" type="radio" name="flexRadioDefault" value="non_covid" id="flexRadioDefault2" >
+  <label class="form-check-label" for="flexRadioDefault2">Non-Covid</label>
+</div>
+
+    </div>
+    </div>
+    <div class="row mb-3" style="padding-left: 110px;padding-right: 110px;">
+    <div class="col-sm-12 col-md-10 col-lg-10">
+    <div>
+    <label for="customRange3" class="form-label labelStyle" >Book Time Slot</label>
+    <fieldset class="range__field">
+   <input class="range" type="range" min="0" max="12">
+   <svg role="presentation" width="100%" height="10" xmlns="http://www.w3.org/2000/svg">
+      <rect class="range__tick" x="0%" y="3" width="1" height="10"></rect>
+      <rect class="range__tick" x="8.3%" y="3" width="1" height="10"></rect>
+      <rect class="range__tick" x="16.6%" y="3" width="1" height="10"></rect>
+      <rect class="range__tick" x="24.9%" y="3" width="1" height="10"></rect>
+      <rect class="range__tick" x="33.2%" y="3" width="1" height="10"></rect>
+      <rect class="range__tick" x="41.5%" y="3" width="1" height="10"></rect>
+      <rect class="range__tick" x="49.8%" y="3" width="1" height="10"></rect>
+      <rect class="range__tick" x="58.1%" y="3" width="1" height="10"></rect>
+      <rect class="range__tick" x="66.4%" y="3" width="1" height="10"></rect>
+      <rect class="range__tick" x="74.7%" y="3" width="1" height="10"></rect>
+      <rect class="range__tick" x="83%" y="3" width="1" height="10"></rect>
+      <rect class="range__tick" x="91.3%" y="3" width="1" height="10"></rect>
+      <rect class="range__tick" x="99.6%" y="3" width="1" height="10"></rect>
+
+
+   </svg>
+   <svg role="presentation" width="100%" height="14" xmlns="http://www.w3.org/2000/svg">
+      <text class="range__point" x="0%" y="14" text-anchor="start">0</text>
+      <text class="range__point" x="8.3%" y="14" text-anchor="middle">1</text>
+      <text class="range__point" x="16.6%" y="14" text-anchor="middle">2</text>
+      <text class="range__point" x="24.9%" y="14" text-anchor="middle">3</text>
+      <text class="range__point" x="33.2%" y="14" text-anchor="middle">4</text>
+      <text class="range__point" x="41.5%" y="14" text-anchor="middle">5</text>
+      <text class="range__point" x="49.8%" y="14" text-anchor="middle">6</text>
+      <text class="range__point" x="58.1%" y="14" text-anchor="middle">7</text>
+      <text class="range__point" x="66.4%" y="14" text-anchor="middle">8</text>
+      <text class="range__point" x="74.7%" y="14" text-anchor="middle">9</text>
+      <text class="range__point" x="83%" y="14" text-anchor="end">10</text>
+      <text class="range__point" x="91.3%" y="14" text-anchor="middle">11</text>
+      <text class="range__point" x="99.6%" y="14" text-anchor="end">12</text>
+   </svg>
 </fieldset>
+    </div>
+    </div>
+    <div class="col-sm-12 col-md-2 col-lg-2" style="margin-top: 40px;">
+    <div class="btn-group" role="group" aria-label="Basic example">
+  <button type="button" class="btn btn-secondary">A M</button>
+  <button type="button" class="btn btn-secondary">P M</button>
+
 </div>
-
-<div id="service_type_main" style="display:none;">
-	<fieldset id="book_popup_2">
-		<h3>Select your Service</h3>
-		<!--<p>We will send you a SMS. Input the code to verify.</p>-->
-		<div class="mb-5 more_btns">
-		<ul id="service_type">
-
-		</ul>
-		</div>
-		<button type="button" class="action-button previous_button">Back</button>
-		<button id="add_servicetype" type="button" class="next action-button">Continue</button>
-	</fieldset>
+    </div>
+    </div>
+    <div class="row mb-3" style="padding-left:110px">
+    <div class="col-12">
+    <div class="btn-group" role="group" aria-label="Basic example">
+  <button type="button" class="btn btn-secondary">0:0</button>
+  <button type="button" class="btn btn-secondary">0:15</button>
+  <button type="button" class="btn btn-secondary">0:30</button>
+  <button type="button" class="btn btn-secondary">0:45</button>
 </div>
-<input type="hidden" id="base_url" value="<?php echo base_url()?>">
-	<script src="<?php echo base_url();?>web_assets2/js/jquery.js"></script>
-    <script src="<?php echo base_url();?>web_assets2/js/bootstrap.min.js"></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js'></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.2/js/intlTelInput.js'></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js'></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js'></script>
-
-    <script src="<?php echo base_url();?>web_assets2/js/owl.carousel.min.js"></script>
-    <script src="<?php echo base_url();?>web_assets2/js/main.js"></script>
-    <script src="<?php echo base_url();?>web_assets2/js/all.min.js"></script>
-	<script src="<?php echo base_url()?>assets/plugins/jquery-ui-1.12.1/jquery-ui.min.js" type="text/javascript"></script>
-    <script src="<?php echo base_url();?>web_assets2/js/custom.js" type="text/javascript"></script>
-	<script src="<?php echo base_url();?>web_assets2/js/home_footer.js"></script>
-
-
-
-    <script src="<?php echo base_url();?>web_assets2/appointment/js/script.js"></script>
-
+    </div>
+    </div>
+    <div class="row mb-3" id="department_type" style="display:none;padding: 0px 110px 0px 110px;">
+    <div class="col-sm-12 col-md-4 col-lg-3">
+    <div class="btn-group" id="elem">
+    <button class="btn-group__item btn-group__item" ></button>
+   </div>
+    </div>
+    </div>
+    <div class="row mb-3">
+    <div class="col-sm-12 col-md-4 col-lg-3">
+  <h6>Dr. List</h6>
+  <input type="hidden" id="base_url" value="<?php echo base_url()?>">
+    </div>
+    </div>
+    </div>
 <script>
 $(document).ready(function(){
-
-	$('#p_name').keypress(function (e) {
-		var charLength = $(this).val().length;
-		var regex = new RegExp("^[a-zA-Z ]+$");
-		var strigChar = String.fromCharCode(!e.charCode ? e.which : e.charCode);
-		if (regex.test(strigChar)) {
-			if(charLength < 21){
-			return true;
-			}
-		}
-		return false;
-	});
-	$('#p_phone').keypress(function (e) {
-		var charLength = $(this).val().length;
-		if(charLength < 10){
-			return true;
-		}else{
-			return false;
-		}
-	});
-
-
-
-	$("#p_phone").keypress (function (event) {
-        if ((event.which < 32) || (event.which > 126)) return true;
-        return jQuery.isNumeric ($(this).val () + String.fromCharCode (event.which));
-    });
-
-	$('#contact_us').click(function(){
-		var full_name    = $('#full_name').val();
-		var email_id     = $('#email_id').val();
-		var subject      = $('#subject').val();
-		var message      = $('#message').val();
-		var captchdas    = '<?php echo $hello; ?>';
-		var captcha_code = $('#captcha_code').val();
-		var base_url = $('#base_url').val();
-		var msg = '';
-
-		if(full_name==""){
-			msg += 'Please enter full name.<br>';
-		}
-		if(email_id==""){
-			msg += 'Please enter email ID.<br>';
-		}else{
-			var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-            if(email_id.match(mailformat))
-            {}else{
-                msg += 'You have entered an Invalid Email ID.<br>';
-            }
-		}
-		if(subject==""){
-			msg += 'Please enter subject.<br>';
-		}
-		if(message==""){
-			msg += 'Please enter your message.<br>';
-		}
-		if(captcha_code==""){
-			msg += 'Please enter captcha code.<br>';
-		}
-		else{
-			if(captchdas != captcha_code){
-				msg += 'Please enter a valid captcha code.<br>';
-			}
-		}
-		if(msg!=""){
-            $('#q_succ_msg').hide();
-            $('#q_show_error').show();
-            $('#q_succ_msg').html('');
-            $('#q_show_error').html(msg);
-        }else{
-			$('#q_show_error').hide();
-			$('#q_succ_msg').show();
-			$('#q_succ_msg').html('Please wait...');
-			$.ajax({
-				url:base_url+'index.php/Welcome/contactEmail',
-				method: 'post',
-				data: {full_name:full_name, email_id:email_id, subject:subject, message:message},
-				type: 'POST',
-				success: function(response){
-					//$('#q_succ_msg').html('Your details has been submited successfully.');
-					$('#full_name').val('');
-					$('#email_id').val('');
-					$('#subject').val('');
-					$('#message').val('');
-					$('#captcha_code').val('');
-					$('#q_succ_msg').html(response);
-				}
-			});
-        }
-
-	});
-
-
-    $(document).on("click","#add_service", function(){
-		var services =	$('input[name="service"]:checked').val();
-		var base_url = $('#base_url').val();
-	//	$('.multi_step_form .book_popup_11').remove();
-		if(services==""){
-			alert("Please select service first");
-			return false;
-		}
-		if(services=="Covid Consultancy"){
-		//	var getHtml = $('#userdiv').html();
-		//	$(getHtml).insertAfter('#book_popup_2');
-		}else{
-		//	$('.multi_step_form .book_popup_11').remove();
-		}
-		$.ajax({
-			url:base_url+'index.php/Welcome/getservicetype',
-			method: 'post',
-			data: {services:services},
-			type: 'POST',
-			success: function(response){
-				//alert(response);
-				$('#service_type').html(response);
-			}
-		});
-		$('#service1').val(services);
-	});
-
-
-	$(document).on("click","#add_servicetype", function(){
-		var servicestype =	$('input[name="servicetype"]:checked').val();
-		var base_url = $('#base_url').val();
-		var lang_set_val =	$('#service3').val();
-
-		$('#service2').val(servicestype);
-		//alert(lang_set_val)
-		if(servicestype==""){
-			alert("Please select service type first");
-			return false;
-		}
-		/* $.ajax({
-			url:'http://telehealers.in/index.php/Welcome/getservicetypedoctor',
-			method: 'post',
-			data: {servicestype:servicestype},
-			type: 'POST',
-			success: function(response){
-				alert(response);
-				$('#service_type').html(response);
-			}
-		}); */
-		$.ajax({
-			url:base_url+'index.php/Welcome/getdoctorforappointment',
-			method: 'post',
-			data: {servicestype:servicestype,lang_set_val:lang_set_val},
-			type: 'POST',
-			success: function(response){
-				//alert(response);
-				$('#book_popup_5 .doctors_list').html(response);
-
-			}
-		});
-	});
-
-
-	$(document).on("click","#app_type", function(){
-
-	});
-
-    $(document).on("click",".add_patient2", function(){
-	    $('.multi_step_form .book_popup_4').remove();
-		var p_type =	$('input[name="p_type"]:checked').val();
-		//alert(p_type);
-		if(p_type == 1){
-			var getHtml = $('#patient_type').html();
-			$(getHtml).insertAfter('#book_popup_11');
-		}
-		if(p_type == 2){
-			$('.multi_step_form .book_popup_4').remove();
-		}
-	});
-
-	$(document).on("change","#p_email",function(){
-	    setSlot();
-	});
-	$(document).on("change","#p_email_old",function(){
-		var email = $(this).val();
-		base_url = $('#base_url').val();
-		$.ajax({
-			url:base_url+'index.php/Welcome/getPatientDetails',
-			method: 'post',
-			data: {email:email},
-			type: 'POST',
-			success: function(response){
-				//alert(response);
-				if(response!=""){
-				    if(response==1){
-				        $('#email_msg').html('<span style="color:red;float:left;">This email ID already Used!</span><span style="color:green;float:right;cursor:pointer;font-size:10px;" onclick="setfields()">To change in existing details like age, name, sex, click here</span>');
-				        $('#bb_app').hide();
-
-				    }else if(response==2){
-				        $('#email_msg').html('<span style="color:red;float:left;">This email ID already Used!</span><span style="color:green;float:right;cursor:pointer;font-size:10px;" onclick="setfields()">To change in existing details like age, name, sex, click here</span>');
-				        $('#bb_app').hide();
-
-				    }else{
-				        $('#bb_app').show();
-    					var p_data = response.split(',');
-    					var p_name = p_data[0];
-    					var p_phone = p_data[1];
-    					var p_sex = p_data[2];
-    					var p_age = p_data[3];
-    					$('#p_name').val(p_name);
-    					$('#p_name').attr("disabled", true);
-    					$('#p_phone').val(p_phone);
-    					$('#p_phone').attr("disabled", true);
-    					$('#p_gender').val(p_sex);
-    					$('#p_gender').attr("disabled", true);
-    					$('#p_age').val(p_age);
-    					$('#p_age').attr("disabled", true);
-    					$('#email_msg').html('<span style="color:red;float:left;">Existing Patient</span><span style="color:green;float:right;cursor:pointer;font-size:10px;" onclick="setfields()">To change in existing details like age, name, sex, click here</span>');
-    					$('#p_date').focus();
-    					$('#existing_user').val(1);
-				    }
-				}else{
-				    $('#bb_app').show();
-					//$('#p_name').val('');
-					$('#p_phone').val('');
-					$('#p_gender').val('');
-					$('#p_age').val('');
-					$('#p_name').attr("disabled", false);
-					$('#p_phone').attr("disabled", false);
-					$('#p_gender').attr("disabled", false);
-					$('#p_age').attr("disabled", false);
-					$('#email_msg').html('<span style="color:green;float:left;">New Patient</span>');
-					$('#existing_user').val(0);
-				}
-				//$('#book_popup_5 .doctors_list').html(response);
-
-			}
-		});
-	});
-	$( ".datepicker3" ).datepicker({ minDate: 0});
-  $('.datepicker').datepicker({
-format: 'dd-mm-yyyy',
-autoclose: true,
-startDate: '0d'
+// declare var $:any;
+  // $("#datepicker").datepicker();
+$('#p_name').keypress(function (e) {
+  var charLength = $(this).val().length;
+  var regex = new RegExp("^[a-zA-Z ]+$");
+  var strigChar = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+  if (regex.test(strigChar)) {
+    if(charLength < 21){
+    return true;
+    }
+  }
+  return false;
 });
+
+$(document).on('click', 'input:radio[id^="flexRadioDefault"]', function(event) {
+  console.log("event clicked",event.target.value);
+  var queryType = event.target.value;
+if(queryType == "covid"){
+  // department_type
+  document.getElementById('department_type').style.display = 'none';
+}
+
+if(queryType == "non_covid"){
+  debugger;
+  console.log('non-covid case');
+  document.getElementById('department_type').style.display = 'block';
+  var base_url = $('#base_url').val();
+  $.ajax({
+            url:base_url+'index.php/Welcome/getservicetype',
+            method: 'post',
+            data: {services:"Speciality Consultation"},
+            type: 'POST',
+            success: function(response){
+                //alert(response);
+                console.log(response);
+                $('#service_type').html(response);
+            }
+        });
+}
+
+})
+
+$(function() {
+       var print = function(msg) {
+         alert(msg);
+       };
+
+       var setInvisible = function(elem) {
+         elem.css('visibility', 'hidden');
+       };
+       var setVisible = function(elem) {
+         elem.css('visibility', 'visible');
+       };
+
+       var elem = $("#elem");
+       var items = elem.children();
+
+       // Inserting Buttons
+       elem.prepend('<div id="right-button" style="visibility: hidden;"><a href="#"><</a></div>');
+       elem.append('  <div id="left-button"><a href="#">></a></div>');
+
+       // Inserting Inner
+       items.wrapAll('<div id="inner" />');
+
+       // Inserting Outer
+
+       elem.find('#inner').wrap('<div id="outer"/>');
+
+       var outer = $('#outer');
+
+       var updateUI = function() {
+         var maxWidth = outer.outerWidth(true);
+         var actualWidth = 0;
+         $.each($('#inner >'), function(i, item) {
+           actualWidth += $(item).outerWidth(true);
+         });
+
+         if (actualWidth <= maxWidth) {
+           setVisible($('#left-button'));
+         }
+       };
+       updateUI();
+
+
+
+       $('#right-button').click(function() {
+         var leftPos = outer.scrollLeft();
+         outer.animate({
+           scrollLeft: leftPos - 200
+         }, 800, function() {
+           debugger;
+           if ($('#outer').scrollLeft() <= 0) {
+             setInvisible($('#right-button'));
+           }
+         });
+       });
+
+       $('#left-button').click(function() {
+         setVisible($('#right-button'));
+         var leftPos = outer.scrollLeft();
+         outer.animate({
+           scrollLeft: leftPos + 200
+         }, 800);
+       });
+
+       $(window).resize(function() {
+         updateUI();
+       });
+     });
+
+
+const buttons = document.querySelectorAll(".btn-group__item");
+buttons.forEach(button => {
+  button.addEventListener("click",() => {
+    // do some action according to button
+
+    // show success feedback
+    button.classList.add("btn-group__item--active");
+    setTimeout(() => {
+      button.classList.remove("btn-group__item--active");
+    },600)
+  })
+})
+
+
+$('.dropdown-menu li').on('click', function() {
+  var getValue = $(this).text();
+  $('.dropdown-select').text(getValue);
+});
+
+$('#p_phone').keypress(function (e) {
+  var charLength = $(this).val().length;
+  if(charLength < 10){
+    return true;
+  }else{
+    return false;
+  }
+});
+
+
+
+$("#p_phone").keypress (function (event) {
+      if ((event.which < 32) || (event.which > 126)) return true;
+      return jQuery.isNumeric ($(this).val () + String.fromCharCode (event.which));
+  });
+
+$('#contact_us').click(function(){
+  var full_name    = $('#full_name').val();
+  var email_id     = $('#email_id').val();
+  var subject      = $('#subject').val();
+  var message      = $('#message').val();
+  var captchdas    = '<?php echo $hello; ?>';
+  var captcha_code = $('#captcha_code').val();
+  var base_url = $('#base_url').val();
+  var msg = '';
+
+  if(full_name==""){
+    msg += 'Please enter full name.<br>';
+  }
+  if(email_id==""){
+    msg += 'Please enter email ID.<br>';
+  }else{
+    var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+          if(email_id.match(mailformat))
+          {}else{
+              msg += 'You have entered an Invalid Email ID.<br>';
+          }
+  }
+  if(subject==""){
+    msg += 'Please enter subject.<br>';
+  }
+  if(message==""){
+    msg += 'Please enter your message.<br>';
+  }
+  if(captcha_code==""){
+    msg += 'Please enter captcha code.<br>';
+  }
+  else{
+    if(captchdas != captcha_code){
+      msg += 'Please enter a valid captcha code.<br>';
+    }
+  }
+  if(msg!=""){
+          $('#q_succ_msg').hide();
+          $('#q_show_error').show();
+          $('#q_succ_msg').html('');
+          $('#q_show_error').html(msg);
+      }else{
+    $('#q_show_error').hide();
+    $('#q_succ_msg').show();
+    $('#q_succ_msg').html('Please wait...');
+    $.ajax({
+      url:base_url+'index.php/Welcome/contactEmail',
+      method: 'post',
+      data: {full_name:full_name, email_id:email_id, subject:subject, message:message},
+      type: 'POST',
+      success: function(response){
+        //$('#q_succ_msg').html('Your details has been submited successfully.');
+        $('#full_name').val('');
+        $('#email_id').val('');
+        $('#subject').val('');
+        $('#message').val('');
+        $('#captcha_code').val('');
+        $('#q_succ_msg').html(response);
+      }
+    });
+      }
+
+});
+
+$(document).on('click', '.dropdown-menu li a', function() {
+    $('#datebox').val($(this).html());
+});
+  $(document).on("click","#add_service", function(){
+  var services =	$('input[name="service"]:checked').val();
+  var base_url = $('#base_url').val();
+//	$('.multi_step_form .book_popup_11').remove();
+  if(services==""){
+    alert("Please select service first");
+    return false;
+  }
+  if(services=="Covid Consultancy"){
+  //	var getHtml = $('#userdiv').html();
+  //	$(getHtml).insertAfter('#book_popup_2');
+  }else{
+  //	$('.multi_step_form .book_popup_11').remove();
+  }
+  $.ajax({
+    url:base_url+'index.php/Welcome/getservicetype',
+    method: 'post',
+    data: {services:services},
+    type: 'POST',
+    success: function(response){
+      //alert(response);
+      $('#service_type').html(response);
+    }
+  });
+  $('#service1').val(services);
+});
+
+
+$(document).on("click","#add_servicetype", function(){
+  var servicestype =	$('input[name="servicetype"]:checked').val();
+  var base_url = $('#base_url').val();
+  var lang_set_val =	$('#service3').val();
+
+  $('#service2').val(servicestype);
+  //alert(lang_set_val)
+  if(servicestype==""){
+    alert("Please select service type first");
+    return false;
+  }
+  /* $.ajax({
+    url:'http://telehealers.in/index.php/Welcome/getservicetypedoctor',
+    method: 'post',
+    data: {servicestype:servicestype},
+    type: 'POST',
+    success: function(response){
+      alert(response);
+      $('#service_type').html(response);
+    }
+  }); */
+  $.ajax({
+    url:base_url+'index.php/Welcome/getdoctorforappointment',
+    method: 'post',
+    data: {servicestype:servicestype,lang_set_val:lang_set_val},
+    type: 'POST',
+    success: function(response){
+      //alert(response);
+      $('#book_popup_5 .doctors_list').html(response);
+
+    }
+  });
+});
+
+
+$(document).on("click","#app_type", function(){
+
+});
+
+  $(document).on("click",".add_patient2", function(){
+    $('.multi_step_form .book_popup_4').remove();
+  var p_type =	$('input[name="p_type"]:checked').val();
+  //alert(p_type);
+  if(p_type == 1){
+    var getHtml = $('#patient_type').html();
+    $(getHtml).insertAfter('#book_popup_11');
+  }
+  if(p_type == 2){
+    $('.multi_step_form .book_popup_4').remove();
+  }
+});
+
+$(document).on("change","#p_email",function(){
+    setSlot();
+});
+$(document).on("change","#p_email_old",function(){
+  var email = $(this).val();
+  base_url = $('#base_url').val();
+  $.ajax({
+    url:base_url+'index.php/Welcome/getPatientDetails',
+    method: 'post',
+    data: {email:email},
+    type: 'POST',
+    success: function(response){
+      //alert(response);
+      if(response!=""){
+          if(response==1){
+              $('#email_msg').html('<span style="color:red;float:left;">This email ID already Used!</span><span style="color:green;float:right;cursor:pointer;font-size:10px;" onclick="setfields()">To change in existing details like age, name, sex, click here</span>');
+              $('#bb_app').hide();
+
+          }else if(response==2){
+              $('#email_msg').html('<span style="color:red;float:left;">This email ID already Used!</span><span style="color:green;float:right;cursor:pointer;font-size:10px;" onclick="setfields()">To change in existing details like age, name, sex, click here</span>');
+              $('#bb_app').hide();
+
+          }else{
+              $('#bb_app').show();
+            var p_data = response.split(',');
+            var p_name = p_data[0];
+            var p_phone = p_data[1];
+            var p_sex = p_data[2];
+            var p_age = p_data[3];
+            $('#p_name').val(p_name);
+            $('#p_name').attr("disabled", true);
+            $('#p_phone').val(p_phone);
+            $('#p_phone').attr("disabled", true);
+            $('#p_gender').val(p_sex);
+            $('#p_gender').attr("disabled", true);
+            $('#p_age').val(p_age);
+            $('#p_age').attr("disabled", true);
+            $('#email_msg').html('<span style="color:red;float:left;">Existing Patient</span><span style="color:green;float:right;cursor:pointer;font-size:10px;" onclick="setfields()">To change in existing details like age, name, sex, click here</span>');
+            $('#p_date').focus();
+            $('#existing_user').val(1);
+          }
+      }else{
+          $('#bb_app').show();
+        //$('#p_name').val('');
+        $('#p_phone').val('');
+        $('#p_gender').val('');
+        $('#p_age').val('');
+        $('#p_name').attr("disabled", false);
+        $('#p_phone').attr("disabled", false);
+        $('#p_gender').attr("disabled", false);
+        $('#p_age').attr("disabled", false);
+        $('#email_msg').html('<span style="color:green;float:left;">New Patient</span>');
+        $('#existing_user').val(0);
+      }
+      //$('#book_popup_5 .doctors_list').html(response);
+
+    }
+  });
+});
+$( ".datepicker3" ).datepicker({ minDate: 0});
+// $('.datepicker').datepicker({
+// format: 'dd-mm-yyyy',
+// autoclose: true,
+// startDate: '0d'
+// });
 
 $('.cell').click(function(){
 $('.cell').removeClass('select');
@@ -735,311 +825,126 @@ $(this).addClass('select');
 });
 
 $( document ).ajaxComplete(function() {
-	//verificationForm();
-	var current_fs, next_fs, previous_fs; //fieldsets
-        var left, opacity, scale; //fieldset properties which we will animate
-        var animating; //flag to prevent quick multi-click glitches
+//verificationForm();
+var current_fs, next_fs, previous_fs; //fieldsets
+      var left, opacity, scale; //fieldset properties which we will animate
+      var animating; //flag to prevent quick multi-click glitches
 
 
 
-	/*$(".add_patient2").click(function () {
-		var p_type =	$('input[name="p_type"]:checked').val();
-		//alert(p_type);
-		if(p_type == 1){
-			var getHtml = $('#patient_type').html();
-			$(getHtml).insertAfter('#book_popup_11');
-		}
-		if(p_type == 2){
-			$('.multi_step_form .book_popup_4').remove();
-		}
-	});
-	*/
+/*$(".add_patient2").click(function () {
+  var p_type =	$('input[name="p_type"]:checked').val();
+  //alert(p_type);
+  if(p_type == 1){
+    var getHtml = $('#patient_type').html();
+    $(getHtml).insertAfter('#book_popup_11');
+  }
+  if(p_type == 2){
+    $('.multi_step_form .book_popup_4').remove();
+  }
+});
+*/
 
 
 
 
 
-		$(document).on("click",".next1", function(){
-            if (animating) return false;
-            animating = true;
+  $(document).on("click",".next1", function(){
+          if (animating) return false;
+          animating = true;
 
-            current_fs = $(this).parent();
-            next_fs = $(this).parent().next();
+          current_fs = $(this).parent();
+          next_fs = $(this).parent().next();
 
-            //activate next step on progressbar using the index of next_fs
-            $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+          //activate next step on progressbar using the index of next_fs
+          $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
 
-            //show the next fieldset
-            next_fs.show();
-            //hide the current fieldset with style
-            current_fs.animate({
-                opacity: 0
-            }, {
-                step: function (now, mx) {
-                    //as the opacity of current_fs reduces to 0 - stored in "now"
-                    //1. scale current_fs down to 80%
-                    scale = 1 - (1 - now) * 0.2;
-                    //2. bring next_fs from the right(50%)
-                    left = (now * 50) + "%";
-                    //3. increase opacity of next_fs to 1 as it moves in
-                    opacity = 1 - now;
-                    current_fs.css({
-                        'transform': 'scale(' + scale + ')',
-                        'position': 'absolute'
-                    });
-                    next_fs.css({
-                        'left': left,
-                        'opacity': opacity
-                    });
-                },
-                duration: 600,
-                complete: function () {
-                    current_fs.hide();
-                    animating = false;
-                },
-                //this comes from the custom easing plugin
-                easing: 'easeInOutBack'
-            });
-        });
+          //show the next fieldset
+          next_fs.show();
+          //hide the current fieldset with style
+          current_fs.animate({
+              opacity: 0
+          }, {
+              step: function (now, mx) {
+                  //as the opacity of current_fs reduces to 0 - stored in "now"
+                  //1. scale current_fs down to 80%
+                  scale = 1 - (1 - now) * 0.2;
+                  //2. bring next_fs from the right(50%)
+                  left = (now * 50) + "%";
+                  //3. increase opacity of next_fs to 1 as it moves in
+                  opacity = 1 - now;
+                  current_fs.css({
+                      'transform': 'scale(' + scale + ')',
+                      'position': 'absolute'
+                  });
+                  next_fs.css({
+                      'left': left,
+                      'opacity': opacity
+                  });
+              },
+              duration: 600,
+              complete: function () {
+                  current_fs.hide();
+                  animating = false;
+              },
+              //this comes from the custom easing plugin
+              easing: 'easeInOutBack'
+          });
+      });
 
-		$(document).on("click",".previous_button", function(){
-			$('#message_id').html('');
-		});
-		$(document).on("click",".previous_button1", function(){
-            if (animating) return false;
-            animating = true;
+  $(document).on("click",".previous_button", function(){
+    $('#message_id').html('');
+  });
+  $(document).on("click",".previous_button1", function(){
+          if (animating) return false;
+          animating = true;
 
 
 
-            current_fs = $(this).parent();
-            previous_fs = $(this).parent().prev();
+          current_fs = $(this).parent();
+          previous_fs = $(this).parent().prev();
 
-            //de-activate current step on progressbar
-            $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
+          //de-activate current step on progressbar
+          $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
 
-            //show the previous fieldset
-            previous_fs.show();
-            //hide the current fieldset with style
-            current_fs.animate({
-                opacity: 0
-            }, {
-                step: function (now, mx) {
-                    //as the opacity of current_fs reduces to 0 - stored in "now"
-                    //1. scale previous_fs from 80% to 100%
-                    scale = 0.8 + (1 - now) * 0.2;
-                    //2. take current_fs to the right(50%) - from 0%
-                    left = ((1 - now) * 50) + "%";
-                    //3. increase opacity of previous_fs to 1 as it moves in
-                    opacity = 1 - now;
-                    current_fs.css({
-                        'left': left
-                    });
-                    previous_fs.css({
-                        'transform': 'scale(' + scale + ')',
-                        'opacity': opacity
-                    });
-                },
-                duration: 600,
-                complete: function () {
-                    current_fs.hide();
-                    animating = false;
-                },
-                //this comes from the custom easing plugin
-                easing: 'easeInOutBack'
-            });
-        });
+          //show the previous fieldset
+          previous_fs.show();
+          //hide the current fieldset with style
+          current_fs.animate({
+              opacity: 0
+          }, {
+              step: function (now, mx) {
+                  //as the opacity of current_fs reduces to 0 - stored in "now"
+                  //1. scale previous_fs from 80% to 100%
+                  scale = 0.8 + (1 - now) * 0.2;
+                  //2. take current_fs to the right(50%) - from 0%
+                  left = ((1 - now) * 50) + "%";
+                  //3. increase opacity of previous_fs to 1 as it moves in
+                  opacity = 1 - now;
+                  current_fs.css({
+                      'left': left
+                  });
+                  previous_fs.css({
+                      'transform': 'scale(' + scale + ')',
+                      'opacity': opacity
+                  });
+              },
+              duration: 600,
+              complete: function () {
+                  current_fs.hide();
+                  animating = false;
+              },
+              //this comes from the custom easing plugin
+              easing: 'easeInOutBack'
+          });
+      });
 
-		$(".submit").click(function () {
-            return false;
-        })
+  $(".submit").click(function () {
+          return false;
+      })
 
 });
-function setform(){
-	//alert('hello...');
-	var p_type =	$('input[name="p_type"]:checked').val();
-	$('.multi_step_form .book_popup_4').remove();
-	//alert(p_type);
-	if(p_type == 1){
-		var getHtml = $('#patient_type').html();
-		$(getHtml).insertAfter('#book_popup_11');
-		//$('#add_patient2').addClass('next');
-		//$('#add_patient2').trigger('click');
-	}
-	if(p_type == 2){
-		$('.multi_step_form .book_popup_4').remove();
-	}
-}
-function setDoctor(){
-	//$('#app_type').addClass('next');
-	base_url = $('#base_url').val();
-	$('.multi_step_form #book_popup_5').remove();
-	var p_type =	$('input[name="app_val"]:checked').val();
-	$('#app_type_val').val(p_type);
-	//alert(p_type);
-	if(p_type == 2){
-		var getHtml = $('#doctor_type').html();
-		$(getHtml).insertAfter('#book_popup_3');
-		//$('#app_type').addClass('next');
-		//$('#app_type').trigger('click');
-		//$('#app_type_btn #app_type_btn2').trigger('click');
-		$('#appDate').show();
-		$('#loadsche').show();
-	}
-	if(p_type == 1){
-		$('.multi_step_form #book_popup_5').remove();
-		$('#appDate').hide();
-		$('#loadsche').hide();
-		let today = new Date().toISOString().substr(0, 10);
-		document.querySelector("#p_date").value = today;
-		$('#venue_id').val(3);
-		var servicestype =	$('input[name="servicetype"]:checked').val();
-		var lang_set_val =	$('#service3').val();
-		//alert(lang_set_val);
-		$.ajax({
-			url: base_url+'index.php/Welcome/getservicetypedoctorforimmde',
-			method: 'post',
-			data: {servicestype:servicestype,lang_set_val:lang_set_val},
-			type: 'POST',
-			success: function(response){
-				//alert(response);
-				if(response==0){
-					$('#bb_app').hide();
-					$('#message_id').html('<span style="color:red;">No doctor available at this time please make a Schedule Appointment.</span>');
-
-				}else{
-					//$('#message_id').html(response);
-					$('#bb_app').show();
-					$('#message_id').html('');
-					var str = response.split(',');
-					var d_id = str[0];
-					var s_id = str[1];
-					var sh_id = str[2];
-					$('#doc_idd').val(d_id);
-					$('#slot_idd').val(s_id);
-					$('#sh_idd').val(sh_id);
-				}
-				//$('#service_type').html(response);
-			}
-		});
-	}
-}
-function setstm(){
-	//var symptoms =	$('input[name="symptoms"]:checked').val();
-	//var energy = symptoms.join(',');
-
-	const selectedValues = $('input[name="symptoms"]:checked').map( function () {
-        return $(this).val();
-    })
-    .get()
-    .join(', ');
-	//alert(selectedValues);
-	$('#service3').val(selectedValues);
-	const selectedValues2 = $('input[name="comorbidity"]:checked').map( function () {
-        return $(this).val();
-    })
-    .get()
-    .join(', ');
-	//alert(selectedValues);
-	$('#service4').val(selectedValues2);
-}
-function addDoctor(){
-	var doctor_id =	$('input[name="doctor_id"]:checked').val();
-	$('#service5').val(doctor_id);
-}
-function resetVenue(){
-	$('#venue_id').val('');
-	$('.schedul1').html('');
-	$('#ui-datepicker-div').hide();
-	var r = $('#p_date').val();
-
-	//alert(r);
-}
-function addService(){
-	var services =	$('input[name="service"]:checked').val();
-
-	const selectedValues = $('input[name="lang_set"]:checked').map( function () {
-        return $(this).val();
-    })
-    .get()
-    .join(', ');
-	//alert(selectedValues);
-	$('#service3').val(selectedValues);
-
-
-	if(services=="Consultation for COVID-19"){
-		$('.multi_step_form #book_popup_2').remove();
-		setTimeout(function(){
-			$('#add_servicetype').trigger('click');
-		}, 1000);
-	}else{
-		var getHtml = $('#service_type_main').html();
-		$(getHtml).insertAfter('#book_popup_1');
-		$('#book_popup_2').removeAttr("style");
-	}
-}
-function setSlot(){
-	base_url = $('#base_url').val();
-	var time_slot = $('#serial_no').val();
-	var p_email = $('#p_email').val();
-	var p_date = $('#p_date').val();
-	//p_date = '2021-05-08';
-	if(typeof time_slot === 'undefined'){
-		$('#bb_app').attr("disabled", true);
-		$('#bb_app').addClass("btn_disable");
-		$('#message_id').addClass('alert alert-danger');
-		$('#message_id').html('Kindly fill the information Correctly!');
-	}else{
-		$('#bb_app').attr("disabled", false);
-		if(time_slot==""){
-			$('#bb_app').attr("disabled", true);
-			$('#bb_app').addClass("btn_disable");
-			$('#msg_c').html('<div class="col-md-12"><div class="alert alert-danger">Please select appointment time slot</div></div>');
-			return false;
-		}
-	}
-	if(p_email!="" || p_date!=""){
-		//alert(p_email+' / '+p_date);
-		//raghuveer@ecomsolver.com / 2021-05-13
-		$.ajax({
-			url:base_url+'index.php/Welcome/checkAppointment',
-			method: 'post',
-			data: {p_email:p_email,p_date:p_date},
-			type: 'POST',
-			success: function(response){
-				//alert(response);
-				if(response==1){
-					$('#bb_app').attr("disabled", true);
-					$('#bb_app').addClass("btn_disable");
-					$('#message_id').addClass('alert alert-danger');
-					$('#message_id').html('Sorry You already get apointment in this date');
-					$('#p_date').val('');
-				}else{
-					$('#bb_app').attr("disabled", false);
-					$('#bb_app').removeClass("btn_disable");
-					$('#message_id').removeClass('alert alert-danger');
-					$('#message_id').html('');
-				}
-				//$('#service_type').html(response);
-			}
-		});
-	}
-
-
-}
-function setfields(){
-	$('#p_name').attr("disabled", false);
-	$('#p_phone').attr("disabled", false);
-	$('#p_gender').attr("disabled", false);
-	$('#p_age').attr("disabled", false);
-}
-
-function preventBack() {
-window.history.forward();
-}
-setTimeout("preventBack()", 0);
-window.onunload = function () { null };
-
-
 </script>
+
 </body>
 </html>

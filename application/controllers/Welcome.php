@@ -592,53 +592,16 @@ public function registration()
       $this->form_validation->set_rules('phone', 'Phone Number', 'trim|required|min_length[6]|max_length[15]');
       $this->form_validation->set_rules('email', 'Email', 'required' );
       if ($this->form_validation->run()==true) {
-          // get picture data
-          if (@$_FILES['picture']['name']){
-
-              $config['upload_path']   = './assets/uploads/patient/';
-              $config['allowed_types'] = 'gif|jpg|jpeg|png';
-              $config['overwrite']     = false;
-              $config['max_size']      = 1024;
-              $config['remove_spaces'] = true;
-              $config['max_filename']   = 10;
-              $config['file_ext_tolower'] = true;
-
-              $this->load->library('upload', $config);
-              if (!$this->upload->do_upload('picture')){
-                  $this->session->set_flashdata('exception',"<div class='alert alert-danger msg'>".$this->upload->display_errors()."</div>");
-                  redirect('Welcome');
-              } else {
-              $data = $this->upload->data();
-              $image = base_url($config['upload_path'].$data['file_name']);
-
-                #------------resize image------------#
-                $this->load->library('image_lib');
-                $config['image_library'] = 'gd2';
-                $config['source_image'] = $config['upload_path'].$data['file_name'];
-                $config['create_thumb'] = FALSE;
-                $config['maintain_ratio'] = FALSE;
-                $config['width']     = 250;
-                $config['height']   = 200;
-
-                $this->image_lib->clear();
-                $this->image_lib->initialize($config);
-                $this->image_lib->resize();
-                #-------------resize image----------#
-               }
-            } else {
-              $image = "";
-            }
-        #------------------------------------------------#
+         #------------------------------------------------#
           $exists_user = $this->patient_model->exists_user(
-              $this->input->post('phone',true),
-              date('Y-m-d',strtotime($this->input->post('birth_date',true)))
-          );
+              $this->input->post('phone',true));
           if($exists_user == true){
-              $this->session->set_flashdata('exception','<div class="alert alert-danger">'.display('exist_error_msg').'</div>');
-              redirect('Welcome');
-          }
+            // user exists then show alert to login
+                echo 0 ;
 
-            $patient_id = $this->input->post('pat_id',TRUE);
+                    }
+          else{
+            //create patient
             $create_date = date('Y-m-d h:i:s');
             $patient_id = "P".date('y').strtoupper($this->randstrGenapp(5));
             $log_id = $this->db->insert_id();
@@ -655,54 +618,10 @@ public function registration()
             'log_id'    => $log_id,
             'patient_name' => $this->input->post('name',true),
             'patient_email' => $this->input->post('email',true),
-            'patient_phone' => $this->input->post('phone',TRUE),
-            'birth_date' =>$birth_date,
-            'sex' => $this->input->post('gender',TRUE),
-            'blood_group' => $this->input->post('blood_group',TRUE),
-            'address' => $this->input->post('address',TRUE),
-            'picture' => $image,
+            'patient_phone' => $this->input->post('phone',true),
+            'sex' => $this->input->post('gender',true),
             'create_date'=>$create_date
             );
-        #--------------------------------------
-        # send email
-        #--------------------------------------
-          $email_config1 = $this->email_model->email_config();
-            #-------------------------------
-            if($email_config1->at_registration==1){
-              // gate email template
-              $email_temp_info = $this->db->select("*")->from('email_template')->where('default_status',1)->where('template_type',1)->get()->row();
-               if(!empty($email_temp_info)) {
-
-                      $message = $this->template([
-                         'patient_name'     => $this->input->post('name',TRUE),
-                         'patient_id'       => $this->input->post('pat_id',TRUE),
-                         'date' => date("Y-m-d h:i:s"),
-                         'message'          => $email_temp_info->email_template
-                     ]);
-
-                #----------------------------
-                    $config['protocol'] = $email_config1->protocol;
-                    $config['mailpath'] = $email_config1->mailpath;
-                    $config['charset'] = 'utf-8';
-                    $config['wordwrap'] = TRUE;
-                    $config['mailtype'] = $email_config1->mailtype;
-                    $this->email->initialize($config);
-
-                     $this->email->from($email_config1->sender, "Doctor");
-                     $this->email->to($this->input->post('email',TRUE));
-                     $this->email->subject("Registration");
-                     $this->email->message($message);
-                     $this->email->send();
-                #-----------------------------
-                    // save email delivary data
-                    $save_email = array(
-                      'delivery_date_time '=> date("Y-m-d h:i:s"),
-                      'reciver_email '=> $this->input->post('email',TRUE),
-                      'message'     => $message
-                    );
-                    $this->db->insert('email_delivery',$save_email);
-               }
-            }
 
             $savedata = $this->security->xss_clean($savedata);
             $this->patient_model->save_patient($savedata);
@@ -837,38 +756,59 @@ public function registration()
 
 	}
 
-	public function getservicetype(){
+	// public function getservicetype(){
 
-		$services = $this->input->post('services',TRUE);
-		$sql = "select id from service where title = '".$services."'";
-		$res = $this->db->query($sql);
-		$result = $res->result_array();
-		if(is_array($result) && count($result)>0){
-			$service_id = $result[0]['id'];
-		}
-		$con = '';
-		if($service_id>0){
-			$sql_st = "select * from servicetype where service = '".$service_id."'";
-			$res_st = $this->db->query($sql_st);
-			$result_st = $res_st->result_array();
-			$i=0;
-			if(is_array($result_st) && count($result_st)>0){
-				foreach($result_st as $res){
-					$i++;
-					$service_id = $res['id'];
-					$servicetype = $res['servicetype'];
-					$doctors = $res['doctors'];
-					if($i==1){
-						$con .= '<li><button type="button" class="btn_choose_sent bg_btn_chose_1"><input type="radio" value="'.$servicetype.'" name="servicetype" checked="checked" />'.$servicetype.'</button></li>';
-					}else{
-						$con .= '<li><button type="button" class="btn_choose_sent bg_btn_chose_1"><input type="radio" value="'.$servicetype.'" name="servicetype" />'.$servicetype.'</button></li>';
-					}
+	// 	$services = $this->input->post('services',TRUE);
+	// 	$sql = "select id from service where title = '".$services."'";
+	// 	$res = $this->db->query($sql);
+	// 	$result = $res->result_array();
+	// 	if(is_array($result) && count($result)>0){
+	// 		$service_id = $result[0]['id'];
+	// 	}
+	// 	$con = '';
+	// 	if($service_id>0){
+	// 		$sql_st = "select * from servicetype where service = '".$service_id."'";
+	// 		$res_st = $this->db->query($sql_st);
+	// 		$result_st = $res_st->result_array();
+	// 		$i=0;
+	// 		if(is_array($result_st) && count($result_st)>0){
+	// 			foreach($result_st as $res){
+	// 				$i++;
+	// 				$service_id = $res['id'];
+	// 				$servicetype = $res['servicetype'];
+	// 				$doctors = $res['doctors'];
+	// 				if($i==1){
+	// 					$con .= '<li><button type="button" class="btn_choose_sent bg_btn_chose_1"><input type="radio" value="'.$servicetype.'" name="servicetype" checked="checked" />'.$servicetype.'</button></li>';
+	// 				}else{
+	// 					$con .= '<li><button type="button" class="btn_choose_sent bg_btn_chose_1"><input type="radio" value="'.$servicetype.'" name="servicetype" />'.$servicetype.'</button></li>';
+	// 				}
 
-				}
-			}
-		}
-		echo $con;
-	}
+	// 			}
+	// 		}
+	// 	}
+	// 	echo $con;
+	// }
+  public function getservicetype(){
+
+    $services = $this->input->post('services',TRUE);
+    $sql = "select id from service where title = '".$services."'";
+    $res = $this->db->query($sql);
+    $result = $res->result_array();
+    if(is_array($result) && count($result)>0){
+        $service_id = $result[0]['id'];
+    }
+    $con = '';
+    if($service_id>0){
+        $sql_st = "select * from servicetype where service = '".$service_id."'";
+        $res_st = $this->db->query($sql_st);
+        $result_st = $res_st->result_array();
+        $i=0;
+       // $result
+//
+    print json_encode( $result_st);
+    }
+}
+
 
 	public function getservicetypedoctor(){
 

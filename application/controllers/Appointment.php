@@ -21,20 +21,20 @@ class Appointment extends CI_Controller {
         //Load Home_view_model
         $this->load->model('web/Home_view_model','home_view_model');
         //Load Overview model
-        $this->load->model('admin/Overview_model','overview_model');
-        //Load venue model
+        // $this->load->model('admin/Overview_model','overview_model');
+        // Load venue model
         $this->load->model('admin/Venue_model','venue_model');
-        //load appointment model
+        // load appointment model
         $this->load->model('admin/Appointment_model','appointment_model');
-        //Load Basic model
+     //   Load Basic model
         $this->load->model('admin/basic_model','basic_model');
-        //Load Schedule model
+      //  Load Schedule model
         $this->load->model('admin/Schedule_model','schedule_model');
-        //Load Patient model
+      //  Load Patient model
         $this->load->model('admin/Patient_model','patient_model');
-        // Load sms setup model
+      //  Load sms setup model
         $this->load->model('admin/Sms_setup_model','sms_setup_model');
-		// Load Doctor model
+	//	Load Doctor model
 		$this->load->model('admin/Doctor_model','doctor_model');
         //
         $this->load->library('Smsgateway');
@@ -54,37 +54,37 @@ class Appointment extends CI_Controller {
 	public function index($patient_id=NULL)
 	{
 
-		$email_config = $this->email_model->email_config();
+		// $email_config = $this->email_model->email_config();
 
-        //get_schedule_list
+    //     //get_schedule_list
         $data['schedule'] = $this->schedule_model->get_schedule_list();
-        //setup information
+    //     //setup information
         $data['info'] = $this->home_view_model->Home_satup();
-        //get doctor_info
+    //     //get doctor_info
         $data['doctor_info'] = $this->home_view_model->doctor_info();
-        //load slider
+    //     //load slider
         $data['slider'] = $this->home_view_model->Slider();
-        //total_appointment
-        $data['total_appointment'] = $this->overview_model->total_appointment();
-        //total_patient
-        $data['total_patient'] = $this->overview_model->total_patient();
-        //to_day_appointment
-        $data['to_day_appointment'] = $this->overview_model->to_day_appointment();
-        //to_day_get_appointment
-        $data['to_day_get_appointment'] = $this->overview_model->to_day_get_appointment();
-        // testimonial
+    //     //total_appointment
+        // $data['total_appointment'] = $this->overview_model->total_appointment();
+    //     //total_patient
+    //     $data['total_patient'] = $this->overview_model->total_patient();
+    //     //to_day_appointment
+        // $data['to_day_appointment'] = $this->overview_model->to_day_appointment();
+    //     //to_day_get_appointment
+        // $data['to_day_get_appointment'] = $this->overview_model->to_day_get_appointment();
+    //     // testimonial
         $data['testimonial'] = $this->db->get('testimonial')->result();
 		$data['faq'] = $this->db->get('faq')->result();
         $data['theraphists'] = $this->db->get('theraphists')->result();
         $data['commitements'] = $this->db->get('commitements')->result();
-        // Post
+    //     // Post
         $data['post'] = $this->home_view_model->get_all_post();
-		//get venue list
+		// //get venue list
         $data['venue'] = $this->venue_model->get_venue_list();
 
 		$data['service'] = $this->db->get('service')->result();
 
-		//get doctor list for appointmaent
+		// get doctor list for appointmaent
 		$data['doctor_info_for_appo'] = $this->doctor_model->getDoctorListByselect();
 
 		$language_arr = array();
@@ -105,11 +105,12 @@ class Appointment extends CI_Controller {
 
 		$data['language_arr'] = $language_arr;
 
-        $meta_sql = "select * from metadata where id = '4'";
+      $meta_sql = "select * from metadata where id = '4'";
 		$res_meta = $this->db->query($meta_sql);
 		$data['meta_info'] = $res_meta->result_array();
 
         #------view page----------
+        // $data= null;
         $this->load->view('appointment',$data);
 	}
 
