@@ -60,7 +60,6 @@
                                     <th class="all"><?php echo display('sequence'); ?></th>
                                     <th class="all"><?php echo display('date'); ?></th>
                                     <th class="all">Meeting URL</th>
-                                    <th class="all">Meeting Password</th>
                                     <th class="desktop"><?php echo display('action'); ?></th>
                                 </tr>
                             </thead>
@@ -143,11 +142,7 @@
                                     <td>
                                         <a href="<?php echo $symt1;?>" target="_blank"><?php echo $symt1;?></a>
                                     </td>
-										
-                                    <td>
-										<?php echo $symt2;?>
-                                    </td>
-
+								
                                     <td class="text-center" width="100">
 
                                         <?php if(empty($result) AND $this->session->userdata('user_type')==1) { ?>
@@ -155,10 +150,7 @@
                                         <?php } else { ?>
                                             <a class="btn btn-xs btn-primary" data-toggle="tooltip" title="View Prescription!"  target="_blank" href="<?php echo base_url();?>admin/Prescription_controller/my_prescription/<?php echo html_escape($value->appointment_id); ?>"><i class="fa fa-eye"></i></a>   
                                         <?php } ?> 
-                                        <a class="btn btn-xs btn-success" data-toggle="tooltip" title="View Appointment" target="_blank" href="<?php echo base_url();?>admin/Basic_controller/my_appointment/<?php echo html_escape($value->appointment_id); ?>"><i class="fa fa-print"></i></a>
-                                        <!--<a class="btn btn-xs btn-info" data-toggle="tooltip" title="View History" target="_blank" href="<?php echo base_url();?>History_controller/patient_history/<?php echo html_escape($value->patient_id); ?>"><i class="fa fa-history" aria-hidden="true"></i></a>-->
                                         <a class="btn btn-xs btn-danger" data-toggle="tooltip" title="Delete" href="<?php echo base_url();?>admin/Appointment_controller/delete_appointment/<?php echo html_escape($value->appointment_id); ?>"><i class="fa fa-trash" aria-hidden="true"></i></a>
-                                       <a class="btn btn-xs btn-primary" href="<?php echo base_url();?>admin/Appointment_controller/send_meet_url/<?php echo $value->appointment_id; ?>" onclick="return confirm('Are you want to send meeting url?');">Send Google Meet</a>
 									   <a class="btn btn-xs btn-primary" href="<?php echo base_url();?>admin/Appointment_controller/appointment_referral/<?php echo $value->appointment_id; ?>">Referral</a>
                                     </td>
                                 </tr>
