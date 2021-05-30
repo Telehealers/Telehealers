@@ -91,7 +91,7 @@
                                 <div class="form-group">
                                     <label class="col-md-3 control-label"> <span class="text-danger"> * </span> <?php echo display('phone_number'); ?></label>
                                     <div class="col-md-6">
-                                        <input type="number"  name="phone" value="<?php echo set_value('phone'); ?>" class="form-control" required placeholder="<?php echo display('phone_number'); ?>"> 
+                                        <input type="tel"  name="phone" value="<?php echo set_value('phone'); ?>" class="form-control" required placeholder="<?php echo display('phone_number'); ?>"> 
                                         <span class="text-danger"><?php echo form_error('phone'); ?></span>
                                     </div>
                                 </div>
