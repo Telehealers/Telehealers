@@ -1516,42 +1516,58 @@ public function registration()
 		}
 		echo $con;
 	}
-	public function getdoctorforappointment(){
-		$servicestype = $this->input->post('servicestype',TRUE);
-		$sql = "select id,doctors from servicetype where servicetype = '".$servicestype."'";
-		$res = $this->db->query($sql);
-		$result = $res->result_array();
-		if(is_array($result) && count($result)>0){
-			$service_id = $result[0]['id'];
-			$doctors    = $result[0]['doctors'];
+	/* Get available doctors
+      INPUT booking_time ({sql datetime}:
+	        sample:"YYYY-MM-DD Hr:Min:Sec" e.g. "2021-05-25 10:00:32"), 
+        preferred_language:e.g. "English", "Hindi".
+		department_type : department_id from table doctor_department_info
+      returns: HTML doctor list with pictures and all-unselected radio buttons. 
+        TODO: rows with bias_reduction < 0, are rows with other languages, 
+			handle this case.
+        REMARKS: We can also add bias which sort rows according to preferred,
+          common(like English) and other(like other state's language/boli) languages, 
+		  a 3-categorized language set.
+    */
+	public function getdoctorforappointment($department_type, $preferred_language, $booking_time){
+		//NOTE: Input can also be mapped to post input, uncomment below comments
+		// to use them.
+		// $department_type = $this->input->post('department_type',TRUE);
+		$department_filter = ($department_type)? '(dpt.department_id = '.$department_type.') AND ':"";
+		// $preferred_language = $this->input->post('preferred_language', TRUE);
+		$preferred_language_filter = '(language LIKE "%'.$preferred_language.'%")';
+		// $booking_time = $this->input->post('booking_date', TRUE)." ".
+		// 	$this->input->post("booking_hour",TRUE).":".
+		// 	$this->input->post("booking_minute", TRUE).":00 ".
+		// 	$this->input->post("booking_am_pm", TRUE);
+		$booking_time = urldecode($booking_time);
+		$sql_query = 'SELECT picture, designation, doctor_name, doctor_id, '.
+			'(IF('.$preferred_language_filter.', RAND(), -RAND())) as bias_reduction_score '. //Doctor selection bias reduction logic
+			'FROM doctor_tbl, doctor_department_info dpt WHERE '.
+			' dpt.department_id = department AND '.$department_filter.
+			'doctor_id IN ('.
+			'SELECT sched.doctor_id FROM schedul_setup_tbl sched WHERE '.
+			'sched.day = DAYOFWEEK("'.$booking_time.'") AND CAST(sched.start_time AS TIME) <= "'.
+			$booking_time.'" AND CAST(sched.end_time AS TIME) >= CAST(ADDTIME("'.
+			$booking_time.'", SEC_TO_TIME(sched.per_patient_time * 60)) AS TIME)) AND '.
+			'doctor_id NOT IN (SELECT bookings.doctor_id FROM '.
+			'appointment_tbl bookings, doctor_tbl as docs, schedul_setup_tbl schedule '.
+			'WHERE bookings.doctor_id = docs.doctor_id AND '.
+			'schedule.doctor_id = bookings.doctor_id AND '.
+			'bookings.get_date_time <=  "'.$booking_time.'" AND "'.$booking_time.
+			'" <= ADDTIME(bookings.get_date_time, SEC_TO_TIME(schedule.per_patient_time*60))) '.
+			' ORDER BY bias_reduction_score;';
+		$available_doctors = $this->db->query($sql_query);
+		foreach ($available_doctors->result() as $doc) {
+			echo '<div class="col-md-6"><div class="doc_box">'.
+					'<span class="image_dr"><img src="'.$doc->picture.'" alt="#"></span>'.
+					'<span class="content"><h5>Dr. '.$doc->doctor_name.' </h5>'.
+						'<p>'.$doc->designation.'</p><div class="select_dr">'.
+							'<input type="radio" name="doctor_id" value="'.
+							$doc->doctor_id.'">Take an Appointment'.
+						'</div>'.
+					'</span>'.
+				'</div></div>';
 		}
-		//echo "<pre>";print_r($doctors);die();
-		$doctors_arr = explode(',',$doctors);
-		$con = '<div class="row">';
-		//echo "<pre>";print_r($doctors_arr);die();
-		$i=0;
-		if(is_array($doctors_arr) && count($doctors_arr)>0){
-			foreach($doctors_arr as $doc){
-				$i++;
-				$sql_doc = "select doc_id,doctor_name,designation from doctor_tbl where doctor_id = '".$doc."'";
-				//echo $sql_doc;
-				$res_doc = $this->db->query($sql_doc);
-				$result_doc = $res_doc->result_array();
-				if(is_array($result_doc) && count($result_doc)>0){
-					$doc_id = $result_doc[0]['doc_id'];
-					$doctor_name    = $result_doc[0]['doctor_name'];
-					$designation    = $result_doc[0]['designation'];
-					if($i==1){
-						$con .= '<div class="col-md-6"><div class="doc_box"><span class="image_dr"><img src="https://telehealers.in/web_assets2/appointment/images/doctor.jpg" alt="#"></span><span class="content"><h5>Dr. '.$doctor_name.' </h5><p>'.$designation.'</p><div class="select_dr"><input type="radio" checked="checked" name="doctor_id" value="'.$doc.'">Take an Appointment</div></span></div></div>';
-					}else{
-						$con .= '<div class="col-md-6"><div class="doc_box"><span class="image_dr"><img src="https://telehealers.in/web_assets2/appointment/images/doctor.jpg" alt="#"></span><span class="content"><h5>Dr. '.$doctor_name.' </h5><p>'.$designation.'</p><div class="select_dr"><input type="radio" name="doctor_id" value="'.$doc.'">Take an Appointment</div></span></div></div>';
-					}
-
-				}
-			}
-		}
-		$con .= "</div>";
-		echo $con;
 	}
 
 	public function getpromocodeprice(){
