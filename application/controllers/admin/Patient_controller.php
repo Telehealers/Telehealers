@@ -227,7 +227,8 @@ class Patient_controller extends CI_Controller {
             'doctor_id'    => $user_id,
             'patient_name' => $this->input->post('name',TRUE),
             'patient_email' => $this->input->post('email',true),
-            'patient_phone' => $this->input->post('phone',TRUE), 
+            'patient_phone' => $this->input->post('phone',TRUE),
+            'age' => $this->input->post('age',TRUE), 
             'sex' => $this->input->post('gender',TRUE),
             'create_date'=>$create_date
             );

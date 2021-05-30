@@ -83,7 +83,7 @@
 
                                     <label class="col-md-3 control-label"> <?php echo display('age'); ?></label>
                                     <div class="col-md-4 ">
-                                       <input type="text" name="old" id="old" class="form-control" placeholder="<?php echo display('age'); ?>">
+                                       <input type="text" name="age" id="age" class="form-control" placeholder="<?php echo display('age'); ?>">
                                     </div>
                                 </div>
 
