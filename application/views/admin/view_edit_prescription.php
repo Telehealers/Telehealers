@@ -25,7 +25,7 @@
            
          <div class="row">
              <?php 
-             var_dump($pres);
+
                 $attributes = array( 'class' => 'form-horizontal','name'=>'n_p');
                 echo form_open_multipart('admin/Prescription_controller/update_prescription', $attributes);
              ?>

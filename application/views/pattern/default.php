@@ -89,15 +89,14 @@
     	                <strong><?php echo display('patient_name');?>:</strong> <b><?php echo html_escape(@$value->patient_name);?></b>
     	                 &nbsp; <strong>Age :</strong> 
     	                 <?php
-    	                    /* $date1=date_create(@$value->birth_date);
-    	                    $date2= date_create( date('y-m-d'));
-    	                    $diff=date_diff($date1,$date2);
-    	                    echo @$diff->format("%Y-Y:%m-M:%d-D"); */
 							echo @$value->age;
     	                  ?>
-    	                 &nbsp;<strong><?php echo display('sex');?> :</strong> <?php echo html_escape(@$value->sex);?> 
-    	                 &nbsp;<strong><?php echo display('patient_weight');?> :</strong> <?php echo html_escape(@$value->weight);?> 
-                         &nbsp;<strong><?php echo display('patient_bp');?> :</strong> <?php echo html_escape(@$value->pressure);?>
+                        <?php if(@$value->sex){ ?>
+    	                 &nbsp;<strong><?php echo display('sex');?> :</strong> <?php echo html_escape(@$value->sex);}?> 
+                        <?php if(@$value->weight){ ?>
+    	                 &nbsp;<strong><?php echo display('patient_weight');?> :</strong> <?php echo html_escape(@$value->weight);}?> 
+                         <?php if(@$value->pressure){ ?>
+                         &nbsp;<strong><?php echo display('patient_bp');?> :</strong> <?php echo html_escape(@$value->pressure);}?>
     	                 </h5>
     	            </div>
     	        </div>
@@ -264,7 +263,11 @@
 
                 <div class="row main-footer">
                     <div class="col-sm-7 f1">
-                        <p id="link"><?php echo base_url();?></p>						
+                        
+                        <p id="link">
+                        To book an appointment:<?php echo 'www.telehealers.in';?>
+                        </p>
+                        Helpline #9071123400						
                     </div>
                     <div class="col-sm-5 f2">							
                         
