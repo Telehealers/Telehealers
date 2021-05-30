@@ -176,8 +176,9 @@ class Appointment_controller extends CI_Controller {
         $data['teamplate'] = $this->sms_setup_model->teamplate_list();
         $user_type = $this->session->userdata('user_type');
         $doctor_id = $this->session->userdata('doctor_id');
-		if($user_type==1){
-			if($doctor_id==1){
+        
+		if($user_type=='1'){
+			if($doctor_id=='1'){
 			 $data['appointmaent_info'] = $this->overview_model->to_day_appointment();
 			}
 			else{

@@ -49,7 +49,6 @@
                                     <th class="all"><?php echo display('sequence');?></th>
                                     <th class="all"><?php echo display('date');?></th>
                                     <th class="all">Meeting URL</th>
-                                    <th class="all">Meeting Password</th>
                                     <th class="desktop"><?php echo display('action');?></th>
                                 </tr>
                             </thead>
