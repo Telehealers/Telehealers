@@ -25,6 +25,7 @@
            
          <div class="row">
              <?php 
+             var_dump($pres);
                 $attributes = array( 'class' => 'form-horizontal','name'=>'n_p');
                 echo form_open_multipart('admin/Prescription_controller/update_prescription', $attributes);
              ?>
@@ -48,13 +49,7 @@
                                         <div class="col-md-12 col-xs-12">
                                             <div class="caption">
                                                 <span class="caption-subject font-green sbold uppercase"><?php echo display('name');?> : </span><?php echo html_escape(@$pres->patient_name);?>,&nbsp&nbsp&nbsp
-                                                <span class="caption-subject font-green sbold uppercase"><?php echo display('age');?> : </span>
-                                                <?php
-                                                    $date1=date_create(@$pres->birth_date);
-                                                    $date2= date_create( date('y-m-d'));
-                                                    $diff=date_diff($date1,$date2);
-                                                    echo @$diff->format("%Y-Y:%m-M:%d-D");
-                                                ?>,&nbsp&nbsp&nbsp 
+                                                <span class="caption-subject font-green sbold uppercase"><?php echo display('age');?> : </span> <?php echo html_escape(@$pres->age);?>,&nbsp&nbsp&nbsp
                                                 <span class="caption-subject font-green sbold uppercase"><?php echo display('sex');?> : </span><?php echo html_escape(@$pres->sex);?>,&nbsp&nbsp&nbsp
                                                 <span class="caption-subject font-green sbold uppercase">Id : </span><?php echo html_escape(@$pres->patient_id);?>
                                             </div>
