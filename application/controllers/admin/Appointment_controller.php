@@ -174,6 +174,18 @@ class Appointment_controller extends CI_Controller {
         //gate gateway_information
         $data['gateway_list'] = $this->db->select('*')->from('sms_gateway')->where('default_status',1)->get()->row();
         $data['teamplate'] = $this->sms_setup_model->teamplate_list();
+        $user_type = $this->session->userdata('user_type');
+        $doctor_id = $this->session->userdata('doctor_id');
+		if($user_type==1){
+			if($doctor_id==1){
+			 $data['appointmaent_info'] = $this->overview_model->to_day_appointment();
+			}
+			else{
+				$data['appointmaent_info'] = $this->overview_model->to_day_appointment_by_id($doctor_id);	
+			}
+		}else{
+       		 $data['appointmaent_info'] = $this->overview_model->to_day_appointment();
+		} 
         $data['appointmaent_info'] = $this->overview_model->to_day_appointment();
         $this->load->view('admin/_header',$data);
         $this->load->view('admin/_left_sideber');
