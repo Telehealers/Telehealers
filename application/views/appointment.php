@@ -12,24 +12,21 @@
     <!-- Bootstrap CSS -->
 
     <link rel="stylesheet" href="<?php echo base_url();?>web_assets2/css/main.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 	<link href="<?php echo base_url()?>assets/plugins/jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
-  <script src="https://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.js"></script>
 	<link rel="stylesheet" href="<?php echo base_url();?>web_assets2/appointment/css/main.css">
     <link rel="stylesheet" href="<?php echo base_url();?>web_assets2/appointment/css/style.css">
     <link rel="stylesheet" href="<?php echo base_url();?>web_assets2/appointment/css/calendar_style.css">
 
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"  crossorigin="anonymous"></script>
+<!--     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"  crossorigin="anonymous"></script>
+ -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.2/js/intlTelInput.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js'></script>
 
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-<!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js'></script> -->
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.2/js/intlTelInput.js'></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js'></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js'></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.js"></script>
+   
    <title><?php echo $meta_info[0]['page_title']; ?></title>
 	<meta name="keywords" content="<?php echo $meta_info[0]['meta_keywords']; ?>">
 	<meta name="description" content="<?php echo $meta_info[0]['meta_description']; ?>">
@@ -459,7 +456,7 @@ input.range::-ms-fill-upper {
     </div>
 <script>
 $(document).ready(function(){
-// declare var $:any;
+  //var $:any;
   // $("#datepicker").datepicker();
 $('#p_name').keypress(function (e) {
   var charLength = $(this).val().length;
