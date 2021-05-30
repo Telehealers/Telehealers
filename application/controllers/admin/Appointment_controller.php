@@ -187,7 +187,7 @@ class Appointment_controller extends CI_Controller {
 		}else{
        		 $data['appointmaent_info'] = $this->overview_model->to_day_appointment();
 		} 
-        $data['appointmaent_info'] = $this->overview_model->to_day_appointment();
+        
         $this->load->view('admin/_header',$data);
         $this->load->view('admin/_left_sideber');
         $this->load->view('admin/view_today_appointment_list');

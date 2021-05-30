@@ -88,12 +88,9 @@
 									echo $app_date;
 									?></td>
                                     <td>
-                                        <a href="<?php echo $symt1;?>" target="_blank"><?php echo $value->$symt1;?></a>
+                                        <a href="<?php echo $symt1;?>" target="_blank"><?php echo $symt1;?></a>
                                     </td>
 										
-                                    <td>
-										<?php echo $value->   $symt2;?>
-                                    </td>
                                     <td class="text-center">
                                     <?php if(empty($result) AND $this->session->userdata('user_type')==1) { ?>
                                         <a class="btn btn-xs btn-primary"  href="<?php echo base_url();?>admin/Prescription_controller/create_prescription/<?php echo html_escape($value->appointment_id); ?>" ><i class="fa fa-user-md"></i></a>
