@@ -1558,15 +1558,16 @@ public function registration()
 			' ORDER BY bias_reduction_score;';
 		$available_doctors = $this->db->query($sql_query);
 		foreach ($available_doctors->result() as $doc) {
-			echo '<div class="col-md-6"><div class="doc_box">'.
-					'<span class="image_dr"><img src="'.$doc->picture.'" alt="#"></span>'.
-					'<span class="content"><h5>Dr. '.$doc->doctor_name.' </h5>'.
-						'<p>'.$doc->designation.'</p><div class="select_dr">'.
-							'<input type="radio" name="doctor_id" value="'.
-							$doc->doctor_id.'">Take an Appointment'.
-						'</div>'.
-					'</span>'.
-				'</div></div>';
+			echo '<div class="our-team" data-value="'.$doc->doctor_id.'">
+			        <div class="picture">
+			          <img class="img-fluid" src="'.$doc->picture.'
+			        </div>
+			        <div class="team-content">
+			          <h3 class="name"> '.$doc->doctor_name.' </h3>
+			          <h4 class="title">'.$doc->designation.'</h4>
+			        </div>
+			        
+      </div>';
 		}
 	}
 
