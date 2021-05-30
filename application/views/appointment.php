@@ -26,7 +26,7 @@
 
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.js"></script>
-   
+
    <title><?php echo $meta_info[0]['page_title']; ?></title>
 	<meta name="keywords" content="<?php echo $meta_info[0]['meta_keywords']; ?>">
 	<meta name="description" content="<?php echo $meta_info[0]['meta_description']; ?>">
@@ -247,9 +247,11 @@ input.range::-ms-fill-upper {
   background-color: #ccc;
 }
 .labelStyle{
-  font-weight: 600;
+  /* font-weight: 600; */
     font-size: 20px;
-    color: #6c757d;
+    /* color: #6c757d; */
+
+    color: #5d5d5d;
 }
 
 
@@ -260,7 +262,8 @@ input.range::-ms-fill-upper {
 /** button group styles **/
  .btn-group {
 	 border-radius: 1rem;
-	 box-shadow: -2.3px -2.3px 3.8px rgba(255, 255, 255, 0.2), -6.3px -6.3px 10.6px rgba(255, 255, 255, 0.3), -15.1px -15.1px 25.6px rgba(255, 255, 255, 0.4), -50px -50px 85px rgba(255, 255, 255, 0.07), 2.3px 2.3px 3.8px rgba(0, 0, 0, 0.024), 6.3px 6.3px 10.6px rgba(0, 0, 0, 0.035), 15.1px 15.1px 25.6px rgba(0, 0, 0, 0.046), 50px 50px 85px rgba(0, 0, 0, 0.07);
+	 /* box-shadow: -2.3px -2.3px 3.8px rgba(255, 255, 255, 0.2), -6.3px -6.3px 10.6px rgba(255, 255, 255, 0.3), -15.1px -15.1px 25.6px rgba(255, 255, 255, 0.4), -50px -50px 85px rgba(255, 255, 255, 0.07), 2.3px 2.3px 3.8px rgba(0, 0, 0, 0.024), 6.3px 6.3px 10.6px rgba(0, 0, 0, 0.035), 15.1px 15.1px 25.6px rgba(0, 0, 0, 0.046), 50px 50px 85px rgba(0, 0, 0, 0.07); */
+   box-shadow : rgb(0 0 0 / 15%) 1.95px 1.95px 2.6px;
 }
  .btn-group__item {
 	 border: none;
@@ -340,19 +343,143 @@ input.range::-ms-fill-upper {
    display: none;
  }
 
+#outer {
+  width : auto ;
+}
+
+
+/* body {
+  font-family: tahoma;
+  height: 100vh;
+  background-image: url(https://picsum.photos/g/3000/2000);
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+} */
+
+.our-team {
+  padding: 30px 0 40px;
+  margin-bottom: 30px;
+  background-color: #eeeeee;
+  box-shadow : rgb(0 0 0 / 15%) 1.95px 1.95px 2.6px;
+  cursor: pointer;
+  text-align: center;
+  overflow: hidden;
+  position: relative;
+  border-radius: 8px;
+}
+
+.our-team .picture {
+  display: inline-block;
+  height: 130px;
+  width: 130px;
+  margin-bottom: 50px;
+  z-index: 1;
+  position: relative;
+}
+
+.our-team .picture::before {
+  content: "";
+  width: 100%;
+  height: 0;
+  border-radius: 50%;
+  background-color: #1369ce;
+  position: absolute;
+  bottom: 135%;
+  right: 0;
+  left: 0;
+  opacity: 0.9;
+  transform: scale(3);
+  transition: all 0.3s linear 0s;
+}
+
+.our-team:hover .picture::before {
+  height: 100%;
+}
+
+.our-team .picture::after {
+  content: "";
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: #1369ce;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+.our-team .picture img {
+  width: 100%;
+  height: auto;
+  border-radius: 50%;
+  transform: scale(1);
+  transition: all 0.9s ease 0s;
+}
+
+.our-team:hover .picture img {
+  box-shadow: 0 0 0 14px #f7f5ec;
+  transform: scale(0.7);
+}
+
+.our-team .title {
+  display: block;
+  font-size: 15px;
+  color: #4e5052;
+  text-transform: capitalize;
+}
+
+.our-team .social {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  background-color: #1369ce;
+  position: absolute;
+  bottom: -100px;
+  left: 0;
+  transition: all 0.5s ease 0s;
+}
+
+.our-team:hover .social {
+  bottom: 0;
+}
+
+.our-team .social li {
+  display: inline-block;
+}
+
+.our-team .social li a {
+  display: block;
+  padding: 10px;
+  font-size: 17px;
+  color: white;
+  transition: all 0.3s ease 0s;
+  text-decoration: none;
+}
+
+.our-team .social li a:hover {
+  color: #1369ce;
+  background-color: #f7f5ec;
+}
 
 </style>
 <body>
 
     <div class="container" style="background: white;margin-top: 20px;border-radius: 10px;box-shadow: 4px 5px 8px #ababab;">
-    <div class="row pt-3 pb-3" >
+    <div class="row" style="text-align:center; color:white;background:grey;border-top-left-radius: 8px;border-top-right-radius: 8px;padding:10px">
+    <div class="col-12">
+    <h4>Appontment</h4>
+    </div>
+    </div>
+    <div class="row pt-4" >
     <div class="col-sm-12 col-md-4 col-lg-4">
     <div class="dropdown">
   <button id="dLabel" class="dropdown-select float-right" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     Select Language
     <span class="caret"></span>
   </button>
-  <ul class="dropdown-menu" aria-labelledby="dLabel">
+  <ul class="dropdown-menu" style="height: 200px;overflow: auto;" aria-labelledby="dLabel">
     <?php if(is_array($language_arr) && count($language_arr)>0){
                                         foreach($language_arr as $val){
                                            ?>
@@ -362,7 +489,7 @@ input.range::-ms-fill-upper {
 </div>
 </div>
 
-    <div class="col-sm-12 col-md-4 col-lg-4">
+    <div class="col-sm-12 col-md-4 col-lg-4" style="padding-left: 5%;">
     <div class="form-group">
     <!-- <label for="exampleInputEmail1">Email address</label> -->
     <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Choose Appointment Date">
@@ -430,7 +557,7 @@ input.range::-ms-fill-upper {
 </div>
     </div>
     </div>
-    <div class="row mb-3" style="padding-left:110px">
+    <div class="row mb-3 mt-4" style="padding-left:110px;padding-right:110px">
     <div class="col-12">
     <div class="btn-group" role="group" aria-label="Basic example">
   <button type="button" class="btn btn-secondary">0:0</button>
@@ -438,25 +565,102 @@ input.range::-ms-fill-upper {
   <button type="button" class="btn btn-secondary">0:30</button>
   <button type="button" class="btn btn-secondary">0:45</button>
 </div>
+<div class="float-right">
+<label for="customRange3" class="form-label labelStyle" style="margin-bottom: 0 !important;padding-top: 5px;">5/31/2021, 1:30:24 AM</label>
+
+</div>
     </div>
     </div>
     <div class="row mb-3" id="department_type" style="display:none;padding: 0px 110px 0px 110px;">
     <div class="col-sm-12 col-md-4 col-lg-3">
+    <label for="customRange3" class="form-label labelStyle mb-3" >Departments</label>
     <div class="btn-group" id="elem">
          <?php if(is_array($departments) && count($departments)>0){
                 foreach($departments as $val){
                         ?><button class="btn-group__item btn-group__item" >
                             <?php echo $val['servicetype']
-                                           ?></button><?php }} ?>        
+                                           ?></button><?php }} ?>
    </div>
     </div>
     </div>
-    <div class="row mb-3">
-    <div class="col-sm-12 col-md-4 col-lg-3">
-  <h6>Dr. List</h6>
-  <input type="hidden" id="base_url" value="<?php echo base_url()?>">
+    <div class="row" style="padding-left:110px;padding-right:110px">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+    <label for="customRange3" class="form-label labelStyle mb-3" >Consultants</label>
+    <input type="hidden" id="base_url" value="<?php echo base_url()?>">
     </div>
     </div>
+    <div class="container" style="padding:0px">
+  <div class="row" style="padding-left:110px; padding-right:110px">
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+      <div class="our-team">
+        <div class="picture">
+          <img class="img-fluid" src="https://picsum.photos/130/130?image=1027">
+        </div>
+        <div class="team-content">
+          <h3 class="name">Michele Miller</h3>
+          <h4 class="title">Web Developer</h4>
+        </div>
+        <ul class="social">
+          <li><a href="https://codepen.io/collection/XdWJOQ/" class="fa fa-facebook" aria-hidden="true"></a></li>
+          <li><a href="https://codepen.io/collection/XdWJOQ/" class="fa fa-twitter" aria-hidden="true"></a></li>
+          <li><a href="https://codepen.io/collection/XdWJOQ/" class="fa fa-google-plus" aria-hidden="true"></a></li>
+          <li><a href="https://codepen.io/collection/XdWJOQ/" class="fa fa-linkedin" aria-hidden="true"></a></li>
+        </ul>
+      </div>
+    </div>
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+      <div class="our-team">
+        <div class="picture">
+          <img class="img-fluid" src="https://picsum.photos/130/130?image=839">
+        </div>
+        <div class="team-content">
+          <h3 class="name">Patricia Knott</h3>
+          <h4 class="title">Web Developer</h4>
+        </div>
+        <ul class="social">
+          <li><a href="https://codepen.io/collection/XdWJOQ/" class="fa fa-facebook" aria-hidden="true"></a></li>
+          <li><a href="https://codepen.io/collection/XdWJOQ/" class="fa fa-twitter" aria-hidden="true"></a></li>
+          <li><a href="https://codepen.io/collection/XdWJOQ/" class="fa fa-google-plus" aria-hidden="true"></a></li>
+          <li><a href="https://codepen.io/collection/XdWJOQ/" class="fa fa-linkedin" aria-hidden="true"></a></li>
+        </ul>
+      </div>
+    </div>
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+      <div class="our-team">
+        <div class="picture">
+          <img class="img-fluid" src="https://picsum.photos/130/130?image=856">
+        </div>
+        <div class="team-content">
+          <h3 class="name">Justin Ramos</h3>
+          <h4 class="title">Web Developer</h4>
+        </div>
+        <ul class="social">
+          <li><a href="https://codepen.io/collection/XdWJOQ/" class="fa fa-facebook" aria-hidden="true"></a></li>
+          <li><a href="https://codepen.io/collection/XdWJOQ/" class="fa fa-twitter" aria-hidden="true"></a></li>
+          <li><a href="https://codepen.io/collection/XdWJOQ/" class="fa fa-google-plus" aria-hidden="true"></a></li>
+          <li><a href="https://codepen.io/collection/XdWJOQ/" class="fa fa-linkedin" aria-hidden="true"></a></li>
+        </ul>
+      </div>
+    </div>
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+      <div class="our-team">
+        <div class="picture">
+          <img class="img-fluid" src="https://picsum.photos/130/130?image=836">
+        </div>
+        <div class="team-content">
+          <h3 class="name">Mary Huntley</h3>
+          <h4 class="title">Web Developer</h4>
+        </div>
+        <ul class="social">
+          <li><a href="https://codepen.io/collection/XdWJOQ/" class="fa fa-facebook" aria-hidden="true"></a></li>
+          <li><a href="https://codepen.io/collection/XdWJOQ/" class="fa fa-twitter" aria-hidden="true"></a></li>
+          <li><a href="https://codepen.io/collection/XdWJOQ/" class="fa fa-google-plus" aria-hidden="true"></a></li>
+          <li><a href="https://codepen.io/collection/XdWJOQ/" class="fa fa-linkedin" aria-hidden="true"></a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
     </div>
 <script>
 $(document).ready(function(){
@@ -484,7 +688,7 @@ if(queryType == "covid"){
 
 if(queryType == "non_covid"){
   document.getElementById('department_type').style.display = 'block';
- 
+
 }
 
 })
@@ -505,8 +709,8 @@ $(function() {
        var items = elem.children();
 
        // Inserting Buttons
-       elem.prepend('<div id="right-button" style="visibility: hidden;"><a href="#"><</a></div>');
-       elem.append('  <div id="left-button"><a href="#">></a></div>');
+       elem.prepend('<div id="right-button" style="visibility: hidden;font-size:35px"><a href="#" ><</a></div>');
+       elem.append('  <div id="left-button" style="font-size:35px"><a href="#" >></a></div>');
 
        // Inserting Inner
        items.wrapAll('<div id="inner" />');
@@ -537,7 +741,7 @@ $(function() {
          outer.animate({
            scrollLeft: leftPos - 200
          }, 800, function() {
-           debugger;
+
            if ($('#outer').scrollLeft() <= 0) {
              setInvisible($('#right-button'));
            }
