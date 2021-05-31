@@ -497,7 +497,7 @@ input.range::-ms-fill-upper {
     <div class="col-sm-12 col-md-4 col-lg-4" style="padding-left: 5%;">
     <div class="form-group">
             <div class='input-group date' id='datepicker'>
-               <input type='text' class="form-control" value="<?php echo date("Y-m-d");?>" />
+               <input type='text' id="p_date"class="form-control" value="<?php echo date("Y-m-d");?>" />
                <span class="input-group-addon">
                <span class="glyphicon glyphicon-calendar"></span>
                </span>
@@ -595,6 +595,8 @@ input.range::-ms-fill-upper {
     <div class="col-sm-12 col-md-12 col-lg-12">
     <label for="customRange3" class="form-label labelStyle mb-3" >Consultants</label>
     <input type="hidden" id="base_url" value="<?php echo base_url()?>">
+        <input type="hidden" id="sequence" value="">
+
     </div>
     </div>
     <div class="container" style="padding:0px">
@@ -648,6 +650,8 @@ function getTime(date,hour, minute,am_pm,language){
   minute= minute ? minute: $('#minute .active').text().substr(2,4);
   am_pm=am_pm? am_pm : ($('#meredium .active').text()).replace(/\s/g, "");
   document.getElementById("time").innerHTML = date_cool.toDateString()+" "+hour+":"+minute+" "+am_pm;
+  document.getElementById("sequence").innerHTML = hour+":"+minute+" "+am_pm;
+
   language=language?language:$('#dLabel').text()
   //console.log(language);
   if(language=='Select Language'){

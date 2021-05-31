@@ -452,7 +452,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		$this->form_validation->set_rules('p_date', 'Date', 'trim|required');
 		/**TODO: Check if patient_id is coming in post request*/
 		$this->form_validation->set_rules('patient_id', 'Patient Id', 'trim|required');
-		$this->form_validation->set_rules('venue_id', 'venue', 'trim|required');
+		//$this->form_validation->set_rules('venue_id', 'venue', 'trim|required');
 		$this->form_validation->set_rules('sequence', 'sequence', 'trim|required');
 
 		/**Application vars
@@ -463,7 +463,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		$booking_hour = $this->input->post("booking_hour", TRUE);
 		$booking_min = $this->input->post("booking_min", TRUE);
 		$booking_am_pm = $this->input->post("booking_am_pm", TRUE);
-		$booking_time = $booking_date." ".$booking_hour.":".$booking_min." ".$booking_am_pm ;
+		$booking_time =date("Y-m-d h:i:s") ;
 		$app_type_val = $this->input->post('app_type_val',TRUE);
 		$service1 = $this->input->post('service1',TRUE);
 		$service2 = $this->input->post('service2',TRUE);
@@ -471,7 +471,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		$schedul_id = $this->input->post('schedul_id',TRUE);
 		$sequence = $this->input->post('slot_idd',TRUE);
 		$patient_id = $this->input->post('p_id', TRUE);
-		$venue_id = $this->input->post('venue_id',TRUE);
+		$venue_id = 3;
 		$p_cc = $this->input->post('problem',TRUE);
 
 		/**Fetching patient data from DB*/
