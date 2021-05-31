@@ -17,16 +17,20 @@
 	<link rel="stylesheet" href="<?php echo base_url();?>web_assets2/appointment/css/main.css">
     <link rel="stylesheet" href="<?php echo base_url();?>web_assets2/appointment/css/style.css">
     <link rel="stylesheet" href="<?php echo base_url();?>web_assets2/appointment/css/calendar_style.css">
-
+    <link rel="stylesheet" type="text/css" media="screen" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <!--     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"  crossorigin="anonymous"></script>
  -->
+
   <script src='https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.2/js/intlTelInput.js'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js'></script>
 
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"  crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.js"></script>
 
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.css" rel="stylesheet">
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment-with-locales.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
    <title><?php echo $meta_info[0]['page_title']; ?></title>
 	<meta name="keywords" content="<?php echo $meta_info[0]['meta_keywords']; ?>">
 	<meta name="description" content="<?php echo $meta_info[0]['meta_description']; ?>">
@@ -475,7 +479,7 @@ input.range::-ms-fill-upper {
     <div class="row pt-4" >
     <div class="col-sm-12 col-md-4 col-lg-4">
     <div class="dropdown">
-  <button id="dLabel" class="dropdown-select float-right" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+  <button id="dLabel" class="dropdown-select float-right"  type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     Select Language
     <span class="caret"></span>
   </button>
@@ -491,10 +495,13 @@ input.range::-ms-fill-upper {
 
     <div class="col-sm-12 col-md-4 col-lg-4" style="padding-left: 5%;">
     <div class="form-group">
-    <!-- <label for="exampleInputEmail1">Email address</label> -->
-    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Choose Appointment Date">
-    <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
-  </div>
+            <div class='input-group date' id='datetimepicker1'>
+               <input type='text' class="form-control" />
+               <span class="input-group-addon">
+               <span class="glyphicon glyphicon-calendar"></span>
+               </span>
+            </div>
+         </div>
     </div>
     <div class="col-sm-12 col-md-4 col-lg-4" style="display:flex;margin-top: 1%;">
     <div class="form-check" style="margin-left:30px">
@@ -665,7 +672,9 @@ input.range::-ms-fill-upper {
 <script>
 $(document).ready(function(){
   //var $:any;
-  // $("#datepicker").datepicker();
+  $(function () {
+             $('#datetimepicker1').datetimepicker();
+         });
 $('#p_name').keypress(function (e) {
   var charLength = $(this).val().length;
   var regex = new RegExp("^[a-zA-Z ]+$");
@@ -677,7 +686,9 @@ $('#p_name').keypress(function (e) {
   }
   return false;
 });
-
+function changeCall(ev){
+  console.log("ev",ev)
+}
 $(document).on('click', 'input:radio[id^="flexRadioDefault"]', function(event) {
   console.log("event clicked",event.target.value);
   var queryType = event.target.value;
