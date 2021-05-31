@@ -452,26 +452,25 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		$this->form_validation->set_rules('p_date', 'Date', 'trim|required');
 		/**TODO: Check if patient_id is coming in post request*/
 		$this->form_validation->set_rules('patient_id', 'Patient Id', 'trim|required');
-		//$this->form_validation->set_rules('venue_id', 'venue', 'trim|required');
+		$this->form_validation->set_rules('venue_id', 'venue', 'trim|required');
 		$this->form_validation->set_rules('sequence', 'sequence', 'trim|required');
 
 		/**Application vars
 		 * TODO: Match name and fetch vars which are not coming from request.
 		 */
-		$sequence = $this->input->post('sequence',TRUE);
 		$booking_date = $this->input->post('p_date', TRUE);
 		$booking_hour = $this->input->post("booking_hour", TRUE);
 		$booking_min = $this->input->post("booking_min", TRUE);
 		$booking_am_pm = $this->input->post("booking_am_pm", TRUE);
-		$booking_time =date("Y-m-d h:i:s") ;
-		$app_type_val = $this->input->post('app_type_val',TRUE);
+		$sequence = $booking_hour.":".$booking_min.":00 ".$booking_am_pm;
+		$sequence = date("H:i:s", strtotime($sequence));
+		$booking_time = $booking_date." ".$sequence ;
 		$service1 = $this->input->post('service1',TRUE);
 		$service2 = $this->input->post('service2',TRUE);
 		$doctor_id = $this->input->post('doctor_id');
 		$schedul_id = $this->input->post('schedul_id',TRUE);
-		$sequence = $this->input->post('slot_idd',TRUE);
 		$patient_id = $this->input->post('p_id', TRUE);
-		$venue_id = 3;
+		$venue_id = 3; /**NOTE: venue = Online */
 		$p_cc = $this->input->post('problem',TRUE);
 
 		/**Fetching patient data from DB*/
@@ -523,7 +522,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 			'problem' => $p_cc,
 			'service' => $service1,
 			'servicetype' => $service2,
-			'get_date_time' => $booking_time,
+			'get_date_time' => date("Y-m-d h:i:s"),
 			'get_by' => 'Won'
 		);
 
@@ -604,7 +603,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 			'problem' => $p_cc,
 			'service' => $service1,
 			'servicetype' => $service2,
-			'get_date_time' => $booking_time,
+			'get_date_time' => date("Y-m-d h:i:s"),
 			'get_by' => 'Won',
 			'fees' => '0'
 		);
@@ -1264,14 +1263,14 @@ public function registration()
 		$department_filter = ($department_type)? '(dpt.department_id = '.$department_type.') AND ':"";
 		 $preferred_language = $this->input->post('preferred_language', TRUE);
 		$preferred_language_filter = '(language LIKE "%'.$preferred_language.'%")';
-		$booking_time = $this->input->post('booking_date', TRUE)." ".
-			$this->input->post("booking_hour",TRUE).":".
-			$this->input->post("booking_minute", TRUE).":00 ".
-			$this->input->post("booking_am_pm", TRUE);
+		$sequence =$this->input->post("booking_hour",TRUE).":".
+		$this->input->post("booking_minute", TRUE).":00 ".
+		$this->input->post("booking_am_pm", TRUE);
+		$sequence = date("H:i:s", strtotime($sequence));
+		$booking_time = $this->input->post('booking_date', TRUE)." ".$sequence;
+			
 		$booking_time = urldecode($booking_time);
-
-
-		$sql_query = 'SELECT picture, language, designation, doctor_name, doctor_id, '.
+		$sql_query = 'SELECT picture, designation, doctor_name, doctor_id, '.
 			'(IF('.$preferred_language_filter.', RAND(), -RAND())) as bias_reduction_score '. //Doctor selection bias reduction logic
 			'FROM doctor_tbl, doctor_department_info dpt WHERE '.
 			' dpt.department_id = department AND '.$department_filter.
@@ -1284,25 +1283,23 @@ public function registration()
 			'appointment_tbl bookings, doctor_tbl as docs, schedul_setup_tbl schedule '.
 			'WHERE bookings.doctor_id = docs.doctor_id AND '.
 			'schedule.doctor_id = bookings.doctor_id AND '.
-			'bookings.get_date_time <=  "'.$booking_time.'" AND "'.$booking_time.
-			'" <= ADDTIME(bookings.get_date_time, SEC_TO_TIME(schedule.per_patient_time*60))) '.
-			' ORDER BY bias_reduction_score desc;';
+			'CAST(bookings.sequence AS TIME) <=  "'.$booking_time.'" AND "'.$booking_time.
+			'" <= ADDTIME(CAST(bookings.sequence AS TIME), SEC_TO_TIME(schedule.per_patient_time*60))) '.
+			' ORDER BY bias_reduction_score DESC;';
+		var_dump($sql_query);
 		$available_doctors = $this->db->query($sql_query);
-
 		foreach ($available_doctors->result() as $doc) {
-			if($doc->doctor_name!='Admin'){
 			echo '<div class="our-team" data-value="'.$doc->doctor_id.'">
 			        <div class="picture">
-			          <img class="img-fluid" src="'.$doc->picture.'">
+			          <img class="img-fluid" src="'.$doc->picture.'
 			        </div>
 			        <div class="team-content">
 			          <h3 class="name"> '.$doc->doctor_name.' </h3>
 			          <h4 class="title">'.$doc->designation.'</h4>
-			          <h5 class="language">'.$doc->language.'</h5>
 			        </div>
 			        
       </div>';
-		}}
+		}
 	}
 
 	public function getpromocodeprice(){
