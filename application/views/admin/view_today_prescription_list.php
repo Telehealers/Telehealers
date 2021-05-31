@@ -62,7 +62,7 @@
                                 <td><?php echo html_escape($value->patient_phone);?></td>
                                 <td><?php echo html_escape($value->sex); ?></td>
                                 <td>
-                                    <a class="btn btn-xs btn-info"target="_blank" href="<?php echo base_url();?>admin/Prescription_controller/my_prescription/<?php echo html_escape($value->appointment_id); ?>"><i class="fa fa-eye"></i></a>
+                                    <a class="btn btn-xs btn-info"target="_blank" href="<?php echo base_url();?>admin/Prescription_controller/my_prescription/<?php echo html_escape($value->prescription_id); ?>"><i class="fa fa-eye"></i></a>
                                 </td>
                             </tr>
                             <?php } ?>

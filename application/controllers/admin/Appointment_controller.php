@@ -1,5 +1,5 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
-include APPPATH.'../zoom/config.php';
+
 
 class Appointment_controller extends CI_Controller {
 
@@ -23,10 +23,14 @@ class Appointment_controller extends CI_Controller {
 	       $this->load->model('admin/Appointment_model','appointment_model');
 	      $this->load->model('admin/Venue_model','venue_model');
 	      $this->load->library('Smsgateway');
+
+
         $this->load->model('admin/Overview_model','overview_model');
         $this->load->model('admin/email/Email_model','email_model');
 		$this->load->model('admin/Doctor_model','doctor_model');
         $this->load->library('email');
+       	$this->load->model('admin/Patient_model','patient_model');
+
 		
 		
   }
@@ -41,6 +45,7 @@ class Appointment_controller extends CI_Controller {
 		$user_type = $this->session->userdata('user_type');
 		if($user_type==1){
 			$doctor_id = $this->session->userdata('doctor_id');
+      $data['patient_info'] = $this->patient_model->get_by_id_patient($doctor_id);
 			if($doctor_id!="1"){
 				$data['doctor_info'] = $this->doctor_model->getDoctorListById($doctor_id);	
 			}else{
@@ -53,7 +58,7 @@ class Appointment_controller extends CI_Controller {
         $data['title'] = "Create New Appointment";
 		$data['venue_info'] = $this->venue_model->get_venue_list();
 		
-		
+
 		$this->load->view('admin/_header',$data);
 		$this->load->view('admin/_left_sideber');
 		$this->load->view('admin/view_create_appointment');
@@ -101,6 +106,43 @@ class Appointment_controller extends CI_Controller {
         $this->load->view('admin/view_appointment_list');
         $this->load->view('admin/_footer');
 	}
+	
+	public function appointment_list_referral($search=NULL)
+	{
+		//echo '<pre>'; print_r($this->session->all_userdata());exit;
+        $data['title'] = "Appointment List";
+        //gate gateway_information
+        $data['gateway_list'] = $this->db->select('*')->from('sms_gateway')->where('default_status',1)->get()->row();
+     
+        $data['teamplate'] = $this->sms_setup_model->teamplate_list();
+    
+		$user_type = $this->session->userdata('user_type');
+		
+		
+		
+		
+		if($user_type==1){
+			echo $doctor_id = $this->session->userdata('doctor_id');
+			if($doctor_id!="1"){
+				$data['appointmaent_info'] = $this->appointment_model->get_appointment_list_by_id_referral($doctor_id);
+			}else{
+				
+				$data['appointmaent_info'] = $this->appointment_model->get_appointment_list_referral();
+				//echo "<pre>";print_r($data['appointmaent_info']);die();
+			}
+		}else{
+			$data['appointmaent_info'] = $this->appointment_model->get_appointment_list_referral();
+		}
+
+		//echo "<pre>";print_r($data['appointmaent_info']);die();
+	
+        
+        
+       	$this->load->view('admin/_header',$data);
+        $this->load->view('admin/_left_sideber');
+        $this->load->view('admin/view_appointment_list_referral');
+        $this->load->view('admin/_footer');
+	}
 
     #------------------------------------------------
     #  appointment list view 
@@ -111,6 +153,7 @@ class Appointment_controller extends CI_Controller {
 		$this->db->where('appointment_id',$appointment_id)->delete('appointment_tbl');
         $this->db->where('appointment_id',$appointment_id)->delete('email_info');
         $this->db->where('appointment_id',$appointment_id)->delete('sms_info');
+		$this->db->where('appointment_id',$appointment_id)->delete('appointment_referral');
         $this->session->set_flashdata('message',display('delete_msg'));
 		$user_id = $this->session->userdata('log_id');
 		$action_title = 'Delete appointment ';
@@ -131,7 +174,20 @@ class Appointment_controller extends CI_Controller {
         //gate gateway_information
         $data['gateway_list'] = $this->db->select('*')->from('sms_gateway')->where('default_status',1)->get()->row();
         $data['teamplate'] = $this->sms_setup_model->teamplate_list();
-        $data['appointmaent_info'] = $this->overview_model->to_day_appointment();
+        $user_type = $this->session->userdata('user_type');
+        $doctor_id = $this->session->userdata('doctor_id');
+        
+		if($user_type=='1'){
+			if($doctor_id=='1'){
+			 $data['appointmaent_info'] = $this->overview_model->to_day_appointment();
+			}
+			else{
+				$data['appointmaent_info'] = $this->overview_model->to_day_appointment_by_id($doctor_id);	
+			}
+		}else{
+       		 $data['appointmaent_info'] = $this->overview_model->to_day_appointment();
+		} 
+        
         $this->load->view('admin/_header',$data);
         $this->load->view('admin/_left_sideber');
         $this->load->view('admin/view_today_appointment_list');
@@ -709,5 +765,623 @@ class Appointment_controller extends CI_Controller {
 		}
 		redirect("admin/Appointment_controller/appointment_list");
 	}
+	
+	function send_meet_url_referral($appointmaent_id){
+		$ci = get_instance();
+		$ci->load->library('email');
+		$email_config = $this->email_model->email_config();
+		if(is_array($email_config) && count($email_config)>0){
+			$protocol = $email_config->protocol;
+			$smtp_host = $email_config->mailpath;
+			$smtp_port = $email_config->port;
+			$smtp_user = $email_config->sender;
+			$smtp_pass = $email_config->mailtype;
+		}
+        $config['protocol'] = $protocol;
+        $config['smtp_host'] = $smtp_host;
+        $config['smtp_port'] = $smtp_port;
+        $config['smtp_user'] = $smtp_user; 
+        $config['smtp_pass'] = $smtp_pass;
+        $config['charset'] = "utf-8";
+        $config['mailtype'] = "html";
+        $config['newline'] = "\r\n";
+		$ci->email->initialize($config);
+		
+		$patient_id='';
+		$doctor_id='';
+		$meet_url='';
+		
+		$sql_p = "select * from appointment_tbl where appointment_id = '".$appointmaent_id."' ";
+		$res_p = $this->db->query($sql_p);
+		$result_p = $res_p->result_array();
+		if(is_array($result_p) && count($result_p)>0){
+			$patient_id = $result_p[0]['patient_id'];
+		}
+		
+		$sql_pr = "select * from appointment_referral where appointment_id = '".$appointmaent_id."' ";
+		$res_pr = $this->db->query($sql_pr);
+		$result_pr = $res_pr->result_array();
+		if(is_array($result_pr) && count($result_pr)>0){
+			$doctor_id = $result_pr[0]['referral_to'];
+		}
+		
+		if($patient_id!="" && $doctor_id!=""){
+			$sql = "select * from patient_tbl where patient_id = '".$patient_id."' ";
+			$res = $this->db->query($sql);
+			$result = $res->result_array();
+			if(is_array($result) && count($result)>0){
+				$patient_name = $result[0]['patient_name'];
+				$patient_email = $result[0]['patient_email'];
+			}
+			$sql_doc = "select * from doctor_tbl where doctor_id = '".$doctor_id."' ";
+			$res_doc = $this->db->query($sql_doc);
+			$result_doc = $res_doc->result_array();
+			if(is_array($result_doc) && count($result_doc)>0){
+				$doctor_name = $result_doc[0]['doctor_name'];
+				$meet_url = $result_doc[0]['meet_url'];
+				$doc_id = $result_doc[0]['doc_id'];
+			}
+			if($meet_url!=""){
+				
+			
+			$message = '<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #f1f1f1;">
+    <center style="width: 100%; background-color: #f1f1f1;">
+        <div style="display: none; font-size: 1px;max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
+            &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
+        </div>
+        <div style="max-width: 600px; margin: 0 auto;" class="email-container">
+            <!-- BEGIN BODY -->
+            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
+                <tbody><tr>
+                    <td valign="top" class="bg_white" style="padding: 1em 2.5em 0 2.5em;">
+                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                            <tbody><tr>
+                                <td class="logo" style="text-align: left;">
+                                    <h1>
+                                        <a href="https://telehealers.in/">
+                                        <img src="https://telehealers.in/assets/uploads/images/telehe2.png">    
+                                        </a>
+                                    </h1>
+                                </td>
+                            </tr>
+                        </tbody></table>
+                    </td>
+                </tr>
+                <tr>
+                    </tr></tbody></table><table class="bg_white" role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                        <tbody><tr style="border-bottom: 1px solid rgba(0,0,0,.05);">
+                            <td valign="middle" width="100%" style="text-align:left; padding: 0 2.5em;">
+                                <div class="product-entry">
+                                    <div class="text">
+                                        <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Dear '.$patient_name.':</h2>
+										<p>Thanks for choosing telehealers.in</p>
+										<p>We hope your consultation will go well with '.$doctor_name.' </p>
+                                        <p>Here you can find easy Google Meet URL to connect directly with Doctor.</p>
+										
+										<p>Meeting URL - '.$meet_url.'</p>	
+									
+										<p>&nbsp;</p>
+										
+										<p>Keep in touch during this tough time! </p>
+										<p>Kindly write us back without any hasitation if you find any issues at support@telehealers.in</p>
+										
+										
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody></table>
+                
+            
+            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
+                <tbody><tr>
+                    <td class="bg_white" style="text-align: center;">
+                        <p>Receive these email? You can <a href="#" style="color: rgba(0,0,0,.8);">Unsubscribe here</a></p>
+                    </td>
+                </tr>
+            </tbody></table>
+
+        </div>
+    </center>
+
+
+</body></html>';
+
+		$ci->email->from('info@telehealers.in', 'telehealers');
+		$list = array($patient_email);
+		$ci->email->to($list);
+		$this->email->reply_to('info@telehealers.in', 'telehealers');
+		$subject = 'Telehealers Meeting Link with '.$doctor_name;
+		$ci->email->subject($subject);
+		$ci->email->message($message);
+		$ci->email->send();
+			}
+		}
+		if($meet_url!=""){
+				$this->session->set_flashdata('message','Meeting URL has been sent successfully!');
+		}else{
+			$this->session->set_flashdata('message2','Doctor Meeting URL is empty.');
+		}
+		redirect("admin/Appointment_controller/appointment_list_referral");
+	}
+	
+	function appointment_referral_accept($appointmaent_id){
+		$ci = get_instance();
+		$ci->load->library('email');
+		$email_config = $this->email_model->email_config();
+		if(is_array($email_config) && count($email_config)>0){
+			$protocol = $email_config->protocol;
+			$smtp_host = $email_config->mailpath;
+			$smtp_port = $email_config->port;
+			$smtp_user = $email_config->sender;
+			$smtp_pass = $email_config->mailtype;
+		}
+        $config['protocol'] = $protocol;
+        $config['smtp_host'] = $smtp_host;
+        $config['smtp_port'] = $smtp_port;
+        $config['smtp_user'] = $smtp_user; 
+        $config['smtp_pass'] = $smtp_pass;
+        $config['charset'] = "utf-8";
+        $config['mailtype'] = "html";
+        $config['newline'] = "\r\n";
+		$ci->email->initialize($config);
+		
+		$patient_id='';
+		$doctor_id_from='';
+		$doctor_id_to='';
+		$meet_url='';
+		$ref_id='';
+		
+		
+		$sql_pr = "select * from appointment_referral where appointment_id = '".$appointmaent_id."' ";
+		$res_pr = $this->db->query($sql_pr);
+		$result_pr = $res_pr->result_array();
+		if(is_array($result_pr) && count($result_pr)>0){
+			$doctor_id_to = $result_pr[0]['referral_to'];
+			$doctor_id_from = $result_pr[0]['referral_from'];
+			$ref_id = $result_pr[0]['id'];
+		}
+		
+		if($doctor_id_from!="" && $doctor_id_to!=""){
+			
+			$referal_from = $this->appointment_model->getdoctordata($doctor_id_from);
+			$referal_to = $this->appointment_model->getdoctordata($doctor_id_to);
+			
+			$referal_from_doc_name='';
+			$referal_from_doc_email='';
+			$referal_to_doc_name='';
+			$referal_to_doc_email='';
+			
+			
+			
+			if(is_array($referal_from) && count($referal_from)>0){
+				$referal_from_doc_name = $referal_from['doctor_name'];
+				$referal_from_doc_email = $referal_from['doc_email'];
+			}
+			if(is_array($referal_to) && count($referal_to)>0){
+				$referal_to_doc_name = $referal_to['doctor_name'];
+				$referal_to_doc_email = $referal_to['doc_email'];
+			}
+			$savedata = array(
+				'app_status' => '1'
+			);
+			$this->appointment_model->UpdateReferralAppointment($savedata,$ref_id);
+			if($referal_from_doc_email!=""){
+				
+			
+			$message = '<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #f1f1f1;">
+    <center style="width: 100%; background-color: #f1f1f1;">
+        <div style="display: none; font-size: 1px;max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
+            &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
+        </div>
+        <div style="max-width: 600px; margin: 0 auto;" class="email-container">
+            <!-- BEGIN BODY -->
+            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
+                <tbody><tr>
+                    <td valign="top" class="bg_white" style="padding: 1em 2.5em 0 2.5em;">
+                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                            <tbody><tr>
+                                <td class="logo" style="text-align: left;">
+                                    <h1>
+                                        <a href="https://telehealers.in/">
+                                        <img src="https://telehealers.in/assets/uploads/images/telehe2.png">    
+                                        </a>
+                                    </h1>
+                                </td>
+                            </tr>
+                        </tbody></table>
+                    </td>
+                </tr>
+                <tr>
+                    </tr></tbody></table><table class="bg_white" role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                        <tbody><tr style="border-bottom: 1px solid rgba(0,0,0,.05);">
+                            <td valign="middle" width="100%" style="text-align:left; padding: 0 2.5em;">
+                                <div class="product-entry">
+                                    <div class="text">
+                                        <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Hey '.$referal_from_doc_name.':</h2>
+										
+										<p>'.$referal_to_doc_name.' Accepted your appointment referral request!</p>	
+										
+										<p>Appointment ID - '.$appointmaent_id.'</p>
+									
+										<p>&nbsp;</p>
+										
+										
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody></table>
+                
+            
+            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
+                <tbody><tr>
+                    <td class="bg_white" style="text-align: center;">
+                       
+                    </td>
+                </tr>
+            </tbody></table>
+
+        </div>
+    </center>
+
+
+</body></html>';
+
+		$ci->email->from('info@telehealers.in', 'telehealers');
+		$list = array($referal_from_doc_email);
+		$ci->email->to($list);
+		$this->email->reply_to('info@telehealers.in', 'telehealers');
+		$subject = 'Appointment referral Accepted by '.$referal_to_doc_name;
+		$ci->email->subject($subject);
+		$ci->email->message($message);
+		$ci->email->send();
+		
+		$admin_email = 'info@telehealers.in';
+		$ci->email->from('info@telehealers.in', 'telehealers');
+		$list = array($admin_email);
+		$ci->email->to($list);
+		$this->email->reply_to('info@telehealers.in', 'telehealers');
+		$subject = 'Appointment referral Accepted by '.$referal_to_doc_name;
+		$ci->email->subject($subject);
+		$ci->email->message($message);
+		$ci->email->send();
+		
+			}
+		}
+		
+		$this->session->set_flashdata('message','Appointment Accepted!');
+		
+		redirect("admin/Appointment_controller/appointment_list_referral");
+	}
+	
+	function appointment_referral_reject($appointmaent_id){
+		$ci = get_instance();
+		$ci->load->library('email');
+		$email_config = $this->email_model->email_config();
+		if(is_array($email_config) && count($email_config)>0){
+			$protocol = $email_config->protocol;
+			$smtp_host = $email_config->mailpath;
+			$smtp_port = $email_config->port;
+			$smtp_user = $email_config->sender;
+			$smtp_pass = $email_config->mailtype;
+		}
+        $config['protocol'] = $protocol;
+        $config['smtp_host'] = $smtp_host;
+        $config['smtp_port'] = $smtp_port;
+        $config['smtp_user'] = $smtp_user; 
+        $config['smtp_pass'] = $smtp_pass;
+        $config['charset'] = "utf-8";
+        $config['mailtype'] = "html";
+        $config['newline'] = "\r\n";
+		$ci->email->initialize($config);
+		
+		$patient_id='';
+		$doctor_id_from='';
+		$doctor_id_to='';
+		$meet_url='';
+		$ref_id='';
+		
+		
+		$sql_pr = "select * from appointment_referral where appointment_id = '".$appointmaent_id."' ";
+		$res_pr = $this->db->query($sql_pr);
+		$result_pr = $res_pr->result_array();
+		if(is_array($result_pr) && count($result_pr)>0){
+			$doctor_id_to = $result_pr[0]['referral_to'];
+			$doctor_id_from = $result_pr[0]['referral_from'];
+			$ref_id = $result_pr[0]['id'];
+		}
+		
+		if($doctor_id_from!="" && $doctor_id_to!=""){
+			
+			$referal_from = $this->appointment_model->getdoctordata($doctor_id_from);
+			$referal_to = $this->appointment_model->getdoctordata($doctor_id_to);
+			
+			$referal_from_doc_name='';
+			$referal_from_doc_email='';
+			$referal_to_doc_name='';
+			$referal_to_doc_email='';
+			
+			
+			
+			if(is_array($referal_from) && count($referal_from)>0){
+				$referal_from_doc_name = $referal_from['doctor_name'];
+				$referal_from_doc_email = $referal_from['doc_email'];
+			}
+			if(is_array($referal_to) && count($referal_to)>0){
+				$referal_to_doc_name = $referal_to['doctor_name'];
+				$referal_to_doc_email = $referal_to['doc_email'];
+			}
+			$savedata = array(
+				'app_status' => '2'
+			);
+			$this->appointment_model->UpdateReferralAppointment($savedata,$ref_id);
+			if($referal_from_doc_email!=""){
+				
+			
+			$message = '<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #f1f1f1;">
+    <center style="width: 100%; background-color: #f1f1f1;">
+        <div style="display: none; font-size: 1px;max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
+            &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
+        </div>
+        <div style="max-width: 600px; margin: 0 auto;" class="email-container">
+            <!-- BEGIN BODY -->
+            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
+                <tbody><tr>
+                    <td valign="top" class="bg_white" style="padding: 1em 2.5em 0 2.5em;">
+                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                            <tbody><tr>
+                                <td class="logo" style="text-align: left;">
+                                    <h1>
+                                        <a href="https://telehealers.in/">
+                                        <img src="https://telehealers.in/assets/uploads/images/telehe2.png">    
+                                        </a>
+                                    </h1>
+                                </td>
+                            </tr>
+                        </tbody></table>
+                    </td>
+                </tr>
+                <tr>
+                    </tr></tbody></table><table class="bg_white" role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                        <tbody><tr style="border-bottom: 1px solid rgba(0,0,0,.05);">
+                            <td valign="middle" width="100%" style="text-align:left; padding: 0 2.5em;">
+                                <div class="product-entry">
+                                    <div class="text">
+                                        <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Hey '.$referal_from_doc_name.':</h2>
+										
+										<p>'.$referal_to_doc_name.' Rejected your appointment referral request!</p>	
+										
+										<p>Appointment ID - '.$appointmaent_id.'</p>
+									
+										<p>&nbsp;</p>
+										
+										<p>Kindly speak to admin for referring it to someone else</p>
+										
+										<p>&nbsp;</p>
+										
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody></table>
+                
+            
+            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
+                <tbody><tr>
+                    <td class="bg_white" style="text-align: center;">
+                       
+                    </td>
+                </tr>
+            </tbody></table>
+
+        </div>
+    </center>
+
+
+</body></html>';
+
+		
+		$ci->email->from('info@telehealers.in', 'telehealers');
+		$list = array($referal_from_doc_email);
+		$ci->email->to($list);
+		$this->email->reply_to('info@telehealers.in', 'telehealers');
+		$subject = 'Appointment Referral Rejected by '.$referal_to_doc_name;
+		$ci->email->subject($subject);
+		$ci->email->message($message);
+		$ci->email->send();
+		
+		
+		$admin_email = 'info@telehealers.in';
+		$ci->email->from('info@telehealers.in', 'telehealers');
+		$list = array($admin_email);
+		$ci->email->to($list);
+		$this->email->reply_to('info@telehealers.in', 'telehealers');
+		$subject = 'Appointment Referral Rejected by '.$referal_to_doc_name;
+		$ci->email->subject($subject);
+		$ci->email->message($message);
+		$ci->email->send();
+		
+		
+			}
+		}
+		
+		$this->session->set_flashdata('message','Appointment Rejected!');
+		
+		redirect("admin/Appointment_controller/appointment_list_referral");
+	}
+  
+	function appointment_referral($appointmaent_id){
+	    
+		//echo $p_id;die(); 
+		  
+		$data['title'] = "Patient referral";
+		//$data['patient_info'] = $this->patient_model->get_patient_inde_info($p_id);
+		
+		$user_type = $this->session->userdata('user_type');
+		if($user_type==1){
+			$user_id = $this->session->userdata('doctor_id');
+		}else{
+			$user_id = $this->session->userdata('user_id');
+		} 
+		$data['doctor_info'] = $this->doctor_model->getDoctorListByselect();
+		$data['get_appointment'] = $this->appointment_model->check_appointment_referral($appointmaent_id);
+			
+		$data['p_id'] = $appointmaent_id;
+		
+		$data['user_id'] = $user_id;
+		//echo $data['user_id'];die();
+		
+		//echo "<pre>";print_r($data['patient_info']);die();
+		
+		$this->load->view('admin/_header',$data);
+		$this->load->view('admin/_left_sideber');
+		$this->load->view('admin/referral_appointment');
+		$this->load->view('admin/_footer');
+	}  
+	
+	public function referral_appointment_save(){
+	 
+		$ci = get_instance();
+		$ci->load->library('email');
+        $config['protocol'] = "tls";
+        $config['smtp_host'] = "inpro8.fcomet.com";
+        $config['smtp_port'] = "465";
+        $config['smtp_user'] = "info@telehealers.in"; 
+        $config['smtp_pass'] = "Ajay@1234%";
+        $config['charset'] = "utf-8";
+        $config['mailtype'] = "html";
+        $config['newline'] = "\r\n";
+		$ci->email->initialize($config);
+
+		$appointment_id = $this->input->post('p_id',TRUE);
+		$referral_to = $this->input->post('doctor',TRUE);
+		
+		$user_type = $this->session->userdata('user_type');
+		if($user_type==1){
+			$user_id = $this->session->userdata('doctor_id');
+		}else{
+			$user_id = $this->session->userdata('user_id');
+		} 
+		$savedata =  array(
+				'appointment_id' => $appointment_id,
+				'referral_to' => $referral_to,
+				'referral_from' => $user_id,
+				'app_status' => 0,
+				'referral_date' => date("Y-m-d H:i:s"),
+			);
+		$get_appointment = $this->appointment_model->check_appointment_referral($appointment_id);
+		
+		if(is_array($get_appointment) && count($get_appointment)>0){
+			$ref_to = $get_appointment[0]['referral_to'];
+			$ref_from = $get_appointment[0]['referral_from'];
+			$ref_id = $get_appointment[0]['id'];
+			$this->appointment_model->UpdateReferralAppointment($savedata,$ref_id);
+			$get_appointment = $this->appointment_model->check_appointment_referral($appointment_id);
+		}else{
+			
+			$this->appointment_model->SaveReferralAppointment($savedata);
+		}
+		
+		$referal_from = $this->appointment_model->getdoctordata($user_id);
+		$referal_to = $this->appointment_model->getdoctordata($referral_to);
+		
+		$referal_from_doc_name='';
+		$referal_from_doc_email='';
+		$referal_to_doc_name='';
+		$referal_to_doc_email='';
+		
+		if(is_array($referal_from) && count($referal_from)>0){
+			$referal_from_doc_name = $referal_from['doctor_name'];
+			$referal_from_doc_email = $referal_from['doc_email'];
+		}
+		if(is_array($referal_to) && count($referal_to)>0){
+			$referal_to_doc_name = $referal_to['doctor_name'];
+			$referal_to_doc_email = $referal_to['doc_email'];
+		}
+		
+		//echo "<pre>";print_r($referal_from);
+		//echo "<pre>";print_r($referal_to);
+		//echo "<pre>";print_r($get_appointment);die();
+		
+		
+		$message = '<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #f1f1f1;">
+    <center style="width: 100%; background-color: #f1f1f1;">
+        <div style="display: none; font-size: 1px;max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
+            &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
+        </div>
+        <div style="max-width: 600px; margin: 0 auto;" class="email-container">
+            <!-- BEGIN BODY -->
+            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
+                <tbody><tr>
+                    <td valign="top" class="bg_white" style="padding: 1em 2.5em 0 2.5em;">
+                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                            <tbody><tr>
+                                <td class="logo" style="text-align: left;">
+                                    <h1>
+                                        <a href="http://telehealers.in/">
+                                        <img src="http://telehealers.in/assets/uploads/images/telehe2.png">    
+                                        </a>
+                                    </h1>
+                                </td>
+                            </tr>
+                        </tbody></table>
+                    </td>
+                </tr>
+                <tr>
+                    </tr></tbody></table><table class="bg_white" role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                        <tbody><tr style="border-bottom: 1px solid rgba(0,0,0,.05);">
+                            <td valign="middle" width="100%" style="text-align:left; padding: 0 2.5em;">
+                                <div class="product-entry">
+                                    <div class="text">
+                                        <p>Hey '.$referal_to_doc_name.',</p>
+                                        <p>Appointment Referral to you by '.$referal_from_doc_name.' ('.$referal_from_doc_email.').</p>
+                                        
+                                        <p>Appointment ID: '.$appointment_id.'</p>
+										
+										<p>Please check your doctor dashboard to accept the appointment of patient.</p>
+										
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody></table>
+                
+            
+            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
+                <tbody><tr>
+                    <td class="bg_white" style="text-align: center;">
+                    </td>
+                </tr>
+            </tbody></table>
+        </div>
+    </center>
+
+
+</body></html>';
+
+		$ci->email->from('info@telehealers.in', 'telehealers');
+		$list = array($referal_to_doc_email);
+		$ci->email->to($list);
+		$this->email->reply_to('info@telehealers.in', 'telehealers');
+		$ci->email->subject('Referral Appointment (Telehealers)');
+		$ci->email->message($message);
+		$ci->email->send();
+		
+		$admin_email = 'info@telehealers.in';
+		$ci->email->from('info@telehealers.in', 'telehealers');
+		$list = array($admin_email);
+		$ci->email->to($list);
+		$this->email->reply_to('info@telehealers.in', 'telehealers');
+		$ci->email->subject('Referral Appointment (Telehealers)');
+		$ci->email->message($message);
+		$ci->email->send();
+
+		$this->session->set_flashdata('exception','<div class="alert alert-success msg">Appointment has been successfully Referral.</div><br>');
+
+		redirect('admin/Appointment_controller/appointment_referral/'.$appointment_id);
+	
+			  
+  }	  
   
 }
