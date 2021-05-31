@@ -34,6 +34,7 @@ class Doctor_controller extends CI_Controller {
         $data['title'] = "Profile";
 		$data['doctor_info'] = $this->doctor_model->get_doctor_info($doctor_id);
 		$data['depart_info'] = $this->doctor_model->getDoctorDepartmentInfo();
+		$data['doc_language'] = $this->doctor_model->getDoctorlanguage();
 		$this->load->view('admin/_header',$data);
 		$this->load->view('admin/_left_sideber');
 		$this->load->view('admin/profile_setup');
@@ -51,7 +52,9 @@ class Doctor_controller extends CI_Controller {
         $data['title'] = "Profile";
 		$data['doctor_info'] = $this->doctor_model->get_doctor_info2($doctor_id);
 		$data['depart_info'] = $this->doctor_model->getDoctorDepartmentInfo();
-		//echo "<pre>";print_r($data['doctor_info']);die();
+		$data['doc_language'] = $this->doctor_model->getDoctorlanguage();
+		//echo "<pre>";print_r($data['doctor_info']);die(); 
+		
 		$this->load->view('admin/_header',$data);
 		$this->load->view('admin/_left_sideber');
 		$this->load->view('admin/doctor/update_doctor');
@@ -65,7 +68,9 @@ class Doctor_controller extends CI_Controller {
 		$this->form_validation->set_rules('name','Name','trim|required');
 		$this->form_validation->set_rules('phone','Phone','trim|required');
 		$this->form_validation->set_rules('registration_number','Registration number','trim|required');
-        $this->form_validation->set_rules('about_me','About me','trim|required');
+
+		//$this->form_validation->set_rules('registration_number','Registration number','trim|required');
+        //$this->form_validation->set_rules('about_me','About me','trim|required');
 
         $doctor_id = $this->input->post('doctor_id',TRUE);
 		
@@ -162,7 +167,7 @@ class Doctor_controller extends CI_Controller {
 					'blood_group' => $this->input->post('blood_group',TRUE),
 					'doctor_phone' => $this->input->post('phone',TRUE),
 					'address' => $this->input->post('address',TRUE),
-					'language' => $this->input->post('language',TRUE),
+					'language' => implode(',',$this->input->post('language',TRUE)),
 					'meet_url' => $this->input->post('meet_url',TRUE),
 					'about_me' => $this->input->post('about_me',TRUE),
 					'service_place' => $this->input->post('service_place',TRUE),
@@ -180,9 +185,11 @@ class Doctor_controller extends CI_Controller {
                 <strong>'.display('update_msg').'</strong> .
               </div>');
 			  if($doctor_id==1){
-					redirect('profile');
+					//redirect('profile');
+					redirect('admin/Doctor_controller/edit_profile/'.$doctor_id);
 			  }else{
-				  redirect('profile');
+				  //redirect('profile');
+				  redirect('admin/Doctor_controller/edit_profile/'.$doctor_id);
 			  }
                
 
@@ -190,6 +197,7 @@ class Doctor_controller extends CI_Controller {
 				
 				$data['doctor_info'] = $this->doctor_model->get_doctor_info($doctor_id);
 				$data['depart_info'] = $this->doctor_model->getDoctorDepartmentInfo();
+				$data['doc_language'] = $this->doctor_model->getDoctorlanguage();
 				$this->load->view('admin/_header',$data);
 				$this->load->view('admin/_left_sideber');
 				$this->load->view('admin/profile_setup');
@@ -203,7 +211,7 @@ class Doctor_controller extends CI_Controller {
 		//$this->form_validation->set_rules('fees','Fees','trim|required');
 		$this->form_validation->set_rules('name','Name','trim|required');
 		$this->form_validation->set_rules('phone','Phone','trim|required');
-		$this->form_validation->set_rules('about_me','About me','trim|required');
+		//$this->form_validation->set_rules('about_me','About me','trim|required');
 
         $doctor_id = $this->input->post('doctor_id',TRUE);
 		
@@ -301,7 +309,7 @@ class Doctor_controller extends CI_Controller {
 					'blood_group' => $this->input->post('blood_group',TRUE),
 					'doctor_phone' => $this->input->post('phone',TRUE),
 					'address' => $this->input->post('address',TRUE),
-					'language' => $this->input->post('language',TRUE),
+					'language' => implode(',',$this->input->post('language',TRUE)),
 					'meet_url' => $this->input->post('meet_url',TRUE),
 					'about_me' => $this->input->post('about_me',TRUE),
 					'service_place' => $this->input->post('service_place',TRUE),
@@ -317,22 +325,25 @@ class Doctor_controller extends CI_Controller {
                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                 <strong>'.display('update_msg').'</strong> .
               </div>');
-			  if($doctor_id==1){
-					redirect('profile');
-			  }else{
-				  redirect('admin/Doctor_controller/doctor_list');
-			  }
+			  
+			  redirect('admin/Doctor_controller/edit_profile/'.$doctor_id);
+			  
                
 
 			} else {
-				
-				$data['doctor_info'] = $this->doctor_model->get_doctor_info($doctor_id);
+				//echo "doctor_id--".$doctor_id;die();
+				$data['doctor_info'] = $this->doctor_model->get_doctor_info2($doctor_id);
 				$data['depart_info'] = $this->doctor_model->getDoctorDepartmentInfo();
-				$this->load->view('admin/_header',$data);
+				$data['doc_language'] = $this->doctor_model->getDoctorlanguage();
+				/* $this->load->view('admin/_header',$data);
 				$this->load->view('admin/_left_sideber');
 				$this->load->view('admin/profile_setup');
+				$this->load->view('admin/_footer'); */
+				$this->load->view('admin/_header',$data);
+				$this->load->view('admin/_left_sideber');
+				$this->load->view('admin/doctor/update_doctor');
 				$this->load->view('admin/_footer');
-
+				//redirect('admin/Doctor_controller/edit_profile/'.$doctor_id);
 			}
 	}
 	
@@ -341,7 +352,9 @@ class Doctor_controller extends CI_Controller {
 		$data['title'] = "Doctor List";
 
 		$data['depart_info'] = $this->doctor_model->getDoctorDepartmentInfo();
-
+		
+		$data['doc_language'] = $this->doctor_model->getDoctorlanguage();
+		
 		$this->load->view('admin/_header',$data);
 
 		$this->load->view('admin/_left_sideber');
@@ -521,7 +534,7 @@ class Doctor_controller extends CI_Controller {
 		
 		'address' => $this->input->post('address',TRUE),
 		
-		'language' => $this->input->post('language',TRUE),
+		'language' => implode(',',$this->input->post('language',TRUE)),
 		
 		'meet_url' => $this->input->post('meet_url',TRUE),
 		
@@ -566,6 +579,7 @@ class Doctor_controller extends CI_Controller {
 
 		$this->load->view('admin/_header',$data);
 		$data['depart_info'] = $this->doctor_model->getDoctorDepartmentInfo();
+		$data['doc_language'] = $this->doctor_model->getDoctorlanguage();
 		$this->load->view('admin/_left_sideber');
 
 		$this->load->view('admin/doctor/create_new_doctor',$data);  
@@ -720,6 +734,8 @@ Your feedback/requests are valuable to improve this platform.</p>
 		$this->load->view('admin/_footer');
 		
 	} 
+	
+	
 
 	public function approveDoctorSave(){
 		$content = $this->input->post('content',TRUE);
@@ -728,6 +744,40 @@ Your feedback/requests are valuable to improve this platform.</p>
 		$this->db->query($sql_ud);
 		$this->session->set_flashdata('message',"<div class='alert alert-success msg'>Content has been update successfully.</div>");
 		redirect('admin/Doctor_controller/approveDoctor');
+		
+	}
+	
+	public function languageDoctor()
+	{
+		$data['title'] = "Doctor Language";
+		
+		$content='';
+		$sql = "select * from doctor_content where id = '2'";
+		$res = $this->db->query($sql);
+		$result = $res->result_array();
+		if(is_array($result) && count($result)>0){
+			$content = $result[0]['content'];
+		}
+
+		$data['content'] = $content;
+
+		$this->load->view('admin/_header',$data);
+
+		$this->load->view('admin/_left_sideber');
+
+		$this->load->view('admin/doctor/languageDoctor');
+
+		$this->load->view('admin/_footer');
+		
+	} 
+	
+	public function languageDoctorSave(){
+		$content = $this->input->post('content',TRUE);
+		$desc_str = addslashes($content);
+		$sql_ud = "update doctor_content set content = '$desc_str' where id = '2'";
+		$this->db->query($sql_ud);
+		$this->session->set_flashdata('message',"<div class='alert alert-success msg'>Language has been update successfully.</div>");
+		redirect('admin/Doctor_controller/languageDoctor');
 		
 	}
 

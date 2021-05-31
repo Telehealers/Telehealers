@@ -34,6 +34,10 @@
                     <div class="portlet-body form">
 
                     <?php 
+                        $msg = $this->session->flashdata('message');
+                            if($msg !=''){
+                                  echo htmlspecialchars_decode($msg);
+                            }
                         $mag = $this->session->flashdata('exception');
                         if($mag !=''){
                             echo '<div class="alert alert-danger alert-dismissable">
@@ -41,8 +45,8 @@
                                  <strong>'.html_escape($mag).'</strong>
                             </div>';
                         }
-                        $attributes = array('class' => 'form-horizontal','target'=>'_blank','name'=>'p_info');
-                        echo form_open('admin/Appointment_controller/save_appointment', $attributes);                
+                        $attributes = array('class' => 'form-horizontal','target'=>'_self','name'=>'p_info');
+                        echo form_open_multipart('Appointment/patientAppointment', $attributes);                
                     ?>
                         <div class="form-body">	
 
@@ -67,28 +71,41 @@
 						</div>
 
 						</div>
-						
-
+						                      <div class="form-group">
+ 
+                                <label class="col-md-3 control-label"><span class="text-danger">*</span><?php echo display('patient')?> :</label>
+                                <div class="col-md-5">
+                                        <select class="form-control"  name="patient_id" id="patient_id"  required>
+                                            <option value="">Select Patient</option>
+                                            <?php foreach($patient_info as $val){?>
+                                            <option value="<?php echo $val->patient_id?>"><?php echo $val->patient_id?> (<?php echo $val->patient_name?>)</option>
+                                            <?php }?>
+                                        </select>
+                                    </div></div></div>
+                            <input type="hidden" name="doctor_id" value="<?php echo $this->session->userdata('doctor_id')?>">
                             <div class="form-group">
                                 <label class="col-md-3 control-label"><span class="text-danger">*</span><?php echo display('date')?> :</label>
                                 <div class="col-md-5">
-                                    <input type="text" id="date" value="<?php echo set_value('date'); ?>" name="date"  class="form-control datepicker3" autocomplete="off"  placeholder="<?php echo display('date_placeholder')?>"  required="" >
+                                    <input type="text" id="p_date" value="<?php echo set_value('date'); ?>" name="p_date"  onchange="loadSchedul()"class="form-control datepicker3" autocomplete="off"  placeholder="<?php echo display('date_placeholder')?>"  required="" >
                                     <span class="text-danger"><?php echo form_error('date'); ?> </span>
                                 </div>
                             </div>
 
-                            <div class="form-group">
+                            <!-- <div class="form-group">
                                 <label class="col-md-3 control-label"><span class="text-danger">*</span> <?php echo display('patient_id')?> :</label>
                                 <div class="col-md-5">
                                     <input type="text" name="p_id" id="patient_id" onkeyup="loadName(this.value);" class="form-control" autocomplete="off" placeholder="<?php echo display('patient_id')?>" value="<?php echo isset($a[0]['p_id']) ? $a[0]['p_id'] : set_value('p_id'); ?>" required> 
                                     <span class="text-danger"><?php echo form_error('p_id'); ?> </span>
                                     <span class='p_name' class="text-danger"></span>
                                 </div>
-                            </div>
+                            </div> -->
 
-                            <div class="form-group">
+
+
+
+                           <!--  <div class="form-group">
                                 <label class="col-md-3 control-label "><span class="text-danger">*</span><?php echo display('venue')?> :</label>
-                                <div class="col-md-5">
+ -->                                <!-- <div class="col-md-5">
                                     <select class="form-control v_name" id="venue" onchange="loadSchedul(this.value);" name="venue" value="<?php echo set_value('venue')?>" required>
                                         <option value="">--<?php echo display('select_venue');?>--</option>
                                         <?php foreach ($venue_info as $value) {
@@ -97,10 +114,10 @@
                                     </select>
                                     <span class="text-danger"><?php echo form_error('venue'); ?> </span>
                                 </div>
-                            </div>
+                            </div> -->
 
                             <div class="form-group">
-                                <label class="col-md-3 control-label"><span class="text-danger">*</span><?php echo display('choose_serial')?> :</label>
+                                <div class="col-md-3"></div>
                                 <div class="col-md-5 schedul"></div>
                             </div>
 
@@ -117,7 +134,7 @@
                             <div class="form-group row">
                                 <div class="col-sm-offset-3 col-sm-6">
                                     <button type="reset" class="btn btn-danger"><?php echo display('reset')?></button>
-                                    <button type="submit" disabled class="btn btn-success"><?php echo display('appointment')?></button>
+                                    <button type="submit"  class="btn btn-success"><?php echo display('appointment')?></button>
                                 </div>
                             </div>
 
@@ -131,14 +148,5 @@
     </section>
 </div>
 <script>
-function setvenue(val){
-		
-		$('#venue').val('');
-		
-	}
-	$(document).ready(function(){
-		$('#date').click(function(){
-			$('#venue').val('');
-		});
-	});
+
 </script>

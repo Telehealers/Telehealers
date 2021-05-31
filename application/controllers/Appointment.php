@@ -946,7 +946,14 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		$ci->email->message($message);
 		$ci->email->send();
 		
-		
+		$user_type = $this->session->userdata('user_type');
+
+		if($user_type==1){
+			$mes='successfully created appointment';
+			$this->session->set_flashdata('message',$mes);
+		redirect("admin/Appointment_controller/appointment_list");
+		}		
+		else{
 		$appointmentData = array(
 		'date' => $this->input->post('p_date',TRUE),
 		'patient_id' => $patient_id,
@@ -986,9 +993,10 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		);
 		$this->session->set_userdata($session_data);
 		$this->session->set_flashdata('message',"<div class='alert alert-success'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>".$mes."</div>");
-        redirect('Patient');
+        	redirect('Patient');
 		//$this->load->view('public/process_appointment_info',$data); 
 	}
+}
 	
  
 /* 

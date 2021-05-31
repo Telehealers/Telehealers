@@ -114,4 +114,24 @@ class Doctor_model extends CI_model {
 
 	}
 	
+	public function getDoctorlanguage(){
+		
+		$SQL = "select * from doctor_content where id = '2'";
+		
+		$query = $this->db->query($SQL);
+
+		$result = $query->result_array();				
+		$langArr = array();
+		if(isset($result[0]['content']) && $result[0]['content'] != ""){
+			$language = $result[0]['content'];
+			$languageArr = explode(',',$language);
+			foreach($languageArr as $val){
+				$langArr[] = trim($val);
+			}
+		}
+		return $langArr;
+		
+		
+	}
+	
 }       

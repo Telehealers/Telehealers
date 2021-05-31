@@ -128,7 +128,7 @@ class Prescription_model extends CI_model {
              patient_tbl.patient_name,
              patient_tbl.patient_phone,
              patient_tbl.sex,
-             patient_tbl.birth_date,
+             patient_tbl.age,
              patient_tbl.picture,
              doctor_tbl.doctor_id,
              doctor_tbl.doctor_name,

@@ -57,7 +57,7 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group">
+                                <!-- <div class="form-group">
                                     <label class="col-md-3 control-label"><span class="text-danger"> * </span> <?php echo display('patient_id'); ?> </label>
                                     <div class="col-md-6">
                                         <input type="text" onkeyup="load_patient_id()" id="patient_id" autocomplete="off" name="patient_id" class="form-control" required value="<?php echo set_value('patient_id'); ?>" placeholder="<?php echo display('patient_id'); ?>"> 
@@ -66,7 +66,7 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group">
+ -->                                <div class="form-group">
                                     <label class="col-md-3 control-label"><span class="text-danger"> * </span> <?php echo display('email'); ?></label>
                                     <div class="col-md-6">
                                         <input type="text" name="email" value="<?php echo set_value('email'); ?>" class="form-control" required placeholder="<?php echo display('email'); ?>"> 
@@ -74,13 +74,16 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group">
+                                <!-- <div class="form-group">
                                     <label class="col-md-3 control-label"><span class="text-danger"> * </span> <?php echo display('birth_date'); ?></label>
                                     <div class="col-md-4 ">
                                        <input type="text" name="birth_date" value="" class="form-control datepicker1 birth_date"  placeholder="<?php echo display('date_placeholder'); ?>">
-                                    </div>
-                                    <div class="col-md-2 ">
-                                       <input type="text" name="old" id="old" class="form-control" placeholder="<?php echo display('age'); ?>">
+                                    </div> -->
+                                    <div class="form-group">
+
+                                    <label class="col-md-3 control-label"> <?php echo display('age'); ?></label>
+                                    <div class="col-md-4 ">
+                                       <input type="text" name="age" id="age" class="form-control" placeholder="<?php echo display('age'); ?>">
                                     </div>
                                 </div>
 
@@ -88,7 +91,7 @@
                                 <div class="form-group">
                                     <label class="col-md-3 control-label"> <span class="text-danger"> * </span> <?php echo display('phone_number'); ?></label>
                                     <div class="col-md-6">
-                                        <input type="number"  name="phone" value="<?php echo set_value('phone'); ?>" class="form-control" required placeholder="<?php echo display('phone_number'); ?>"> 
+                                        <input type="tel"  name="phone" value="<?php echo set_value('phone'); ?>" class="form-control" required placeholder="<?php echo display('phone_number'); ?>"> 
                                         <span class="text-danger"><?php echo form_error('phone'); ?></span>
                                     </div>
                                 </div>
@@ -107,38 +110,8 @@
                                     </div>
                                 </div>
                                
-                                <div class="form-group">
-                                    <label class="col-md-3 control-label"><?php echo display('blood_group'); ?> </label>
-                                    <div class="col-md-6">
-                                        <select class="form-control" name="blood_group">
-                                            <option value=''>--<?php echo display('blood_group');?>--</option>
-                                            <option value='A+'>A+</option>
-                                            <option value='A-'>A-</option>
-                                            <option value='B+'>B+</option>
-                                            <option value='B-'>B-</option>
-                                            <option value='O+'>O+</option>
-                                            <option value='O-'>O-</option>
-                                            <option value='AB+'>AB+</option>
-                                            <option value='AB-'>AB-</option>
-                                            <option value='Unknown'>Unknown</option>
-                                        </select>
-                                    </div>
-                                </div>
+                             
 
-                                <div class="form-group">
-                                <label class="col-md-3 control-label"><?php echo display('address'); ?></label>
-                                    <div class="col-md-6">
-                                        <textarea name="address" value="<?php echo display('address'); ?>" class="form-control"></textarea>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="col-md-3 control-label"><?php echo display('picture'); ?></label>
-                                    <div class="col-md-6">
-                                        <input type="file" name="picture">       
-                                    </div>
-                                </div>
-                            </div>
 
                             <div class="form-group row">
                                 <div class="col-sm-offset-3 col-sm-6">
