@@ -12,36 +12,35 @@
     <!-- Bootstrap CSS -->
 
     <link rel="stylesheet" href="<?php echo base_url();?>web_assets2/css/main.css">
-  <link href="<?php echo base_url()?>assets/plugins/jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
+	<link href="<?php echo base_url()?>assets/plugins/jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
-  <link rel="stylesheet" href="<?php echo base_url();?>web_assets2/appointment/css/main.css">
+	<link rel="stylesheet" href="<?php echo base_url();?>web_assets2/appointment/css/main.css">
     <link rel="stylesheet" href="<?php echo base_url();?>web_assets2/appointment/css/style.css">
     <link rel="stylesheet" href="<?php echo base_url();?>web_assets2/appointment/css/calendar_style.css">
     <link rel="stylesheet" type="text/css" media="screen" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <!--     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"  crossorigin="anonymous"></script>
  -->
+<!-- jQuery -->
 
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.2/js/intlTelInput.js'></script>
+
+ <script src='https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.2/js/intlTelInput.js'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js'></script>
 
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"  crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.js"></script>
 
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.css" rel="stylesheet">
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment-with-locales.min.js"></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
    <title><?php echo $meta_info[0]['page_title']; ?></title>
-  <meta name="keywords" content="<?php echo $meta_info[0]['meta_keywords']; ?>">
-  <meta name="description" content="<?php echo $meta_info[0]['meta_description']; ?>">
-  <script>
+	<meta name="keywords" content="<?php echo $meta_info[0]['meta_keywords']; ?>">
+	<meta name="description" content="<?php echo $meta_info[0]['meta_description']; ?>">
+	<script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
   gtag('config', 'G-Y9P95E4VWH');
 </script>
-  <script type="text/javascript">
+	<script type="text/javascript">
 var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
 (function(){
 var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
@@ -265,48 +264,48 @@ input.range::-ms-fill-upper {
 
 /** button group styles **/
  .btn-group {
-   border-radius: 1rem;
-   /* box-shadow: -2.3px -2.3px 3.8px rgba(255, 255, 255, 0.2), -6.3px -6.3px 10.6px rgba(255, 255, 255, 0.3), -15.1px -15.1px 25.6px rgba(255, 255, 255, 0.4), -50px -50px 85px rgba(255, 255, 255, 0.07), 2.3px 2.3px 3.8px rgba(0, 0, 0, 0.024), 6.3px 6.3px 10.6px rgba(0, 0, 0, 0.035), 15.1px 15.1px 25.6px rgba(0, 0, 0, 0.046), 50px 50px 85px rgba(0, 0, 0, 0.07); */
+	 border-radius: 1rem;
+	 /* box-shadow: -2.3px -2.3px 3.8px rgba(255, 255, 255, 0.2), -6.3px -6.3px 10.6px rgba(255, 255, 255, 0.3), -15.1px -15.1px 25.6px rgba(255, 255, 255, 0.4), -50px -50px 85px rgba(255, 255, 255, 0.07), 2.3px 2.3px 3.8px rgba(0, 0, 0, 0.024), 6.3px 6.3px 10.6px rgba(0, 0, 0, 0.035), 15.1px 15.1px 25.6px rgba(0, 0, 0, 0.046), 50px 50px 85px rgba(0, 0, 0, 0.07); */
    box-shadow : rgb(0 0 0 / 15%) 1.95px 1.95px 2.6px;
 }
  .btn-group__item {
-   border: none;
-   min-width: 6rem;
-   padding: 1rem 2rem;
-   background-color: #eee;
-   cursor: pointer;
-   margin: 0;
-   box-shadow: inset 0px 0px 0px -15px rebeccapurple;
-   transition: all 300ms ease-out;
+	 border: none;
+	 min-width: 6rem;
+	 padding: 1rem 2rem;
+	 background-color: #eee;
+	 cursor: pointer;
+	 margin: 0;
+	 box-shadow: inset 0px 0px 0px -15px rebeccapurple;
+	 transition: all 300ms ease-out;
 }
  .btn-group__item:last-child {
-   border-top-right-radius: 1rem;
-   border-bottom-right-radius: 1rem;
+	 border-top-right-radius: 1rem;
+	 border-bottom-right-radius: 1rem;
 }
  .btn-group__item:first-child {
-   border-top-left-radius: 1rem;
-   border-bottom-left-radius: 1rem;
+	 border-top-left-radius: 1rem;
+	 border-bottom-left-radius: 1rem;
 }
  .btn-group__item:hover, .btn-group__item:focus {
-   color: rebeccapurple;
-   box-shadow: inset 0px -20px 0px -15px rebeccapurple;
+	 color: rebeccapurple;
+	 box-shadow: inset 0px -20px 0px -15px rebeccapurple;
 }
  .btn-group__item:focus {
-   outline: none;
+	 outline: none;
 }
  .btn-group__item:after {
-   content: '✔️';
-   margin-left: 0.5rem;
-   display: inline-block;
-   color: rebeccapurple;
-   position: absolute;
-   transform: translatey(10px);
-   opacity: 0;
-   transition: all 200ms ease-out;
+	 content: '✔️';
+	 margin-left: 0.5rem;
+	 display: inline-block;
+	 color: rebeccapurple;
+	 position: absolute;
+	 transform: translatey(10px);
+	 opacity: 0;
+	 transition: all 200ms ease-out;
 }
  .btn-group__item--active:after {
-   opacity: 1;
-   transform: translatey(-2px);
+	 opacity: 1;
+	 transform: translatey(-2px);
 }
 
 #outer {
@@ -479,10 +478,7 @@ input.range::-ms-fill-upper {
     <div class="row pt-4" >
     <div class="col-sm-12 col-md-4 col-lg-4">
     <div class="dropdown">
-  <button id="dLabel" class="dropdown-select float-right" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-    Select Language
-    <span class="caret" id="language"></span>
-  </button>
+  <button id="dLabel" class="dropdown-select float-right" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >Select Language<span class="caret" id="language"></span></button>
   <ul class="dropdown-menu" id=""style="height: 200px;overflow: auto;" aria-labelledby="dLabel">
     <?php if(is_array($language_arr) && count($language_arr)>0){
                                         foreach($language_arr as $val){
@@ -495,23 +491,23 @@ input.range::-ms-fill-upper {
 
     <div class="col-sm-12 col-md-4 col-lg-4" style="padding-left: 5%;">
     <div class="form-group">
-            <div class='input-group date' id='datetimepicker1'>
-               <input type='text' class="form-control" />
+            <div class='input-group date' id='datepicker'>
+               <input type='text' class="form-control" value="<?php echo date("Y-m-d");?>" />
                <span class="input-group-addon">
                <span class="glyphicon glyphicon-calendar"></span>
                </span>
             </div>
          </div>
     </div>
-    <div class="col-sm-12 col-md-4 col-lg-4" style="display:flex;margin-top: 1%;">
-    <div class="form-check" style="margin-left:30px">
-  <input class="form-check-input" type="radio" name="flexRadioDefault" value="covid" id="flexRadioDefault1" checked>
-  <label class="form-check-label" for="flexRadioDefault1">Covid</label>
-</div>
-<div class="form-check" style="margin-left:30px">
-  <input class="form-check-input" type="radio" name="flexRadioDefault" value="non_covid" id="flexRadioDefault2" >
-  <label class="form-check-label" for="flexRadioDefault2">Non-Covid</label>
-</div>
+    <div class="col-sm-12 col-md-4 col-lg-4" style="display:flex;margin-top: 1%;" id="">
+        <div class="form-check" style="margin-left:30px">
+          <input class="form-check-input" type="radio" name="flexRadioDefault" value="covid" id="flexRadioDefault1" checked>
+          <label class="form-check-label" for="flexRadioDefault1">Covid</label>
+      </div>
+  <div class="form-check" style="margin-left:30px">
+        <input class="form-check-input" type="radio" name="flexRadioDefault" value="non_covid" id="flexRadioDefault2" >
+        <label class="form-check-label" for="flexRadioDefault2">Non-Covid</label>
+  </div>
 
     </div>
     </div>
@@ -519,8 +515,8 @@ input.range::-ms-fill-upper {
     <div class="col-sm-12 col-md-10 col-lg-10">
     <div>
     <label for="customRange3" class="form-label labelStyle" >Book Time Slot</label>
-    <fieldset class="range__field">
-   <input class="range" type="range" min="0" max="12">
+    <fieldset class="range__field" id="time_hour" value="10">
+   <input class="range" type="range" min="-2" max="10" value="-2">
    <svg role="presentation" width="100%" height="10" xmlns="http://www.w3.org/2000/svg">
       <rect class="range__tick" x="0%" y="3" width="1" height="10"></rect>
       <rect class="range__tick" x="8.3%" y="3" width="1" height="10"></rect>
@@ -539,26 +535,26 @@ input.range::-ms-fill-upper {
 
    </svg>
    <svg role="presentation" width="100%" height="14" xmlns="http://www.w3.org/2000/svg">
-      <text class="range__point" x="0%" y="14" text-anchor="start">0</text>
-      <text class="range__point" x="8.3%" y="14" text-anchor="middle">1</text>
-      <text class="range__point" x="16.6%" y="14" text-anchor="middle">2</text>
-      <text class="range__point" x="24.9%" y="14" text-anchor="middle">3</text>
-      <text class="range__point" x="33.2%" y="14" text-anchor="middle">4</text>
-      <text class="range__point" x="41.5%" y="14" text-anchor="middle">5</text>
-      <text class="range__point" x="49.8%" y="14" text-anchor="middle">6</text>
-      <text class="range__point" x="58.1%" y="14" text-anchor="middle">7</text>
-      <text class="range__point" x="66.4%" y="14" text-anchor="middle">8</text>
-      <text class="range__point" x="74.7%" y="14" text-anchor="middle">9</text>
-      <text class="range__point" x="83%" y="14" text-anchor="end">10</text>
-      <text class="range__point" x="91.3%" y="14" text-anchor="middle">11</text>
-      <text class="range__point" x="99.6%" y="14" text-anchor="end">12</text>
+      <text class="range__point" x="0%" y="14" text-anchor="start">10</text>
+      <text class="range__point" x="8.3%" y="14" text-anchor="middle">11</text>
+      <text class="range__point" x="16.6%" y="14" text-anchor="middle">12</text>
+      <text class="range__point" x="24.9%" y="14" text-anchor="middle">1</text>
+      <text class="range__point" x="33.2%" y="14" text-anchor="middle">2</text>
+      <text class="range__point" x="41.5%" y="14" text-anchor="middle">3</text>
+      <text class="range__point" x="49.8%" y="14" text-anchor="middle">4</text>
+      <text class="range__point" x="58.1%" y="14" text-anchor="middle">5</text>
+      <text class="range__point" x="66.4%" y="14" text-anchor="middle">6</text>
+      <text class="range__point" x="74.7%" y="14" text-anchor="middle">7</text>
+      <text class="range__point" x="83%" y="14" text-anchor="end">8</text>
+      <text class="range__point" x="91.3%" y="14" text-anchor="middle">9</text>
+      <text class="range__point" x="99.6%" y="14" text-anchor="end">10</text>
    </svg>
 </fieldset>
     </div>
     </div>
     <div class="col-sm-12 col-md-2 col-lg-2" style="margin-top: 40px;">
-    <div class="btn-group" role="group" aria-label="Basic example">
-  <button type="button" class="btn btn-secondary">A M</button>
+    <div class="btn-group" role="group" id="meredium" aria-label="Basic example">
+  <button type="button" id="ambtn" class="btn btn-secondary">A M</button>
   <button type="button" class="btn btn-secondary">P M</button>
 
 </div>
@@ -566,14 +562,14 @@ input.range::-ms-fill-upper {
     </div>
     <div class="row mb-3 mt-4" style="padding-left:110px;padding-right:110px">
     <div class="col-12">
-    <div class="btn-group" role="group" aria-label="Basic example">
-  <button type="button" class="btn btn-secondary">0:0</button>
+    <div class="btn-group"id="minute" role="group" aria-label="Basic example">
+  <button type="button" id="btn1" class="btn btn-secondary">0:00</button>
   <button type="button" class="btn btn-secondary">0:15</button>
   <button type="button" class="btn btn-secondary">0:30</button>
   <button type="button" class="btn btn-secondary">0:45</button>
 </div>
 <div class="float-right">
-<label for="customRange3" class="form-label labelStyle" style="margin-bottom: 0 !important;padding-top: 5px;">5/31/2021, 1:30:24 AM</label>
+<label for="customRange3" id="time" class="form-label labelStyle" style="margin-bottom: 0 !important;padding-top: 5px;"></label>
 
 </div>
     </div>
@@ -605,7 +601,7 @@ input.range::-ms-fill-upper {
     </div>
 <script>
 
-function getdoctors(language,date,hour,min,am_pm,department){
+function getDoctors(language,date,hour,min,am_pm,department){
     $('#doctor_cards').remove();
     $.ajax({
     url:base_url+'index.php/Welcome/getdoctorforappointment',
@@ -617,14 +613,88 @@ function getdoctors(language,date,hour,min,am_pm,department){
     }
   });
 }
+function cleanHours(originalVal){
+  originalVal=parseInt(originalVal)
+ if(originalVal<=0){
+      originalVal+=12;
+    }
+  return originalVal
+}  
+function getTime(date,hour, minute,am_pm){
+  date = date ? date : $('#datepicker').datepicker('getFormattedDate');
+  date_cool = new Date(date);
+  hour = hour ? hour : cleanHours($('#time_hour')[0].elements[0].value);
+  minute= minute ? minute: $('#minute .active').text().substr(2,4);
+  am_pm=am_pm? am_pm : ($('#meredium .active').text()).replace(/\s/g, "");
+  document.getElementById("time").innerHTML = date_cool.toDateString()+" "+hour+":"+minute+" "+am_pm;
+  language=$('#dLabel ').text()
+  if(language>='Select Language'){
+    language='';
+  }
+  var department
+  if($('input:radio[id^="flexRadioDefault"]')[0].checked){
+    department=5; // default dept general dept / general physician , needs to be checked with db 
+  }
+  if($('input:radio[id^="flexRadioDefault"]')[1].checked){
+    console.log($('#department_type').value);
+  }
 
+
+
+
+
+}
 $(document).ready(function(){
-  //var $:any;
-  $("#datepicker").datepicker();
+
+// $('#minute button').click(function(){
+//     console.log('hello');
+// });
+  $("#datepicker").datepicker(
+{format: "yyyy-mm-dd"
+});
+
+$('#btn1').ready(function(){
+  $('#btn1').addClass("active");
+});
+$('#ambtn').ready(function(){
+  $('#ambtn').addClass("active");
+});
+$('#datepicker').on('changeDate',function(e) {
+    var date=($('#datepicker').datepicker('getFormattedDate'));
+    getTime(date);
+    console.log(date);
+
+  });
+
 $('#dLabel ').on('DOMSubtreeModified',function(e){
     var language=e.target.innerHTML;
-
+    console.log(language);
 });   
+
+
+
+$('#time_hour').on('change', function(ev){
+    var hour = cleanHours(parseInt(ev.target.value));
+    getTime(null,hour,null,null);
+
+
+});
+
+$('#meredium button').on('click',function(e){
+
+  $(this).addClass("active").siblings().removeClass("active");
+  getTime();
+
+});
+$('#minute button').on('click',function(e){
+  var minute=(e.target.innerHTML).substr(2, 4)
+  $(this).addClass("active").siblings().removeClass("active");
+  getTime();
+
+});
+$('#elem').on('click',function(e){
+  $(this).addClass("active").siblings().removeClass("active");
+});
 
 
 
@@ -647,13 +717,17 @@ $(document).on('click', 'input:radio[id^="flexRadioDefault"]', function(event) {
   var queryType = event.target.value;
   var base_url = $('#base_url').val();
 
-if(queryType == "covid"){
+  if(queryType == "covid"){
   // department_type
   document.getElementById('department_type').style.display = 'none';
-}
 
-if(queryType == "non_covid"){
+
+  }
+
+  if(queryType == "non_covid"){
   document.getElementById('department_type').style.display = 'block';
+  
+
 }
 });
 
@@ -673,10 +747,10 @@ $(function() {
        var items = elem.children();
 
        // Inserting Buttons
-       elem.prepend('<div id="right-button" style="visibility: hidden;font-size:35px"><a href="#" ><</a></div>');
+       elem.prepend('<div id="right-button" style="visibility: hidden;font-size:35px"><a href="#"><</a></div>');
        elem.append('  <div id="left-button" style="font-size:35px"><a href="#" >></a></div>');
 
-       // Inserting Inner
+//       Inserting Inner
        items.wrapAll('<div id="inner" />');
 
        // Inserting Outer
@@ -696,7 +770,8 @@ $(function() {
            setVisible($('#left-button'));
          }
        };
-       updateUI();
+ //      updateUI();
+
 
        // $('#dLabel').on('change',function(){
        //  debugger;
@@ -729,18 +804,18 @@ $(function() {
      });
 
 
-const buttons = document.querySelectorAll(".btn-group__item");
-buttons.forEach(button => {
-  button.addEventListener("click",() => {
-    // do some action according to button
+// const buttons = document.querySelectorAll(".btn-group__item");
+// buttons.forEach(button => {
+//   button.addEventListener("click",() => {
+//     // do some action according to button
 
-    // show success feedback
-    button.classList.add("btn-group__item--active");
-    setTimeout(() => {
-      button.classList.remove("btn-group__item--active");
-    },600)
-  })
-})
+//     // show success feedback
+//     button.classList.add("btn-group__item--active");
+//     setTimeout(() => {
+//       button.classList.remove("btn-group__item--active");
+//     },600)
+//   })
+// })
 
 
 $('.dropdown-menu li').on('click', function() {
@@ -832,18 +907,18 @@ $(document).on('click', '.dropdown-menu li a', function() {
     $('#datebox').val($(this).html());
 });
   $(document).on("click","#add_service", function(){
-  var services =  $('input[name="service"]:checked').val();
+  var services =	$('input[name="service"]:checked').val();
   var base_url = $('#base_url').val();
-//  $('.multi_step_form .book_popup_11').remove();
+//	$('.multi_step_form .book_popup_11').remove();
   if(services==""){
     alert("Please select service first");
     return false;
   }
   if(services=="Covid Consultancy"){
-  //  var getHtml = $('#userdiv').html();
-  //  $(getHtml).insertAfter('#book_popup_2');
+  //	var getHtml = $('#userdiv').html();
+  //	$(getHtml).insertAfter('#book_popup_2');
   }else{
-  //  $('.multi_step_form .book_popup_11').remove();
+  //	$('.multi_step_form .book_popup_11').remove();
   }
   $.ajax({
     url:base_url+'index.php/Welcome/getservicetype',
@@ -860,9 +935,9 @@ $(document).on('click', '.dropdown-menu li a', function() {
 
 
 $(document).on("click","#add_servicetype", function(){
-  var servicestype =  $('input[name="servicetype"]:checked').val();
+  var servicestype =	$('input[name="servicetype"]:checked').val();
   var base_url = $('#base_url').val();
-  var lang_set_val =  $('#service3').val();
+  var lang_set_val =	$('#service3').val();
 
   $('#service2').val(servicestype);
   //alert(lang_set_val)
@@ -900,7 +975,7 @@ $(document).on("click","#app_type", function(){
 
   $(document).on("click",".add_patient2", function(){
     $('.multi_step_form .book_popup_4').remove();
-  var p_type =  $('input[name="p_type"]:checked').val();
+  var p_type =	$('input[name="p_type"]:checked').val();
   //alert(p_type);
   if(p_type == 1){
     var getHtml = $('#patient_type').html();
@@ -992,7 +1067,7 @@ var current_fs, next_fs, previous_fs; //fieldsets
 
 
 /*$(".add_patient2").click(function () {
-  var p_type =  $('input[name="p_type"]:checked').val();
+  var p_type =	$('input[name="p_type"]:checked').val();
   //alert(p_type);
   if(p_type == 1){
     var getHtml = $('#patient_type').html();
