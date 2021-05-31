@@ -1532,17 +1532,17 @@ public function registration()
           common(like English) and other(like other state's language/boli) languages, 
 		  a 3-categorized language set.
     */
-	public function getdoctorforappointment($department_type, $preferred_language, $booking_time){
+	public function getdoctorforappointment(){
 		//NOTE: Input can also be mapped to post input, uncomment below comments
 		// to use them.
-		// $department_type = $this->input->post('department_type',TRUE);
+		$department_type = $this->input->post('department_type',TRUE);
 		$department_filter = ($department_type)? '(dpt.department_id = '.$department_type.') AND ':"";
-		// $preferred_language = $this->input->post('preferred_language', TRUE);
+		 $preferred_language = $this->input->post('preferred_language', TRUE);
 		$preferred_language_filter = '(language LIKE "%'.$preferred_language.'%")';
-		// $booking_time = $this->input->post('booking_date', TRUE)." ".
-		// 	$this->input->post("booking_hour",TRUE).":".
-		// 	$this->input->post("booking_minute", TRUE).":00 ".
-		// 	$this->input->post("booking_am_pm", TRUE);
+		$booking_time = $this->input->post('booking_date', TRUE)." ".
+			$this->input->post("booking_hour",TRUE).":".
+			$this->input->post("booking_minute", TRUE).":00 ".
+			$this->input->post("booking_am_pm", TRUE);
 		$booking_time = urldecode($booking_time);
 		$sql_query = 'SELECT picture, designation, doctor_name, doctor_id, '.
 			'(IF('.$preferred_language_filter.', RAND(), -RAND())) as bias_reduction_score '. //Doctor selection bias reduction logic
