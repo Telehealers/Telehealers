@@ -434,9 +434,9 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		/* Mail client intialization */
 		$email_config = $this->email_model->email_config();
 		if (!$email_config->protocol) {
-			/**TODO error(bad email config, fill email-table).
-			* NOTE: Must never happen on dep-environments 
-			*/
+			/** Bad email table */
+			log_message('error',"Bad email config, fill email-sql-table correctly.");
+			show_404();
 		}
 		$config['protocol'] = $email_config->protocol;
 		$config['smtp_host'] = $email_config->mailpath;
@@ -492,17 +492,18 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		$venue_info_query = "select * from venue_tbl where venue_id = '".$venue_id."'";
 		$venue_data = $this->db->query($venue_info_query)->result()->fetch_row();
 		if (!$venue_data) {
-			/**Bad venue fetch, 
-			 * TODO: return bad response */
+			/**Bad venue fetch */
+			log_message('error',"Bad venue_id(".$venue_id.") coming from request.");
+			show_404();
 		}
 		$venue_name = $venue_data->venue_name;
 
 		$doctor_info_query = "select doctor_name, log_id from doctor_tbl where doctor_id = '".$doctor_id."'";
 		$doctor_entry = $this->db->query($doctor_info_query)->result()->fetch_row();
 		if (!$doctor_entry) {
-			/** Bad doctor_id from input
-			 * TODO: Respond bad input.
-			 */
+			/** Bad doctor_id from input */
+			log_message('error', "Bad doctor_id(".$doctor_id.") in ");
+			show_404();
 		}
 		$doctor_name = $doctor_entry->doctor_name; 
 		$log_id = $doctor_entry->log_id;
@@ -531,9 +532,9 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		$log_info_query = "select email from log_info where log_id = '".$log_id."'";
 		$log_entry = $this->db->query($log_info_query)->result()->fetch_row();
 		if (!$log_entry) {
-			/** Bad log_info table management.
-			 * TODO: Respond bad doctor_table.log_id
-			 */
+			/** Bad log_info table management.*/
+			log_message('error',"Bad log_id (".$log_id.")");
+			show_404();
 		}
 		$doctor_email = $log_entry->email;
 
