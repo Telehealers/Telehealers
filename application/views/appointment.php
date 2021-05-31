@@ -469,17 +469,17 @@ input.range::-ms-fill-upper {
     <div class="container" style="background: white;margin-top: 20px;border-radius: 10px;box-shadow: 4px 5px 8px #ababab;">
     <div class="row" style="text-align:center; color:white;background:grey;border-top-left-radius: 8px;border-top-right-radius: 8px;padding:10px">
     <div class="col-12">
-    <h4>Appontment</h4>
+    <h4>Book Appointment</h4>
     </div>
     </div>
     <div class="row pt-4" >
     <div class="col-sm-12 col-md-4 col-lg-4">
     <div class="dropdown">
-  <button id="dLabel" class="dropdown-select float-right" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+  <button id="dLabel" class="dropdown-select float-right" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange="changeLang(this.value);">
     Select Language
     <span class="caret"></span>
   </button>
-  <ul class="dropdown-menu" style="height: 200px;overflow: auto;" aria-labelledby="dLabel">
+  <ul class="dropdown-menu"  onchange="changeLang(this.value);"style="height: 200px;overflow: auto;" aria-labelledby="dLabel">
     <?php if(is_array($language_arr) && count($language_arr)>0){
                                         foreach($language_arr as $val){
                                            ?>
@@ -591,81 +591,30 @@ input.range::-ms-fill-upper {
     </div>
     <div class="container" style="padding:0px">
   <div class="row" style="padding-left:110px; padding-right:110px">
-    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-      <div class="our-team">
-        <div class="picture">
-          <img class="img-fluid" src="https://picsum.photos/130/130?image=1027">
-        </div>
-        <div class="team-content">
-          <h3 class="name">Michele Miller</h3>
-          <h4 class="title">Web Developer</h4>
-        </div>
-        <ul class="social">
-          <li><a href="https://codepen.io/collection/XdWJOQ/" class="fa fa-facebook" aria-hidden="true"></a></li>
-          <li><a href="https://codepen.io/collection/XdWJOQ/" class="fa fa-twitter" aria-hidden="true"></a></li>
-          <li><a href="https://codepen.io/collection/XdWJOQ/" class="fa fa-google-plus" aria-hidden="true"></a></li>
-          <li><a href="https://codepen.io/collection/XdWJOQ/" class="fa fa-linkedin" aria-hidden="true"></a></li>
-        </ul>
-      </div>
-    </div>
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-      <div class="our-team">
-        <div class="picture">
-          <img class="img-fluid" src="https://picsum.photos/130/130?image=839">
-        </div>
-        <div class="team-content">
-          <h3 class="name">Patricia Knott</h3>
-          <h4 class="title">Web Developer</h4>
-        </div>
-        <ul class="social">
-          <li><a href="https://codepen.io/collection/XdWJOQ/" class="fa fa-facebook" aria-hidden="true"></a></li>
-          <li><a href="https://codepen.io/collection/XdWJOQ/" class="fa fa-twitter" aria-hidden="true"></a></li>
-          <li><a href="https://codepen.io/collection/XdWJOQ/" class="fa fa-google-plus" aria-hidden="true"></a></li>
-          <li><a href="https://codepen.io/collection/XdWJOQ/" class="fa fa-linkedin" aria-hidden="true"></a></li>
-        </ul>
-      </div>
-    </div>
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-      <div class="our-team">
-        <div class="picture">
-          <img class="img-fluid" src="https://picsum.photos/130/130?image=856">
-        </div>
-        <div class="team-content">
-          <h3 class="name">Justin Ramos</h3>
-          <h4 class="title">Web Developer</h4>
-        </div>
-        <ul class="social">
-          <li><a href="https://codepen.io/collection/XdWJOQ/" class="fa fa-facebook" aria-hidden="true"></a></li>
-          <li><a href="https://codepen.io/collection/XdWJOQ/" class="fa fa-twitter" aria-hidden="true"></a></li>
-          <li><a href="https://codepen.io/collection/XdWJOQ/" class="fa fa-google-plus" aria-hidden="true"></a></li>
-          <li><a href="https://codepen.io/collection/XdWJOQ/" class="fa fa-linkedin" aria-hidden="true"></a></li>
-        </ul>
-      </div>
-    </div>
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-      <div class="our-team">
-        <div class="picture">
-          <img class="img-fluid" src="https://picsum.photos/130/130?image=836">
-        </div>
-        <div class="team-content">
-          <h3 class="name">Mary Huntley</h3>
-          <h4 class="title">Web Developer</h4>
-        </div>
-        <ul class="social">
-          <li><a href="https://codepen.io/collection/XdWJOQ/" class="fa fa-facebook" aria-hidden="true"></a></li>
-          <li><a href="https://codepen.io/collection/XdWJOQ/" class="fa fa-twitter" aria-hidden="true"></a></li>
-          <li><a href="https://codepen.io/collection/XdWJOQ/" class="fa fa-google-plus" aria-hidden="true"></a></li>
-          <li><a href="https://codepen.io/collection/XdWJOQ/" class="fa fa-linkedin" aria-hidden="true"></a></li>
-        </ul>
-      </div>
-    </div>
+   
+    <div id="doctor_cards"> </div>
   </div>
 </div>
     </div>
 <script>
+
+function getdoctors(language,date,hour,min,am_pm,department){
+    $('#doctor_cards').remove();
+    $.ajax({
+    url:base_url+'index.php/Welcome/getdoctorforappointment',
+    method: 'post',
+    data: {department_type:department,preferred_language:language,booking_date:date,booking_hour:hour,booking_minute:min,booking_am_pm:am_pm},
+    type: 'POST',
+    success: function(response){
+      $('#doctor_cards').html(response);
+    }
+  });
+}
+
 $(document).ready(function(){
   //var $:any;
   // $("#datepicker").datepicker();
+   
 $('#p_name').keypress(function (e) {
   var charLength = $(this).val().length;
   var regex = new RegExp("^[a-zA-Z ]+$");
@@ -681,6 +630,20 @@ $('#p_name').keypress(function (e) {
 $(document).on('click', 'input:radio[id^="flexRadioDefault"]', function(event) {
   console.log("event clicked",event.target.value);
   var queryType = event.target.value;
+  var base_url = $('#base_url').val();
+
+$.ajax({
+    url:base_url+'index.php/Appointment/getdoctorforappointment',
+    method: 'post',
+    data: {department_type:'7',preferred_language:'English',booking_date:'2021-06-08',booking_hour:'8',booking_minute:'15',booking_am_pm:'PM'},
+    type: 'POST',
+    success: function(response){
+      //alert(response);
+    $('#doctor_cards').prepend(response);
+
+
+    }
+  });
 if(queryType == "covid"){
   // department_type
   document.getElementById('department_type').style.display = 'none';
@@ -688,7 +651,6 @@ if(queryType == "covid"){
 
 if(queryType == "non_covid"){
   document.getElementById('department_type').style.display = 'block';
-
 }
 
 })
@@ -734,7 +696,10 @@ $(function() {
        };
        updateUI();
 
-
+       // $('#dLabel').on('change',function(){
+       //  debugger;   
+       //  alert(this.value);
+       // })
 
        $('#right-button').click(function() {
          var leftPos = outer.scrollLeft();
