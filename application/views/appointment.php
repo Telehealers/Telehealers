@@ -479,11 +479,11 @@ input.range::-ms-fill-upper {
     <div class="row pt-4" >
     <div class="col-sm-12 col-md-4 col-lg-4">
     <div class="dropdown">
-  <button id="dLabel" class="dropdown-select float-right" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange="changeLang(this.value);">
+  <button id="dLabel" class="dropdown-select float-right" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
     Select Language
-    <span class="caret"></span>
+    <span class="caret" id="language"></span>
   </button>
-  <ul class="dropdown-menu"  onchange="changeLang(this.value);"style="height: 200px;overflow: auto;" aria-labelledby="dLabel">
+  <ul class="dropdown-menu" id=""style="height: 200px;overflow: auto;" aria-labelledby="dLabel">
     <?php if(is_array($language_arr) && count($language_arr)>0){
                                         foreach($language_arr as $val){
                                            ?>
@@ -620,7 +620,13 @@ function getdoctors(language,date,hour,min,am_pm,department){
 
 $(document).ready(function(){
   //var $:any;
-  // $("#datepicker").datepicker();
+  $("#datepicker").datepicker();
+$('#dLabel ').on('DOMSubtreeModified',function(e){
+    var language=e.target.innerHTML;
+
+});   
+
+
 
 $('#p_name').keypress(function (e) {
   var charLength = $(this).val().length;
@@ -641,18 +647,6 @@ $(document).on('click', 'input:radio[id^="flexRadioDefault"]', function(event) {
   var queryType = event.target.value;
   var base_url = $('#base_url').val();
 
-$.ajax({
-    url:base_url+'index.php/Appointment/getdoctorforappointment',
-    method: 'post',
-    data: {department_type:'7',preferred_language:'English',booking_date:'2021-06-08',booking_hour:'8',booking_minute:'15',booking_am_pm:'PM'},
-    type: 'POST',
-    success: function(response){
-      //alert(response);
-    $('#doctor_cards').prepend(response);
-
-
-    }
-  });
 if(queryType == "covid"){
   // department_type
   document.getElementById('department_type').style.display = 'none';
@@ -661,8 +655,7 @@ if(queryType == "covid"){
 if(queryType == "non_covid"){
   document.getElementById('department_type').style.display = 'block';
 }
-
-})
+});
 
 $(function() {
        var print = function(msg) {
