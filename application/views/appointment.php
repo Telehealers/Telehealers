@@ -12,9 +12,9 @@
     <!-- Bootstrap CSS -->
 
     <link rel="stylesheet" href="<?php echo base_url();?>web_assets2/css/main.css">
-	<link href="<?php echo base_url()?>assets/plugins/jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
+  <link href="<?php echo base_url()?>assets/plugins/jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
-	<link rel="stylesheet" href="<?php echo base_url();?>web_assets2/appointment/css/main.css">
+  <link rel="stylesheet" href="<?php echo base_url();?>web_assets2/appointment/css/main.css">
     <link rel="stylesheet" href="<?php echo base_url();?>web_assets2/appointment/css/style.css">
     <link rel="stylesheet" href="<?php echo base_url();?>web_assets2/appointment/css/calendar_style.css">
     <link rel="stylesheet" type="text/css" media="screen" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
@@ -32,16 +32,16 @@
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment-with-locales.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
    <title><?php echo $meta_info[0]['page_title']; ?></title>
-	<meta name="keywords" content="<?php echo $meta_info[0]['meta_keywords']; ?>">
-	<meta name="description" content="<?php echo $meta_info[0]['meta_description']; ?>">
-	<script>
+  <meta name="keywords" content="<?php echo $meta_info[0]['meta_keywords']; ?>">
+  <meta name="description" content="<?php echo $meta_info[0]['meta_description']; ?>">
+  <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
   gtag('config', 'G-Y9P95E4VWH');
 </script>
-	<script type="text/javascript">
+  <script type="text/javascript">
 var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
 (function(){
 var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
@@ -265,48 +265,48 @@ input.range::-ms-fill-upper {
 
 /** button group styles **/
  .btn-group {
-	 border-radius: 1rem;
-	 /* box-shadow: -2.3px -2.3px 3.8px rgba(255, 255, 255, 0.2), -6.3px -6.3px 10.6px rgba(255, 255, 255, 0.3), -15.1px -15.1px 25.6px rgba(255, 255, 255, 0.4), -50px -50px 85px rgba(255, 255, 255, 0.07), 2.3px 2.3px 3.8px rgba(0, 0, 0, 0.024), 6.3px 6.3px 10.6px rgba(0, 0, 0, 0.035), 15.1px 15.1px 25.6px rgba(0, 0, 0, 0.046), 50px 50px 85px rgba(0, 0, 0, 0.07); */
+   border-radius: 1rem;
+   /* box-shadow: -2.3px -2.3px 3.8px rgba(255, 255, 255, 0.2), -6.3px -6.3px 10.6px rgba(255, 255, 255, 0.3), -15.1px -15.1px 25.6px rgba(255, 255, 255, 0.4), -50px -50px 85px rgba(255, 255, 255, 0.07), 2.3px 2.3px 3.8px rgba(0, 0, 0, 0.024), 6.3px 6.3px 10.6px rgba(0, 0, 0, 0.035), 15.1px 15.1px 25.6px rgba(0, 0, 0, 0.046), 50px 50px 85px rgba(0, 0, 0, 0.07); */
    box-shadow : rgb(0 0 0 / 15%) 1.95px 1.95px 2.6px;
 }
  .btn-group__item {
-	 border: none;
-	 min-width: 6rem;
-	 padding: 1rem 2rem;
-	 background-color: #eee;
-	 cursor: pointer;
-	 margin: 0;
-	 box-shadow: inset 0px 0px 0px -15px rebeccapurple;
-	 transition: all 300ms ease-out;
+   border: none;
+   min-width: 6rem;
+   padding: 1rem 2rem;
+   background-color: #eee;
+   cursor: pointer;
+   margin: 0;
+   box-shadow: inset 0px 0px 0px -15px rebeccapurple;
+   transition: all 300ms ease-out;
 }
  .btn-group__item:last-child {
-	 border-top-right-radius: 1rem;
-	 border-bottom-right-radius: 1rem;
+   border-top-right-radius: 1rem;
+   border-bottom-right-radius: 1rem;
 }
  .btn-group__item:first-child {
-	 border-top-left-radius: 1rem;
-	 border-bottom-left-radius: 1rem;
+   border-top-left-radius: 1rem;
+   border-bottom-left-radius: 1rem;
 }
  .btn-group__item:hover, .btn-group__item:focus {
-	 color: rebeccapurple;
-	 box-shadow: inset 0px -20px 0px -15px rebeccapurple;
+   color: rebeccapurple;
+   box-shadow: inset 0px -20px 0px -15px rebeccapurple;
 }
  .btn-group__item:focus {
-	 outline: none;
+   outline: none;
 }
  .btn-group__item:after {
-	 content: '✔️';
-	 margin-left: 0.5rem;
-	 display: inline-block;
-	 color: rebeccapurple;
-	 position: absolute;
-	 transform: translatey(10px);
-	 opacity: 0;
-	 transition: all 200ms ease-out;
+   content: '✔️';
+   margin-left: 0.5rem;
+   display: inline-block;
+   color: rebeccapurple;
+   position: absolute;
+   transform: translatey(10px);
+   opacity: 0;
+   transition: all 200ms ease-out;
 }
  .btn-group__item--active:after {
-	 opacity: 1;
-	 transform: translatey(-2px);
+   opacity: 1;
+   transform: translatey(-2px);
 }
 
 #outer {
@@ -832,18 +832,18 @@ $(document).on('click', '.dropdown-menu li a', function() {
     $('#datebox').val($(this).html());
 });
   $(document).on("click","#add_service", function(){
-  var services =	$('input[name="service"]:checked').val();
+  var services =  $('input[name="service"]:checked').val();
   var base_url = $('#base_url').val();
-//	$('.multi_step_form .book_popup_11').remove();
+//  $('.multi_step_form .book_popup_11').remove();
   if(services==""){
     alert("Please select service first");
     return false;
   }
   if(services=="Covid Consultancy"){
-  //	var getHtml = $('#userdiv').html();
-  //	$(getHtml).insertAfter('#book_popup_2');
+  //  var getHtml = $('#userdiv').html();
+  //  $(getHtml).insertAfter('#book_popup_2');
   }else{
-  //	$('.multi_step_form .book_popup_11').remove();
+  //  $('.multi_step_form .book_popup_11').remove();
   }
   $.ajax({
     url:base_url+'index.php/Welcome/getservicetype',
@@ -860,9 +860,9 @@ $(document).on('click', '.dropdown-menu li a', function() {
 
 
 $(document).on("click","#add_servicetype", function(){
-  var servicestype =	$('input[name="servicetype"]:checked').val();
+  var servicestype =  $('input[name="servicetype"]:checked').val();
   var base_url = $('#base_url').val();
-  var lang_set_val =	$('#service3').val();
+  var lang_set_val =  $('#service3').val();
 
   $('#service2').val(servicestype);
   //alert(lang_set_val)
@@ -900,7 +900,7 @@ $(document).on("click","#app_type", function(){
 
   $(document).on("click",".add_patient2", function(){
     $('.multi_step_form .book_popup_4').remove();
-  var p_type =	$('input[name="p_type"]:checked').val();
+  var p_type =  $('input[name="p_type"]:checked').val();
   //alert(p_type);
   if(p_type == 1){
     var getHtml = $('#patient_type').html();
@@ -992,7 +992,7 @@ var current_fs, next_fs, previous_fs; //fieldsets
 
 
 /*$(".add_patient2").click(function () {
-  var p_type =	$('input[name="p_type"]:checked').val();
+  var p_type =  $('input[name="p_type"]:checked').val();
   //alert(p_type);
   if(p_type == 1){
     var getHtml = $('#patient_type').html();
