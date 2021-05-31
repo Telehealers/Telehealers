@@ -412,6 +412,21 @@ function createVideoCallInformationMail($participantInfoHTML) {
 	}
 	/** A function to confirm appointment ie Fill all DB entries and 
 	 * provide information to participants and assistants.
+	 * Check function flow for functional bugs.
+	 * Current Function Flow: Email-client init
+	 * 	-> Fetch patient and doctor
+	 * 	-> Save appointment
+	 * 	-> Create Video call and inform paticipant
+	 *  -> Save session data (userdata)
+	 *  -> redirect to Patient
+	 * Original Function Flow: Email-client init 
+	 * 	-> get-patient-log-id 
+	 * 	-> Register unregistered patient in patient_tbl and log_info
+	 * 	-> Get patient and doctor data
+	 *  -> Save Appointment
+	 *  -> Create video-call and inform participant
+	 * 	-> Save session data (userdata)
+	 * 	-> redirect to Patient
 	 */
 	public function confirmation(){
 		$ci = get_instance();
@@ -433,13 +448,16 @@ function createVideoCallInformationMail($participantInfoHTML) {
         $config['newline'] = "\r\n";
 		$ci->email->initialize($config);
 
-		/**App vars */
+		/**Variable Validation */
 		$this->form_validation->set_rules('p_date', 'Date', 'trim|required');
 		/**TODO: Check if patient_id is coming in post request*/
 		$this->form_validation->set_rules('patient_id', 'Patient Id', 'trim|required');
 		$this->form_validation->set_rules('venue_id', 'venue', 'trim|required');
 		$this->form_validation->set_rules('sequence', 'sequence', 'trim|required');
 
+		/**Application vars
+		 * TODO: Match name and fetch vars which are not coming from request.
+		 */
 		$sequence = $this->input->post('sequence',TRUE);
 		$booking_date = $this->input->post('p_date', TRUE);
 		$booking_hour = $this->input->post("booking_hour", TRUE);
@@ -449,17 +467,14 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		$app_type_val = $this->input->post('app_type_val',TRUE);
 		$service1 = $this->input->post('service1',TRUE);
 		$service2 = $this->input->post('service2',TRUE);
-		if($app_type_val==1){
-			$doctor_id = $this->input->post('doc_idd',TRUE);
-			$sequence = $this->input->post('slot_idd',TRUE);
-			$schedul_id = $this->input->post('sh_idd',TRUE);
-		}else{
-			$doctor_id = $this->input->post('doctor_id');
-			$schedul_id = $this->input->post('schedul_id',TRUE);
-		}
-		
-		/**Fetching patient data from DB*/
+		$doctor_id = $this->input->post('doctor_id');
+		$schedul_id = $this->input->post('schedul_id',TRUE);
+		$sequence = $this->input->post('slot_idd',TRUE);
 		$patient_id = $this->input->post('p_id', TRUE);
+		$venue_id = $this->input->post('venue_id',TRUE);
+		$p_cc = $this->input->post('problem',TRUE);
+
+		/**Fetching patient data from DB*/
 		$get_patient_query = "select patient_name, patient_email,".
 			" patient_phone, patient_age, patient_sex, log_id from patient_tbl".
 			" where patient_id = '".$patient_id."'";
@@ -471,14 +486,9 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		$p_gender = $patient_entry->patient_sex;
 		$p_log_id = $patient_entry->log_id;
 
-
-		//echo 'schedul_id--'.$schedul_id;die();
-
-		// $data['patient_info'] = $savedata;
 		$data['service1'] = $service1;
 		$data['service2'] = $service2;
 		/**Fetch venue data */
-		$venue_id = $this->input->post('venue_id',TRUE);
 		$venue_info_query = "select * from venue_tbl where venue_id = '".$venue_id."'";
 		$venue_data = $this->db->query($venue_info_query)->result()->fetch_row();
 		if (!$venue_data) {
@@ -487,16 +497,6 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		}
 		$venue_name = $venue_data->venue_name;
 
-		$schedule_info_query = "SELECT per_patient_time FROM schedul_setup_tbl ".
-			"WHERE doctor_id = '".$doctor_id.
-			"' AND day = DAYOFWEEK(".$booking_date.")";
-		$schedule_entry = $this->db->query($schedule_info_query)->result()->fetch_row();
-		if (!$schedule_entry) {
-			/** Bad schedule logic
-			 * TODO: Respond bad doctor fetch logic or data entry on front end
-			 */
-		}
-		$per_patient_time = $schedule_entry->per_patient_time;
 		$doctor_info_query = "select doctor_name, log_id from doctor_tbl where doctor_id = '".$doctor_id."'";
 		$doctor_entry = $this->db->query($doctor_info_query)->result()->fetch_row();
 		if (!$doctor_entry) {
@@ -510,7 +510,6 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		 * TODO: Use auto-increment.
 		 */
 		$appointment_id = "A".date('y').strtoupper($this->randstrGenapp(5));
-		$p_cc = $this->input->post('problem',TRUE);
 
 		$appointmentData = array(
 			'date' => $booking_date,
@@ -611,11 +610,10 @@ function createVideoCallInformationMail($participantInfoHTML) {
 
 		$data['appointmentData'] = $appointmentData;
 
-		//echo "<pre>";print_r($data);die();
 		$data['info'] = $this->home_view_model->Home_satup();
 
 		$app_time = date('h:i A', strtotime($sequence));
-		$app_date = date('jS F Y',strtotime($this->input->post('p_date',TRUE)));
+		$app_date = date('jS F Y',strtotime($booking_date));
 
 		$mes = 'You have successfully registered and made an appointment with '.$doctor_name.' on '.$app_date.'-'.$app_time.'<br>Welcome to your patient dashboard here you can see all your appointments, prescriptions and tests that you upload to the portal. You can always login back using the registered mobile number - '.$p_phone;
 		$session_data = array(
@@ -631,7 +629,6 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		$this->session->set_userdata($session_data);
 		$this->session->set_flashdata('message',"<div class='alert alert-success'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>".$mes."</div>");
         redirect('Patient');
-		//$this->load->view('public/process_appointment_info',$data);
 	}
 
 	public function patientAppointment(){
