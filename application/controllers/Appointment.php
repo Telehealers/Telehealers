@@ -477,7 +477,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		$get_patient_query = "select patient_name, patient_email,".
 			" patient_phone, patient_age, patient_sex, log_id from patient_tbl".
 			" where patient_id = '".$patient_id."'";
-		$patient_entry = $this->db->query($get_patient_query)->result()->fetch_row();
+		$patient_entry = $this->db->query($get_patient_query)->result()[0];
 		$p_name = $patient_entry->patient_name;
 		$p_email = $patient_entry->patient_email;
 		$p_age = $patient_entry->patient_age;
@@ -489,7 +489,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		$data['service2'] = $service2;
 		/**Fetch venue data */
 		$venue_info_query = "select * from venue_tbl where venue_id = '".$venue_id."'";
-		$venue_data = $this->db->query($venue_info_query)->result()->fetch_row();
+		$venue_data = $this->db->query($venue_info_query)->result()[0];
 		if (!$venue_data) {
 			/**Bad venue fetch */
 			log_message('error',"Bad venue_id(".$venue_id.") coming from request.");
@@ -498,7 +498,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		$venue_name = $venue_data->venue_name;
 
 		$doctor_info_query = "select doctor_name, log_id from doctor_tbl where doctor_id = '".$doctor_id."'";
-		$doctor_entry = $this->db->query($doctor_info_query)->result()->fetch_row();
+		$doctor_entry = $this->db->query($doctor_info_query)->result()[0];
 		if (!$doctor_entry) {
 			/** Bad doctor_id from input */
 			log_message('error', "Bad doctor_id(".$doctor_id.") in ");
@@ -529,7 +529,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		$this->appointment_model->SaveAppoin($appointmentData);
 
 		$log_info_query = "select email from log_info where log_id = '".$log_id."'";
-		$log_entry = $this->db->query($log_info_query)->result()->fetch_row();
+		$log_entry = $this->db->query($log_info_query)->result()[0];
 		if (!$log_entry) {
 			/** Bad log_info table management.*/
 			log_message('error',"Bad log_id (".$log_id.")");
