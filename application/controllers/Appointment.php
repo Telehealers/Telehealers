@@ -1544,7 +1544,9 @@ public function registration()
 			$this->input->post("booking_minute", TRUE).":00 ".
 			$this->input->post("booking_am_pm", TRUE);
 		$booking_time = urldecode($booking_time);
-		$sql_query = 'SELECT picture, designation, doctor_name, doctor_id, '.
+
+
+		$sql_query = 'SELECT picture, language, designation, doctor_name, doctor_id, '.
 			'(IF('.$preferred_language_filter.', RAND(), -RAND())) as bias_reduction_score '. //Doctor selection bias reduction logic
 			'FROM doctor_tbl, doctor_department_info dpt WHERE '.
 			' dpt.department_id = department AND '.$department_filter.
@@ -1559,20 +1561,23 @@ public function registration()
 			'schedule.doctor_id = bookings.doctor_id AND '.
 			'bookings.get_date_time <=  "'.$booking_time.'" AND "'.$booking_time.
 			'" <= ADDTIME(bookings.get_date_time, SEC_TO_TIME(schedule.per_patient_time*60))) '.
-			' ORDER BY bias_reduction_score;';
+			' ORDER BY bias_reduction_score desc;';
 		$available_doctors = $this->db->query($sql_query);
+
 		foreach ($available_doctors->result() as $doc) {
+			if($doc->doctor_name!='Admin'){
 			echo '<div class="our-team" data-value="'.$doc->doctor_id.'">
 			        <div class="picture">
-			          <img class="img-fluid" src="'.$doc->picture.'
+			          <img class="img-fluid" src="'.$doc->picture.'">
 			        </div>
 			        <div class="team-content">
 			          <h3 class="name"> '.$doc->doctor_name.' </h3>
 			          <h4 class="title">'.$doc->designation.'</h4>
+			          <h5 class="language">'.$doc->language.'</h5>
 			        </div>
 			        
       </div>';
-		}
+		}}
 	}
 
 	public function getpromocodeprice(){

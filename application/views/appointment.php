@@ -362,8 +362,10 @@ input.range::-ms-fill-upper {
 } */
 
 .our-team {
-  padding: 30px 0 40px;
+  padding: 30px 30px 30px 40px;
   margin-bottom: 30px;
+  margin-left:10px;
+  margin-right:10px;
   background-color: #eeeeee;
   box-shadow : rgb(0 0 0 / 15%) 1.95px 1.95px 2.6px;
   cursor: pointer;
@@ -475,6 +477,9 @@ input.range::-ms-fill-upper {
     <h4>Book Appointment</h4>
     </div>
     </div>
+    <?php   $attributes = array('class' => 'form-horizontal','role'=>'form');
+            echo form_open_multipart('Appointment/confirmation', $attributes);
+      ?>
     <div class="row pt-4" >
     <div class="col-sm-12 col-md-4 col-lg-4">
     <div class="dropdown">
@@ -593,23 +598,38 @@ input.range::-ms-fill-upper {
     </div>
     </div>
     <div class="container" style="padding:0px">
-  <div class="row" style="padding-left:110px; padding-right:110px">
+  <div class="row" id="docs" style="padding-left:110px; padding-right:110px">
 
-    <div id="doctor_cards"> </div>
-  </div>
+    <div id="doctor_cards"> </div></div></div>
+    <div class="row">
+      <div class="panel panel-default" style="width: 100%;bottom:0;position: fixed;z-index: 99;">
+         <div class="panel-body">
+     <div class="col-sm-8 col-md-8 col-lg-8"></div>
+     <div class="col-sm-2 col-md-2 col-lg-2"> 
+    <button type="submit" style="position: relative; float:right;"class="btn btn-success"><?php echo display('submit')?></button>
+  </div></div></div>
 </div>
+  
+    <div class="form-group row">
+          <div class="col-sm-offset-3 col-sm-6">
+           
+          </div>
+      </div>
+
     </div>
 <script>
 
 function getDoctors(language,date,hour,min,am_pm,department){
-    $('#doctor_cards').remove();
+    $('#docs')[0].textContent='';
+   
+    var base_url=$('#base_url').val();
     $.ajax({
-    url:base_url+'index.php/Welcome/getdoctorforappointment',
+    url:base_url+'index.php/Appointment/getdoctorforappointment',
     method: 'post',
     data: {department_type:department,preferred_language:language,booking_date:date,booking_hour:hour,booking_minute:min,booking_am_pm:am_pm},
     type: 'POST',
     success: function(response){
-      $('#doctor_cards').html(response);
+      $('#docs').prepend(response);
     }
   });
 }
@@ -620,24 +640,27 @@ function cleanHours(originalVal){
     }
   return originalVal
 }  
-function getTime(date,hour, minute,am_pm){
+function getTime(date,hour, minute,am_pm,language){
+
   date = date ? date : $('#datepicker').datepicker('getFormattedDate');
   date_cool = new Date(date);
   hour = hour ? hour : cleanHours($('#time_hour')[0].elements[0].value);
   minute= minute ? minute: $('#minute .active').text().substr(2,4);
   am_pm=am_pm? am_pm : ($('#meredium .active').text()).replace(/\s/g, "");
   document.getElementById("time").innerHTML = date_cool.toDateString()+" "+hour+":"+minute+" "+am_pm;
-  language=$('#dLabel ').text()
-  if(language>='Select Language'){
+  language=language?language:$('#dLabel').text()
+  //console.log(language);
+  if(language=='Select Language'){
     language='';
   }
   var department
   if($('input:radio[id^="flexRadioDefault"]')[0].checked){
-    department=5; // default dept general dept / general physician , needs to be checked with db 
+    department=6; // default dept general dept / general physician , needs to be checked with db 
   }
   if($('input:radio[id^="flexRadioDefault"]')[1].checked){
     console.log($('#department_type').value);
   }
+  getDoctors(language,date,hour,minute,am_pm,department);
 
 
 
@@ -650,7 +673,8 @@ $(document).ready(function(){
 //     console.log('hello');
 // });
   $("#datepicker").datepicker(
-{format: "yyyy-mm-dd"
+{format: "yyyy-mm-dd",
+startDate: new Date()
 });
 
 $('#btn1').ready(function(){
@@ -666,16 +690,18 @@ $('#datepicker').on('changeDate',function(e) {
 
   });
 
-$('#dLabel ').on('DOMSubtreeModified',function(e){
+$('#dLabel ').on('DOMNodeInserted',function(e){
     var language=e.target.innerHTML;
-    console.log(language);
+    //console.log(language);
+   getTime(null,null,null,null,language);
+
 });   
 
 
 
 $('#time_hour').on('change', function(ev){
     var hour = cleanHours(parseInt(ev.target.value));
-    getTime(null,hour,null,null);
+    getTime(null,hour,null,null,null);
 
 
 });
