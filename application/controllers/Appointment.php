@@ -1286,7 +1286,6 @@ public function registration()
 			'CAST(bookings.sequence AS TIME) <=  "'.$booking_time.'" AND "'.$booking_time.
 			'" <= ADDTIME(CAST(bookings.sequence AS TIME), SEC_TO_TIME(schedule.per_patient_time*60))) '.
 			' ORDER BY bias_reduction_score DESC;';
-		var_dump($sql_query);
 		$available_doctors = $this->db->query($sql_query);
 		foreach ($available_doctors->result() as $doc) {
 			echo '<div class="our-team" data-value="'.$doc->doctor_id.'">
