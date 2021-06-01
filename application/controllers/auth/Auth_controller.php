@@ -74,7 +74,7 @@ class Auth_controller extends CI_Controller {
                     'logged_in' => TRUE
                 );
 
-					$data['p_id']=$acess_data->patient_id,
+					$data['p_id']=$acess_data->patient_id;
 					$this->session->set_userdata($session_data);
 					if($register){
 						$this->load->view('appointment',$data);

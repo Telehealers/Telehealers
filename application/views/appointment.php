@@ -504,7 +504,7 @@ input.range::-ms-fill-upper {
     <div class="col-sm-12 col-md-4 col-lg-4" >
     <div class="form-group" style="margin-bottom: 0;padding-top: 4px;">
             <div class='input-group date' id='datepicker'>
-               <input type='text' id="p_date"class="form-control" value="<?php echo date("Y-m-d");?>" />
+               <input type='text' name="p_date" id="p_date"class="form-control" value="<?php echo date("Y-m-d");?>" />
                <span class="input-group-addon">
                <span class="glyphicon glyphicon-calendar"></span>
                </span>
@@ -608,10 +608,11 @@ input.range::-ms-fill-upper {
     <div class="row" style="padding-left:2%;padding-right:2%">
     <div class="col-sm-12 col-md-12 col-lg-12">
     <h1 for="customRange3" class="form-label labelStyle mb-3" >Consultants</h1>
-        <input type="hidden" id="base_url" value="<?php echo base_url()?>">
-        <input type="hidden" id="sequence" value="">
-        <input type="hidden" id="p_id" value="P21MFI6Q">
-        <input type="hidden" id="doctor_id">
+        <input type="hidden" name="base_url" id="base_url" value="<?php echo base_url()?>">
+        <input type="hidden" name="sequence" id="sequence" value="">
+        <input type="hidden" name="p_id" id="p_id" value="P21MFI6Q">
+        <input type="hidden" name="doctor_id" id="doctor_id" >
+        <input type="hidden" name="department" id="department" >
     </div>
     </div>
     <div class="container" style="padding:0px;height: 500px;overflow-y: auto;overflow-x: hidden;width: auto;">
@@ -657,7 +658,7 @@ input.range::-ms-fill-upper {
         <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
         <button class="btn btn-primary">Save changes</button>
     </div>
-</div>
+</div>></form>
 <script>
 var department='';
 function getDoctors(language,date,hour,min,am_pm,department){
@@ -708,6 +709,7 @@ function getTime(date,hour, minute,am_pm,language){
 
   if(department){
     $('#q_succ_msg').hide();
+    $('#department').val(department);
     getDoctors(language,date,hour,minute,am_pm,department);
   }
 
@@ -732,7 +734,8 @@ $('#ambtn').ready(function(){
 $('#datepicker').on('changeDate',function(e) {
     var date=($('#datepicker').datepicker('getFormattedDate'));
     getTime(date);
-    console.log(date);
+    $('#p_date').val(date);
+    console.log($('#p_date').val());
 
   });
 
@@ -772,7 +775,8 @@ $('#elem').on('click',function(e){
 $('#docs').on('click',function(event){
       var docid = event.target.getAttribute("data-value");
        console.log('docid',docid);
-       $('#doctor_id').value = docid;
+       
+       $('#doctor_id').val(docid);
 });
 
 
@@ -891,7 +895,7 @@ buttons.forEach(button => {
     // do some action according to button
 
     // show success feedback
-    $(e.target).addClass("btn-group__item--active").siblings().removeClass("btn-group__item--active");
+    $(this).addClass("btn-group__item--active").siblings().removeClass("btn-group__item--active");
 
   })
 })

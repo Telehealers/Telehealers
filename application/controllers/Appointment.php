@@ -196,8 +196,9 @@ function createVideoCallRoom($doctor_name, $doctor_email, $patient_name, $patien
 		),
 	));
 	$superpro_response = curl_exec($curl_session);
+
 	if (!$superpro_response) {
-		log_message('error',$e->getMessage());
+		log_message('error',$superpro_response);
 		show_404();
 	}
 
@@ -464,8 +465,8 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		$booking_am_pm = $this->input->post("booking_am_pm", TRUE);
 		$sequence = $booking_hour.":".$booking_min.":00 ".$booking_am_pm;
 		$sequence = date("H:i:s", strtotime($sequence));
-		$service1 = $this->input->post('service1',TRUE);
-		$service2 = $this->input->post('service2',TRUE);
+		$service1 = $this->input->post('department',TRUE);
+		$service2 = $this->input->post('department',TRUE);
 		$doctor_id = $this->input->post('doctor_id');
 		/**TODO: Bad schedule_id, use sql auto-increment column*/
 		$schedul_id = "A".date('y').strtoupper($this->randstrGenapp(5));
@@ -646,6 +647,12 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		$ci->load->library('email');
 
         $email_config = $this->email_model->email_config();
+        $protocol = null;
+		$smtp_host = null;
+		$smtp_port = null;
+		$smtp_user = null;
+		$smtp_pass = null;
+		
 		if(is_array($email_config) && count($email_config)>0){
 			$protocol = $email_config->protocol;
 			$smtp_host = $email_config->mailpath;
@@ -770,48 +777,12 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		if(is_array($result_tk) && count($result_tk)>0){
 			$accessToken = $result_tk[0]['access_token'];
 		}
+		$superpro_meeting_url = $this->createVideoCallRoom(
+			$doctor_name, $doctor_email,
+			$p_name, $p_email);
+		$meeting_pass = '';
 
-		if($refershToken!="" && $accessToken!=""){
-			$client = new GuzzleHttp\Client(['base_uri' => 'https://zoom.us']);
-
-			//$app_date_time = date('Y-m-d',strtotime($date)).'T'.$sequence;
-
-			//$app_date_time = date('jS F Y',strtotime($date)).' - '.date('h:i A', strtotime($sequence));
-
-			$date_g = '12-07-2021';
-			$sequence_g = '6:15 PM';
-			//$app_date_time = '2021-06-20T16:45:00Z';
-			//$app_date_time = '2021-05-15T12:00:00Z';
-			//2021-05-05T19:00Z
-			$app_date_time = date('Y-m-d',strtotime($date)).'T'.$sequence.":00";
-			//die();
-
-			$meeting_pass = '123456768';
-
-			$response_z = $client->request('POST', '/v2/users/me/meetings', [
-				"headers" => [
-					"Authorization" => "Bearer $accessToken"
-				],
-				'json' => [
-					"topic" => "Appointment Meeting - $appointment_id",
-					"type" => 2,
-					"start_time" => $app_date_time,
-					"duration" => $per_patient_time, // 30 mins
-					"timezone" => 'Asia/Calcutta', // 30 mins
-					"password" => $meeting_pass
-				]
-			]);
-
-			$data_zoom = json_decode($response_z->getBody());
-			$zoom_meeting_url = $data_zoom->join_url;
-		}else{
-			$meeting_pass = '';
-			$zoom_meeting_url = '';
-		}
-
-
-
-		$symt1 = $zoom_meeting_url;
+		$symt1 = $superpro_meeting_url;
 		$symt2 = $meeting_pass;
 
 		$sql_m = "update appointment_tbl set symt1 = '".$symt1."',symt2 = '".$symt2."' where appointment_id = '$appointment_id'";
