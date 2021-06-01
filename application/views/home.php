@@ -835,7 +835,7 @@ $(document).ready(function(){
                     }else if(response==1){
                         $('#meserr1').html('You enter wrong Otp');
                     }else{
-                       window.location.href = 'Patient';
+                       window.location.href = 'appointment';
                     }
                     //$('#q_succ_msg').html('Your details has been submited successfully.');
                     //$('#q_succ_msg').html(response);
