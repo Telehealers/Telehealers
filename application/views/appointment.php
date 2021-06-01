@@ -307,6 +307,8 @@ input.range::-ms-fill-upper {
 }
  .btn-group__item--active:after {
 	 opacity: 1;
+   content: '✔️';
+  color: rebeccapurple;
 	 transform: translatey(-2px);
 
 }
@@ -365,7 +367,7 @@ input.range::-ms-fill-upper {
 } */
 
 .our-team {
-  padding: 30px 30px 30px 40px;
+  padding: 5% 5% 5% 8%;
   margin-bottom: 30px;
   margin-left:10px;
   margin-right:10px;
@@ -420,6 +422,7 @@ input.range::-ms-fill-upper {
 
 .our-team .picture img {
   width: 100%;
+  max-height:104px;
   height: auto;
   border-radius: 50%;
   transform: scale(1);
@@ -604,9 +607,11 @@ input.range::-ms-fill-upper {
     <div class="row" style="padding-left:2%;padding-right:2%">
     <div class="col-sm-12 col-md-12 col-lg-12">
     <h1 for="customRange3" class="form-label labelStyle mb-3" >Consultants</h1>
-    <input type="hidden" id="base_url" value="<?php echo base_url()?>">
+        <input type="hidden" id="base_url" value="<?php echo base_url()?>">
         <input type="hidden" id="sequence" value="">
         <input type="hidden" id="p_id" value="P21MFI6Q">
+        <input type="hidden" id="doctor_id">
+
 
 
     </div>
@@ -633,7 +638,7 @@ input.range::-ms-fill-upper {
   </div>
 </div>
 <script>
-
+var department='';
 function getDoctors(language,date,hour,min,am_pm,department){
     $('#docs')[0].textContent='';
 
@@ -655,7 +660,7 @@ function cleanHours(originalVal){
     }
   return originalVal
 }
-function getTime(date,hour, minute,am_pm,language,department){
+function getTime(date,hour, minute,am_pm,language){
 
   date = date ? date : $('#datepicker').datepicker('getFormattedDate');
   date_cool = new Date(date);
@@ -666,6 +671,7 @@ function getTime(date,hour, minute,am_pm,language,department){
   document.getElementById("sequence").innerHTML = hour+":"+minute+" "+am_pm;
 
   language=language?language:$('#dLabel').text()
+
   //console.log(language);
   if(language=='Select Language'){
     language='';
@@ -738,11 +744,16 @@ $('#minute button').on('click',function(e){
 
 });
 $('#elem').on('click',function(e){
-  var dept=(e.target.value);
-  getTime(null,null,null,null,null,dept);
+  department=(e.target.value);   
+  getTime();
 
 });
+$('#docs').on('click',function(e){
+  var doctor=(e.target.dataset.value);   
+  console.log(doctor);
+  //getTime();
 
+});
 
 
 $('#p_name').keypress(function (e) {
@@ -855,18 +866,23 @@ $(function() {
 
 const buttons = document.querySelectorAll(".btn-group__item");
 buttons.forEach(button => {
-  button.addEventListener("click",() => {
+  button.addEventListener("click",(e) => {
     // do some action according to button
 
     // show success feedback
-    button.classList.add("btn-group__item--active");
-    setTimeout(() => {
-      button.classList.remove("btn-group__item--active");
-    },600);
-    $(this).siblings().removeClass("active");
+    $(e.target).addClass("btn-group__item--active").siblings().removeClass("btn-group__item--active");
 
   })
 })
+// const docs = document.querySelectorAll(".our-team");
+// docs.forEach(button => {
+//   button.addEventListener("click",(e) => {
+//     // do some action according to button
+//     // show success feedback
+//     console.log(e)
+
+//   })
+// })
 
 
 $('.dropdown-menu li').on('click', function() {

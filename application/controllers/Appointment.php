@@ -1294,8 +1294,8 @@ public function registration()
 			if($doc->doctor_name!='Admin'){
           $picture=$doc->picture?$doc->picture:base_url()."web_assets2/images/user_img.png";
 
-			echo '<div class="col-sm-12 col-md-4 col-lg-3">
-          <div class="our-team" data-value="'.$doc->doctor_id.'">
+			echo '<div class="col-sm-12 col-md-4 col-lg-3" data-value="'.$doc->doctor_id.'"> 
+          <div class="our-team" >
 			        <div class="picture">
 			          <img class="img-fluid" src="'.$picture.'">
 			        </div>
