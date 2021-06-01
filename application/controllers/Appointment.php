@@ -451,7 +451,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		/**Variable Validation */
 		$this->form_validation->set_rules('p_date', 'Date', 'trim|required');
 		/**TODO: Check if patient_id is coming in post request*/
-		$this->form_validation->set_rules('patient_id', 'Patient Id', 'trim|required');
+		$this->form_validation->set_rules('p_id', 'Patient Id', 'trim|required');
 		$this->form_validation->set_rules('venue_id', 'venue', 'trim|required');
 		$this->form_validation->set_rules('sequence', 'sequence', 'trim|required');
 
@@ -475,14 +475,16 @@ function createVideoCallInformationMail($participantInfoHTML) {
 
 		/**Fetching patient data from DB*/
 		$get_patient_query = "select patient_name, patient_email,".
-			" patient_phone, patient_age, patient_sex, log_id from patient_tbl".
+			" patient_phone, age, sex, log_id from patient_tbl".
 			" where patient_id = '".$patient_id."'";
-		$patient_entry = $this->db->query($get_patient_query)->result()[0];
+		
+		$patient_entry = $this->db->query($get_patient_query);
+		$patient_entry=$patient_entry ? $patient_entry->result()[0]:null;
 		$p_name = $patient_entry->patient_name;
 		$p_email = $patient_entry->patient_email;
-		$p_age = $patient_entry->patient_age;
+		$p_age = $patient_entry->age;
 		$p_phone = $patient_entry->patient_phone;
-		$p_gender = $patient_entry->patient_sex;
+		$p_gender = $patient_entry->sex;
 		$p_log_id = $patient_entry->log_id;
 
 		$data['service1'] = $service1;
@@ -1286,11 +1288,12 @@ public function registration()
 			'CAST(bookings.sequence AS TIME) <=  "'.$booking_time.'" AND "'.$booking_time.
 			'" <= ADDTIME(CAST(bookings.sequence AS TIME), SEC_TO_TIME(schedule.per_patient_time*60))) '.
 			' ORDER BY bias_reduction_score DESC;';
+		
 		$available_doctors = $this->db->query($sql_query);
 		foreach ($available_doctors->result() as $doc) {
 			echo '<div class="our-team" data-value="'.$doc->doctor_id.'">
 			        <div class="picture">
-			          <img class="img-fluid" src="'.$doc->picture.'
+			          <img class="img-fluid" src="'.$doc->picture.'">
 			        </div>
 			        <div class="team-content">
 			          <h3 class="name"> '.$doc->doctor_name.' </h3>

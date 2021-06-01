@@ -268,6 +268,7 @@ $hello = GeraHash(5);
                     <!-- <button type="button" id="sendOtp_register" class="btn btn-lg btn-success btn-block">Send OTP</button>
  -->
                     <input type="hidden" id="base_url" value="<?php echo base_url()?>">
+                    <input type="hidden" id="registeringuser" value="">
             </form>
         </div>
 <span style="text-align:center;width: 100%;float: left;margin-top: 20px;"><a href="<?php echo base_url();?>">Go to site</a></span>
@@ -877,6 +878,7 @@ $(document).ready(function(){
                         $('#otp_field1').css('display','block');
                         $('#auth').css('display','block');
                         $('#register').hide();
+                        $('#registeringuser').value=true;
                     }})
 
 

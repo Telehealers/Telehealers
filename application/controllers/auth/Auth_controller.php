@@ -36,6 +36,7 @@ class Auth_controller extends CI_Controller {
 			$email = $this->input->post('email',true);
 			$password = $this->input->post('password',true);
 			$type = $this->input->post('type',true);
+			$register = $this->input->post('registeringuser',true);
 			
 			#------------------------------------------------#
 			$acess_data = $this->auth_model->authenticet($email,$password,$type); 
@@ -73,9 +74,17 @@ class Auth_controller extends CI_Controller {
                     'logged_in' => TRUE
                 );
 
-
+					$data['p_id']=$acess_data->patient_id,
 					$this->session->set_userdata($session_data);
-					redirect('Patient'); 
+					if($register){
+						$this->load->view('appointment',$data);
+
+					}
+					else{
+
+						redirect('Patient'); 
+					}
+
 				} else {
 					$session_data = array(
                     'log_id' => $acess_data->log_id,

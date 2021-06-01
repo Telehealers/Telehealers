@@ -11,7 +11,7 @@
                         <div class="top_social">
                             <ul>
                             <li>
-                                    <a href="tel:+91-9352644967" target="_blank">Telehealers Covid Helpline +91-9352644967</a>
+                                    <a href="tel:+91-9071123400" target="_blank">Telehealers Covid Helpline +91-9071123400</a>
                                 </li>
                                 <li>
                                     <a href="<?php echo (!empty(html_escape($info->facebook->details))?html_escape($info->facebook->details):null); ?>" target="_blank"><i class="fab fa-facebook-f"></i></a>
