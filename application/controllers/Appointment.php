@@ -87,9 +87,9 @@ class Appointment extends CI_Controller {
 
 		// get doctor list for appointmaent
 		$data['doctor_info_for_appo'] = $this->doctor_model->getDoctorListByselect();
-		//get departments 
+		//get departments
 		 $data['departments']=$this->ajax_model->getservicetype('Speciality Consultation');
-		
+
 
 		$language_arr = array();
 		$language_str = $this->doctor_model->getDoctorListByselect();
@@ -1522,14 +1522,14 @@ public function registration()
 	}
 	/* Get available doctors
       INPUT booking_time ({sql datetime}:
-	        sample:"YYYY-MM-DD Hr:Min:Sec" e.g. "2021-05-25 10:00:32"), 
+	        sample:"YYYY-MM-DD Hr:Min:Sec" e.g. "2021-05-25 10:00:32"),
         preferred_language:e.g. "English", "Hindi".
 		department_type : department_id from table doctor_department_info
-      returns: HTML doctor list with pictures and all-unselected radio buttons. 
-        TODO: rows with bias_reduction < 0, are rows with other languages, 
+      returns: HTML doctor list with pictures and all-unselected radio buttons.
+        TODO: rows with bias_reduction < 0, are rows with other languages,
 			handle this case.
         REMARKS: We can also add bias which sort rows according to preferred,
-          common(like English) and other(like other state's language/boli) languages, 
+          common(like English) and other(like other state's language/boli) languages,
 		  a 3-categorized language set.
     */
 	public function getdoctorforappointment(){
@@ -1566,17 +1566,20 @@ public function registration()
 
 		foreach ($available_doctors->result() as $doc) {
 			if($doc->doctor_name!='Admin'){
-			echo '<div class="our-team" data-value="'.$doc->doctor_id.'">
+          $picture=$doc->picture?$doc->picture:base_url()."web_assets2/images/user_img.png";
+
+			echo '<div class="col-sm-12 col-md-4 col-lg-3">
+          <div class="our-team" data-value="'.$doc->doctor_id.'">
 			        <div class="picture">
-			          <img class="img-fluid" src="'.$doc->picture.'">
+			          <img class="img-fluid" src="'.$picture.'">
 			        </div>
 			        <div class="team-content">
 			          <h3 class="name"> '.$doc->doctor_name.' </h3>
 			          <h4 class="title">'.$doc->designation.'</h4>
 			          <h5 class="language">'.$doc->language.'</h5>
 			        </div>
-			        
-      </div>';
+
+      </div></div>';
 		}}
 	}
 
