@@ -690,7 +690,7 @@ function getTime(date,hour, minute,am_pm,language){
   minute= minute ? minute: $('#minute .active').text().substr(2,4);
   am_pm=am_pm? am_pm : ($('#meredium .active').text()).replace(/\s/g, "");
   document.getElementById("time").innerHTML = date_cool.toDateString()+" "+hour+":"+minute+" "+am_pm;
-  document.getElementById("sequence").innerHTML = hour+":"+minute+" "+am_pm;
+  $("#sequence").val(hour+":"+minute+" "+am_pm);
 
   language=language?language:$('#dLabel').text()
 
