@@ -464,14 +464,21 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		$booking_am_pm = $this->input->post("booking_am_pm", TRUE);
 		$sequence = $booking_hour.":".$booking_min.":00 ".$booking_am_pm;
 		$sequence = date("H:i:s", strtotime($sequence));
-		$booking_time = $booking_date." ".$sequence ;
 		$service1 = $this->input->post('service1',TRUE);
 		$service2 = $this->input->post('service2',TRUE);
 		$doctor_id = $this->input->post('doctor_id');
-		$schedul_id = $this->input->post('schedul_id',TRUE);
-		$patient_id = $this->input->post('p_id', TRUE);
+		/**TODO: Bad schedule_id, use sql auto-increment column*/
+		$schedul_id = "A".date('y').strtoupper($this->randstrGenapp(5));
+		$patient_id = "";
+		if ($this->session->userdata("user_type") == "3")
+			$patient_id = $this->session->userdata("user_id");
+		else {
+			/**Bad user type: Only implemented for patient*/
+			log_message('error',"Bad user_type(".$this->session->userdata("user_type").
+				") coming from request. Only allowed user type is of patient('3')");
+			show_404();
+		}
 		$venue_id = 3; /**NOTE: venue = Online */
-		$p_cc = $this->input->post('problem',TRUE);
 
 		/**Fetching patient data from DB*/
 		$get_patient_query = "select patient_name, patient_email,".
@@ -519,7 +526,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 			'sequence' => $sequence,
 			'venue_id' => $venue_id,
 			'doctor_id' => $doctor_id,
-			'problem' => $p_cc,
+			'problem' => "",
 			'service' => $service1,
 			'servicetype' => $service2,
 			'get_date_time' => date("Y-m-d h:i:s"),
@@ -550,13 +557,14 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		$sql_m = "update appointment_tbl set symt1 = '".$symt1."',symt2 = '".$symt2."' where appointment_id = '$appointment_id'";
 		$this->db->query($sql_m);
 
-
 		/** Informing participants */
 		$message = $this->createVideoCallInformationMail('
 			<p>Hey <strong>'.$p_name.'</strong>,</p>
-			<p>Our staff member has confirmed you for a '.$service2.' appointment on '.date('jS F Y',$booking_time).' with Dr. '.$doctor_name.'. If you have questions before your appointment,
-				use the contact form with appointment ID to get in touch with us.</p>
-			<h2 style="text-align:left;font-weight:600;color:#356d82">Videocall Details:</h2> 
+			<p>Our staff member has confirmed you for a '.$service2.
+				' appointment on '.$booking_date.' with Dr. '.$doctor_name.
+				'. If you have questions before your appointment,'.
+				'use the contact form with appointment ID to get in touch with us.</p>
+			<h2 style="text-align:left;font-weight:600;color:#356d82">Videocall Details:</h2>
 			<p>Superpro video call link: '.$superpro_meeting_url.',</p>
 			<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Appointment ID - ('.$appointment_id.')</h2><h1></h1>
 			<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Doctor Details:</h2><h1></h1>
@@ -568,8 +576,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 			<p>Phone: '.$p_phone.'</p>
 			<p>Age: '.$p_age.'</p>
 			<p>Gender: '.$p_gender.',</p>
-			<p>Tell us your symptom or health problem: '.$p_cc.'</p>
-			<p>Appointment Date: '.date('jS F Y',$booking_time).'</p>
+			<p>Appointment Date: '.$booking_date.'</p>
 			<p>Appointment Time: '.date('h:i A', strtotime($sequence)).'</p>
 			<p>Appointment ID: '.$appointment_id.'</p>');
 
@@ -600,7 +607,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 			'venue_id' => $venue_id,
 			'venue_name' => $venue_name,
 			'doctor_id' => $doctor_id,
-			'problem' => $p_cc,
+			'problem' => "",
 			'service' => $service1,
 			'servicetype' => $service2,
 			'get_date_time' => date("Y-m-d h:i:s"),
@@ -1261,7 +1268,7 @@ public function registration()
 		// to use them.
 		$department_type = $this->input->post('department_type',TRUE);
 		$department_filter = ($department_type)? '(dpt.department_id = '.$department_type.') AND ':"";
-		 $preferred_language = $this->input->post('preferred_language', TRUE);
+		$preferred_language = $this->input->post('preferred_language', TRUE);
 		$preferred_language_filter = '(language LIKE "%'.$preferred_language.'%")';
 		$sequence =$this->input->post("booking_hour",TRUE).":".
 		$this->input->post("booking_minute", TRUE).":00 ".
