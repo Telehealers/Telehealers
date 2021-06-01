@@ -25,7 +25,11 @@
     }
     $con = '';
     if($service_id>0){
-        $sql_st = "select * from servicetype where service = '".$service_id."'";
+        $sql_st = 'SELECT DISTINCT doctor_department_info.department_id , doctor_department_info.department_name
+FROM doctor_department_info
+    INNER JOIN doctor_tbl
+        ON doctor_department_info.department_id = doctor_tbl.department
+;';
         $res_st = $this->db->query($sql_st);
         $result_st = $res_st->result_array();
         $i=0;

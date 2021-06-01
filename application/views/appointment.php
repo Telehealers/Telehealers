@@ -67,7 +67,9 @@ return $Hash;
 }
 //Here you specify how many characters the returning string must have
 $hello = GeraHash(5);
+$this->load->view('header');
 ?>
+
 <style>
     .owl-carousel .owl-item img{width:65%;}
 
@@ -306,6 +308,7 @@ input.range::-ms-fill-upper {
  .btn-group__item--active:after {
 	 opacity: 1;
 	 transform: translatey(-2px);
+
 }
 
 #outer {
@@ -470,7 +473,6 @@ input.range::-ms-fill-upper {
 
 </style>
 <body>
-
     <div class="container" style="background: white;margin-top: 20px;margin-bottom: 20px;border-radius: 10px;box-shadow: 4px 5px 8px #ababab;">
     <div class="row" style="text-align:center; color:white;background:grey;border-top-left-radius: 8px;border-top-right-radius: 8px;padding:10px ;padding-left:100px;padding-right:100px">
     <div class="col-12">
@@ -480,7 +482,9 @@ input.range::-ms-fill-upper {
     <?php   $attributes = array('class' => 'form-horizontal','role'=>'form');
             echo form_open_multipart('Appointment/confirmation', $attributes);
       ?>
-    <div class="row pt-4" style="margin-bottom: 20px;padding-left:100px;padding-right:100px">
+    <div id="q_succ_msg" class="mt-3 alert alert-success" style="display:none"></div>
+
+    <div class="row pt-4" style="margin-bottom: 20px;padding-left:2%;padding-right:2%">
     <div class="col-sm-12 col-md-4 col-lg-4">
     <div class="dropdown display-flex" >
   <button id="dLabel" class="dropdown-select float-right" style="width:100%" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >Select Language<span class="caret" id="language"></span></button>
@@ -516,7 +520,7 @@ input.range::-ms-fill-upper {
 
     </div>
     </div>
-    <div class="row mb-3" style="padding-left:100px;padding-right:100px">
+    <div class="row mb-3" style="padding-left:2%;padding-right:2%">
     <div class="col-sm-12 col-md-10 col-lg-10">
     <div>
     <h1 for="customRange3" class="form-label labelStyle" style="margin-top: 0;">Book Time Slot</h1>
@@ -565,7 +569,7 @@ input.range::-ms-fill-upper {
 </div>
     </div>
     </div>
-    <div class="row mt-4" style="padding-left:100px;padding-right:100px">
+    <div class="row mt-4" style="padding-left:2%;padding-right:2%">
     <div class="col-sm-12 col-md-6 col-lg-6">
     <div class="btn-group"id="minute" role="group" aria-label="Basic example">
   <button type="button" id="btn1" class="btn btn-secondary">0:00</button>
@@ -582,20 +586,22 @@ input.range::-ms-fill-upper {
 </div>
     </div>
     </div>
-    <div class="row mb-3" id="department_type" style="display:none;padding-left:100px;padding-right:100px">
+    <div class="row mb-3" id="department_type" style="display:none;padding-left:2%;padding-right:2%">
 
     <div class="col-sm-12 col-md-12 col-lg-12">
     <h1 for="customRange3" class="form-label labelStyle mb-4 mt-4" style="margin-top:0%">Departments</h1>
-    <div class="btn-group" id="elem" style="height:40px !important">
+    <div class="btn-group" id="elem" style="width:inherit;height:40px !important">
          <?php if(is_array($departments) && count($departments)>0){
+                //var_dump($departments);
                 foreach($departments as $val){
-                        ?><button class="btn-group__item btn-group__item" >
-                            <?php echo $val['servicetype']
-                                           ?></button><?php }} ?>
+                    if($val['department_id']!= 5){
+                        ?><button type="button"class="btn-group__item btn-group__item" value="<?php echo $val['department_id']?>">
+                            <?php echo $val['department_name'];
+                                           ?></button><?php }}} ?>
    </div>
     </div>
     </div>
-    <div class="row" style="padding-left:100px;padding-right:100px">
+    <div class="row" style="padding-left:2%;padding-right:2%">
     <div class="col-sm-12 col-md-12 col-lg-12">
     <h1 for="customRange3" class="form-label labelStyle mb-3" >Consultants</h1>
     <input type="hidden" id="base_url" value="<?php echo base_url()?>">
@@ -606,9 +612,14 @@ input.range::-ms-fill-upper {
     </div>
     </div>
     <div class="container" style="padding:0px">
-  <div class="row"  id="docs" style="padding-left:100px;padding-right:100px">
+  <div class="row"  id="docs" style="padding-left:2%;padding-right:2%">
 
     </div>
+    </div>
+    <div class="container-fluid" style="padding-left:2%;padding-right:2%">
+    <div class="col-md-10 col-sm-10 col-lg-11 "></div>
+    <div class="col-md-2 col-sm-2 col-lg-1">
+    <button type="submit" style="position: fixed;right: 120px;"class="btn btn-success"><?php echo display('submit')?></button>
     </div>
 
 
@@ -618,12 +629,7 @@ input.range::-ms-fill-upper {
           </div>
       </div>
     </div>
-    <div class="row" style="padding-left:100px;padding-right:100px">
-    <div class="col-12">
-    <div>
-    <button type="submit" style="position: absolute;bottom: 35 px;right: 120px;;"class="btn btn-success"><?php echo display('submit')?></button>
-    </div>
-
+    
   </div>
 </div>
 <script>
@@ -649,7 +655,7 @@ function cleanHours(originalVal){
     }
   return originalVal
 }
-function getTime(date,hour, minute,am_pm,language){
+function getTime(date,hour, minute,am_pm,language,department){
 
   date = date ? date : $('#datepicker').datepicker('getFormattedDate');
   date_cool = new Date(date);
@@ -664,18 +670,19 @@ function getTime(date,hour, minute,am_pm,language){
   if(language=='Select Language'){
     language='';
   }
-  var department
+  
   if($('input:radio[id^="flexRadioDefault"]')[0].checked){
     department=6; // default dept general dept / general physician , needs to be checked with db
   }
-  if($('input:radio[id^="flexRadioDefault"]')[1].checked){
-    console.log($('#department_type').value);
+  else if($('input:radio[id^="flexRadioDefault"]')[1].checked & !department){
+      $('#q_succ_msg').html('select a department to view doctors');
+      $('#q_succ_msg').show();
   }
-  getDoctors(language,date,hour,minute,am_pm,department);
 
-
-
-
+  if(department){
+    $('#q_succ_msg').hide();
+    getDoctors(language,date,hour,minute,am_pm,department);
+  }
 
 }
 $(document).ready(function(){
@@ -694,6 +701,7 @@ $('#btn1').ready(function(){
 $('#ambtn').ready(function(){
   $('#ambtn').addClass("active");
 });
+
 $('#datepicker').on('changeDate',function(e) {
     var date=($('#datepicker').datepicker('getFormattedDate'));
     getTime(date);
@@ -704,7 +712,7 @@ $('#datepicker').on('changeDate',function(e) {
 $('#dLabel ').on('DOMNodeInserted',function(e){
     var language=e.target.innerHTML;
     //console.log(language);
-   getTime(null,null,null,null,language);
+   getTime(null,null,null,null,language,null);
 
 });
 
@@ -712,8 +720,7 @@ $('#dLabel ').on('DOMNodeInserted',function(e){
 
 $('#time_hour').on('change', function(ev){
     var hour = cleanHours(parseInt(ev.target.value));
-    getTime(null,hour,null,null,null);
-
+    getTime(null,hour,null,null,null,null);
 
 });
 
@@ -723,6 +730,7 @@ $('#meredium button').on('click',function(e){
   getTime();
 
 });
+
 $('#minute button').on('click',function(e){
   var minute=(e.target.innerHTML).substr(2, 4)
   $(this).addClass("active").siblings().removeClass("active");
@@ -730,7 +738,9 @@ $('#minute button').on('click',function(e){
 
 });
 $('#elem').on('click',function(e){
-  $(this).addClass("active").siblings().removeClass("active");
+  var dept=(e.target.value);
+  getTime(null,null,null,null,null,dept);
+
 });
 
 
@@ -762,6 +772,8 @@ $(document).on('click', 'input:radio[id^="flexRadioDefault"]', function(event) {
   }
 
   if(queryType == "non_covid"){
+    $('#docs')[0].textContent='';
+
   document.getElementById('department_type').style.display = 'block';
 
 
@@ -784,15 +796,15 @@ $(function() {
        var items = elem.children();
 
        // Inserting Buttons
-       elem.prepend('<div id="right-button" style="visibility: hidden;font-size:30px"><a href="#"><</a></div>');
-       elem.append('  <div id="left-button" style="font-size:30px"><a href="#" >></a></div>');
+       elem.prepend('<div class="col-sm-1 col-md-1 col-lg-1"><div id="right-button" style="visibility: hidden;font-size:30px"><</div></div>');
+       elem.append('<div class="col-sm-1 col-md-1 col-lg-1">  <div id="left-button" style="font-size:30px">></div>');
 
 //       Inserting Inner
        items.wrapAll('<div id="inner" />');
 
        // Inserting Outer
 
-       elem.find('#inner').wrap('<div id="outer"/>');
+       elem.find('#inner').wrap('<div class="col-sm-10 col-md-10 col-lg-10"id="outer"/>');
 
        var outer = $('#outer');
 
@@ -807,7 +819,7 @@ $(function() {
            setVisible($('#left-button'));
          }
        };
- //      updateUI();
+       updateUI();
 
 
        // $('#dLabel').on('change',function(){
@@ -841,18 +853,20 @@ $(function() {
      });
 
 
-// const buttons = document.querySelectorAll(".btn-group__item");
-// buttons.forEach(button => {
-//   button.addEventListener("click",() => {
-//     // do some action according to button
+const buttons = document.querySelectorAll(".btn-group__item");
+buttons.forEach(button => {
+  button.addEventListener("click",() => {
+    // do some action according to button
 
-//     // show success feedback
-//     button.classList.add("btn-group__item--active");
-//     setTimeout(() => {
-//       button.classList.remove("btn-group__item--active");
-//     },600)
-//   })
-// })
+    // show success feedback
+    button.classList.add("btn-group__item--active");
+    setTimeout(() => {
+      button.classList.remove("btn-group__item--active");
+    },600);
+    $(this).siblings().removeClass("active");
+
+  })
+})
 
 
 $('.dropdown-menu li').on('click', function() {
@@ -1216,6 +1230,6 @@ var current_fs, next_fs, previous_fs; //fieldsets
 
 });
 </script>
-
+<?php $this->load->view('footer');?>
 </body>
 </html>
