@@ -604,6 +604,7 @@ input.range::-ms-fill-upper {
    </div>
     </div>
     </div>
+
     <div class="row" style="padding-left:2%;padding-right:2%">
     <div class="col-sm-12 col-md-12 col-lg-12">
     <h1 for="customRange3" class="form-label labelStyle mb-3" >Consultants</h1>
@@ -611,12 +612,9 @@ input.range::-ms-fill-upper {
         <input type="hidden" id="sequence" value="">
         <input type="hidden" id="p_id" value="P21MFI6Q">
         <input type="hidden" id="doctor_id">
-
-
-
     </div>
     </div>
-    <div class="container" style="padding:0px">
+    <div class="container" style="padding:0px;height: 500px;overflow-y: auto;overflow-x: hidden;width: auto;">
   <div class="row"  id="docs" style="padding-left:2%;padding-right:2%">
 
     </div>
@@ -624,7 +622,7 @@ input.range::-ms-fill-upper {
     <div class="container-fluid" style="padding-left:2%;padding-right:2%">
     <div class="col-md-10 col-sm-10 col-lg-11 "></div>
     <div class="col-md-2 col-sm-2 col-lg-1">
-    <button type="submit" style="position: fixed;right: 120px;"class="btn btn-success"><?php echo display('submit')?></button>
+
     </div>
 
 
@@ -634,14 +632,37 @@ input.range::-ms-fill-upper {
           </div>
       </div>
     </div>
-    
+    <div class="row" style="padding: 10px;background: #f3f3f3;box-shadow: 0px -4px 5px #cac3c3ad;">
+  <div class="col-12">
+  <div style="float:right">
+<button type="submit"  class="btn btn-success" style="width: 200px;height: 50px;font-size: 25px;background: #393f7d;"><?php echo display('submit')?></button>
+</div>
   </div>
+  </div>
+
+  </div>
+
+</div>
+
+<!-- Modal -->
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Modal header</h3>
+    </div>
+    <div class="modal-body">
+        <p>One fine body…</p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        <button class="btn btn-primary">Save changes</button>
+    </div>
 </div>
 <script>
 var department='';
 function getDoctors(language,date,hour,min,am_pm,department){
     $('#docs')[0].textContent='';
-
+    $('#my-modal').modal({show: 'false'});
     var base_url=$('#base_url').val();
     $.ajax({
     url:base_url+'index.php/Appointment/getdoctorforappointment',
@@ -676,7 +697,7 @@ function getTime(date,hour, minute,am_pm,language){
   if(language=='Select Language'){
     language='';
   }
-  
+
   if($('input:radio[id^="flexRadioDefault"]')[0].checked){
     department=6; // default dept general dept / general physician , needs to be checked with db
   }
@@ -744,16 +765,16 @@ $('#minute button').on('click',function(e){
 
 });
 $('#elem').on('click',function(e){
-  department=(e.target.value);   
+  department=(e.target.value);
   getTime();
 
 });
-$('#docs').on('click',function(e){
-  var doctor=(e.target.dataset.value);   
-  console.log(doctor);
-  //getTime();
-
+$('#docs').on('click',function(event){
+      var docid = event.target.getAttribute("data-value");
+       console.log('docid',docid);
+       $('#doctor_id').value = docid;
 });
+
 
 
 $('#p_name').keypress(function (e) {
@@ -1239,9 +1260,10 @@ var current_fs, next_fs, previous_fs; //fieldsets
               easing: 'easeInOutBack'
           });
       });
-
+ 
   $(".submit").click(function () {
-          return false;
+    $('#myModal').modal('show');
+          // return false;
       })
 
 });

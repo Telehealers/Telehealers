@@ -477,7 +477,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		$get_patient_query = "select patient_name, patient_email,".
 			" patient_phone, age, sex, log_id from patient_tbl".
 			" where patient_id = '".$patient_id."'";
-		
+
 		$patient_entry = $this->db->query($get_patient_query);
 		$patient_entry=$patient_entry ? $patient_entry->result()[0]:null;
 		$p_name = $patient_entry->patient_name;
@@ -1288,20 +1288,21 @@ public function registration()
 			'CAST(bookings.sequence AS TIME) <=  "'.$booking_time.'" AND "'.$booking_time.
 			'" <= ADDTIME(CAST(bookings.sequence AS TIME), SEC_TO_TIME(schedule.per_patient_time*60))) '.
 			' ORDER BY bias_reduction_score DESC;';
-		
+
 		$available_doctors = $this->db->query($sql_query);
+
 		foreach ($available_doctors->result() as $doc) {
 			if($doc->doctor_name!='Admin'){
           $picture=$doc->picture?$doc->picture:base_url()."web_assets2/images/user_img.png";
 
-			echo '<div class="col-sm-12 col-md-4 col-lg-3" data-value="'.$doc->doctor_id.'"> 
-          <div class="our-team" >
-			        <div class="picture">
-			          <img class="img-fluid" src="'.$picture.'">
+			echo '<div class="col-sm-12 col-md-4 col-lg-3" id="'.$doc->doctor_id.'" data-value="'.$doc->doctor_id.'">
+          <div class="our-team" data-value="'.$doc->doctor_id.'">
+			        <div class="picture" data-value="'.$doc->doctor_id.'">
+			          <img class="img-fluid" src="'.$picture.'" data-value="'.$doc->doctor_id.'">
 			        </div>
-			        <div class="team-content">
-			          <h3 class="name"> '.$doc->doctor_name.' </h3>
-			          <h4 class="title">'.$doc->designation.'</h4>
+			        <div class="team-content" data-value="'.$doc->doctor_id.'">
+			          <h3 class="name" data-value="'.$doc->doctor_id.'"> '.$doc->doctor_name.' </h3>
+			          <h4 class="title" data-value="'.$doc->doctor_id.'">'.$doc->designation.'</h4>
 			        </div>
 
       </div></div>';
