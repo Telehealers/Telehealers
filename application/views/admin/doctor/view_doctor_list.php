@@ -20,7 +20,7 @@
     <!-- Main content -->
     <section class="content">
     <?php 
-        echo @$msg = $this->session->flashdata('message'); 
+       // echo @$msg = $this->session->flashdata('message'); 
     ?>
     <div class="row">
         <!--  table area -->

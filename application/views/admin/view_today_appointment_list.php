@@ -49,7 +49,6 @@
                                     <th class="all"><?php echo display('sequence');?></th>
                                     <th class="all"><?php echo display('date');?></th>
                                     <th class="all">Meeting URL</th>
-                                    <th class="all">Meeting Password</th>
                                     <th class="desktop"><?php echo display('action');?></th>
                                 </tr>
                             </thead>
@@ -57,34 +56,20 @@
                             <tbody>
                                 <?php 
                                 foreach (@$appointmaent_info as $value) {
-                                     $result = $this->db->select('appointment_id')
-                                     ->from('prescription')
-                                     ->where('appointment_id',$value->appointment_id)
-                                     ->get()
-                                     ->num_rows();
-
-                                   $sql2 = "select * from appointment_tbl where appointment_id= '".$value->appointment_id."'";
-									$res_doc = $this->db->query($sql2);
-									$result_doc = $res_doc->result_array();
-									if(is_array($result_doc) && count($result_doc)>0){
-										$symt1 = $result_doc[0]['symt1'];
-										$symt2 = $result_doc[0]['symt2'];
-										$doctor_id = $result_doc[0]['doctor_id'];
-									}
-									
-									$SQL = 'select doctor_name from doctor_tbl where doctor_id = "'.$doctor_id.'"';
-		
-									$query = $this->db->query($SQL);
-
-									$result2 = $query->result_array();
-									$doctor_name = '-';
-									if(is_array($result2) && count($result2)>0){
-										$doctor_name = $result2[0]['doctor_name'];
-									}
+                                    $sql2 = "select * from appointment_tbl where appointment_id= '".$value->appointment_id."'";
+                                    $res_doc = $this->db->query($sql2);
+                                    $result_doc = $res_doc->result_array();
+                                    $symt1=null;
+                                    $symt2=null;
+                                    if(is_array($result_doc) && count($result_doc)>0){
+                                        $symt1 = $result_doc[0]['symt1'];
+                                        $symt2 = $result_doc[0]['symt2'];
+                                        $doctor_id = $result_doc[0]['doctor_id'];
+                                    }
                                 ?>
 
                                     <tr>
-									<td><?php echo html_escape($doctor_name);?></td>
+									<td><?php echo html_escape($value->doctor_name);?></td>
                                     <td><?php echo html_escape($value->patient_name);?></td>
                                     <td><?php echo html_escape($value->patient_id);?></td>
                                     <td><?php echo html_escape($value->patient_phone);?></td>
@@ -106,9 +91,6 @@
                                         <a href="<?php echo $symt1;?>" target="_blank"><?php echo $symt1;?></a>
                                     </td>
 										
-                                    <td>
-										<?php echo $symt2;?>
-                                    </td>
                                     <td class="text-center">
                                     <?php if(empty($result) AND $this->session->userdata('user_type')==1) { ?>
                                         <a class="btn btn-xs btn-primary"  href="<?php echo base_url();?>admin/Prescription_controller/create_prescription/<?php echo html_escape($value->appointment_id); ?>" ><i class="fa fa-user-md"></i></a>

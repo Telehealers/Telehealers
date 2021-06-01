@@ -175,8 +175,9 @@ public function advice()
 #     save advice 
 #--------------------------------	
 	public function save_advices()
-	{
-		$advice['create_by'] = 1;
+	{	
+
+		$advice['create_by'] = $this->session->userdata('doctor_id');
 		$advice['advice'] = $this->input->post('advice',TRUE); 
 		$this->db->insert('doctor_advice',$advice);
 		

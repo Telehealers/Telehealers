@@ -1328,7 +1328,8 @@ public function registration()
 	public function checkAppointment(){
 		$p_email = $this->input->post('p_email',TRUE);
 		$p_date = $this->input->post('p_date',TRUE);
-
+		$doc_id = $this->input->post('doc_id',TRUE);
+		
 		$patient_id = '';
 		$sql = "select * from patient_tbl where patient_email = '$p_email' ";
 		$res = $this->db->query($sql);
@@ -1336,9 +1337,9 @@ public function registration()
 		if(is_array($result) && count($result)>0){
 			$patient_id = $result[0]['patient_id'];
 		}
-
-		$check =  $this->appointment_model->Check_appointment($p_date,$patient_id);
-
+		
+		$check =  $this->appointment_model->Check_appointment_with_doctor($p_date,$patient_id,$doc_id);
+		  
 		if(!empty($check)){
 			echo '1';
 		}else{
@@ -1347,4 +1348,5 @@ public function registration()
 
 	}
 
+	 
 }

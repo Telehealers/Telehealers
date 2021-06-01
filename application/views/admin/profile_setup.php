@@ -190,8 +190,17 @@
 								<div class="form-group">
                                     <label class="col-md-3 control-label">Language</label>
                                     <div class="col-md-7">
-                                         <textarea name="language" value="<?php echo html_escape(@$doctor_info->language); ?>" 
-                                            class="form-control" rows="3"><?php echo html_escape(@$doctor_info->language); ?></textarea>
+                                         <?php 
+									$doc_arr = array();
+									$doc_lang = $doctor_info->language;
+									$doc_langArr = explode(',',$doc_lang);
+									foreach($doc_langArr as $val){
+										$doc_arr[] = trim($val);
+									}
+									?>     
+									<?php foreach($doc_language as $val){?>
+										<input type="checkbox" <?php if(in_array($val,$doc_arr)){?> checked="checked" <?php } ?> name="language[]" value="<?php echo $val; ?>" />&nbsp;<?php echo $val; ?>
+									<?php }?>
                                     </div>
                                 </div>
 								
@@ -209,7 +218,6 @@
                                           id="summernote" class=" form-control" rows="4"><?php echo html_escape(@$doctor_info->about_me); ?>
                                          </textarea>
 
-                                        <span class="text-danger"><?php echo form_error('about_me'); ?> </span>
                                     </div>
                                 </div>
 
@@ -264,7 +272,7 @@
 											</div>
 										</div>	
 										<input type="hidden" id="d_img_sig" name="d_img_sig" />
-										<div id="dataURL"><img src="" width="200" ><div>
+										<div id="dataURL"><img src="" width="200" ></div>
                                     </div>
                                 </div>
 

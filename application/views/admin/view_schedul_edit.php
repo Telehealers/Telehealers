@@ -146,8 +146,6 @@
                                 </div>
                                 <input type="hidden" name="id" value="<?php echo html_escape($schedul_info->schedul_id);?>">
                             </div>
-							<div class="form-group">                                <label class="col-md-3 control-label "><span class="text-danger">*</span>Fees :</label>                                <div class="col-md-5">                                    <select class="form-control v_name" id="fees" name="fees">                                        <option value="1" <?php if($schedul_info->schedul_id==1){?> selected="selected"<?php }?>>Free</option>                                        <option value="2" <?php if($schedul_info->schedul_id==2){?> selected="selected"<?php }?>>Paid</option>                                    </select>                                </div>                            </div>
-
                             <div class="form-group row">
                                 <div class="col-sm-offset-3 col-sm-6">
                                     <button type="submit" class="btn btn-success"><?php echo display('Update');?></button>

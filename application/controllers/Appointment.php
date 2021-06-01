@@ -645,14 +645,13 @@ function createVideoCallInformationMail($participantInfoHTML) {
 
 		$ci = get_instance();
 		$ci->load->library('email');
-
-        $email_config = $this->email_model->email_config();
-        $protocol = null;
-		$smtp_host = null;
-		$smtp_port = null;
-		$smtp_user = null;
-		$smtp_pass = null;
-		
+		//Necessary variable initialization
+		$protocol = NULL;
+		$smtp_host = NULL;
+		$smtp_port = NULL;
+		$smtp_user = NULL;
+		$smtp_pass = NULL;
+        $email_config = NULL;
 		if(is_array($email_config) && count($email_config)>0){
 			$protocol = $email_config->protocol;
 			$smtp_host = $email_config->mailpath;
@@ -787,79 +786,29 @@ function createVideoCallInformationMail($participantInfoHTML) {
 
 		$sql_m = "update appointment_tbl set symt1 = '".$symt1."',symt2 = '".$symt2."' where appointment_id = '$appointment_id'";
 		$this->db->query($sql_m);
-
-
-
-		$message = '<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #f1f1f1;">
-    <center style="width: 100%; background-color: #f1f1f1;">
-        <div style="display: none; font-size: 1px;max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
-            &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
-        </div>
-        <div style="max-width: 600px; margin: 0 auto;" class="email-container">
-            <!-- BEGIN BODY -->
-            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
-                <tbody><tr>
-                    <td valign="top" class="bg_white" style="padding: 1em 2.5em 0 2.5em;">
-                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-                            <tbody><tr>
-                                <td class="logo" style="text-align: left;">
-                                    <h1>
-                                        <a href="http://telehealers.in/">
-                                        <img src="http://telehealers.in/assets/uploads/images/telehe2.png">
-                                        </a>
-                                    </h1>
-                                </td>
-                            </tr>
-                        </tbody></table>
-                    </td>
-                </tr>
-                <tr>
-                    </tr></tbody></table><table class="bg_white" role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-                        <tbody><tr style="border-bottom: 1px solid rgba(0,0,0,.05);">
-                            <td valign="middle" width="100%" style="text-align:left; padding: 0 2.5em;">
-                                <div class="product-entry">
-                                    <div class="text">
-                                        <p>Hey <strong>'.$p_name.'</strong>,</p>
-                                        <p>Our staff member has confirmed you for a '.$service1.' appointment on '.date('jS F Y',strtotime($date)).' with Dr. '.$doctor_name.'. If you have questions before your appointment,
-                                            use the contact form with appointment ID to get in touch with us.</p>
-										<h2 style="text-align:left;font-weight:600;color:#356d82">Zoom Meeting Details:</h2>
-										<p>Zoom meeting URL: '.$zoom_meeting_url.',</p>
-										<p>Zoom meeting Password: '.$meeting_pass.',</p>
-                                        <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Appointment ID - ('.$appointment_id.')</h2><h1></h1>
-                                        <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Doctor Details:</h2><h1></h1>
-                                        <p>Name: '.$doctor_name.'</p>
-                                        <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Patient Details:</h2>
-                                        <p>Name: '.$p_name.'</p>
-                                        <p>ID: '.$patient_id.'</p>
-										<p>Email: '.$p_email.'</p>
-										<p>Phone: '.$p_phone.'</p>
-										<p>Age: '.$p_age.'</p>
-										<p>Gender: '.$p_gender.',</p>
-										<p>Tell us your symptom or health problem: '.$problem.'</p>
-										<p>Appointment Date: '.date('jS F Y',strtotime($date)).'</p>
-										<p>Appointment Time: '.date('h:i A', strtotime($sequence)).'</p>
-										<p>Appointment ID: '.$appointment_id.'</p>
-
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody></table>
-
-
-            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
-                <tbody><tr>
-                    <td class="bg_white" style="text-align: center;">
-                        <p>Receive these email? You can <a href="#" style="color: rgba(0,0,0,.8);">Unsubscribe here</a></p>
-                    </td>
-                </tr>
-            </tbody></table>
-
-        </div>
-    </center>
-
-
-</body></html>';
+		
+		
+		
+		$message = $this->createVideoCallInformationMail('
+			<p>Hey <strong>'.$p_name.'</strong>,</p>
+			<p>Our staff member has confirmed you for a '.$service1.' appointment on '.date('jS F Y',strtotime($date)).' with Dr. '.$doctor_name.'. If you have questions before your appointment,
+				use the contact form with appointment ID to get in touch with us.</p>
+			<h2 style="text-align:left;font-weight:600;color:#356d82">Videocall Details:</h2> 
+			<p>Superpro video call link: '.$superpro_meeting_url.',</p>
+			<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Appointment ID - ('.$appointment_id.')</h2><h1></h1>
+			<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Doctor Details:</h2><h1></h1>
+			<p>Name: '.$doctor_name.'</p>
+			<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Patient Details:</h2>
+			<p>Name: '.$p_name.'</p>
+			<p>ID: '.$patient_id.'</p>
+			<p>Email: '.$p_email.'.Enter this in videocall link to join.</p>
+			<p>Phone: '.$p_phone.'</p>
+			<p>Age: '.$p_age.'</p>
+			<p>Gender: '.$p_gender.',</p>
+			<p>Tell us your symptom or health problem: '.$problem.'</p>
+			<p>Appointment Date: '.date('jS F Y',strtotime($date)).'</p>
+			<p>Appointment Time: '.date('h:i A', strtotime($sequence)).'</p>
+			<p>Appointment ID: '.$appointment_id.'</p>');
 
 		$ci->email->from('info@telehealers.in', 'telehealers');
 		$list = array($p_email);
@@ -876,8 +825,15 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		$ci->email->subject('Appointment Information');
 		$ci->email->message($message);
 		$ci->email->send();
+		
+		$user_type = $this->session->userdata('user_type');
 
-
+		if($user_type==1){
+			$mes='successfully created appointment';
+			$this->session->set_flashdata('message',$mes);
+		redirect("admin/Appointment_controller/appointment_list");
+		}		
+		else{
 		$appointmentData = array(
 		'date' => $this->input->post('p_date',TRUE),
 		'patient_id' => $patient_id,
@@ -917,12 +873,13 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		);
 		$this->session->set_userdata($session_data);
 		$this->session->set_flashdata('message',"<div class='alert alert-success'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>".$mes."</div>");
-        redirect('Patient');
-		//$this->load->view('public/process_appointment_info',$data);
+        	redirect('Patient');
+		//$this->load->view('public/process_appointment_info',$data); 
 	}
-
-
-/*
+}
+	
+ 
+/* 
 |--------------------------------------
 |     view  print_appointment_info
 |--------------------------------------

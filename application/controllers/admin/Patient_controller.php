@@ -152,8 +152,7 @@ class Patient_controller extends CI_Controller {
 		
 	     $this->form_validation->set_rules('name', 'Name', 'trim|required');
       $this->form_validation->set_rules('phone', 'Phone Number', 'trim|required|min_length[6]|max_length[15]');
-      $this->form_validation->set_rules('patient_id', 'Patient Id', 'trim|required|is_unique[patient_tbl.patient_id]');
-      $this->form_validation->set_rules('email', 'Email', 'valid_email|is_unique[log_info.email]');         
+      $this->form_validation->set_rules('email', 'Email', 'valid_email');         
    
         if ($this->form_validation->run()==true) {
             // get picture data
@@ -195,7 +194,7 @@ class Patient_controller extends CI_Controller {
 			$patient_exist=0;
 			$sql_log = "select * from log_info where email = '$p_email'";
 			$res_log = $this->db->query($sql_log);
-			$result_log = $res_log->result_array();
+			$result_log = null;//$res_log->result_array();
 			if(is_array($result_log) && count($result_log)>0){
 				$this->session->set_flashdata('message','<div class="alert alert-success msg">Patient Email ID already exist.</div>');
 				redirect('create_new_patient');
@@ -211,7 +210,7 @@ class Patient_controller extends CI_Controller {
 			$log_id = $this->db->insert_id();	
 			
 			$p_name = $this->input->post('name',TRUE);
-			$patient_id  = $this->input->post('patient_id',TRUE);
+
 			$user_type = $this->session->userdata('user_type');
 			if($user_type==1){
 				$user_id = $this->session->userdata('doctor_id');	
@@ -221,19 +220,16 @@ class Patient_controller extends CI_Controller {
 			}
 			
             $create_date = date('Y-m-d h:i:s');
-            $birth_date = date('Y-m-d',strtotime($this->input->post('birth_date',TRUE)));
+            $p_id="P".date('y').strtoupper($this->randstrGen(2,4));
              $savedata =  array(
-            'patient_id'    => $this->input->post('patient_id',TRUE),
+            'patient_id'    => $p_id,
             'log_id'    => $log_id,
             'doctor_id'    => $user_id,
             'patient_name' => $this->input->post('name',TRUE),
             'patient_email' => $this->input->post('email',true),
-            'patient_phone' => $this->input->post('phone',TRUE), 
-            'birth_date' => $birth_date,
+            'patient_phone' => $this->input->post('phone',TRUE),
+            'age' => $this->input->post('age',TRUE), 
             'sex' => $this->input->post('gender',TRUE),
-            'blood_group' => $this->input->post('blood_group',TRUE),
-            'address' => $this->input->post('address',TRUE),
-            'picture' => $image,
             'create_date'=>$create_date
             );
             $savedata = $this->security->xss_clean($savedata); 
@@ -274,9 +270,6 @@ class Patient_controller extends CI_Controller {
 										<p>Thanks for choosing telehealers.in</p>
 										<p>Kindly visit Your dashboard using registered mobile number.</p>
 										<p>Url:  https://telehealers.in/Userlogin</p>
-                                        <p>Name: '.$p_name.'</p>
-                                        <p>ID: '.$patient_id.'</p>
-										<p>Email: '.$p_email.'</p>
 										<p>&nbsp;</p>
 										<p>Keep in touch during this tough time! </p>
 										<p>Kindly write us back without any hasitation if you find any issues at support@telehealers.in</p>
@@ -762,9 +755,9 @@ class Patient_controller extends CI_Controller {
                                 <div class="product-entry">
                                     <div class="text">
                                         <p>Hey Dr. '.$doctor_name.',</p>
-                                        <p>Patient referral to you bt '.$doctor_name_f.'.</p>
+                                        <p>Patient referral to you by '.$doctor_name_f.'.</p>
                                         
-                                        <p>ID: '.$patient_id.',</p>
+                                        <p>ID: '.$patient_id.'</p>
 										
                                     </div>
                                 </div>

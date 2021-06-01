@@ -4,10 +4,24 @@ This repo contains source of telehealers, written primarily in/using PHP, JS.
 ## Deployment Step
 1. [One Time] Install docker
 2. Load environment variables(see .env for reference)
+2. Place '.htaccess' file in src-base directory(see [Sample .htaccess](#Sample-.htaccess))
+    for apache server(Add appropriate env-variable on server deployment).
 2. In base directory do `docker-compose --env-file <path-to-envfile> up` (might require sudo access). 
 2. [One Time] Load data into db(mysql container). (At localhost:3306)
 2. [One Time][On Deployment] Change SSL certificate of apache server.
 2. Site will be up at `https://localhost:8443`
+
+### Sample .htaccess
+```sh
+RewriteEngine on
+RewriteCond %{HTTPS} off
+RewriteRule .* https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+RewriteCond %{HTTP_HOST} !^www\. [NC]
+RewriteRule .* https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php?/$1 [L]
+```
 
 ## Environment Variable
 * DB_USERNAME
