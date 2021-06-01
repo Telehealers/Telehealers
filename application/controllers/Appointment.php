@@ -460,10 +460,10 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		 * TODO: Match name and fetch vars which are not coming from request.
 		 */
 		$booking_date = $this->input->post('p_date', TRUE);
-		$booking_hour = $this->input->post("booking_hour", TRUE);
-		$booking_min = $this->input->post("booking_min", TRUE);
-		$booking_am_pm = $this->input->post("booking_am_pm", TRUE);
-		$sequence = $booking_hour.":".$booking_min.":00 ".$booking_am_pm;
+		// $booking_hour = $this->input->post("booking_hour", TRUE);
+		// $booking_min = $this->input->post("booking_min", TRUE);
+		// $booking_am_pm = $this->input->post("booking_am_pm", TRUE);
+		$sequence = $this->input->post("sequence",TRUE);
 		$sequence = date("H:i:s", strtotime($sequence));
 		$service1 = $this->input->post('department',TRUE);
 		$service2 = $this->input->post('department',TRUE);
