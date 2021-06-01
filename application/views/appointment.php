@@ -251,7 +251,7 @@ input.range::-ms-fill-upper {
 }
 .labelStyle{
   /* font-weight: 600; */
-    font-size: 20px;
+    font-size: 17px;
     /* color: #6c757d; */
 
     color: #5d5d5d;
@@ -377,7 +377,7 @@ input.range::-ms-fill-upper {
 
 .our-team .picture {
   display: inline-block;
-  height: 130px;
+  /* height: 130px; */
   width: 130px;
   margin-bottom: 50px;
   z-index: 1;
@@ -471,8 +471,8 @@ input.range::-ms-fill-upper {
 </style>
 <body>
 
-    <div class="container" style="background: white;margin-top: 20px;border-radius: 10px;box-shadow: 4px 5px 8px #ababab;">
-    <div class="row" style="text-align:center; color:white;background:grey;border-top-left-radius: 8px;border-top-right-radius: 8px;padding:10px">
+    <div class="container" style="background: white;margin-top: 20px;margin-bottom: 20px;border-radius: 10px;box-shadow: 4px 5px 8px #ababab;">
+    <div class="row" style="text-align:center; color:white;background:grey;border-top-left-radius: 8px;border-top-right-radius: 8px;padding:10px ;padding-left:100px;padding-right:100px">
     <div class="col-12">
     <h4>Book Appointment</h4>
     </div>
@@ -480,10 +480,10 @@ input.range::-ms-fill-upper {
     <?php   $attributes = array('class' => 'form-horizontal','role'=>'form');
             echo form_open_multipart('Appointment/confirmation', $attributes);
       ?>
-    <div class="row pt-4" >
+    <div class="row pt-4" style="margin-bottom: 20px;padding-left:100px;padding-right:100px">
     <div class="col-sm-12 col-md-4 col-lg-4">
-    <div class="dropdown">
-  <button id="dLabel" class="dropdown-select float-right" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >Select Language<span class="caret" id="language"></span></button>
+    <div class="dropdown display-flex" >
+  <button id="dLabel" class="dropdown-select float-right" style="width:100%" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >Select Language<span class="caret" id="language"></span></button>
   <ul class="dropdown-menu" id=""style="height: 200px;overflow: auto;" aria-labelledby="dLabel">
     <?php if(is_array($language_arr) && count($language_arr)>0){
                                         foreach($language_arr as $val){
@@ -494,8 +494,8 @@ input.range::-ms-fill-upper {
 </div>
 </div>
 
-    <div class="col-sm-12 col-md-4 col-lg-4" style="padding-left: 5%;">
-    <div class="form-group">
+    <div class="col-sm-12 col-md-4 col-lg-4" >
+    <div class="form-group" style="margin-bottom: 0;padding-top: 4px;">
             <div class='input-group date' id='datepicker'>
                <input type='text' id="p_date"class="form-control" value="<?php echo date("Y-m-d");?>" />
                <span class="input-group-addon">
@@ -507,19 +507,19 @@ input.range::-ms-fill-upper {
     <div class="col-sm-12 col-md-4 col-lg-4" style="display:flex;margin-top: 1%;" id="">
         <div class="form-check" style="margin-left:30px">
           <input class="form-check-input" type="radio" name="flexRadioDefault" value="covid" id="flexRadioDefault1" checked>
-          <label class="form-check-label" for="flexRadioDefault1">Covid</label>
+          <label class="form-check-label pl-4" for="flexRadioDefault1">Covid</label>
       </div>
   <div class="form-check" style="margin-left:30px">
         <input class="form-check-input" type="radio" name="flexRadioDefault" value="non_covid" id="flexRadioDefault2" >
-        <label class="form-check-label" for="flexRadioDefault2">Non-Covid</label>
+        <label class="form-check-label pl-4" for="flexRadioDefault2">Non-Covid</label>
   </div>
 
     </div>
     </div>
-    <div class="row mb-3" style="padding-left: 110px;padding-right: 110px;">
+    <div class="row mb-3" style="padding-left:100px;padding-right:100px">
     <div class="col-sm-12 col-md-10 col-lg-10">
     <div>
-    <label for="customRange3" class="form-label labelStyle" >Book Time Slot</label>
+    <h1 for="customRange3" class="form-label labelStyle" style="margin-top: 0;">Book Time Slot</h1>
     <fieldset class="range__field" id="time_hour" value="10">
    <input class="range" type="range" min="-2" max="10" value="-2">
    <svg role="presentation" width="100%" height="10" xmlns="http://www.w3.org/2000/svg">
@@ -557,32 +557,36 @@ input.range::-ms-fill-upper {
 </fieldset>
     </div>
     </div>
-    <div class="col-sm-12 col-md-2 col-lg-2" style="margin-top: 40px;">
-    <div class="btn-group" role="group" id="meredium" aria-label="Basic example">
+    <div class="col-sm-12 col-md-2 col-lg-2" style="margin-top: 20px;">
+    <div class="btn-group" role="group" style="display:flex" id="meredium" aria-label="Basic example">
   <button type="button" id="ambtn" class="btn btn-secondary">A M</button>
   <button type="button" class="btn btn-secondary">P M</button>
 
 </div>
     </div>
     </div>
-    <div class="row mb-3 mt-4" style="padding-left:110px;padding-right:110px">
-    <div class="col-12">
+    <div class="row mt-4" style="padding-left:100px;padding-right:100px">
+    <div class="col-sm-12 col-md-6 col-lg-6">
     <div class="btn-group"id="minute" role="group" aria-label="Basic example">
   <button type="button" id="btn1" class="btn btn-secondary">0:00</button>
   <button type="button" class="btn btn-secondary">0:15</button>
   <button type="button" class="btn btn-secondary">0:30</button>
   <button type="button" class="btn btn-secondary">0:45</button>
 </div>
-<div class="float-right">
-<label for="customRange3" id="time" class="form-label labelStyle" style="margin-bottom: 0 !important;padding-top: 5px;"></label>
+
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-6">
+    <div class="float-right">
+<h1 for="customRange3" id="time" class="form-label labelStyle" style="margin-bottom: 0 !important;margin-top:0px;padding-top: 5px;"></h1>
 
 </div>
     </div>
     </div>
-    <div class="row mb-3" id="department_type" style="display:none;padding: 0px 110px 0px 110px;">
-    <div class="col-sm-12 col-md-4 col-lg-3">
-    <label for="customRange3" class="form-label labelStyle mb-3" >Departments</label>
-    <div class="btn-group" id="elem">
+    <div class="row mb-3" id="department_type" style="display:none;padding-left:100px;padding-right:100px">
+
+    <div class="col-sm-12 col-md-12 col-lg-12">
+    <h1 for="customRange3" class="form-label labelStyle mb-4 mt-4" style="margin-top:0%">Departments</h1>
+    <div class="btn-group" id="elem" style="height:40px !important">
          <?php if(is_array($departments) && count($departments)>0){
                 foreach($departments as $val){
                         ?><button class="btn-group__item btn-group__item" >
@@ -591,9 +595,9 @@ input.range::-ms-fill-upper {
    </div>
     </div>
     </div>
-    <div class="row" style="padding-left:110px;padding-right:110px">
+    <div class="row" style="padding-left:100px;padding-right:100px">
     <div class="col-sm-12 col-md-12 col-lg-12">
-    <label for="customRange3" class="form-label labelStyle mb-3" >Consultants</label>
+    <h1 for="customRange3" class="form-label labelStyle mb-3" >Consultants</h1>
     <input type="hidden" id="base_url" value="<?php echo base_url()?>">
         <input type="hidden" id="sequence" value="">
         <input type="hidden" id="p_id" value="P21MFI6Q">
@@ -602,30 +606,31 @@ input.range::-ms-fill-upper {
     </div>
     </div>
     <div class="container" style="padding:0px">
-  <div class="row" id="docs" style="padding-left:110px; padding-right:110px">
+  <div class="row"  id="docs" style="padding-left:100px;padding-right:100px">
 
-    <div id="doctor_cards"> </div></div></div>
-    <div class="row">
-      <div class="panel panel-default" style="width: 100%;bottom:0;position: fixed;z-index: 99;">
-         <div class="panel-body">
-     <div class="col-sm-8 col-md-8 col-lg-8"></div>
-     <div class="col-sm-2 col-md-2 col-lg-2"> 
-    <button type="submit" style="position: relative; float:right;"class="btn btn-success"><?php echo display('submit')?></button>
-  </div></div></div>
-</div>
-  
+    </div>
+    </div>
+
+
     <div class="form-group row">
           <div class="col-sm-offset-3 col-sm-6">
-           
+
           </div>
       </div>
-</form>
     </div>
+    <div class="row" style="padding-left:100px;padding-right:100px">
+    <div class="col-12">
+    <div>
+    <button type="submit" style="position: absolute;bottom: 35 px;right: 120px;;"class="btn btn-success"><?php echo display('submit')?></button>
+    </div>
+
+  </div>
+</div>
 <script>
 
 function getDoctors(language,date,hour,min,am_pm,department){
     $('#docs')[0].textContent='';
-   
+
     var base_url=$('#base_url').val();
     $.ajax({
     url:base_url+'index.php/Appointment/getdoctorforappointment',
@@ -643,7 +648,7 @@ function cleanHours(originalVal){
       originalVal+=12;
     }
   return originalVal
-}  
+}
 function getTime(date,hour, minute,am_pm,language){
 
   date = date ? date : $('#datepicker').datepicker('getFormattedDate');
@@ -661,7 +666,7 @@ function getTime(date,hour, minute,am_pm,language){
   }
   var department
   if($('input:radio[id^="flexRadioDefault"]')[0].checked){
-    department=6; // default dept general dept / general physician , needs to be checked with db 
+    department=6; // default dept general dept / general physician , needs to be checked with db
   }
   if($('input:radio[id^="flexRadioDefault"]')[1].checked){
     console.log($('#department_type').value);
@@ -701,7 +706,7 @@ $('#dLabel ').on('DOMNodeInserted',function(e){
     //console.log(language);
    getTime(null,null,null,null,language);
 
-});   
+});
 
 
 
@@ -758,7 +763,7 @@ $(document).on('click', 'input:radio[id^="flexRadioDefault"]', function(event) {
 
   if(queryType == "non_covid"){
   document.getElementById('department_type').style.display = 'block';
-  
+
 
 }
 });
@@ -779,8 +784,8 @@ $(function() {
        var items = elem.children();
 
        // Inserting Buttons
-       elem.prepend('<div id="right-button" style="visibility: hidden;font-size:35px"><a href="#"><</a></div>');
-       elem.append('  <div id="left-button" style="font-size:35px"><a href="#" >></a></div>');
+       elem.prepend('<div id="right-button" style="visibility: hidden;font-size:30px"><a href="#"><</a></div>');
+       elem.append('  <div id="left-button" style="font-size:30px"><a href="#" >></a></div>');
 
 //       Inserting Inner
        items.wrapAll('<div id="inner" />');

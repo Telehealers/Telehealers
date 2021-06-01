@@ -87,9 +87,9 @@ class Appointment extends CI_Controller {
 
 		// get doctor list for appointmaent
 		$data['doctor_info_for_appo'] = $this->doctor_model->getDoctorListByselect();
-		//get departments 
+		//get departments
 		 $data['departments']=$this->ajax_model->getservicetype('Speciality Consultation');
-		
+
 
 		$language_arr = array();
 		$language_str = $this->doctor_model->getDoctorListByselect();
@@ -410,7 +410,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		$this->load->view('public/process_appointment_info',$data);
 
 	}
-	/** A function to confirm appointment ie Fill all DB entries and 
+	/** A function to confirm appointment ie Fill all DB entries and
 	 * provide information to participants and assistants.
 	 * Check function flow for functional bugs.
 	 * Current Function Flow: Email-client init
@@ -419,8 +419,8 @@ function createVideoCallInformationMail($participantInfoHTML) {
 	 * 	-> Create Video call and inform paticipant
 	 *  -> Save session data (userdata)
 	 *  -> redirect to Patient
-	 * Original Function Flow: Email-client init 
-	 * 	-> get-patient-log-id 
+	 * Original Function Flow: Email-client init
+	 * 	-> get-patient-log-id
 	 * 	-> Register unregistered patient in patient_tbl and log_info
 	 * 	-> Get patient and doctor data
 	 *  -> Save Appointment
@@ -506,7 +506,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 			log_message('error', "Bad doctor_id(".$doctor_id.") in ");
 			show_404();
 		}
-		$doctor_name = $doctor_entry->doctor_name; 
+		$doctor_name = $doctor_entry->doctor_name;
 		$log_id = $doctor_entry->log_id;
 		/** Bad way to generate ID
 		 * TODO: Use auto-increment.
@@ -539,8 +539,8 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		}
 		$doctor_email = $log_entry->email;
 
-		/** Video call room creation 
-		 * TODO: Add assistants to videocall members**/				
+		/** Video call room creation
+		 * TODO: Add assistants to videocall members**/
 		$superpro_meeting_url = $this->createVideoCallRoom(
 			$doctor_name, $doctor_email,
 			$p_name, $p_email);
@@ -558,7 +558,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 			<p>Hey <strong>'.$p_name.'</strong>,</p>
 			<p>Our staff member has confirmed you for a '.$service2.' appointment on '.date('jS F Y',$booking_time).' with Dr. '.$doctor_name.'. If you have questions before your appointment,
 				use the contact form with appointment ID to get in touch with us.</p>
-			<h2 style="text-align:left;font-weight:600;color:#356d82">Videocall Details:</h2> 
+			<h2 style="text-align:left;font-weight:600;color:#356d82">Videocall Details:</h2>
 			<p>Superpro video call link: '.$superpro_meeting_url.',</p>
 			<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Appointment ID - ('.$appointment_id.')</h2><h1></h1>
 			<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Doctor Details:</h2><h1></h1>
@@ -1248,14 +1248,14 @@ public function registration()
 	}
 	/* Get available doctors
       INPUT booking_time ({sql datetime}:
-	        sample:"YYYY-MM-DD Hr:Min:Sec" e.g. "2021-05-25 10:00:32"), 
+	        sample:"YYYY-MM-DD Hr:Min:Sec" e.g. "2021-05-25 10:00:32"),
         preferred_language:e.g. "English", "Hindi".
 		department_type : department_id from table doctor_department_info
-      returns: HTML doctor list with pictures and all-unselected radio buttons. 
-        TODO: rows with bias_reduction < 0, are rows with other languages, 
+      returns: HTML doctor list with pictures and all-unselected radio buttons.
+        TODO: rows with bias_reduction < 0, are rows with other languages,
 			handle this case.
         REMARKS: We can also add bias which sort rows according to preferred,
-          common(like English) and other(like other state's language/boli) languages, 
+          common(like English) and other(like other state's language/boli) languages,
 		  a 3-categorized language set.
     */
 	public function getdoctorforappointment(){
@@ -1270,7 +1270,7 @@ public function registration()
 		$this->input->post("booking_am_pm", TRUE);
 		$sequence = date("H:i:s", strtotime($sequence));
 		$booking_time = $this->input->post('booking_date', TRUE)." ".$sequence;
-			
+
 		$booking_time = urldecode($booking_time);
 		$sql_query = 'SELECT picture, designation, doctor_name, doctor_id, '.
 			'(IF('.$preferred_language_filter.', RAND(), -RAND())) as bias_reduction_score '. //Doctor selection bias reduction logic
@@ -1291,17 +1291,21 @@ public function registration()
 		
 		$available_doctors = $this->db->query($sql_query);
 		foreach ($available_doctors->result() as $doc) {
-			echo '<div class="our-team" data-value="'.$doc->doctor_id.'">
+			if($doc->doctor_name!='Admin'){
+          $picture=$doc->picture?$doc->picture:base_url()."web_assets2/images/user_img.png";
+
+			echo '<div class="col-sm-12 col-md-4 col-lg-3">
+          <div class="our-team" data-value="'.$doc->doctor_id.'">
 			        <div class="picture">
-			          <img class="img-fluid" src="'.$doc->picture.'">
+			          <img class="img-fluid" src="'.$picture.'">
 			        </div>
 			        <div class="team-content">
 			          <h3 class="name"> '.$doc->doctor_name.' </h3>
 			          <h4 class="title">'.$doc->designation.'</h4>
 			        </div>
-			        
-      </div>';
-		}
+
+      </div></div>';
+		}}
 	}
 
 	public function getpromocodeprice(){
