@@ -56,7 +56,9 @@ class Servicestype extends CI_Controller {
 
 
 
-
+    /** A function to add servicetype to db tables.
+     * Inserts in servicetype, service_to_doctor_map.
+     */
     public function save_post()
     {
         $this->form_validation->set_rules('service', 'Servie', 'trim|required');
@@ -69,22 +71,28 @@ class Servicestype extends CI_Controller {
             } else {
               $post_by = $this->session->userdata('user_id');
             }
-
+            /**servicetype insertion */
             $create_date = date('Y-m-d');
-			
 			$assign_doctors = $this->input->post('assign_doctors',TRUE);
-			$doctorsArr = implode(',',$assign_doctors);
-
+            $service = $this->input->post('service',TRUE);
+            $servicetype = $this->input->post('servicetype',TRUE);
             $savedata =  array(
-				'service' => $this->input->post('service',TRUE),
-				'servicetype' => $this->input->post('servicetype',TRUE),	
+				'service' => $service,
+				'servicetype' => $servicetype,
 				'create_by' => $post_by,
-				'doctors' => $doctorsArr,
+				'doctors' => "",
 				'post_date'=>$create_date
             );
-
             $savedata = $this->security->xss_clean($savedata); 
             $this->db->insert('servicetype',$savedata);
+            /** Insert into service_to_doctor_map */
+            $service_doctor_map_values = array();
+            foreach($assign_doctors as $doctor_id) {
+                array_push($service_doctor_map_values, "(".$service." , ".$doctor_id.")");
+            }
+            $service_doctor_map_query = "INSERT INTO service_to_doctor_map (service, doctor_id) VALUES ".
+                implode(",", $service_doctor_map_values);
+            $this->db->query($service_doctor_map_query);
             $this->session->set_flashdata('message','<div class="alert alert-success">Add successful</div>');
             redirect('admin/servicestype');
         } else {
