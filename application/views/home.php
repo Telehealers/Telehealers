@@ -212,12 +212,12 @@ $hello = GeraHash(5);
             </div>    
         <hr>
             <?php
-                $attributes = array('id'=>"registerForm",'role'=>'form');
+                $attributes = array('name'=>'registerForm', 'id'=>"registerForm",'role'=>'form');
                 echo form_open_multipart('authentication', $attributes);
             ?>
 
                     <div class="form-group">
-                        <div id="meserr" style="color:red;"></div>
+                        <div id="meserrReg" style="color:red;"></div>
                         <input class="form-control" id="name" placeholder="Name" name="name" type="text" required  />
                          <span class="text-danger"></span>
                     </div>
@@ -652,8 +652,8 @@ if ($result2->num_rows > 0) {
 $(document).ready(function(){
     $('.appoimentbtn').show();
 
-    $("#myModal").bind('dialogclose', function(event){
-        $("#registerForm").trigger( "reset" ); // todo 
+ $('#myModal').on('hidden.bs.modal', function () {        
+     $('#myModal registerForm').trigger("reset");
     });
 
     $('#aptBtn').on('click',function(){
@@ -864,7 +864,21 @@ $(document).ready(function(){
         var baseUrl =$('#base_url').val();
         var gender = document.querySelector('input[name="inlineRadioOptions"]:checked').value;
             console.log(gender);
-      
+        var msg=''    
+        if(name==""){
+            msg += 'Please enter name<br>';
+        }
+        if(email==""){
+            msg += 'Please enter Email<br>';
+        }
+        if(!age){
+            msg += 'Please enter Age<br>';
+        }
+        if(msg!=""){
+            $('#meserrReg').html(msg);
+        }else{
+
+            $('#meserrReg').html('');
             $.ajax({
                 url:baseUrl+'index.php/Welcome/registration',
                 method: 'post',
@@ -873,6 +887,7 @@ $(document).ready(function(){
                 success: function(response){
                    if (response==0) {
                         // this user already exists , show error to user that number is already registered , please log in 
+                        $('#meserrReg').html('This phone number is already registered. Please login')
                    }
                    else if(response==1){
                     // new user has been created , 
@@ -899,7 +914,7 @@ $(document).ready(function(){
 
                 }
             });
-        });
+        }});
 });
 
 function preventBack() {

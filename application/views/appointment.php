@@ -73,7 +73,7 @@ return $Hash;
 }
 //Here you specify how many characters the returning string must have
 $hello = GeraHash(5);
-$this->load->view('header');
+    
 ?>
 
 <style>
@@ -482,6 +482,7 @@ input.range::-ms-fill-upper {
 
 </style>
 <body>
+  <?php $this->load->view('header.php')?>
     <div class="container" style="background: white;margin-top: 20px;margin-bottom: 20px;border-radius: 10px;box-shadow: 4px 5px 8px #ababab;">
     <div class="row" style="text-align:center; color:white;background:grey;border-top-left-radius: 8px;border-top-right-radius: 8px;padding:10px ;padding-left:100px;padding-right:100px">
     <div class="col-12">
