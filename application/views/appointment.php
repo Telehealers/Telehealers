@@ -603,7 +603,7 @@ input.range::-ms-fill-upper {
          <?php if(is_array($departments) && count($departments)>0){
                 //var_dump($departments);
                 foreach($departments as $val){
-                    if($val['department_id']!= 5){
+                    if($val['department_id']!= 26){
                         ?><button type="button"class="btn-group__item btn-group__item" value="<?php echo $val['department_id']?>">
                             <?php echo $val['department_name'];
                                            ?></button><?php }}} ?>
