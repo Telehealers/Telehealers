@@ -512,7 +512,6 @@ input.range::-ms-fill-upper {
             <div class='input-group date' id='datepicker'>
                <input type='text' name="p_date" id="p_date"class="form-control" value="<?php echo date("Y-m-d");?>" />
                <span class="input-group-addon">
-               <span class="glyphicon glyphicon-calendar"></span>
                </span>
             </div>
          </div>
