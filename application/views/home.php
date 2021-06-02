@@ -83,8 +83,8 @@ $hello = GeraHash(5);
         <!--<button type="button" class="popup_btn" data-toggle="modal" data-target="#exampleModalLong">c
         book an appointment
       </button>-->
-                    <a class="popup_btn d-inline-block" href="<?php echo base_url();?>appointment">Book An Appointment</a>
-                    <button class="btn btn-primary btn-lg popup_btn d-inline-block" data-toggle="modal" data-target="#myModal">Login</button>
+                    <button class="btn btn-primary btn-lg popup_btn d-inline-block" id="aptBtn" data-toggle="modal" data-target="#myModal">Book an Appointment</button> 
+                    <button class="btn btn-primary btn-lg popup_btn d-inline-block" id="loginBtn"data-toggle="modal" data-target="#myModal">Login</button>
                   <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -99,11 +99,12 @@ $hello = GeraHash(5);
         <!-- <li class="nav-item">
             <a href="#home" class="nav-link active">Home</a>
         </li> -->
+        
         <li class="nav-item">
-            <a href="#profile" class="nav-link" style="width:150px">Login</a>
+            <a href="#messages" id="regtab" class="nav-link" style="width:150px">Registration</a>
         </li>
         <li class="nav-item">
-            <a href="#messages" class="nav-link" style="width:150px">Registration</a>
+            <a href="#profile" id="logtab" class="nav-link" style="width:150px">Login</a>
         </li>
     </ul>
     <div class="tab-content">
@@ -211,7 +212,7 @@ $hello = GeraHash(5);
             </div>    
         <hr>
             <?php
-                $attributes = array('role'=>'form');
+                $attributes = array('id'=>"registerForm",'role'=>'form');
                 echo form_open_multipart('authentication', $attributes);
             ?>
 
@@ -650,6 +651,17 @@ if ($result2->num_rows > 0) {
 
 $(document).ready(function(){
     $('.appoimentbtn').show();
+
+    $("#myModal").bind('dialogclose', function(event){
+        $("#registerForm").trigger( "reset" ); // todo 
+    });
+
+    $('#aptBtn').on('click',function(){
+        $('#regtab').click();
+    });
+ $('#loginBtn').on('click',function(){
+        $('#logtab').click();
+    });
 
 	$('#contact_us').click(function(){
 		var full_name    = $('#full_name').val();
