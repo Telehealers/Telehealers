@@ -10,6 +10,9 @@
                     <div class="col-md-6 col-sm-4">
                         <div class="top_social">
                             <ul>
+                            <li>
+                                    <a href="tel:+91-9071123400" target="_blank">Telehealers Covid Helpline +91-9071123400</a>
+                                </li>
                                 <li>
                                     <a href="<?php echo (!empty(html_escape($info->facebook->details))?html_escape($info->facebook->details):null); ?>" target="_blank"><i class="fab fa-facebook-f"></i></a>
                                 </li>
@@ -22,6 +25,10 @@
                                 <li>
                                     <a href="<?php echo (!empty(html_escape($info->google->details))?html_escape($info->google->details):null); ?>" target="_blank"><i class="fab fa-instagram"></i></a>
                                 </li>
+                                <!-- <li>
+                                    <a href="<?php echo (!empty(html_escape($info->google->details))?html_escape($info->google->details):null); ?>" target="_blank"><i class="fab fa-instagram"></i></a>
+                                </li> -->
+
                             </ul>
                         </div>
                     </div>
@@ -53,7 +60,7 @@
 										<li><a href="<?php echo base_url()?>appointment">Book Appointment</a></li>
                                         <li><a href="<?php echo base_url()?>contact">Contact Us</a></li>
 										<?php if($this->session->userdata('user_type')==3){?>
-										
+
 										<li><a href="<?php echo base_url();?>Patient">Dashboard</a></li>
 										<?php }else if($this->session->userdata('user_type')==1){?>
 										<li><a href="<?php echo base_url()?>Doctorlogin/logout">Logout</a></li>
