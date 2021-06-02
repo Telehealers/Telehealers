@@ -202,10 +202,13 @@ function createVideoCallRoom($doctor_name, $doctor_email, $patient_name, $patien
 		show_404();
 	}
 
-
-
 	curl_close($curl_session);
 	$superpro_data = json_decode($superpro_response);
+
+	if (isset($superpro_data->message)) {
+		log_message('error', $superpro_data->message);
+		show_404();
+	}
 	return $superpro_data->videoCallUrl ;
 
 }
@@ -460,13 +463,9 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		 * TODO: Match name and fetch vars which are not coming from request.
 		 */
 		$booking_date = $this->input->post('p_date', TRUE);
-		// $booking_hour = $this->input->post("booking_hour", TRUE);
-		// $booking_min = $this->input->post("booking_min", TRUE);
-		// $booking_am_pm = $this->input->post("booking_am_pm", TRUE);
 		$sequence = $this->input->post("sequence",TRUE);
 		$sequence = date("H:i:s", strtotime($sequence));
-		$service1 = $this->input->post('department',TRUE);
-		$service2 = $this->input->post('department',TRUE);
+		$department_id = $this->input->post('department',TRUE);
 		$doctor_id = $this->input->post('doctor_id');
 		/**TODO: Bad schedule_id, use sql auto-increment column*/
 		$schedul_id = "A".date('y').strtoupper($this->randstrGenapp(5));
@@ -480,6 +479,16 @@ function createVideoCallInformationMail($participantInfoHTML) {
 			show_404();
 		}
 		$venue_id = 3; /**NOTE: venue = Online */
+
+		/**Fetching department name */
+		$department_info_query = "select department_name FROM doctor_department_info where department_id = ".$department_id;
+		$department_entry = $this->db->query($department_info_query)->result()[0];
+		if (!$department_entry) {
+			/** Bad doctor_id from input */
+			log_message('error', "Bad doctor_id(".$department_id.") in ");
+			show_404();
+		}
+		$service1 = $department_entry->department_name;
 
 		/**Fetching patient data from DB*/
 		$get_patient_query = "select patient_name, patient_email,".
@@ -496,7 +505,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		$p_log_id = $patient_entry->log_id;
 
 		$data['service1'] = $service1;
-		$data['service2'] = $service2;
+		$data['service2'] = $service1;
 		/**Fetch venue data */
 		$venue_info_query = "select * from venue_tbl where venue_id = '".$venue_id."'";
 		$venue_data = $this->db->query($venue_info_query)->result()[0];
@@ -531,7 +540,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 			'doctor_id' => $doctor_id,
 			'problem' => "",
 			'service' => $service1,
-			'servicetype' => $service2,
+			'servicetype' => $service1,
 			'get_date_time' => date("Y-m-d h:i:s"),
 			'get_by' => 'Won'
 		);
@@ -563,7 +572,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		/** Informing participants */
 		$message = $this->createVideoCallInformationMail('
 			<p>Hey <strong>'.$p_name.'</strong>,</p>
-			<p>Our staff member has confirmed you for a '.$service2.
+			<p>Our staff member has confirmed you for a '.$service1.
 				' appointment on '.$booking_date.' with Dr. '.$doctor_name.
 				'. If you have questions before your appointment,'.
 				'use the contact form with appointment ID to get in touch with us.</p>
@@ -612,7 +621,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 			'doctor_id' => $doctor_id,
 			'problem' => "",
 			'service' => $service1,
-			'servicetype' => $service2,
+			'servicetype' => $service1,
 			'get_date_time' => date("Y-m-d h:i:s"),
 			'get_by' => 'Won',
 			'fees' => '0'
