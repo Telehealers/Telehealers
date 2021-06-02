@@ -12,11 +12,12 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="<?php echo base_url();?>web_assets2/css/main.css">
 	<link href="<?php echo base_url()?>assets/plugins/jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
-	
+
 	<link rel="stylesheet" href="<?php echo base_url();?>web_assets2/appointment/css/main.css">
     <link rel="stylesheet" href="<?php echo base_url();?>web_assets2/appointment/css/style.css">
+    <link rel="stylesheet" href="<?php echo base_url();?>web_assets2/appointment/css/style.css">
 	<link rel="" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js">
-	
+
     <title><?php echo $meta_info[0]['page_title']; ?></title>
 	<meta name="keywords" content="<?php echo $meta_info[0]['meta_keywords']; ?>">
 	<meta name="description" content="<?php echo $meta_info[0]['meta_description']; ?>">
@@ -64,77 +65,234 @@ $hello = GeraHash(5);
 ?>
 <style>
     .owl-carousel .owl-item img{width:65%;}
-    
+
 </style>
 <body>
     <?php $this->load->view('header.php')?>
-    
-
-    <section class="home_new_slider mb-5">
-            <div id="Home_slider" class="owl-carousel owl-theme">
-                <div class="item">
-                    <div class="product-thumb">
-                        <div class="carousel-thumb">
-                            <div class="slider_content">
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="img_box">
-                                                <img src="<?php echo base_url();?>web_assets2/images/banner_new_1.png" alt="#">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="product-thumb">
-                        <div class="carousel-thumb">
-                            <div class="slider_content">
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="img_box">
-                                                <a href="https://www.telehealers.in/appointment" class="desktop_img"><img src="<?php echo base_url();?>web_assets2/images/banner_new_2.png" alt="#"></a>
-                                                <a href="https://www.telehealers.in/appointment" class="mobile_img"><img src="<?php echo base_url();?>web_assets2/images/banner_new_4.png" alt="#"></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="product-thumb">
-                        <div class="carousel-thumb">
-                            <div class="slider_content">
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="img_box">
-                                                <a href="https://www.telehealers.in/appointment"><img src="<?php echo base_url();?>web_assets2/images/banner_new_3.png" alt="#"></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+    <? $this->load->view('homeslider.php')?>
 <section id="home" class="meat_our_team">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="heading">
+                    <div class="heading" style="margin-bottom:0px">
                         <h3><?php echo $info->theraphists_title->details;?></h3>
                         <p><?php echo $info->theraphists_sub_title->details;?></p>
+
                     </div>
+                    <div style="display:none;" class="appoimentbtn"><br>
+        <!--<button type="button" class="popup_btn" data-toggle="modal" data-target="#exampleModalLong">c
+        book an appointment
+      </button>-->
+                    <button class="btn btn-primary btn-lg popup_btn d-inline-block" id="aptBtn" data-toggle="modal" data-target="#myModal">Book an Appointment</button> 
+                    <button class="btn btn-primary btn-lg popup_btn d-inline-block" id="loginBtn"data-toggle="modal" data-target="#myModal">Login</button>
+                  <!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- <div class="modal-header d-block">
+      <h4 class="modal-title" id="myModalLabel">Login</h4>
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+      </div> -->
+      <div class="modal-body" style="background:#f9f9f9">
+      <div class="bs-example">
+    <ul id="myTab" class="nav nav-pills">
+        <!-- <li class="nav-item">
+            <a href="#home" class="nav-link active">Home</a>
+        </li> -->
+        
+        <li class="nav-item">
+            <a href="#messages" id="regtab" class="nav-link" style="width:150px">Registration</a>
+        </li>
+        <li class="nav-item">
+            <a href="#profile" id="logtab" class="nav-link" style="width:150px">Login</a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <!-- <div class="tab-pane fade show active" id="home">
+            <h4 class="mt-2">Home tab content</h4>
+            <p>Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui. Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth.</p>
+        </div> -->
+        <div class="tab-pane fade show active" id="profile">
+        <div class="login-wrapper" style="background:#FFF;">
+
+            <div class="container-center">
+                <div class="panel panel-bd">
+
+                <?php
+                    $exception = $this->session->flashdata('exception');
+                    if(!empty($exception)){
+                             echo '<div class="alert alert-danger">
+                            <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <strong>WOPS!</strong> '.html_escape($exception).'
+                          </div>';
+                    }
+                ?>
+
+                    <!-- <div class="panel-heading">
+                        <div class="view-header">
+                            <div class="header-icon">
+                                <i class="pe-7s-unlock"></i>
+                            </div>
+                            <div class="header-title">
+                                <h3>Login</h3>
+                                <small><strong><?php echo display('login_title');?></strong></small>
+                            </div>
+                        </div>
+                    </div> -->
+
+                    <?php
+                        $result = $this->db->select('*')->from('web_pages_tbl')->where('name','footer_logo')->where('status',1)->get()->row();
+                    ?>
+
+                    <div class="panel-body" style="padding: 50px 130px 10px 130px;background:#f9f9f9">
+                        <?php
+                            $attributes = array('role'=>'form');
+                            echo form_open_multipart('authentication', $attributes);
+                        ?>
+
+                                <div class="form-group">
+								    <div id="meserr" style="color:red;"></div>
+                                    <input class="form-control" id="phone" placeholder="Mobile Number" name="phone" type="text" required pattern="[1-9]{1}[0-9]{9}" />
+                                     <span class="text-danger"></span>
+                                </div>
+								<div class="form-group" id="otp_field" style="display:none;">
+								    <div id="meserr" style="color:red;"></div>
+                                    <input class="form-control" id="otp" placeholder="Enter Otp" name="otp" type="text" required pattern="[1-9]{1}[0-9]{9}" />
+                                     <span class="text-danger"></span>
+                                </div>
+								<div id="otpmess" style="color:green;"></div>
+                                <button type="button" id="sendOtp" class="btn btn-lg btn-success btn-block ">Send OTP</button>
+								<button type="button" id="login" style="display:none;" class="btn btn-lg btn-success btn-block">Login</button>
+                                <input type="hidden" id="base_url" value="<?php echo base_url()?>">
+                        </form>
+                    </div>
+					<span style="text-align:center;width: 100%;float: left;margin-top: 20px;"><a href="<?php echo base_url();?>">Go to site</a></span>
                 </div>
+            </div>
+        </div>
+            <!-- <h4 class="mt-2">Profile tab content</h4>
+            <p>Vestibulum nec erat eu nulla rhoncus fringilla ut non neque. Vivamus nibh urna, ornare id gravida ut, mollis a magna. Aliquam porttitor condimentum nisi, eu viverra ipsum porta ut. Nam hendrerit bibendum turpis, sed molestie mi fermentum id. Aenean volutpat velit sem. Sed consequat ante in rutrum convallis. Nunc facilisis leo at faucibus adipiscing.</p> -->
+
+        </div>
+        <div class="tab-pane fade" id="messages">
+        <div class="registration-wrapper" style="background:#FFF;">
+
+<div class="container-center">
+    <div class="panel panel-bd">
+
+    <?php
+        $exception = $this->session->flashdata('exception');
+        if(!empty($exception)){
+                 echo '<div class="alert alert-danger">
+                <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>WOPS!</strong> '.html_escape($exception).'
+              </div>';
+        }
+    ?>
+
+        <!-- <div class="panel-heading">
+            <div class="view-header">
+                <div class="header-icon">
+                    <i class="pe-7s-unlock"></i>
+                </div>
+                <div class="header-title">
+                    <h3>Login</h3>
+                    <small><strong><?php echo display('login_title');?></strong></small>
+                </div>
+            </div>
+        </div> -->
+
+        <?php
+            $result = $this->db->select('*')->from('web_pages_tbl')->where('name','footer_logo')->where('status',1)->get()->row();
+        ?>
+
+        <div class="panel-body" style="padding: 50px 130px 10px 130px;background:#f9f9f9">
+            <div class="row">
+                Please register to book an appointment
+            </div>    
+        <hr>
+            <?php
+                $attributes = array('name'=>'registerForm', 'id'=>"registerForm",'role'=>'form');
+                echo form_open_multipart('authentication', $attributes);
+            ?>
+
+                    <div class="form-group">
+                        <div id="meserrReg" style="color:red;"></div>
+                        <input class="form-control" id="name" placeholder="Name" name="name" type="text" required  />
+                         <span class="text-danger"></span>
+                    </div>
+                    <!-- new input fields added -- abinash  -->
+                    <div class="form-group">
+                        <div id="meserr" style="color:red;"></div>
+                        <input class="form-control" id="phone1" placeholder="Mobile Number" name="phone" type="text" required  />
+                         <span class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <div id="meserr" style="color:red;"></div>
+                        <input class="form-control" id="email" placeholder="Email" name="meail" type="text" required  />
+                         <span class="text-danger"></span>
+                    </div>
+                    <div class="row">
+                    <div class="col-sm-12 col-md-6 col-lg-6">
+                    <div class="form-group">
+                        <div id="meserr" style="color:red;"></div>
+                        <input class="form-control" id="age" placeholder="Age" name="age" type="text" required  pattern="[1-9]{1}[0-9]{9}"/>
+                         <span class="text-danger"></span>
+                    </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-6">
+                    <div class="form-group d-flex" style="line-height:2.5">
+                        <div id="meserr" style="color:red;"></div>
+                        <div class="form-check form-check-inline">
+  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="M">
+  <label class="form-check-label" for="inlineRadio1">Male</label>
+</div>
+<div class="form-check form-check-inline">
+  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="F">
+  <label class="form-check-label" for="inlineRadio2">Female</label>
+</div>
+                         <span class="text-danger"></span>
+                    </div>
+                    </div>
+                    </div>
+                     <div class="form-group" id="otp_field1" style="display:none;">
+                     <div id="meserr1" style="color:red;"></div>
+                        <input class="form-control" id="otp1" placeholder="Enter Otp" name="otp" type="text" required pattern="[1-9]{1}[0-9]{9}" />
+                         <span class="text-danger"></span>
+                    </div>
+
+                    <!-- end of line -->
+    <div id="otpmess1" style="color:green;"></div>
+    <button type="button" id="register" class="btn btn-lg btn-success btn-block">Register</button>
+
+    <button type="button" id="auth" class="btn btn-lg btn-success btn-block" style="display:none;">Authenticate</button>
+                    <!-- <button type="button" id="sendOtp_register" class="btn btn-lg btn-success btn-block">Send OTP</button>
+ -->
+                    <input type="hidden" id="base_url" value="<?php echo base_url()?>">
+                    <input type="hidden" id="registeringuser" value="">
+            </form>
+        </div>
+<span style="text-align:center;width: 100%;float: left;margin-top: 20px;"><a href="<?php echo base_url();?>">Go to site</a></span>
+    </div>
+</div>
+</div>
+        </div>
+    </div>
+
+</div>
+      </div>
+      <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div> -->
+    </div>
+  </div>
+</div>
+
+                    <!-- <a class="popup_btn d-inline-block" style="margin-left:10px" href="https://www.telehealers.in/Userlogin">Login</a> -->
+                  </div>
+                </div>
+
                 <div id="home_faq_slider" class="owl-carousel owl-theme">
     				 <?php $i=1; foreach($theraphists as $val){?>
     				 <div class="item">
@@ -143,7 +301,7 @@ $hello = GeraHash(5);
                             <div class="team_box">
                                 <div class="left_box">
                                    <?php echo $val->details; ?>
-								   
+
 								   <p class="doc_tag">For you, by you</p>
                                 </div>
                                 <div class="img_box">
@@ -158,16 +316,6 @@ $hello = GeraHash(5);
             </div>
         </div>
     </section>
-    
-	<div style="display:none;" class="appoimentbtn"><br>
-        <!--<button type="button" class="popup_btn" data-toggle="modal" data-target="#exampleModalLong">
-        book an appointment
-      </button>-->
-      <a class="popup_btn d-inline-block" href="<?php echo base_url();?>appointment">Book An Appointment</a>
-    </div>
-    
-	
-    
 
     <section id="about"  class="home_about_block">
         <div class="container">
@@ -186,18 +334,18 @@ $hello = GeraHash(5);
         </div>
     </section>
 
-    
-    
+
+
     <section id="home1" class="home_slider">
         <div class="container">
             <div id="home_main_slider" class="owl-carousel owl-theme">
-			<?php 
+			<?php
                   foreach ($slider as  $value) {
                 ?>
                 <div class="item">
                     <div class="product-item">
                         <div class="carousel-thumb">
-						
+
                             <div class="row">
                                 <div class="col-lg-12 order_2">
                                     <div class="slider_img" style="text-align:center;">
@@ -210,11 +358,11 @@ $hello = GeraHash(5);
 					    </div>
                     </div>
                 </div>
-			 <?php } ?>	
+			 <?php } ?>
 		    </div>
         </div>
     </section>
-	
+
 	<section id="testimonials" class="our_testimonail_home">
         <div id="h_r_pub" class="container">
             <div class="row">
@@ -273,7 +421,7 @@ $hello = GeraHash(5);
         </div>
     </section>
 
-    
+
 
     <section id="blog"  class="home_recent_publication">
         <div class="container">
@@ -304,8 +452,8 @@ $result = $conn->query($sql);
 
 ?>
             <div id="home_publication_slider" class="owl-carousel owl-theme">
-			<?php 
-			//foreach ($post as $key => $val) { 
+			<?php
+			//foreach ($post as $key => $val) {
 			if ($result->num_rows > 0) {
   // output data of each row
   while($row = $result->fetch_assoc()) {
@@ -340,20 +488,20 @@ if ($result2->num_rows > 0) {
                         </div>
                     </div>
                 </div>
-			<?php 
+			<?php
 			//}
 }
-} 
+}
 			?>
             </div>
         </div>
     </section>
-	
-	
+
+
 	<!-- <section id="faq" class="our_testimonail_home"> -->
-	
-	
-        
+
+
+
         <section id="faq" class="faq-section">
             <div class="container">
                         <div class="row">
@@ -365,8 +513,8 @@ if ($result2->num_rows > 0) {
                             </div>
                             <div class="col-md-12">
                                 <div class="faq" id="accordion">
-                                    
-                                    
+
+
                                     <?php if(is_array($faq) && count($faq)>0){?>
                                     <?php $i=0; ?>
                                     <?php foreach($faq as $val){?>
@@ -386,16 +534,16 @@ if ($result2->num_rows > 0) {
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <?php }} ?>
-                                    
-                                    
-                                    
-                                    
+
+
+
+
                                 </div>
                             </div>
                         </div>
-                    
+
                 </div>
         </section>
         <!-- <div id="h_r_pub1" class="container">
@@ -403,7 +551,7 @@ if ($result2->num_rows > 0) {
                 <div class="col-md-12">
                     <div class="heading">
                         <h5>Faqs</h5>
-                       
+
                     </div>
                     <div class="testmoli_slider">
                         <div id="home_faq_slider" class="owl-carousel owl-theme">
@@ -434,9 +582,9 @@ if ($result2->num_rows > 0) {
                         <p>PROVIDING MENTAL PEACE IS OUR GOAL</p>
                     </div>
                 </div>
-			
+
 			<div class="col-md-3">
-                    
+
                 </div>
                 <div class="col-md-6">
                     <div class="contact_form">
@@ -454,17 +602,17 @@ if ($result2->num_rows > 0) {
                             <div class="form-group">
                                 <textarea class="form-control" id="message" name="message" rows="6" placeholder="Your message..." required></textarea>
                             </div>
-							
+
 							<div class="form-group">
 								<div id=""><span style="background: #0c8bef none repeat scroll 0 0;color: #fff;padding: 4px 20px;font-family:serif,sans-serif;font-style: italic;"><?php echo $hello; ?></span></div>
 								<div id="captchdas" style="visibility: hidden;"><?php echo $hello; ?></div>
                                 <input type="text" class="form-control" id="captcha_code" name="captcha_code" placeholder="Captcha..." required>
                             </div>
-	
+
                             <div class="submit_box_btn">
                                 <input id="contact_us" type="button" value="submit">
                             </div>
-							
+
 							<div id="q_succ_msg" class="mt-3 alert alert-success" style="display:none"></div>
 							<div id="q_show_error" class="mt-3 alert alert-danger" style="display:none"></div>
 			  <br>
@@ -477,9 +625,9 @@ if ($result2->num_rows > 0) {
     </section>-->
 	<?php $this->load->view('footer.php')?>
 
-    
+
 <input type="hidden" id="baseUrl" value="<?php echo base_url();?>" />
-	
+
 
 <input type="hidden" id="base_url" value="<?php echo base_url()?>">
 	<script src="<?php echo base_url();?>web_assets2/js/jquery.js"></script>
@@ -491,10 +639,30 @@ if ($result2->num_rows > 0) {
     <script src="<?php echo base_url();?>web_assets2/js/custom.js" type="text/javascript"></script>
 	<script src="<?php echo base_url();?>web_assets2/js/home_footer.js"></script>
 	<script src="<?php echo base_url();?>web_assets2/appointment/js/script.js"></script>
-	
+  <script>
+     $(document).ready(function(){
+      $("#myTab a").click(function(e){
+            e.preventDefault();
+            $(this).tab('show');
+        });
+     });
+ </script>
 <script>
+
 $(document).ready(function(){
     $('.appoimentbtn').show();
+
+ $('#myModal').on('hidden.bs.modal', function () {        
+     $('#myModal registerForm').trigger("reset");
+    });
+
+    $('#aptBtn').on('click',function(){
+        $('#regtab').click();
+    });
+ $('#loginBtn').on('click',function(){
+        $('#logtab').click();
+    });
+
 	$('#contact_us').click(function(){
 		var full_name    = $('#full_name').val();
 		var email_id     = $('#email_id').val();
@@ -504,7 +672,7 @@ $(document).ready(function(){
 		var captcha_code = $('#captcha_code').val();
 		var baseUrl = $('#baseUrl').val();
 		var msg = '';
-		
+
 		if(full_name==""){
 			msg += 'Please enter full name.<br>';
 		}
@@ -515,7 +683,7 @@ $(document).ready(function(){
             if(email_id.match(mailformat))
             {}else{
                 msg += 'You have entered an Invalid Email ID.<br>';
-            }  
+            }
 		}
 		if(subject==""){
 			msg += 'Please enter subject.<br>';
@@ -556,20 +724,205 @@ $(document).ready(function(){
 				}
 			});
         }
-		
+
 	});
-	
-	
-	
+
+	$("#phone").keypress (function (event) {
+		var charLength = $(this).val().length;
+		if(charLength < 11){
+			if ((event.which < 32) || (event.which > 126)){
+				return true;
+			}
+			return jQuery.isNumeric ($(this).val () + String.fromCharCode (event.which));
+		}else{
+			return false;
+		}
+	});
+    $("#phone1").keypress (function (event) {
+        var charLength = $(this).val().length;
+        if(charLength < 11){
+            if ((event.which < 32) || (event.which > 126)){
+                return true;
+            }
+            return jQuery.isNumeric ($(this).val () + String.fromCharCode (event.which));
+        }else{
+            return false;
+        }
+    });
+	$("#otp").keypress (function (event) {
+		var charLength = $(this).val().length;
+		if(charLength < 4){
+			if ((event.which < 32) || (event.which > 126)){
+				return true;
+			}
+			return jQuery.isNumeric ($(this).val () + String.fromCharCode (event.which));
+		}else{
+			return false;
+		}
+	});
+	$('#sendOtp').click(function(){
+		var base_url = $('#base_url').val();
+		var phone = $('#phone').val();
+		if(phone==""){
+			$('#meserr').html('Please enter mobile number first');
+		}else{
+			$('#meserr').html('');
+			$.ajax({
+				url:base_url+'index.php/Patient/checkUser',
+				method: 'post',
+				data: {phone:phone},
+				type: 'POST',
+				success: function(response){
+					if(response==0){
+						$('#meserr').html('Incorrect Mobile number');
+					}else{
+						$('#otp_field').css('display','block');
+						$('#otpmess').html('Otp sent on your mobile number...');
+						$('#sendOtp').hide();
+						$('#login').show();
+					}
+					//$('#q_succ_msg').html('Your details has been submited successfully.');
+					//$('#q_succ_msg').html(response);
+				}
+			});
+		}
+	});
+	$('#login').click(function (){
+		var base_url = $('#base_url').val();
+		var phone = $('#phone').val();
+		var otp = $('#otp').val();
+		var msg = '';
+		if(phone==""){
+			msg += 'Please enter mobile number<br>';
+		}
+		if(otp==""){
+			msg += 'Please enter Otp<br>';
+		}
+		if(msg!=""){
+			$('#meserr').html(msg);
+		}else{
+			$('#meserr').html('');
+			$.ajax({ 
+				url:base_url+'index.php/Patient/userLogin',
+				method: 'post',
+				data: {phone:phone,otp:otp},
+				type: 'POST',
+				success: function(response){
+					if(response==0){
+						$('#meserr').html('Incorrect Mobile number');
+					}else if(response==1){
+						$('#meserr').html('You enter wrong Otp');
+					}else{
+                       window.location.href = 'Patient';
+					}
+					//$('#q_succ_msg').html('Your details has been submited successfully.');
+					//$('#q_succ_msg').html(response);
+				}
+			});
+		}
+	});
+    $('#auth').click(function (){
+        var base_url = $('#base_url').val();
+        var phone = $('#phone1').val();
+        var otp = $('#otp1').val();
+        var msg = '';
+        if(phone==""){
+            msg += 'Please enter mobile number<br>';
+        }
+        if(otp==""){
+            msg += 'Please enter Otp<br>';
+        }
+        if(msg!=""){
+            $('#meserr1').html(msg);
+        }else{
+            $('#meserr1').html('');
+            $.ajax({
+                url:base_url+'index.php/Patient/userLogin',
+                method: 'post',
+                data: {phone:phone,otp:otp},
+                type: 'POST',
+                success: function(response){
+                    if(response==0){
+                        $('#meserr1').html('Incorrect Mobile number');
+                    }else if(response==1){
+                        $('#meserr1').html('You enter wrong Otp');
+                    }else{
+                       window.location.href = 'appointment';
+                    }
+                    //$('#q_succ_msg').html('Your details has been submited successfully.');
+                    //$('#q_succ_msg').html(response);
+                }
+            });
+        }
+    });
+
+    $('#register').click(function(){
+        var name    = $('#name').val();
+        var email     = $('#email').val();
+        var age      = $('#age').val();
+        var phone      = $('#phone1').val();
+        var baseUrl =$('#base_url').val();
+        var gender = document.querySelector('input[name="inlineRadioOptions"]:checked').value;
+            console.log(gender);
+        var msg=''    
+        if(name==""){
+            msg += 'Please enter name<br>';
+        }
+        if(email==""){
+            msg += 'Please enter Email<br>';
+        }
+        if(!age){
+            msg += 'Please enter Age<br>';
+        }
+        if(msg!=""){
+            $('#meserrReg').html(msg);
+        }else{
+
+            $('#meserrReg').html('');
+            $.ajax({
+                url:baseUrl+'index.php/Welcome/registration',
+                method: 'post',
+                data: {name:name, email:email,age:age , phone: phone,gender:gender},
+                type: 'POST',
+                success: function(response){
+                   if (response==0) {
+                        // this user already exists , show error to user that number is already registered , please log in 
+                        $('#meserrReg').html('This phone number is already registered. Please login')
+                   }
+                   else if(response==1){
+                    // new user has been created , 
+                    $.ajax({
+                        url:baseUrl+'index.php/Patient/checkUser',
+                        method: 'post',
+                        data: {phone:phone},
+                        type: 'POST',
+                        success: function(response){
+                        if(response==0){
+                            $('#meserr').html('Incorrect Mobile number');
+                        }else{
+                            $('#otpmess1').html('Otp sent on your mobile number...');
+                        }
+                        $('#otp_field1').css('display','block');
+                        $('#auth').css('display','block');
+                        $('#register').hide();
+                        $('#registeringuser').value=true;
+                    }})
+
+
+                    
+                   }
+
+                }
+            });
+        }});
 });
 
+function preventBack() {
+window.history.forward();
+}
+setTimeout("preventBack()", 0);
+window.onunload = function () { null };
 
-function preventBack() { 
-window.history.forward(); 
-}  
-setTimeout("preventBack()", 0);  
-window.onunload = function () { null };  
-
-</script>	
+</script>
 </body>
 </html>

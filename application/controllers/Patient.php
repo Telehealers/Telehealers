@@ -923,6 +923,7 @@ public function registration()
 		if(is_array($result_doc) && count($result_doc)>0){
 			$patient_name = $result_doc[0]['patient_name'];
 			$rand = rand(1000,9999);
+			var_dump($rand);
 			$sql = "update patient_tbl set opt_code = '$rand' where patient_phone = '$phone'";
 			$this->db->query($sql);
 			$path = "http://japi.instaalerts.zone/httpapi/QueryStringReceiver?ver=1.0&key=pjjXNjf8In8sb8BdmFYVgw==&encrypt=0&dest=".$phone."&send=LOADIT&text=OTP%20IS%20-%20".$rand;
