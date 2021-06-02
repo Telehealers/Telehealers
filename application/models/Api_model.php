@@ -36,7 +36,6 @@ class Api_model extends CI_model {
          $result = $this->db->select('
               appointment_tbl.*,
               patient_tbl.*,venue_tbl.*')
-
               ->from('appointment_tbl')
               ->join('patient_tbl','patient_tbl.patient_id = appointment_tbl.patient_id','left')
               ->join('venue_tbl','venue_tbl.venue_id = appointment_tbl.venue_id','left')

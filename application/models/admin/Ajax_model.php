@@ -15,7 +15,27 @@
 
       ->row();
  	 }
+  public function getservicetype($services){
 
+    $sql = "select id from service where title = '".$services."'";
+    $res = $this->db->query($sql);
+    $result = $res->result_array();
+    if(is_array($result) && count($result)>0){
+        $service_id = $result[0]['id'];
+    }
+    $con = '';
+    if($service_id>0){
+        $sql_st = 'SELECT DISTINCT doctor_department_info.department_id , doctor_department_info.department_name
+FROM doctor_department_info
+    INNER JOIN doctor_tbl
+        ON doctor_department_info.department_id = doctor_tbl.department
+;';
+        $res_st = $this->db->query($sql_st);
+        $result_st = $res_st->result_array();
+        $i=0;
+    }
+    return  $result_st;
+}
 
     public function get_patient_id($patient_id)
     {
