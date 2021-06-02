@@ -154,7 +154,7 @@ $hello = GeraHash(5);
 										echo $app_date;
 										?></td>
                                         <td><?php echo $app_time;?></td>
-                                        <td><?php echo $val['symt1'];?></td>
+                                        <td><a href="<?php echo $val['symt1'];?>"><?php echo $val['symt1'];?></a></td>
                                         <td><?php echo $val['service'];?></td>
 										
 								    </tr>

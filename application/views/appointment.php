@@ -602,8 +602,9 @@ input.range::-ms-fill-upper {
     <div class="btn-group" id="elem" style="width:inherit;height:40px !important">
          <?php if(is_array($departments) && count($departments)>0){
                 //var_dump($departments);
+                $covid_dept=[5,25];
                 foreach($departments as $val){
-                    if($val['department_id']!= 26){
+                    if(!in_array($val['department_id'], $covid_dept)){
                         ?><button type="button"class="btn-group__item btn-group__item" value="<?php echo $val['department_id']?>">
                             <?php echo $val['department_name'];
                                            ?></button><?php }}} ?>
@@ -706,7 +707,7 @@ function getTime(date,hour, minute,am_pm,language){
   }
 
   if($('input:radio[id^="flexRadioDefault"]')[0].checked){
-    department=26; // default dept general dept / general physician , needs to be checked with db
+    department='5,6,25'; // default dept general dept / general physician , needs to be checked with db
   }
   else if($('input:radio[id^="flexRadioDefault"]')[1].checked & !department){
       $('#q_succ_msg').html('select a department to view doctors');

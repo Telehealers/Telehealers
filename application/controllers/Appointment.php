@@ -486,7 +486,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		$venue_id = 3; /**NOTE: venue = Online */
 
 		/**Fetching department name */
-		$department_info_query = "select department_name FROM doctor_department_info where department_id = ".$department_id;
+		$department_info_query = "select department_name FROM doctor_department_info where department_id IN (".$department_id.')';
 		$department_entry = $this->db->query($department_info_query)->result()[0];
 		if (!$department_entry) {
 			/** Bad doctor_id from input */
@@ -522,7 +522,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		$venue_name = $venue_data->venue_name;
 
 		$doctor_info_query = "select doctor_name, log_id from doctor_tbl where doctor_id = '".$doctor_id.
-			"' AND department = ".$department_id;
+			"' AND department IN (".$department_id.')';
 		$doctor_entry = $this->db->query($doctor_info_query)->result()[0];
 		if (!$doctor_entry) {
 			/** Bad doctor_id from input */
@@ -1212,7 +1212,7 @@ public function registration()
 		//NOTE: Input can also be mapped to post input, uncomment below comments
 		// to use them.
 		$department_type = $this->input->post('department_type',TRUE);
-		$department_filter = ($department_type)? '(dpt.department_id = '.$department_type.') AND ':"";
+		$department_filter = ($department_type)? '(dpt.department_id IN ('.$department_type.')) AND ':"";
 		$preferred_language = $this->input->post('preferred_language', TRUE);
 		$preferred_language_filter = '(language LIKE "%'.$preferred_language.'%")';
 		$sequence =$this->input->post("booking_hour",TRUE).":".
