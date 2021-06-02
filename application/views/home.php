@@ -83,8 +83,8 @@ $hello = GeraHash(5);
         <!--<button type="button" class="popup_btn" data-toggle="modal" data-target="#exampleModalLong">c
         book an appointment
       </button>-->
-                    <a class="popup_btn d-inline-block" href="<?php echo base_url();?>appointment">Book An Appointment</a>
-                    <button class="btn btn-primary btn-lg popup_btn d-inline-block" data-toggle="modal" data-target="#myModal">Login</button>
+                    <button class="btn btn-primary btn-lg popup_btn d-inline-block" id="aptBtn" data-toggle="modal" data-target="#myModal">Book an Appointment</button> 
+                    <button class="btn btn-primary btn-lg popup_btn d-inline-block" id="loginBtn"data-toggle="modal" data-target="#myModal">Login</button>
                   <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -99,11 +99,12 @@ $hello = GeraHash(5);
         <!-- <li class="nav-item">
             <a href="#home" class="nav-link active">Home</a>
         </li> -->
+        
         <li class="nav-item">
-            <a href="#profile" class="nav-link" style="width:150px">Login</a>
+            <a href="#messages" id="regtab" class="nav-link" style="width:150px">Registration</a>
         </li>
         <li class="nav-item">
-            <a href="#messages" class="nav-link" style="width:150px">Registration</a>
+            <a href="#profile" id="logtab" class="nav-link" style="width:150px">Login</a>
         </li>
     </ul>
     <div class="tab-content">
@@ -211,12 +212,12 @@ $hello = GeraHash(5);
             </div>    
         <hr>
             <?php
-                $attributes = array('role'=>'form');
+                $attributes = array('name'=>'registerForm', 'id'=>"registerForm",'role'=>'form');
                 echo form_open_multipart('authentication', $attributes);
             ?>
 
                     <div class="form-group">
-                        <div id="meserr" style="color:red;"></div>
+                        <div id="meserrReg" style="color:red;"></div>
                         <input class="form-control" id="name" placeholder="Name" name="name" type="text" required  />
                          <span class="text-danger"></span>
                     </div>
@@ -651,6 +652,17 @@ if ($result2->num_rows > 0) {
 $(document).ready(function(){
     $('.appoimentbtn').show();
 
+ $('#myModal').on('hidden.bs.modal', function () {        
+     $('#myModal registerForm').trigger("reset");
+    });
+
+    $('#aptBtn').on('click',function(){
+        $('#regtab').click();
+    });
+ $('#loginBtn').on('click',function(){
+        $('#logtab').click();
+    });
+
 	$('#contact_us').click(function(){
 		var full_name    = $('#full_name').val();
 		var email_id     = $('#email_id').val();
@@ -852,7 +864,21 @@ $(document).ready(function(){
         var baseUrl =$('#base_url').val();
         var gender = document.querySelector('input[name="inlineRadioOptions"]:checked').value;
             console.log(gender);
-      
+        var msg=''    
+        if(name==""){
+            msg += 'Please enter name<br>';
+        }
+        if(email==""){
+            msg += 'Please enter Email<br>';
+        }
+        if(!age){
+            msg += 'Please enter Age<br>';
+        }
+        if(msg!=""){
+            $('#meserrReg').html(msg);
+        }else{
+
+            $('#meserrReg').html('');
             $.ajax({
                 url:baseUrl+'index.php/Welcome/registration',
                 method: 'post',
@@ -861,6 +887,7 @@ $(document).ready(function(){
                 success: function(response){
                    if (response==0) {
                         // this user already exists , show error to user that number is already registered , please log in 
+                        $('#meserrReg').html('This phone number is already registered. Please login')
                    }
                    else if(response==1){
                     // new user has been created , 
@@ -887,7 +914,7 @@ $(document).ready(function(){
 
                 }
             });
-        });
+        }});
 });
 
 function preventBack() {
