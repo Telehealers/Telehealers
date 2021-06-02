@@ -186,6 +186,11 @@ function createVideoCallRoom($doctor_name, $doctor_email, $patient_name, $patien
 				"name":"'.$patient_name.'",
 				"email":"'.$patient_email.'",
 				"role":"aud"
+			},
+			{
+				"name":"assistant",
+				"email":"support@telehealers.in",
+				"role":"cohost"
 			}
 		]
 	}
