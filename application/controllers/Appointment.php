@@ -186,6 +186,11 @@ function createVideoCallRoom($doctor_name, $doctor_email, $patient_name, $patien
 				"name":"'.$patient_name.'",
 				"email":"'.$patient_email.'",
 				"role":"aud"
+			},
+			{
+				"name":"assistant",
+				"email":"support@telehealers.in",
+				"role":"cohost"
 			}
 		]
 	}
@@ -516,7 +521,8 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		}
 		$venue_name = $venue_data->venue_name;
 
-		$doctor_info_query = "select doctor_name, log_id from doctor_tbl where doctor_id = '".$doctor_id."'";
+		$doctor_info_query = "select doctor_name, log_id from doctor_tbl where doctor_id = '".$doctor_id.
+			"' AND department = ".$department_id;
 		$doctor_entry = $this->db->query($doctor_info_query)->result()[0];
 		if (!$doctor_entry) {
 			/** Bad doctor_id from input */
