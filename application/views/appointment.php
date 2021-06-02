@@ -706,7 +706,7 @@ function getTime(date,hour, minute,am_pm,language){
   }
 
   if($('input:radio[id^="flexRadioDefault"]')[0].checked){
-    department=6; // default dept general dept / general physician , needs to be checked with db
+    department=26; // default dept general dept / general physician , needs to be checked with db
   }
   else if($('input:radio[id^="flexRadioDefault"]')[1].checked & !department){
       $('#q_succ_msg').html('select a department to view doctors');
