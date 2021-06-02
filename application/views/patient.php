@@ -110,7 +110,7 @@ $hello = GeraHash(5);
                                         <th scope="col">Doctor</th>
                                         <th scope="col">Date</th>
                                         <th scope="col">Time</th>
-                                        <th scope="col">Zoom meeting</th>
+                                        <th scope="col">Meeting Link</th>
 										<th scope="col">Service</th>
 										
                                     </tr>
@@ -154,7 +154,7 @@ $hello = GeraHash(5);
 										echo $app_date;
 										?></td>
                                         <td><?php echo $app_time;?></td>
-                                        <td><?php echo $val['symt1'];?></td>
+                                        <td><a href="<?php echo $val['symt1'];?>"><?php echo $val['symt1'];?></a></td>
                                         <td><?php echo $val['service'];?></td>
 										
 								    </tr>
@@ -199,9 +199,8 @@ $hello = GeraHash(5);
 								<div class="row">
 									<div class="col-md-1"><?php echo $i; ?></div>
 									<div class="col-md-5"><?php echo $doctor_name; ?></div>
-									<div class="col-md-6"><a href="javascript:void(0)" class="btn_app" onclick="setdocapp('<?php echo $doctor_name;?>','<?php echo $val;?>')" >Book Appointment</a>
-									
-									</div>
+									<!-- <div class="col-md-6"><a href="javascript:void(0)" class="btn_app" onclick="setdocapp('<?php echo $doctor_name;?>','<?php echo $val;?>')" >Book Appointment</a> -->
+									<!-- </div> -->
 									</div><br>	
 								<?php
 							}

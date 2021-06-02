@@ -7,10 +7,9 @@ class Patient_model extends CI_model {
 |   chack user exist or not
 |------------------------------------------------
 */
-public function exists_user($patient_phone,$birth_date)
+public function exists_user($patient_phone)
 {
     return $this->db->where('patient_phone',$patient_phone)
-    ->where('birth_date',$birth_date)
     ->get('patient_tbl')
     ->num_rows();
 }   
