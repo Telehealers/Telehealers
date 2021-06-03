@@ -83,12 +83,12 @@ class Appointment extends CI_Controller {
 		// //get venue list
         $data['venue'] = $this->venue_model->get_venue_list();
 
-		$data['service'] = $this->db->get('service')->result();
+		//$data['service'] = $this->db->get('service')->result();
 
 		// get doctor list for appointmaent
 		$data['doctor_info_for_appo'] = $this->doctor_model->getDoctorListByselect();
 		//get departments
-		 $data['departments']=$this->ajax_model->getservicetype('Speciality Consultation');
+		 $data['services']=$this->getservicetype();
 
 
 		$language_arr = array();
@@ -436,8 +436,15 @@ function createVideoCallInformationMail($participantInfoHTML) {
 	 *  -> Create video-call and inform participant
 	 * 	-> Save session data (userdata)
 	 * 	-> redirect to Patient
+	 * Post input used: p_date(YYYY-MM-DD), servicetype_id(INT), sequence(HH:MM:SS AM|PM), doctor_id(INT)
+	 *  p_id {patient_id} (INT)
 	 */
 	public function confirmation(){
+		if ( !$this->session->userdata("logged_in")) {
+			log_message("error", "Confirmation access without login");
+			redirect("welcome");
+		}
+
 		$ci = get_instance();
 		$ci->load->library('email');
 		/* Mail client intialization */
@@ -461,8 +468,15 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		$this->form_validation->set_rules('p_date', 'Date', 'trim|required');
 		/**TODO: Check if patient_id is coming in post request*/
 		$this->form_validation->set_rules('p_id', 'Patient Id', 'trim|required');
-		$this->form_validation->set_rules('venue_id', 'venue', 'trim|required');
 		$this->form_validation->set_rules('sequence', 'sequence', 'trim|required');
+		$this->form_validation->set_rules('doctor_id', 'doctor', 'required' );
+		$this->form_validation->set_rules('servicetype_id', 'service', 'required');
+
+		
+		if (!$this->form_validation->run()) {
+			log_message("error", "Bad post-inputs");
+			redirect("appointment");
+		}
 
 		/**Application vars
 		 * TODO: Match name and fetch vars which are not coming from request.
@@ -470,7 +484,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		$booking_date = $this->input->post('p_date', TRUE);
 		$sequence = $this->input->post("sequence",TRUE);
 		$sequence = date("H:i:s", strtotime($sequence));
-		$department_id = $this->input->post('department',TRUE);
+		$servicetype_id = $this->input->post('servicetype_id',TRUE);
 		$doctor_id = $this->input->post('doctor_id');
 		/**TODO: Bad schedule_id, use sql auto-increment column*/
 		$schedul_id = "A".date('y').strtoupper($this->randstrGenapp(5));
@@ -485,16 +499,16 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		}
 		$venue_id = 3; /**NOTE: venue = Online */
 
-		/**Fetching department name */
-		$department_info_query = "select department_name FROM doctor_department_info where department_id IN (".$department_id.')';
-		$department_entry = $this->db->query($department_info_query)->result()[0];
-		if (!$department_entry) {
-			/** Bad doctor_id from input */
-			log_message('error', "Bad doctor_id(".$department_id.") in ");
+		/** Fetching service */
+		$servicetype_query = "select service, servicetype FROM servicetype where id = ".$servicetype_id;
+		$servicetype_entry = $this->db->query($servicetype_query)->result()[0];
+		if (!$servicetype_entry) {
+			/** Bad service from input */
+			log_message('error', "Bad service query: ".$servicetype_query." ");
 			show_404();
 		}
-		$service1 = $department_entry->department_name;
-
+		$service = $servicetype_entry->service;
+		$servicetype = $servicetype_entry->servicetype;
 		/**Fetching patient data from DB*/
 		$get_patient_query = "select patient_name, patient_email,".
 			" patient_phone, age, sex, log_id from patient_tbl".
@@ -509,8 +523,8 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		$p_gender = $patient_entry->sex;
 		$p_log_id = $patient_entry->log_id;
 
-		$data['service1'] = $service1;
-		$data['service2'] = $service1;
+		$data['service1'] = $service;
+		$data['service2'] = $servicetype;
 		/**Fetch venue data */
 		$venue_info_query = "select * from venue_tbl where venue_id = '".$venue_id."'";
 		$venue_data = $this->db->query($venue_info_query)->result()[0];
@@ -521,8 +535,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		}
 		$venue_name = $venue_data->venue_name;
 
-		$doctor_info_query = "select doctor_name, log_id from doctor_tbl where doctor_id = '".$doctor_id.
-			"' AND department IN (".$department_id.')';
+		$doctor_info_query = "select doctor_name, log_id from doctor_tbl where doctor_id = '".$doctor_id."'";
 		$doctor_entry = $this->db->query($doctor_info_query)->result()[0];
 		if (!$doctor_entry) {
 			/** Bad doctor_id from input */
@@ -545,8 +558,8 @@ function createVideoCallInformationMail($participantInfoHTML) {
 			'venue_id' => $venue_id,
 			'doctor_id' => $doctor_id,
 			'problem' => "",
-			'service' => $service1,
-			'servicetype' => $service1,
+			'service' => $service,
+			'servicetype' => $servicetype,
 			'get_date_time' => date("Y-m-d h:i:s"),
 			'get_by' => 'Won'
 		);
@@ -578,7 +591,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		/** Informing participants */
 		$message = $this->createVideoCallInformationMail('
 			<p>Hey <strong>'.$p_name.'</strong>,</p>
-			<p>Our staff member has confirmed you for a '.$service1.
+			<p>Our staff member has confirmed you for a '.$service.
 				' appointment on '.$booking_date.' with Dr. '.$doctor_name.
 				'. If you have questions before your appointment,'.
 				'use the contact form with appointment ID to get in touch with us.</p>
@@ -626,8 +639,8 @@ function createVideoCallInformationMail($participantInfoHTML) {
 			'venue_name' => $venue_name,
 			'doctor_id' => $doctor_id,
 			'problem' => "",
-			'service' => $service1,
-			'servicetype' => $service1,
+			'service' => $service,
+			'servicetype' => $servicetype,
 			'get_date_time' => date("Y-m-d h:i:s"),
 			'get_by' => 'Won',
 			'fees' => '0'
@@ -1141,34 +1154,10 @@ public function registration()
 	public function getservicetype(){
 
 		$services = $this->input->post('services',TRUE);
-		$sql = "select id from service where title = '".$services."'";
+		$sql = "select id,servicetype from servicetype ";
 		$res = $this->db->query($sql);
 		$result = $res->result_array();
-		if(is_array($result) && count($result)>0){
-			$service_id = $result[0]['id'];
-		}
-		$con = '';
-		if($service_id>0){
-			$sql_st = "select * from servicetype where service = '".$service_id."'";
-			$res_st = $this->db->query($sql_st);
-			$result_st = $res_st->result_array();
-			$i=0;
-			if(is_array($result_st) && count($result_st)>0){
-				foreach($result_st as $res){
-					$i++;
-					$service_id = $res['id'];
-					$servicetype = $res['servicetype'];
-					$doctors = $res['doctors'];
-					if($i==1){
-						$con .= '<li><button type="button" class="btn_choose_sent bg_btn_chose_1"><input type="radio" value="'.$servicetype.'" name="servicetype" checked="checked" />'.$servicetype.'</button></li>';
-					}else{
-						$con .= '<li><button type="button" class="btn_choose_sent bg_btn_chose_1"><input type="radio" value="'.$servicetype.'" name="servicetype" />'.$servicetype.'</button></li>';
-					}
-
-				}
-			}
-		}
-		echo $con;
+		return $result;
 	}
 	public function getservicetypedoctor(){
 
@@ -1196,12 +1185,10 @@ public function registration()
 		}
 		echo $con;
 	}
-	/* Get available doctors
-      INPUT booking_time ({sql datetime}:
-	        sample:"YYYY-MM-DD Hr:Min:Sec" e.g. "2021-05-25 10:00:32"),
-        preferred_language:e.g. "English", "Hindi".
-		department_type : department_id from table doctor_department_info
-      returns: HTML doctor list with pictures and all-unselected radio buttons.
+	/* 	Get available doctors
+	*	Post input used: servicetype_id(INT), preferred_language(STRING), booking_hour (HH),
+			 booking_minute (MM), booking_am_pm (AM|PM), booking_date(YYYY-MM-DD)
+    *  	returns: HTML doctor list with pictures and all-unselected radio buttons.
         TODO: rows with bias_reduction < 0, are rows with other languages,
 			handle this case.
         REMARKS: We can also add bias which sort rows according to preferred,
@@ -1211,8 +1198,8 @@ public function registration()
 	public function getdoctorforappointment(){
 		//NOTE: Input can also be mapped to post input, uncomment below comments
 		// to use them.
-		$department_type = $this->input->post('department_type',TRUE);
-		$department_filter = ($department_type)? '(dpt.department_id IN ('.$department_type.')) AND ':"";
+		$servicetype_id = $this->input->post('servicetype_id',TRUE);
+		$servicetype_filter = ($servicetype_id)? 'stdm.servicetype_id = '.$servicetype_id.' AND ':"";
 		$preferred_language = $this->input->post('preferred_language', TRUE);
 		$preferred_language_filter = '(language LIKE "%'.$preferred_language.'%")';
 		$sequence =$this->input->post("booking_hour",TRUE).":".
@@ -1222,22 +1209,27 @@ public function registration()
 		$booking_time = $this->input->post('booking_date', TRUE)." ".$sequence;
 
 		$booking_time = urldecode($booking_time);
-		$sql_query = 'SELECT picture, designation, doctor_name, doctor_id, '.
+		/** SQL-Query: 
+		 * Incldes aggregation on doctor_id: A contigency mechanism so that no
+		 * 	bad logic emits multiple doctors e.g. by joining unconditionally on n-row table.
+		 */
+		$sql_query = 'SELECT main_docs.picture AS picture, main_docs.designation AS designation, '.
+			'main_docs.doctor_name AS doctor_name, main_docs.doctor_id AS doctor_id, '.
 			'(IF('.$preferred_language_filter.', RAND(), -RAND())) as bias_reduction_score '. //Doctor selection bias reduction logic
-			'FROM doctor_tbl, doctor_department_info dpt WHERE '.
-			' dpt.department_id = department AND '.$department_filter.
-			'doctor_id IN ('.
+			'FROM doctor_tbl main_docs, servicetype_to_doctor_map stdm WHERE '.
+			' stdm.doctor_id = main_docs.doctor_id AND '.$servicetype_filter.
+			'main_docs.doctor_id IN ('.
 			'SELECT sched.doctor_id FROM schedul_setup_tbl sched WHERE '.
 			'sched.day = DAYOFWEEK("'.$booking_time.'") AND CAST(sched.start_time AS TIME) <= "'.
 			$booking_time.'" AND CAST(sched.end_time AS TIME) >= CAST(ADDTIME("'.
 			$booking_time.'", SEC_TO_TIME(sched.per_patient_time * 60)) AS TIME)) AND '.
-			'doctor_id NOT IN (SELECT bookings.doctor_id FROM '.
+			'main_docs.doctor_id NOT IN (SELECT bookings.doctor_id FROM '.
 			'appointment_tbl bookings, doctor_tbl as docs, schedul_setup_tbl schedule '.
 			'WHERE bookings.doctor_id = docs.doctor_id AND '.
 			'schedule.doctor_id = bookings.doctor_id AND '.
 			'CAST(bookings.sequence AS TIME) <=  "'.$booking_time.'" AND "'.$booking_time.
 			'" <= ADDTIME(CAST(bookings.sequence AS TIME), SEC_TO_TIME(schedule.per_patient_time*60))) '.
-			' ORDER BY bias_reduction_score DESC;';
+			' GROUP BY main_docs.doctor_id ORDER BY bias_reduction_score DESC;';
 
 		$available_doctors = $this->db->query($sql_query);
 

@@ -56,7 +56,9 @@ class Servicestype extends CI_Controller {
 
 
 
-
+    /** A function to add servicetype to db tables.
+     * Inserts in servicetype, servicetype_to_doctor_map.
+     */
     public function save_post()
     {
         $this->form_validation->set_rules('service', 'Servie', 'trim|required');
@@ -69,22 +71,28 @@ class Servicestype extends CI_Controller {
             } else {
               $post_by = $this->session->userdata('user_id');
             }
-
+            /**Creating servicetype new row.*/
             $create_date = date('Y-m-d');
-			
 			$assign_doctors = $this->input->post('assign_doctors',TRUE);
-			$doctorsArr = implode(',',$assign_doctors);
-
+            $service = $this->input->post('service',TRUE);
+            $servicetype = $this->input->post('servicetype',TRUE);
             $savedata =  array(
-				'service' => $this->input->post('service',TRUE),
-				'servicetype' => $this->input->post('servicetype',TRUE),	
+				'service' => $service,
+				'servicetype' => $servicetype,
 				'create_by' => $post_by,
-				'doctors' => $doctorsArr,
 				'post_date'=>$create_date
             );
-
             $savedata = $this->security->xss_clean($savedata); 
             $this->db->insert('servicetype',$savedata);
+            /** Insert into servicetyp_to_doctor_map */
+            $servicetype_id = $this->db->insert_id();
+            $servicetype_doctor_map_values = array();
+            foreach($assign_doctors as $doctor_id) {
+                array_push($servicetype_doctor_map_values, "(".$servicetype_id." , ".$doctor_id.")");
+            }
+            $servicetype_doctor_map_query = "INSERT INTO servicetype_to_doctor_map (servicetype_id, doctor_id) VALUES ".
+                implode(",", $servicetype_doctor_map_values);
+            $this->db->query($servicetype_doctor_map_query);
             $this->session->set_flashdata('message','<div class="alert alert-success">Add successful</div>');
             redirect('admin/servicestype');
         } else {
@@ -127,20 +135,26 @@ public function save_edit_post()
         // get picture data
 		
 		$assign_doctors = $this->input->post('assign_doctors',TRUE);
-			$doctorsArr = implode(',',$assign_doctors);
-       
+
+            /** Updating servicetype */
             $savedata =  array(
                 'service' => $this->input->post('service',TRUE),								
                 'servicetype' => $this->input->post('servicetype',TRUE),
-				'doctors' => $doctorsArr
 			);
-            
             $id = $this->input->post('id',TRUE);
-
-
             $savedata = $this->security->xss_clean($savedata); 
-            
             $this->db->where('id',$id)->update('servicetype',$savedata);
+
+            /** Adding doctors by inserting into 
+             * servicetype_to_doctor_map */
+            $servicetype_doctor_map_values = array();
+            foreach($assign_doctors as $doctor_id) {
+                array_push($servicetype_doctor_map_values, "(".$id." , ".$doctor_id.")");
+            }
+            $servicetype_doctor_map_query = "INSERT INTO servicetype_to_doctor_map (servicetype_id, doctor_id) VALUES ".
+                implode(",", $servicetype_doctor_map_values);
+            $this->db->query($servicetype_doctor_map_query);
+
             $this->session->set_flashdata('message','<div class="alert alert-success">'.display('update_msg').'</div>');
             redirect('admin/servicestype/servicetype_list');
         } else {

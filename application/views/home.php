@@ -144,7 +144,7 @@ $hello = GeraHash(5);
                         $result = $this->db->select('*')->from('web_pages_tbl')->where('name','footer_logo')->where('status',1)->get()->row();
                     ?>
 
-                    <div class="panel-body" style="padding: 50px 130px 10px 130px;background:#f9f9f9">
+                    <div class="panel-body" style="padding:8% 10% 2% 10%;background:#f9f9f9">
                         <?php
                             $attributes = array('role'=>'form');
                             echo form_open_multipart('authentication', $attributes);
@@ -206,7 +206,7 @@ $hello = GeraHash(5);
             $result = $this->db->select('*')->from('web_pages_tbl')->where('name','footer_logo')->where('status',1)->get()->row();
         ?>
 
-        <div class="panel-body" style="padding: 50px 130px 10px 130px;background:#f9f9f9">
+        <div class="panel-body" style="padding: 8% 10% 2% 10%;background:#f9f9f9">
             <div class="row">
                 Please register to book an appointment
             </div>    
@@ -224,7 +224,7 @@ $hello = GeraHash(5);
                     <!-- new input fields added -- abinash  -->
                     <div class="form-group">
                         <div id="meserr" style="color:red;"></div>
-                        <input class="form-control" id="phone1" placeholder="Mobile Number" name="phone" type="text" required  />
+                        <input class="form-control" id="phone1" placeholder="Mobile Number" name="phone" title="Enter 10 digit mobile number" type="tel" required  pattern="[1-9]{1}[0-9]{9}"   />
                          <span class="text-danger"></span>
                     </div>
                     <div class="form-group">
@@ -236,7 +236,7 @@ $hello = GeraHash(5);
                     <div class="col-sm-12 col-md-6 col-lg-6">
                     <div class="form-group">
                         <div id="meserr" style="color:red;"></div>
-                        <input class="form-control" id="age" placeholder="Age" name="age" type="text" required  pattern="[1-9]{1}[0-9]{9}"/>
+                        <input class="form-control" id="age" placeholder="Age" name="age" type="text" required  />
                          <span class="text-danger"></span>
                     </div>
                     </div>
@@ -652,15 +652,34 @@ if ($result2->num_rows > 0) {
 $(document).ready(function(){
     $('.appoimentbtn').show();
 
- $('#myModal').on('hidden.bs.modal', function () {        
-     $('#myModal registerForm').trigger("reset");
+ $('#myModal').on('hide.bs.modal', function () {        
+     $(this).trigger('reset');
     });
 
     $('#aptBtn').on('click',function(){
         $('#regtab').click();
+        $('.form-control').val('');
+        $('#meserrReg').html('');
+        $('#meserr1').html('');
+        $('#otpmess1').html('');
+        $('#otp_field1').css('display','none');
+        $('#auth').css('display','none');
+        $('#register').show();
+
+
     });
  $('#loginBtn').on('click',function(){
         $('#logtab').click();
+        $('.form-control').val('');
+        $('#meserr').html('');
+        $('#otp_field').css('display','none');
+        $('#sendOtp').show();
+         $('#login').hide();
+         $('#otpmess').html('');
+
+
+
+
     });
 
 	$('#contact_us').click(function(){
@@ -861,8 +880,9 @@ $(document).ready(function(){
         var email     = $('#email').val();
         var age      = $('#age').val();
         var phone      = $('#phone1').val();
+
         var baseUrl =$('#base_url').val();
-        var gender = document.querySelector('input[name="inlineRadioOptions"]:checked').value;
+        var gender = document.querySelector('input[name="inlineRadioOptions"]:checked')
             console.log(gender);
         var msg=''    
         if(name==""){
@@ -874,6 +894,17 @@ $(document).ready(function(){
         if(!age){
             msg += 'Please enter Age<br>';
         }
+        if(!gender){
+            msg+='Please select gender<br>';
+        }
+        else{
+            gender=gender.value;
+        }
+        if(phone.length<10){
+            msg+='Incorrect Phone Number<br>'
+        }
+
+        
         if(msg!=""){
             $('#meserrReg').html(msg);
         }else{
