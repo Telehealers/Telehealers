@@ -437,8 +437,14 @@ function createVideoCallInformationMail($participantInfoHTML) {
 	 * 	-> Save session data (userdata)
 	 * 	-> redirect to Patient
 	 * Post input used: p_date(YYYY-MM-DD), servicetype_id(INT), sequence(HH:MM:SS AM|PM), doctor_id(INT)
+	 *  p_id {patient_id} (INT)
 	 */
 	public function confirmation(){
+		if ( !$this->session->userdata("logged_in")) {
+			log_message("error", "Confirmation access without login");
+			redirect("welcome");
+		}
+
 		$ci = get_instance();
 		$ci->load->library('email');
 		/* Mail client intialization */
@@ -462,8 +468,15 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		$this->form_validation->set_rules('p_date', 'Date', 'trim|required');
 		/**TODO: Check if patient_id is coming in post request*/
 		$this->form_validation->set_rules('p_id', 'Patient Id', 'trim|required');
-		$this->form_validation->set_rules('venue_id', 'venue', 'trim|required');
 		$this->form_validation->set_rules('sequence', 'sequence', 'trim|required');
+		$this->form_validation->set_rules('doctor_id', 'doctor', 'required' );
+		$this->form_validation->set_rules('servicetype', 'service', 'required');
+
+		
+		if (!$this->form_validation->run()) {
+			log_message("error", "Bad post-inputs");
+			redirect("appointment");
+		}
 
 		/**Application vars
 		 * TODO: Match name and fetch vars which are not coming from request.
@@ -1220,6 +1233,10 @@ public function registration()
 		$booking_time = $this->input->post('booking_date', TRUE)." ".$sequence;
 
 		$booking_time = urldecode($booking_time);
+		/** SQL-Query: 
+		 * Incldes aggregation on doctor_id: A contigency mechanism so that no
+		 * 	bad logic emits multiple doctors e.g. by joining unconditionally on n-row table.
+		 */
 		$sql_query = 'SELECT main_docs.picture AS picture, main_docs.designation AS designation, '.
 			'main_docs.doctor_name AS doctor_name, main_docs.doctor_id AS doctor_id, '.
 			'(IF('.$preferred_language_filter.', RAND(), -RAND())) as bias_reduction_score '. //Doctor selection bias reduction logic
@@ -1236,7 +1253,7 @@ public function registration()
 			'schedule.doctor_id = bookings.doctor_id AND '.
 			'CAST(bookings.sequence AS TIME) <=  "'.$booking_time.'" AND "'.$booking_time.
 			'" <= ADDTIME(CAST(bookings.sequence AS TIME), SEC_TO_TIME(schedule.per_patient_time*60))) '.
-			' ORDER BY bias_reduction_score DESC;';
+			' GROUP BY main_docs.doctor_id ORDER BY bias_reduction_score DESC;';
 
 		$available_doctors = $this->db->query($sql_query);
 
