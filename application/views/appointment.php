@@ -759,7 +759,7 @@ $('#minute button').on('click',function(e){
 });
 $('#elem').on('click',function(e){
   servicetype=(e.target.value);
-  getTime();
+  fetchTime();
 
 });
 $('#docs').on('click',function(event){
@@ -791,7 +791,7 @@ $(document).on('click', 'input:radio[id^="flexRadioDefault"]', function(event) {
 
   if(queryType == "covid"){
   // department_type
-  document.getElementById('services').style.display = 'none';
+  document.getElementById('department_type').style.display = 'none';
 
 
   }
@@ -799,7 +799,7 @@ $(document).on('click', 'input:radio[id^="flexRadioDefault"]', function(event) {
   if(queryType == "non_covid"){
     $('#docs')[0].textContent='';
 
-  document.getElementById('services').style.display = 'block';
+  document.getElementById('department_type').style.display = 'block';
 
 
 }
