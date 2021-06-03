@@ -396,99 +396,101 @@ class Doctor_controller extends CI_Controller {
 		$this->form_validation->set_rules('email', 'Email', 'valid_email|is_unique[log_info.email]');
 
 		$this->form_validation->set_rules('password', 'Password', 'trim|required|min_length[8]');
+		$this->form_validation->set_rules('language', 'Language', 'trim|required|');
+
 		
 		if ($this->form_validation->run()==true) {	
 
-		$log_data = array(
-		'email' => $this->input->post('email',TRUE),
-		'password' => MD5($this->input->post('password',TRUE)),
-		'user_type' => '1'
-		);					
+				$log_data = array(
+				'email' => $this->input->post('email',TRUE),
+				'password' => MD5($this->input->post('password',TRUE)),
+				'user_type' => '1'
+				);					
 
-		if (@$_FILES['picture']['name']) {
-                $config['upload_path']   = './assets/uploads/doctor/';
-                $config['allowed_types'] = 'gif|jpg|jpeg|png';
-                $config['overwrite']     = false;
-                $config['max_size']      = 1024;
-                $config['remove_spaces'] = true;
-                $config['max_filename']   = 10;
-                $config['file_ext_tolower'] = true;
+				if (@$_FILES['picture']['name']) {
+		                $config['upload_path']   = './assets/uploads/doctor/';
+		                $config['allowed_types'] = 'gif|jpg|jpeg|png';
+		                $config['overwrite']     = false;
+		                $config['max_size']      = 1024;
+		                $config['remove_spaces'] = true;
+		                $config['max_filename']   = 10;
+		                $config['file_ext_tolower'] = true;
 
-                $this->load->library('upload', $config);
+		                $this->load->library('upload', $config);
 
-                if ( ! $this->upload->do_upload('picture'))
-                {
-                   $this->session->set_flashdata('execption', $this->upload->display_errors());
-                   redirect('profile');
-                } else {
-                
-                 $data = $this->upload->data();
-                 $image = base_url($config['upload_path'].$data['file_name']);
-                  #------------resize image------------#
-                  $this->load->library('image_lib');
-                  $config['image_library'] = 'gd2';
-                  $config['source_image'] = $config['upload_path'].$data['file_name'];
-                  $config['create_thumb'] = FALSE;
-                  $config['maintain_ratio'] = FALSE;
-                  $config['width']     = 250;
-                  $config['height']   = 200;
+		                if ( ! $this->upload->do_upload('picture'))
+		                {
+		                   $this->session->set_flashdata('execption', $this->upload->display_errors());
+		                   redirect('profile');
+		                } else {
+		                
+		                 $data = $this->upload->data();
+		                 $image = base_url($config['upload_path'].$data['file_name']);
+		                  #------------resize image------------#
+		                  $this->load->library('image_lib');
+		                  $config['image_library'] = 'gd2';
+		                  $config['source_image'] = $config['upload_path'].$data['file_name'];
+		                  $config['create_thumb'] = FALSE;
+		                  $config['maintain_ratio'] = FALSE;
+		                  $config['width']     = 250;
+		                  $config['height']   = 200;
 
-                  $this->image_lib->clear();
-                  $this->image_lib->initialize($config);
-                  $this->image_lib->resize();
-                  #-------------resize image----------#
-                }
+		                  $this->image_lib->clear();
+		                  $this->image_lib->initialize($config);
+		                  $this->image_lib->resize();
+		                  #-------------resize image----------#
+		                }
 
-		} else {
-				$image = $this->input->post('image',TRUE);
-		}
+				} else {
+						$image = $this->input->post('image',TRUE);
+				}
 
-		if (@$_FILES['picture2']['name']) {
-                $config['upload_path']   = './assets/uploads/doctor/';
-                $config['allowed_types'] = 'gif|jpg|jpeg|png';
-                $config['overwrite']     = false;
-                $config['max_size']      = 1024;
-                $config['remove_spaces'] = true;
-                $config['max_filename']   = 10;
-                $config['file_ext_tolower'] = true;
+				if (@$_FILES['picture2']['name']) {
+		                $config['upload_path']   = './assets/uploads/doctor/';
+		                $config['allowed_types'] = 'gif|jpg|jpeg|png';
+		                $config['overwrite']     = false;
+		                $config['max_size']      = 1024;
+		                $config['remove_spaces'] = true;
+		                $config['max_filename']   = 10;
+		                $config['file_ext_tolower'] = true;
 
-                $this->load->library('upload', $config);
+		                $this->load->library('upload', $config);
 
-                if ( ! $this->upload->do_upload('picture2'))
-                {
-                   $this->session->set_flashdata('execption', $this->upload->display_errors());
-                   redirect('profile');
-                } else {
-                
-                 $data = $this->upload->data();
-                 $image2 = base_url($config['upload_path'].$data['file_name']);
-                  #------------resize image------------#
-                  $this->load->library('image_lib');
-                  $config['image_library'] = 'gd2';
-                  $config['source_image'] = $config['upload_path'].$data['file_name'];
-                  $config['create_thumb'] = FALSE;
-                  $config['maintain_ratio'] = FALSE;
-                  $config['width']     = 250;
-                  $config['height']   = 200;
+		                if ( ! $this->upload->do_upload('picture2'))
+		                {
+		                   $this->session->set_flashdata('execption', $this->upload->display_errors());
+		                   redirect('profile');
+		                } else {
+		                
+		                 $data = $this->upload->data();
+		                 $image2 = base_url($config['upload_path'].$data['file_name']);
+		                  #------------resize image------------#
+		                  $this->load->library('image_lib');
+		                  $config['image_library'] = 'gd2';
+		                  $config['source_image'] = $config['upload_path'].$data['file_name'];
+		                  $config['create_thumb'] = FALSE;
+		                  $config['maintain_ratio'] = FALSE;
+		                  $config['width']     = 250;
+		                  $config['height']   = 200;
 
-                  $this->image_lib->clear();
-                  $this->image_lib->initialize($config);
-                  $this->image_lib->resize();
-                  #-------------resize image----------#
-                }
+		                  $this->image_lib->clear();
+		                  $this->image_lib->initialize($config);
+		                  $this->image_lib->resize();
+		                  #-------------resize image----------#
+		                }
 
-		} else {
-				$image2 = $this->input->post('image2',TRUE);
-		}	
+				} else {
+						$image2 = $this->input->post('image2',TRUE);
+				}	
 
-		$exists_user = $this->doctor_model->exists_doctor(	
-		$this->input->post('phone',true),
-		date('Y-m-d',strtotime($this->input->post('birth_date',true)))
-		); 		
+				$exists_user = $this->doctor_model->exists_doctor(	
+				$this->input->post('phone',true),
+				date('Y-m-d',strtotime($this->input->post('birth_date',true)))
+				); 		
 
-		if($exists_user == true){	
+				if($exists_user == true){	
 
-		$this->session->set_flashdata('exception','<div class="alert alert-danger">'.$this->input->post('name',TRUE) .display('exist_error_msg').'</div>');  
+				$this->session->set_flashdata('exception','<div class="alert alert-danger">'.$this->input->post('name',TRUE) .display('exist_error_msg').'</div>');  
 
 		redirect('admin/Doctor_controller/create_new_doctor');
 

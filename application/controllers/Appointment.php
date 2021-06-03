@@ -88,7 +88,7 @@ class Appointment extends CI_Controller {
 		// get doctor list for appointmaent
 		$data['doctor_info_for_appo'] = $this->doctor_model->getDoctorListByselect();
 		//get departments
-		 $data['departments']=$this->ajax_model->getservicetype('Speciality Consultation');
+		 $data['services']=$this->getservicetype();
 
 
 		$language_arr = array();
@@ -1141,34 +1141,10 @@ public function registration()
 	public function getservicetype(){
 
 		$services = $this->input->post('services',TRUE);
-		$sql = "select id from service where title = '".$services."'";
+		$sql = "select id,servicetype from servicetype ";
 		$res = $this->db->query($sql);
 		$result = $res->result_array();
-		if(is_array($result) && count($result)>0){
-			$service_id = $result[0]['id'];
-		}
-		$con = '';
-		if($service_id>0){
-			$sql_st = "select * from servicetype where service = '".$service_id."'";
-			$res_st = $this->db->query($sql_st);
-			$result_st = $res_st->result_array();
-			$i=0;
-			if(is_array($result_st) && count($result_st)>0){
-				foreach($result_st as $res){
-					$i++;
-					$service_id = $res['id'];
-					$servicetype = $res['servicetype'];
-					$doctors = $res['doctors'];
-					if($i==1){
-						$con .= '<li><button type="button" class="btn_choose_sent bg_btn_chose_1"><input type="radio" value="'.$servicetype.'" name="servicetype" checked="checked" />'.$servicetype.'</button></li>';
-					}else{
-						$con .= '<li><button type="button" class="btn_choose_sent bg_btn_chose_1"><input type="radio" value="'.$servicetype.'" name="servicetype" />'.$servicetype.'</button></li>';
-					}
-
-				}
-			}
-		}
-		echo $con;
+		return $result;
 	}
 	public function getservicetypedoctor(){
 
