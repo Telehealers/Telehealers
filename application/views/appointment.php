@@ -547,21 +547,20 @@ input.range::-ms-fill-upper {
 </div>
 
     </div>
-    <div class="col-sm-2 col-md-3 col-lg-2" style="">
+    <div class="col-sm-12 col-md-3 col-lg-2" style="">
     <div class="btn-group" role="group"  id="meredium" aria-label="Basic example">
   <button type="button" id="ambtn" class="btn btn-secondary">A M</button>
   <button type="button" class="btn btn-secondary">P M</button>
 
 </div>
     </div>
-    </div>
-   
-    <div class="col-sm-6 col-md-6 col-lg-6">
-    <div class="float-right">
+
+    <div class="col-sm-12 col-md-3 col-lg-4">
+
 <h1 for="customRange3" id="time" class="form-label labelStyle" style="margin-bottom: 0 !important;margin-top:0px;padding-top: 5px;"></h1>
 
-</div>
-    </div>
+
+    </div></div>
     
     <div class="row mb-3" id="department_type" style="display:none;padding-left:2%;padding-right:2%">
 
