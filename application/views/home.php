@@ -206,7 +206,7 @@ $hello = GeraHash(5);
             $result = $this->db->select('*')->from('web_pages_tbl')->where('name','footer_logo')->where('status',1)->get()->row();
         ?>
 
-        <div class="panel-body" style="padding: 50px 130px 10px 130px;background:#f9f9f9">
+        <div class="panel-body" style="padding: 8% 10% 2% 10%;background:#f9f9f9">
             <div class="row">
                 Please register to book an appointment
             </div>    
