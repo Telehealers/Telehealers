@@ -497,7 +497,7 @@ input.range::-ms-fill-upper {
     </div>
     </div>
     <div class="row mb-3" style="padding-left:2%;padding-right:2%">
-    <div class="col-sm-12 col-md-10 col-lg-10">
+    <div class="col-sm-12 col-md-12 col-lg-12">
     <div>
     <h1 for="customRange3" class="form-label labelStyle" style="margin-top: 0;">Book Time Slot</h1>
     <fieldset class="range__field" id="time_hour" value="10">
@@ -562,7 +562,7 @@ input.range::-ms-fill-upper {
 
 </div>
     </div>
-    </div>
+    
     <div class="row mb-3" id="department_type" style="display:none;padding-left:2%;padding-right:2%">
 
     <div class="col-sm-12 col-md-12 col-lg-12">
