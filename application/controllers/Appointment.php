@@ -436,7 +436,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 	 *  -> Create video-call and inform participant
 	 * 	-> Save session data (userdata)
 	 * 	-> redirect to Patient
-	 * Post input used: p_date(YYYY-MM-DD), service(INT), sequence(HH:MM:SS AM|PM), doctor_id(INT)
+	 * Post input used: p_date(YYYY-MM-DD), servicetype_id(INT), sequence(HH:MM:SS AM|PM), doctor_id(INT)
 	 */
 	public function confirmation(){
 		$ci = get_instance();
@@ -471,7 +471,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		$booking_date = $this->input->post('p_date', TRUE);
 		$sequence = $this->input->post("sequence",TRUE);
 		$sequence = date("H:i:s", strtotime($sequence));
-		$service = $this->input->post('service',TRUE);
+		$servicetype_id = $this->input->post('servicetype_id',TRUE);
 		$doctor_id = $this->input->post('doctor_id');
 		/**TODO: Bad schedule_id, use sql auto-increment column*/
 		$schedul_id = "A".date('y').strtoupper($this->randstrGenapp(5));
@@ -486,16 +486,16 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		}
 		$venue_id = 3; /**NOTE: venue = Online */
 
-		/** Fetching servicetype */
-		$servicetype_query = "select servicetype FROM servicetype where service = ".$service;
+		/** Fetching service */
+		$servicetype_query = "select service, servicetype FROM servicetype where id = ".$servicetype_id;
 		$servicetype_entry = $this->db->query($servicetype_query)->result()[0];
 		if (!$servicetype_entry) {
 			/** Bad service from input */
 			log_message('error', "Bad service query: ".$servicetype_query." ");
 			show_404();
 		}
+		$service = $servicetype_entry->service;
 		$servicetype = $servicetype_entry->servicetype;
-
 		/**Fetching patient data from DB*/
 		$get_patient_query = "select patient_name, patient_email,".
 			" patient_phone, age, sex, log_id from patient_tbl".
@@ -1173,7 +1173,7 @@ public function registration()
 		echo $con;
 	}
 	/* 	Get available doctors
-	*	Post input used: service(INT), preferred_language(STRING), booking_hour (HH),
+	*	Post input used: servicetype_id(INT), preferred_language(STRING), booking_hour (HH),
 			 booking_minute (MM), booking_am_pm (AM|PM), booking_date(YYYY-MM-DD)
     *  	returns: HTML doctor list with pictures and all-unselected radio buttons.
         TODO: rows with bias_reduction < 0, are rows with other languages,
@@ -1185,8 +1185,8 @@ public function registration()
 	public function getdoctorforappointment(){
 		//NOTE: Input can also be mapped to post input, uncomment below comments
 		// to use them.
-		$service = $this->input->post('service',TRUE);
-		$service_filter = ($service)? 'stdm.service = '.$service.' AND ':"";
+		$servicetype_id = $this->input->post('servicetype_id',TRUE);
+		$servicetype_filter = ($servicetype_id)? 'stdm.servicetype_id = '.$servicetype_id.' AND ':"";
 		$preferred_language = $this->input->post('preferred_language', TRUE);
 		$preferred_language_filter = '(language LIKE "%'.$preferred_language.'%")';
 		$sequence =$this->input->post("booking_hour",TRUE).":".
@@ -1199,8 +1199,8 @@ public function registration()
 		$sql_query = 'SELECT main_docs.picture AS picture, main_docs.designation AS designation, '.
 			'main_docs.doctor_name AS doctor_name, main_docs.doctor_id AS doctor_id, '.
 			'(IF('.$preferred_language_filter.', RAND(), -RAND())) as bias_reduction_score '. //Doctor selection bias reduction logic
-			'FROM doctor_tbl main_docs, service_to_doctor_map stdm WHERE '.
-			' stdm.doctor_id = main_docs.doctor_id AND '.$service_filter.
+			'FROM doctor_tbl main_docs, servicetype_to_doctor_map stdm WHERE '.
+			' stdm.doctor_id = main_docs.doctor_id AND '.$servicetype_filter.
 			'main_docs.doctor_id IN ('.
 			'SELECT sched.doctor_id FROM schedul_setup_tbl sched WHERE '.
 			'sched.day = DAYOFWEEK("'.$booking_time.'") AND CAST(sched.start_time AS TIME) <= "'.
