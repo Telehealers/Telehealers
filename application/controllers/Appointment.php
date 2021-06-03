@@ -83,7 +83,7 @@ class Appointment extends CI_Controller {
 		// //get venue list
         $data['venue'] = $this->venue_model->get_venue_list();
 
-		$data['service'] = $this->db->get('service')->result();
+		//$data['service'] = $this->db->get('service')->result();
 
 		// get doctor list for appointmaent
 		$data['doctor_info_for_appo'] = $this->doctor_model->getDoctorListByselect();

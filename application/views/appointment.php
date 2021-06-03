@@ -604,8 +604,8 @@ input.range::-ms-fill-upper {
                 //var_dump($departments);
 
                 foreach($services as $val){
-                    if($val['service']>1){
-                        ?><button type="button"class="btn-group__item btn-group__item" value="<?php echo $val['service']?>">
+                    if($val['id']>1){
+                        ?><button type="button"class="btn-group__item btn-group__item" value="<?php echo $val['id']?>">
                             <?php echo $val['servicetype'];
                                            ?></button><?php }}} ?>
    </div>
@@ -619,7 +619,7 @@ input.range::-ms-fill-upper {
         <input type="hidden" name="sequence" id="sequence" value="">
         <input type="hidden" name="p_id" id="p_id" value="P21MFI6Q">
         <input type="hidden" name="doctor_id" id="doctor_id" >
-        <input type="hidden" name="servicetype" id="servicetype" >
+        <input type="hidden" name="servicetype_id" id="servicetype_id" >
     </div>
     </div>
     <div class="container" style="padding:0px;height: 500px;overflow-y: auto;overflow-x: hidden;width: auto;">
@@ -675,7 +675,7 @@ function getDoctors(language,date,hour,min,am_pm,servicetype){
     $.ajax({
     url:base_url+'index.php/Appointment/getdoctorforappointment',
     method: 'post',
-    data: {servicetype:servicetype,preferred_language:language,booking_date:date,booking_hour:hour,booking_minute:min,booking_am_pm:am_pm},
+    data: {servicetype_id:servicetype,preferred_language:language,booking_date:date,booking_hour:hour,booking_minute:min,booking_am_pm:am_pm},
     type: 'POST',
     success: function(response){
       $('#docs').prepend(response);
