@@ -111,7 +111,6 @@ class Schedule_controller extends CI_Controller {
         date_default_timezone_set(@$info->details);
 
 
-	    $this->form_validation->set_rules('venue', 'Venue', 'trim|required');
 	    $this->form_validation->set_rules('s_time', 'Start time', 'trim|required');
 	    $this->form_validation->set_rules('e_time', 'End time', 'trim|required');
 	    $this->form_validation->set_rules('p_time', 'Per', 'trim|required');
@@ -124,7 +123,7 @@ class Schedule_controller extends CI_Controller {
 		    for($i=0; $i<count( $d_name['day']); $i++) {
 		    	$savedata = array(
 	     		'doctor_id' => $this->input->post('doctor',TRUE) , 
-	     		'venue_id' => $this->input->post('venue',TRUE) , 
+	     		'venue_id' => 3 , 
 	     		'start_time' => $this->input->post('s_time',TRUE) , 
 	     		'end_time' => $this->input->post('e_time',TRUE) , 
 	     		'day' => $d_name['day'][$i] , 
@@ -167,13 +166,9 @@ class Schedule_controller extends CI_Controller {
         	redirect('admin/Schedule_controller/add_schedule');
 
 	      } else {
+	      	$this->session->set_flashdata('message',"<div class='alert alert-danger'>Some fields are messing, Please Try again.</div>");
 
-		   $data['venue_info'] = $this->venue_model->get_venue_list(); 
-		   $data['doctor_info'] = $this->doctor_model->getDoctorListByselect();
-	        $this->load->view('admin/_header',$data);
-			$this->load->view('admin/_left_sideber');
-			$this->load->view('admin/view_setup_schedule');
-			$this->load->view('admin/_footer');
+	      	redirect('admin/Schedule_controller/add_schedule');
 	     }      
     }
 
