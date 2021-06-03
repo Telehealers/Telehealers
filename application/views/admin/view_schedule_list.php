@@ -72,8 +72,6 @@
                                 <tr>
                                     <th >#SL</th>
                                     <th >Doctor </th>
-									<th >Fees</th>
-									<th ><?php echo display('venue');?> </th>
                                     <th ><?php echo display('day');?> </th>
                                     <th ><?php echo display('start_time');?> </th>
                                     <th ><?php echo display('end_time');?> </th>
@@ -101,8 +99,6 @@
                                 <tr>
                                     <td><?php echo $i++;?></td>
 									<td><?php echo html_escape($doctor_name);?></td>
-									<td><?php if($value->fees==1){echo 'Free';}if($value->fees==2){echo 'Paid';}?></td>
-                                    <td><?php echo html_escape($value->venue_name);?></td>
                                     <td><?php echo html_escape(day($value->day));?></td>
                                     <td><?php echo html_escape($value->start_time);?></td>
                                     <td><?php echo html_escape($value->end_time);?></td>
