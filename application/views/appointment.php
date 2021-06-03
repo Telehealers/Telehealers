@@ -821,8 +821,8 @@ $(function() {
        var items = elem.children();
 
        // Inserting Buttons
-       elem.prepend('<div class="col-sm-1 col-md-1 col-lg-1"><div id="right-button" style="visibility: hidden;font-size:30px;color: #4c0082;font-weight: 900;"><</div></div>');
-       elem.append('<div class="col-sm-1 col-md-1 col-lg-1">  <div id="left-button" style="font-size:30px;color: #4c0082;font-weight: 900;">></div>');
+       elem.prepend('<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><div id="right-button" style="visibility: hidden;font-size:30px;color: #4c0082;font-weight: 900;"><</div></div>');
+       elem.append('<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">  <div id="left-button" style="font-size:30px;color: #4c0082;font-weight: 900;">></div>');
 
 //       Inserting Inner
        items.wrapAll('<div id="inner" />');
