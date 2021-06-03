@@ -641,7 +641,7 @@ input.range::-ms-fill-upper {
 </div>></form>
 <script>
 var servicetype='';
-function getDoctors(language,date,hour,min,am_pm,servicetype){
+function getDoctors(language,date,hour,min,am_pm){
     $('#docs')[0].textContent='';
     $('#my-modal').modal({show: 'false'});
     var base_url=$('#base_url').val();
@@ -699,8 +699,8 @@ function fetchTime(date,hour, minute,am_pm,language){
 
   if(servicetype){
     $('#q_succ_msg').hide();
-    $('#servicetype').val(servicetype);
-    getDoctors(language,date,hour,minute,am_pm,servicetype);
+    $('#servicetype_id').val(servicetype);
+    getDoctors(language,date,hour,minute,am_pm);
   }
 
 }

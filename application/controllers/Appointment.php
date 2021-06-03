@@ -470,7 +470,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		$this->form_validation->set_rules('p_id', 'Patient Id', 'trim|required');
 		$this->form_validation->set_rules('sequence', 'sequence', 'trim|required');
 		$this->form_validation->set_rules('doctor_id', 'doctor', 'required' );
-		$this->form_validation->set_rules('servicetype', 'service', 'required');
+		$this->form_validation->set_rules('servicetype_id', 'service', 'required');
 
 		
 		if (!$this->form_validation->run()) {
@@ -535,7 +535,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		}
 		$venue_name = $venue_data->venue_name;
 
-		$doctor_info_query = "select doctor_name, log_id from doctor_tbl where doctor_id = '".$doctor_id;
+		$doctor_info_query = "select doctor_name, log_id from doctor_tbl where doctor_id = '".$doctor_id."'";
 		$doctor_entry = $this->db->query($doctor_info_query)->result()[0];
 		if (!$doctor_entry) {
 			/** Bad doctor_id from input */
