@@ -66,46 +66,35 @@
 							</div>
 						</div>
 						
-						<div class="form-group">
-                            <label class="col-md-3 control-label"><?php echo display('venue');?> :</label>
-                            <div class="col-md-5">
-                                <select class="form-control v_name" name="venue" id="v_id">
-                                    <option value=''>--<?php echo display('select_venue');?>--</option>
-                                     <?php 
-                                    foreach ($venue_info as $vv) {
-                                       echo'<option value="'.html_escape($vv->venue_id).'">'.html_escape($vv->venue_name).'</option>';
-                                    }?>
-                                </select>
-                                <?php echo form_error('venue', '<div class=" text-danger">', '</div>'); ?>
-                            </div>
-                        </div>
+						
 
                         <div class="form-group">
                             <label class="col-md-3 control-label"> <span class="text-danger">*</span><?php echo display('day');?> :</label>
                             <div class="col-md-5">
                                 <div class="md-checkbox-inline">
+                                        
+                                        <input id="checkbox6" name="day[]" id="day" value="1" class="md-check" type="checkbox">
+                                        <label for="checkbox6"> <?php echo display('sunday');?> </label>
                                 
-                                        <input id="checkbox7" name="day[]" id="day" value="3" class="md-check" type="checkbox">
+                                        <input id="checkbox7" name="day[]" id="day" value="2" class="md-check" type="checkbox">
                                         <label for="checkbox7"> <?php echo display('monday');?> </label>
 
-                                        <input id="checkbox8" name="day[]" id="day" value="4" class="md-check" type="checkbox">
+                                        <input id="checkbox8" name="day[]" id="day" value="3" class="md-check" type="checkbox">
                                         <label for="checkbox8"><?php echo display('tuesday');?> </label>
                                 
                                     
-                                        <input id="checkbox9" name="day[]" id="day" value="5" class="md-check" type="checkbox">
+                                        <input id="checkbox9" name="day[]" id="day" value="4" class="md-check" type="checkbox">
                                         <label for="checkbox9"> <?php echo display('wednesday');?> </label>
                                     
-                                        <input id="checkbox10" name="day[]" id="day" value="6" class="md-check" type="checkbox">
+                                        <input id="checkbox10" name="day[]" id="day" value="5" class="md-check" type="checkbox">
                                         <label for="checkbox10"> <?php echo display('thusday');?> </label>
                                     
-                                        <input id="checkbox11" name="day[]" id="day" value="7" class="md-check" type="checkbox">
+                                        <input id="checkbox11" name="day[]" id="day" value="6" class="md-check" type="checkbox">
                                         <label for="checkbox11"><?php echo display('friday');?> </label>
                                         
-                                         <input id="checkbox5" name="day[]" id="day" value="1" class="md-check" type="checkbox">
+                                         <input id="checkbox5" name="day[]" id="day" value="7" class="md-check" type="checkbox">
                                         <label for="checkbox5"><?php echo display('saturday');?> </label>
                                     
-                                        <input id="checkbox6" name="day[]" id="day" value="2" class="md-check" type="checkbox">
-                                        <label for="checkbox6"> <?php echo display('sunday');?> </label>
                                   
                                     <?php echo form_error('day', '<div class=" text-danger">', '</div>'); ?>
 
