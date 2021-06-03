@@ -470,7 +470,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		$this->form_validation->set_rules('p_id', 'Patient Id', 'trim|required');
 		$this->form_validation->set_rules('sequence', 'sequence', 'trim|required');
 		$this->form_validation->set_rules('doctor_id', 'doctor', 'required' );
-		$this->form_validation->set_rules('servicetype', 'service', 'required');
+		$this->form_validation->set_rules('servicetype_id', 'service', 'required');
 
 		
 		if (!$this->form_validation->run()) {

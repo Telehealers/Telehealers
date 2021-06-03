@@ -236,7 +236,8 @@ class Schedule_controller extends CI_Controller {
          $this->form_validation->set_rules('visible', 'Visible', 'trim|required');
           
         if ($this->form_validation->run()==true) {
-                 $savedata = array(
+			$savedata = array(
+				"schedule_id" => $s_id,
          		'doctor_id' => $this->session->userdata('doctor_id',TRUE), 
          		'venue_id' => $this->input->post('venue',TRUE), 
          		'start_time' => $this->input->post('s_time',TRUE), 
@@ -244,8 +245,7 @@ class Schedule_controller extends CI_Controller {
          		'day' => $this->input->post('day',TRUE), 
          		'per_patient_time' => $this->input->post('p_time',TRUE), 
          		'visibility' => $this->input->post('visible',TRUE)
-         		);
-
+			);
            $this->schedule_model->save_edit_schedul($savedata,$s_id);
 		   $action_link = $s_id;
 		   $user_id = $this->session->userdata('log_id');
