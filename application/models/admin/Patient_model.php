@@ -120,6 +120,18 @@ public function get_patient_inde_info($patient_id)
  $this->db->insert('patient_doc_tbl', $savedata);
  
  }
+
+ /** A Function to send patient docs to new doctor 
+  * NOTE: All existing doctors will have their copy.
+  * TODO: Take decision on wether to remove or add new rows.
+ */
+ public function transfer_patient_doc_to_new_doctor($patient_id, $referee_doctor, $referred_doctor) {
+    $transfer_query = "INSERT INTO patient_doc_tbl SELECT ".
+    "patient_doc_id, patient_id, ".$referred_doctor." as doctor_id,document, add_date".
+    " FROM patient_doc_tbl WHERE patient_id = '".$patient_id."' ".
+    " AND doctor_id = ".$referee_doctor ;
+    return $this->db->query($transfer_query);
+ }
  
  
 

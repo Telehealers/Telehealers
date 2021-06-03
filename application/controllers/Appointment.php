@@ -43,6 +43,9 @@ class Appointment extends CI_Controller {
         //
         $this->load->model('admin/email/Email_model','email_model');
         $this->load->library('email');
+
+		/**Load Superpro Model */
+		$this->load->model('Superpro_model', 'conference');
   }
 
 
@@ -159,117 +162,6 @@ function randstrGenapp($len)
     return $result;
 }
 
-#-----------------------------------------------
-#   Superpro API: Create call room.
-#	Returns Video call link.
-#-----------------------------------------------
-function createVideoCallRoom($doctor_name, $doctor_email, $patient_name, $patient_email) {
-	$curl_session = curl_init();
-	curl_setopt_array($curl_session, array(
-		CURLOPT_URL => getenv('SUPERPRO_CREATE_VIDEOCALL_API_ENDPOINT'),
-		CURLOPT_RETURNTRANSFER => true,
-		CURLOPT_ENCODING => '',
-		CURLOPT_MAXREDIRS => 10,
-		CURLOPT_TIMEOUT => 0,
-		CURLOPT_FOLLOWLOCATION => true,
-		CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-		CURLOPT_RETURNTRANSFER => true,
-		CURLOPT_CUSTOMREQUEST => 'POST',
-		CURLOPT_POSTFIELDS =>'{
-		"usersAdd":[
-			{
-				"name":"'.$doctor_name.'",
-				"email":"'.$doctor_email.'",
-				"role":"host"
-			},
-			{
-				"name":"'.$patient_name.'",
-				"email":"'.$patient_email.'",
-				"role":"aud"
-			},
-			{
-				"name":"assistant",
-				"email":"support@telehealers.in",
-				"role":"cohost"
-			}
-		]
-	}
-	',
-		CURLOPT_HTTPHEADER => array(
-		'Authorization: Bearer '.getenv('SUPERPRO_AUTH_TOKEN'),
-		'Content-Type: application/json'
-		),
-	));
-	$superpro_response = curl_exec($curl_session);
-
-	if (!$superpro_response) {
-		log_message('error',$superpro_response);
-		show_404();
-	}
-
-	curl_close($curl_session);
-	$superpro_data = json_decode($superpro_response);
-
-	if (isset($superpro_data->message)) {
-		log_message('error', $superpro_data->message);
-		show_404();
-	}
-	return $superpro_data->videoCallUrl ;
-
-}
-#-----------------------------------------------
-#   Input: Client & Dr. Details in HTML in <p>...</p> format.
-#	Returns: Email msg for a video-call.
-#-----------------------------------------------
-function createVideoCallInformationMail($participantInfoHTML) {
-	return '<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #f1f1f1;">
-		<center style="width: 100%; background-color: #f1f1f1;">
-			<div style="display: none; font-size: 1px;max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
-				&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
-			</div>
-			<div style="max-width: 600px; margin: 0 auto;" class="email-container">
-				<!-- BEGIN BODY -->
-				<table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
-					<tbody><tr>
-						<td valign="top" class="bg_white" style="padding: 1em 2.5em 0 2.5em;">
-							<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-								<tbody><tr>
-									<td class="logo" style="text-align: left;">
-										<h1>
-											<a href="http://telehealers.in/">
-											<img src="http://telehealers.in/assets/uploads/images/telehe2.png">
-											</a>
-										</h1>
-									</td>
-								</tr>
-							</tbody></table>
-						</td>
-					</tr>
-					<tr>
-						</tr></tbody></table><table class="bg_white" role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-							<tbody><tr style="border-bottom: 1px solid rgba(0,0,0,.05);">
-								<td valign="middle" width="100%" style="text-align:left; padding: 0 2.5em;">
-									<div class="product-entry">
-										<div class="text">
-											'.$participantInfoHTML.'
-										</div>
-									</div>
-								</td>
-							</tr>
-						</tbody></table>
-
-
-				<table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
-					<tbody><tr>
-						<td class="bg_white" style="text-align: center;">
-							<p>Receive these email? You can <a href="#" style="color: rgba(0,0,0,.8);">Unsubscribe here</a></p>
-						</td>
-					</tr>
-				</tbody></table>
-			</div>
-		</center>
-	</body></html>' ;
-}
 
 #-----------------------------------------------
 #    save appointmaent
@@ -577,7 +469,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 
 		/** Video call room creation
 		 * TODO: Add assistants to videocall members**/
-		$superpro_meeting_url = $this->createVideoCallRoom(
+		$superpro_meeting_url = $this->conference->createVideoCallRoom(
 			$doctor_name, $doctor_email,
 			$p_name, $p_email);
 		$meeting_pass = '';
@@ -589,7 +481,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		$this->db->query($sql_m);
 
 		/** Informing participants */
-		$message = $this->createVideoCallInformationMail('
+		$message = $this->conference->createVideoCallInformationMail('
 			<p>Hey <strong>'.$p_name.'</strong>,</p>
 			<p>Our staff member has confirmed you for a '.$service.
 				' appointment on '.$booking_date.' with Dr. '.$doctor_name.
@@ -612,21 +504,12 @@ function createVideoCallInformationMail($participantInfoHTML) {
 			<p>Appointment ID: '.$appointment_id.'</p>');
 
 		$ci->email->from('info@telehealers.in', 'telehealers');
-		$list = array($p_email);
+		$list = array($p_email, $doctor_email);
 		$ci->email->to($list);
 		$this->email->reply_to('info@telehealers.in', 'telehealers');
 		$ci->email->subject('Appointment Information');
 		$ci->email->message($message);
 		$ci->email->send();
-
-		$ci->email->from('info@telehealers.in', 'telehealers');
-		$list = array($doctor_email);
-		$ci->email->to($list);
-		$this->email->reply_to('info@telehealers.in', 'telehealers');
-		$ci->email->subject('Appointment Information');
-		$ci->email->message($message);
-		$ci->email->send();
-
 
 		$appointmentData = array(
 			'date' => $booking_date,
@@ -804,7 +687,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		if(is_array($result_tk) && count($result_tk)>0){
 			$accessToken = $result_tk[0]['access_token'];
 		}
-		$superpro_meeting_url = $this->createVideoCallRoom(
+		$superpro_meeting_url = $this->conference->createVideoCallRoom(
 			$doctor_name, $doctor_email,
 			$p_name, $p_email);
 		$meeting_pass = '';
@@ -817,7 +700,7 @@ function createVideoCallInformationMail($participantInfoHTML) {
 		
 		
 		
-		$message = $this->createVideoCallInformationMail('
+		$message = $this->conference->createVideoCallInformationMail('
 			<p>Hey <strong>'.$p_name.'</strong>,</p>
 			<p>Our staff member has confirmed you for a '.$service1.' appointment on '.date('jS F Y',strtotime($date)).' with Dr. '.$doctor_name.'. If you have questions before your appointment,
 				use the contact form with appointment ID to get in touch with us.</p>
