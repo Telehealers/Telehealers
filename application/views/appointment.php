@@ -536,17 +536,9 @@ input.range::-ms-fill-upper {
    </svg>
 </fieldset>
     </div>
-    </div>
-    <div class="col-sm-12 col-md-2 col-lg-2" style="margin-top: 20px;">
-    <div class="btn-group" role="group" style="display:flex" id="meredium" aria-label="Basic example">
-  <button type="button" id="ambtn" class="btn btn-secondary">A M</button>
-  <button type="button" class="btn btn-secondary">P M</button>
-
-</div>
-    </div>
-    </div>
-    <div class="row mt-4" style="padding-left:2%;padding-right:2%">
-    <div class="col-sm-12 col-md-6 col-lg-6">
+    </div></div>
+        <div class="row mt-4" style="padding-left:2%;padding-right:2%">
+ <div class="col-sm-12 col-md-6 col-lg-6">
     <div class="btn-group"id="minute" role="group" aria-label="Basic example">
   <button type="button" id="btn1" class="btn btn-secondary">0:00</button>
   <button type="button" class="btn btn-secondary">0:15</button>
@@ -555,7 +547,16 @@ input.range::-ms-fill-upper {
 </div>
 
     </div>
-    <div class="col-sm-12 col-md-6 col-lg-6">
+    <div class="col-sm-2 col-md-3 col-lg-2" style="">
+    <div class="btn-group" role="group"  id="meredium" aria-label="Basic example">
+  <button type="button" id="ambtn" class="btn btn-secondary">A M</button>
+  <button type="button" class="btn btn-secondary">P M</button>
+
+</div>
+    </div>
+    </div>
+   
+    <div class="col-sm-6 col-md-6 col-lg-6">
     <div class="float-right">
 <h1 for="customRange3" id="time" class="form-label labelStyle" style="margin-bottom: 0 !important;margin-top:0px;padding-top: 5px;"></h1>
 
@@ -663,7 +664,7 @@ function cleanHours(originalVal){
   return originalVal
 }
 date_today=new Date();
-function getTime(date,hour, minute,am_pm,language){
+function fetchTime(date,hour, minute,am_pm,language){
 
   date = date ? date : $('#datepicker').datepicker('getFormattedDate');
   date_cool = new Date(date);
@@ -675,7 +676,8 @@ function getTime(date,hour, minute,am_pm,language){
   document.getElementById("time").innerHTML = date_time;
   $("#sequence").val(hour+":"+minute+" "+am_pm);
   time=hour+":"+minute+" "+am_pm;
-  if(selected_dt.getTime()<date_today.getTime()){
+  console.log(selected_dt.toString(),date_today.toString());
+  if(selected_dt.getTime()< date_today.getTime()){
         $('#docs')[0].textContent='';
          return; 
   }
@@ -722,7 +724,7 @@ $('#ambtn').ready(function(){
 
 $('#datepicker').on('changeDate',function(e) {
     var date=($('#datepicker').datepicker('getFormattedDate'));
-    getTime(date);
+    fetchTime(date);
     $('#p_date').val(date);
     console.log($('#p_date').val());
 
@@ -731,7 +733,7 @@ $('#datepicker').on('changeDate',function(e) {
 $('#dLabel ').on('DOMNodeInserted',function(e){
     var language=e.target.innerHTML;
     //console.log(language);
-   getTime(null,null,null,null,language,null);
+  fetchTime(null,null,null,null,language,null);
 
 });
 
@@ -739,26 +741,26 @@ $('#dLabel ').on('DOMNodeInserted',function(e){
 
 $('#time_hour').on('change', function(ev){
     var hour = cleanHours(parseInt(ev.target.value));
-    getTime(null,hour,null,null,null,null);
+    fetchTime(null,hour,null,null,null,null);
 
 });
 
 $('#meredium button').on('click',function(e){
 
   $(this).addClass("active").siblings().removeClass("active");
-  getTime();
+  fetchTime();
 
 });
 
 $('#minute button').on('click',function(e){
   var minute=(e.target.innerHTML).substr(2, 4)
   $(this).addClass("active").siblings().removeClass("active");
-  getTime();
+  fetchTime();
 
 });
 $('#elem').on('click',function(e){
   department=(e.target.value);
-  getTime();
+  fetchTime();
 
 });
 $('#docs').on('click',function(event){
