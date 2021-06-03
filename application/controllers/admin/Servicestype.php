@@ -71,7 +71,7 @@ class Servicestype extends CI_Controller {
             } else {
               $post_by = $this->session->userdata('user_id');
             }
-            /**servicetype insertion */
+            /**Creating servicetype new row.*/
             $create_date = date('Y-m-d');
 			$assign_doctors = $this->input->post('assign_doctors',TRUE);
             $service = $this->input->post('service',TRUE);
@@ -80,7 +80,6 @@ class Servicestype extends CI_Controller {
 				'service' => $service,
 				'servicetype' => $servicetype,
 				'create_by' => $post_by,
-				'doctors' => "",
 				'post_date'=>$create_date
             );
             $savedata = $this->security->xss_clean($savedata); 
@@ -136,22 +135,18 @@ public function save_edit_post()
         // get picture data
 		
 		$assign_doctors = $this->input->post('assign_doctors',TRUE);
-			$doctorsArr = implode(',',$assign_doctors);
-       
+
+            /** Updating servicetype */
             $savedata =  array(
                 'service' => $this->input->post('service',TRUE),								
                 'servicetype' => $this->input->post('servicetype',TRUE),
-				'doctors' => $doctorsArr
 			);
-            
             $id = $this->input->post('id',TRUE);
-
-
             $savedata = $this->security->xss_clean($savedata); 
-            
             $this->db->where('id',$id)->update('servicetype',$savedata);
 
-            /** Insert into servicetyp_to_doctor_map */
+            /** Adding doctors by inserting into 
+             * servicetype_to_doctor_map */
             $servicetype_doctor_map_values = array();
             foreach($assign_doctors as $doctor_id) {
                 array_push($servicetype_doctor_map_values, "(".$id." , ".$doctor_id.")");
