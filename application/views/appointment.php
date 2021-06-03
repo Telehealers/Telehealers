@@ -1,5 +1,5 @@
 <?php
-    // date_default_timezone_set(@$info->timezone->details);
+     date_default_timezone_set(@$info->timezone->details);
 ?>
 <!doctype html>
 <html lang="en">
@@ -573,13 +573,13 @@ input.range::-ms-fill-upper {
     justify-content: center;
     align-items: center;
 ">
-         <?php if(is_array($departments) && count($departments)>0){
+         <?php if(is_array($services) && count($services)>0){
                 //var_dump($departments);
-                $covid_dept=[5,25];
-                foreach($departments as $val){
-                    if(!in_array($val['department_id'], $covid_dept)){
-                        ?><button type="button"class="btn-group__item btn-group__item" value="<?php echo $val['department_id']?>">
-                            <?php echo $val['department_name'];
+
+                foreach($services as $val){
+                    if($val['id']>1){
+                        ?><button type="button"class="btn-group__item btn-group__item" value="<?php echo $val['id']?>">
+                            <?php echo $val['servicetype'];
                                            ?></button><?php }}} ?>
    </div>
     </div>
@@ -592,7 +592,7 @@ input.range::-ms-fill-upper {
         <input type="hidden" name="sequence" id="sequence" value="">
         <input type="hidden" name="p_id" id="p_id" value="P21MFI6Q">
         <input type="hidden" name="doctor_id" id="doctor_id" >
-        <input type="hidden" name="department" id="department" >
+        <input type="hidden" name="servicetype_id" id="servicetype_id" >
     </div>
     </div>
     <div class="container" style="padding:0px;height: 500px;overflow-y: auto;overflow-x: hidden;width: auto;">
@@ -640,15 +640,15 @@ input.range::-ms-fill-upper {
     </div>
 </div>></form>
 <script>
-var department='';
-function getDoctors(language,date,hour,min,am_pm,department){
+var servicetype='';
+function getDoctors(language,date,hour,min,am_pm,servicetype){
     $('#docs')[0].textContent='';
     $('#my-modal').modal({show: 'false'});
     var base_url=$('#base_url').val();
     $.ajax({
     url:base_url+'index.php/Appointment/getdoctorforappointment',
     method: 'post',
-    data: {department_type:department,preferred_language:language,booking_date:date,booking_hour:hour,booking_minute:min,booking_am_pm:am_pm},
+    data: {servicetype_id:servicetype,preferred_language:language,booking_date:date,booking_hour:hour,booking_minute:min,booking_am_pm:am_pm},
     type: 'POST',
     success: function(response){
       $('#docs').prepend(response);
@@ -690,17 +690,17 @@ function fetchTime(date,hour, minute,am_pm,language){
   }
 
   if($('input:radio[id^="flexRadioDefault"]')[0].checked){
-    department='5,6,25'; // default dept general dept / general physician , needs to be checked with db
+    servicetype='1'; // default dept general dept / general physician , needs to be checked with db
   }
-  else if($('input:radio[id^="flexRadioDefault"]')[1].checked & !department){
+  else if($('input:radio[id^="flexRadioDefault"]')[1].checked & !servicetype){
       $('#q_succ_msg').html('select a department to view doctors');
       $('#q_succ_msg').show();
   }
 
-  if(department){
+  if(servicetype){
     $('#q_succ_msg').hide();
-    $('#department').val(department);
-    getDoctors(language,date,hour,minute,am_pm,department);
+    $('#servicetype').val(servicetype);
+    getDoctors(language,date,hour,minute,am_pm,servicetype);
   }
 
 }
@@ -758,8 +758,8 @@ $('#minute button').on('click',function(e){
 
 });
 $('#elem').on('click',function(e){
-  department=(e.target.value);
-  fetchTime();
+  servicetype=(e.target.value);
+  getTime();
 
 });
 $('#docs').on('click',function(event){
@@ -791,7 +791,7 @@ $(document).on('click', 'input:radio[id^="flexRadioDefault"]', function(event) {
 
   if(queryType == "covid"){
   // department_type
-  document.getElementById('department_type').style.display = 'none';
+  document.getElementById('services').style.display = 'none';
 
 
   }
@@ -799,7 +799,7 @@ $(document).on('click', 'input:radio[id^="flexRadioDefault"]', function(event) {
   if(queryType == "non_covid"){
     $('#docs')[0].textContent='';
 
-  document.getElementById('department_type').style.display = 'block';
+  document.getElementById('services').style.display = 'block';
 
 
 }
