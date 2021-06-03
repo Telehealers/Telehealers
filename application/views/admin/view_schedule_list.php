@@ -36,20 +36,20 @@
 
     function day($day){
         if($day == 1){
-            return $day = "Saturday";
+            return $day = "Sunday";
         }
         elseif ($day == 2) {
-            return $day = "Sunday";
-        }elseif ($day == 3) {
             return $day = "Monday";
-        }elseif ($day == 4) {
+        }elseif ($day == 3) {
             return $day = "Tuesday";
-        }elseif ($day == 5) {
+        }elseif ($day == 4) {
             return $day = "Wednesday";
-        }elseif ($day == 6) {
+        }elseif ($day == 5) {
             return $day = "Thusday";
-        }else {
+        }elseif ($day == 6) {
             return $day = "Friday";
+        }else {
+            return $day = "Saturday";
         }
     }
 

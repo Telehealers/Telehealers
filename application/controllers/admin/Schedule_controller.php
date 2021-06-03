@@ -223,7 +223,7 @@ class Schedule_controller extends CI_Controller {
     public function edit_schedul_stup()
     {
          $s_id = $this->input->post('id',TRUE) ;
-         $this->form_validation->set_rules('venue', 'Venue', 'trim|required');
+
          $this->form_validation->set_rules('s_time', 'Start time', 'trim|required');
          $this->form_validation->set_rules('e_time', 'End time', 'trim|required');
          $this->form_validation->set_rules('day', 'Day', 'trim|required');
@@ -233,7 +233,7 @@ class Schedule_controller extends CI_Controller {
         if ($this->form_validation->run()==true) {
                  $savedata = array(
          		'doctor_id' => $this->session->userdata('doctor_id',TRUE), 
-         		'venue_id' => $this->input->post('venue',TRUE), 
+         		'venue_id' => 3, 
          		'start_time' => $this->input->post('s_time',TRUE), 
          		'end_time' => $this->input->post('e_time',TRUE), 
          		'day' => $this->input->post('day',TRUE), 
