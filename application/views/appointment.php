@@ -7,7 +7,7 @@
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
     <link rel="icon" href="<?php echo (!empty(html_escape($info->fabicon->picture))?html_escape($info->fabicon->picture):null); ?>" type="image">
     <!-- Bootstrap CSS -->
 
@@ -312,16 +312,19 @@ input.range::-ms-fill-upper {
 	 transition: all 200ms ease-out;
 }
  .btn-group__item--active:after {
-	 opacity: 1;
-   content: '✔️';
-  color: rebeccapurple;
-	 transform: translatey(-2px);
+	  content: '✔️';
+   margin-left: 0.5rem;
+   display: inline-block;
+   color: rebeccapurple;
+   position: absolute;
+   transform: translatey(10px);
+   opacity: 0;
+   transition: all 200ms ease-out;
 
 }
 
 #outer {
    float: left;
-   width: 250px;
    overflow: hidden;
    white-space: nowrap;
    display: inline-block;
@@ -358,7 +361,7 @@ input.range::-ms-fill-upper {
  }
 
 #outer {
-  width : auto ;
+  width : fit-content ;
 }
 
 
@@ -410,9 +413,6 @@ input.range::-ms-fill-upper {
   transition: all 0.3s linear 0s;
 }
 
-.our-team:hover .picture::before {
-  height: 100%;
-}
 
 .our-team .picture::after {
   content: "";
@@ -447,38 +447,6 @@ input.range::-ms-fill-upper {
   text-transform: capitalize;
 }
 
-.our-team .social {
-  width: 100%;
-  padding: 0;
-  margin: 0;
-  background-color: #1369ce;
-  position: absolute;
-  bottom: -100px;
-  left: 0;
-  transition: all 0.5s ease 0s;
-}
-
-.our-team:hover .social {
-  bottom: 0;
-}
-
-.our-team .social li {
-  display: inline-block;
-}
-
-.our-team .social li a {
-  display: block;
-  padding: 10px;
-  font-size: 17px;
-  color: white;
-  transition: all 0.3s ease 0s;
-  text-decoration: none;
-}
-
-.our-team .social li a:hover {
-  color: #1369ce;
-  background-color: #f7f5ec;
-}
 
 </style>
 <body>
@@ -497,7 +465,7 @@ input.range::-ms-fill-upper {
     <div class="row pt-4" style="margin-bottom: 20px;padding-left:2%;padding-right:2%">
     <div class="col-sm-12 col-md-4 col-lg-4">
     <div class="dropdown display-flex" >
-  <button id="dLabel" class="dropdown-select float-right" style="width:100%" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >Select Language<span class="caret" id="language"></span></button>
+  <button id="dLabel" class="dropdown-select float-right" style="width:100%; text-align:center;" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >Select Language<span class="caret" id="language" style="float: right"></span></button>
   <ul class="dropdown-menu" id=""style="height: 200px;overflow: auto;" aria-labelledby="dLabel">
     <?php if(is_array($language_arr) && count($language_arr)>0){
                                         foreach($language_arr as $val){
@@ -507,16 +475,15 @@ input.range::-ms-fill-upper {
   </ul>
 </div>
 </div>
-
     <div class="col-sm-12 col-md-4 col-lg-4" >
-    <div class="form-group" style="margin-bottom: 0;padding-top: 4px;">
+    <div class="form-group" style="margin-bottom: 0;padding-top: 4px;padding-left:6%;padding-right:6%; ">
             <div class='input-group date' id='datepicker'>
                <input type='text' name="p_date" id="p_date"class="form-control" value="<?php echo date("Y-m-d");?>" />
                <span class="input-group-addon">
                </span>
             </div>
          </div>
-    </div>
+    </div> 
     <div class="col-sm-12 col-md-4 col-lg-4" style="display:flex;margin-top: 1%;" id="">
         <div class="form-check" style="margin-left:30px">
           <input class="form-check-input" type="radio" name="flexRadioDefault" value="covid" id="flexRadioDefault1" checked>
@@ -599,7 +566,13 @@ input.range::-ms-fill-upper {
 
     <div class="col-sm-12 col-md-12 col-lg-12">
     <h1 for="customRange3" class="form-label labelStyle mb-4 mt-4" style="margin-top:0%">Departments</h1>
-    <div class="btn-group" id="elem" style="width:inherit;height:40px !important">
+    <div class="btn-group" id="elem" style="width:inherit;height:40px !important;display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: space-between;
+    justify-content: center;
+    align-items: center;
+">
          <?php if(is_array($departments) && count($departments)>0){
                 //var_dump($departments);
                 $covid_dept=[5,25];
@@ -689,6 +662,7 @@ function cleanHours(originalVal){
     }
   return originalVal
 }
+date_today=new Date();
 function getTime(date,hour, minute,am_pm,language){
 
   date = date ? date : $('#datepicker').datepicker('getFormattedDate');
@@ -696,8 +670,16 @@ function getTime(date,hour, minute,am_pm,language){
   hour = hour ? hour : cleanHours($('#time_hour')[0].elements[0].value);
   minute= minute ? minute: $('#minute .active').text().substr(2,4);
   am_pm=am_pm? am_pm : ($('#meredium .active').text()).replace(/\s/g, "");
-  document.getElementById("time").innerHTML = date_cool.toDateString()+" "+hour+":"+minute+" "+am_pm;
+  date_time = date_cool.toDateString()+" "+hour+":"+minute+" "+am_pm;
+  selected_dt = new Date(date_time);
+  document.getElementById("time").innerHTML = date_time;
   $("#sequence").val(hour+":"+minute+" "+am_pm);
+  time=hour+":"+minute+" "+am_pm;
+  if(selected_dt.getTime()<date_today.getTime()){
+        $('#docs')[0].textContent='';
+         return; 
+  }
+
 
   language=language?language:$('#dLabel').text()
 
@@ -782,7 +764,6 @@ $('#elem').on('click',function(e){
 $('#docs').on('click',function(event){
       var docid = event.target.getAttribute("data-value");
        console.log('docid',docid);
-       
        $('#doctor_id').val(docid);
 });
 
@@ -839,8 +820,8 @@ $(function() {
        var items = elem.children();
 
        // Inserting Buttons
-       elem.prepend('<div class="col-sm-1 col-md-1 col-lg-1"><div id="right-button" style="visibility: hidden;font-size:30px"><</div></div>');
-       elem.append('<div class="col-sm-1 col-md-1 col-lg-1">  <div id="left-button" style="font-size:30px">></div>');
+       elem.prepend('<div class="col-sm-1 col-md-1 col-lg-1"><div id="right-button" style="visibility: hidden;font-size:30px;color: #4c0082;font-weight: 900;"><</div></div>');
+       elem.append('<div class="col-sm-1 col-md-1 col-lg-1">  <div id="left-button" style="font-size:30px;color: #4c0082;font-weight: 900;">></div>');
 
 //       Inserting Inner
        items.wrapAll('<div id="inner" />');
@@ -906,15 +887,15 @@ buttons.forEach(button => {
 
   })
 })
-// const docs = document.querySelectorAll(".our-team");
-// docs.forEach(button => {
-//   button.addEventListener("click",(e) => {
-//     // do some action according to button
-//     // show success feedback
-//     console.log(e)
+const docs = document.querySelectorAll(".our-team");
+docs.forEach(button => {
+  button.addEventListener("click",(e) => {
+    // do some action according to button
+    // show success feedback
+    $(this).addClass("btn-group__item--active").siblings().removeClass("btn-group__item--active");
 
-//   })
-// })
+  })
+})
 
 
 $('.dropdown-menu li').on('click', function() {
