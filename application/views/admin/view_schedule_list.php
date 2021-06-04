@@ -45,7 +45,7 @@
         }elseif ($day == 4) {
             return $day = "Wednesday";
         }elseif ($day == 5) {
-            return $day = "Thusday";
+            return $day = "Thursday";
         }elseif ($day == 6) {
             return $day = "Friday";
         }else {
