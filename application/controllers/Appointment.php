@@ -378,8 +378,6 @@ function randstrGenapp($len)
 		$sequence = date("H:i:s", strtotime($sequence));
 		$servicetype_id = $this->input->post('servicetype_id',TRUE);
 		$doctor_id = $this->input->post('doctor_id');
-		/**TODO: Bad schedule_id, use sql auto-increment column*/
-		$schedul_id = "A".date('y').strtoupper($this->randstrGenapp(5));
 		$patient_id = "";
 		if ($this->session->userdata("user_type") == "3")
 			$patient_id = $this->session->userdata("user_id");
@@ -445,7 +443,6 @@ function randstrGenapp($len)
 			'date' => $booking_date,
 			'patient_id' => $patient_id,
 			'appointment_id' =>$appointment_id,
-			'schedul_id' => $schedul_id,
 			'sequence' => $sequence,
 			'venue_id' => $venue_id,
 			'doctor_id' => $doctor_id,
@@ -453,10 +450,17 @@ function randstrGenapp($len)
 			'service' => $service,
 			'servicetype' => $servicetype,
 			'get_date_time' => date("Y-m-d h:i:s"),
-			'get_by' => 'Won'
 		);
 
-		$this->appointment_model->SaveAppoin($appointmentData);
+		if (! $this->appointment_model->SaveAppoin($appointmentData) ) {
+			log_message("error", "Confirmation failed due to atomicity assertion.");
+			/* TODO: Review flashdata code. */
+			$this->session->set_flashdata('message',
+				"<div class='alert alert-success'><a href='#' class='close' data-dismiss='alert'".
+				" aria-label='close'>&times;</a>Appointment failed due to slot booked while you were booking.".
+				"Kindly retry.</div>");
+			redirect("appointment");
+		}
 
 		$log_info_query = "select email from log_info where log_id = '".$log_id."'";
 		$log_entry = $this->db->query($log_info_query)->result()[0];
@@ -516,7 +520,6 @@ function randstrGenapp($len)
 			'patient_id' => $patient_id,
 			'doctor_name' => $doctor_name,
 			'appointment_id' =>$appointment_id,
-			'schedul_id' => $schedul_id,
 			'sequence' => $sequence,
 			'venue_id' => $venue_id,
 			'venue_name' => $venue_name,
@@ -525,7 +528,6 @@ function randstrGenapp($len)
 			'service' => $service,
 			'servicetype' => $servicetype,
 			'get_date_time' => date("Y-m-d h:i:s"),
-			'get_by' => 'Won',
 			'fees' => '0'
 		);
 
