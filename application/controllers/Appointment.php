@@ -57,9 +57,8 @@ class Appointment extends CI_Controller {
 */
 	public function index($patient_id=NULL)
 	{
-
 		// $email_config = $this->email_model->email_config();
-
+		$data['patient_id_from_assistant'] = $patient_id;
     //     //get_schedule_list
         $data['schedule'] = $this->schedule_model->get_schedule_list();
     //     //setup information
@@ -91,7 +90,7 @@ class Appointment extends CI_Controller {
 		// get doctor list for appointmaent
 		$data['doctor_info_for_appo'] = $this->doctor_model->getDoctorListByselect();
 		//get departments
-		 $data['services']=$this->getservicetype();
+		$data['services']=$this->getservicetype();
 
 
 		$language_arr = array();
@@ -119,6 +118,11 @@ class Appointment extends CI_Controller {
         #------view page----------
         // $data= null;
         $this->load->view('appointment',$data);
+	}
+
+	/** An alias for index as used by Assistants. */
+	function createAppointForAssistant($patient_id) {
+		$this->index($patient_id);
 	}
 
 /*
@@ -364,7 +368,6 @@ function randstrGenapp($len)
 		$this->form_validation->set_rules('doctor_id', 'doctor', 'required' );
 		$this->form_validation->set_rules('servicetype_id', 'service', 'required');
 
-		
 		if (!$this->form_validation->run()) {
 			log_message("error", "Bad post-inputs");
 			redirect("appointment");
@@ -379,16 +382,8 @@ function randstrGenapp($len)
 		$servicetype_id = $this->input->post('servicetype_id',TRUE);
 		$doctor_id = $this->input->post('doctor_id');
 		$patient_id = "";
-		if ($this->session->userdata("user_type") == "3")
-			$patient_id = $this->session->userdata("user_id");
-		else {
-			/**Bad user type: Only implemented for patient*/
-			log_message('error',"Bad user_type(".$this->session->userdata("user_type").
-				") coming from request. Only allowed user type is of patient('3')");
-			show_404();
-		}
+		$patient_id = $this->input->post('p_id');		
 		$venue_id = 3; /**NOTE: venue = Online */
-
 		/** Fetching service */
 		$servicetype_query = "select service, servicetype FROM servicetype where id = ".$servicetype_id;
 		$servicetype_entry = $this->db->query($servicetype_query)->result()[0];
@@ -538,7 +533,6 @@ function randstrGenapp($len)
 		$app_time = date('h:i A', strtotime($sequence));
 		$app_date = date('jS F Y',strtotime($booking_date));
 
-		$mes = 'You have successfully registered and made an appointment with '.$doctor_name.' on '.$app_date.'-'.$app_time.'<br>Welcome to your patient dashboard here you can see all your appointments, prescriptions and tests that you upload to the portal. You can always login back using the registered mobile number - '.$p_phone;
 		$session_data = array(
 			'log_id' => $p_log_id,
 			'user_id' => $patient_id,
@@ -549,9 +543,17 @@ function randstrGenapp($len)
 			'session_id' => session_id(),
 			'logged_in' => TRUE
 		);
-		$this->session->set_userdata($session_data);
-		$this->session->set_flashdata('message',"<div class='alert alert-success'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>".$mes."</div>");
-        redirect('Patient');
+		$user_type = $this->session->userdata('user_type');
+		if ($user_type == 2) {
+			$mes = 'Appointment of Doctor '.$doctor_name.' on '.$app_date.'-'.$app_time.' with patient '.$p_name.' confirmed.';
+			$this->session->set_flashdata('message',"<div class='alert alert-success'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>".$mes."</div>");
+			redirect("patient_list");
+		} else {
+			$mes = 'You have successfully registered and made an appointment with '.$doctor_name.' on '.$app_date.'-'.$app_time.'<br>Welcome to your patient dashboard here you can see all your appointments, prescriptions and tests that you upload to the portal. You can always login back using the registered mobile number - '.$p_phone;
+			$this->session->set_flashdata('message',"<div class='alert alert-success'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>".$mes."</div>");
+			$this->session->set_userdata($session_data);
+			redirect('Patient');	
+		}
 	}
 
 	public function patientAppointment(){
@@ -1090,10 +1092,9 @@ public function registration()
 		$sequence =$this->input->post("booking_hour",TRUE).":".
 		$this->input->post("booking_minute", TRUE).":00 ".
 		$this->input->post("booking_am_pm", TRUE);
-		$sequence = date("H:i:s", strtotime($sequence));
-		$booking_time = $this->input->post('booking_date', TRUE)." ".$sequence;
+		$booking_slot_starting_time = date("H:i:s", strtotime($sequence));
+		$booking_date = $this->input->post('booking_date', TRUE);
 
-		$booking_time = urldecode($booking_time);
 		/** SQL-Query: 
 		 * Incldes aggregation on doctor_id: A contigency mechanism so that no
 		 * 	bad logic emits multiple doctors e.g. by joining unconditionally on n-row table.
@@ -1105,15 +1106,16 @@ public function registration()
 			' stdm.doctor_id = main_docs.doctor_id AND '.$servicetype_filter.
 			'main_docs.doctor_id IN ('.
 			'SELECT sched.doctor_id FROM schedul_setup_tbl sched WHERE '.
-			'sched.day = DAYOFWEEK("'.$booking_time.'") AND CAST(sched.start_time AS TIME) <= "'.
-			$booking_time.'" AND CAST(sched.end_time AS TIME) >= CAST(ADDTIME("'.
-			$booking_time.'", SEC_TO_TIME(sched.per_patient_time * 60)) AS TIME)) AND '.
+			'sched.day = DAYOFWEEK("'.$booking_date.'") AND sched.start_time <= "'.
+			$booking_slot_starting_time.'" AND sched.end_time >= ADDTIME("'.
+			$booking_slot_starting_time.'", SEC_TO_TIME(sched.per_patient_time * 60)) ) AND '.
 			'main_docs.doctor_id NOT IN (SELECT bookings.doctor_id FROM '.
 			'appointment_tbl bookings, doctor_tbl as docs, schedul_setup_tbl schedule '.
 			'WHERE bookings.doctor_id = docs.doctor_id AND '.
 			'schedule.doctor_id = bookings.doctor_id AND '.
-			'CAST(bookings.sequence AS TIME) <=  "'.$booking_time.'" AND "'.$booking_time.
-			'" <= ADDTIME(CAST(bookings.sequence AS TIME), SEC_TO_TIME(schedule.per_patient_time*60))) '.
+			'bookings.sequence <=  "'.$booking_slot_starting_time.'" AND '.
+			'bookings.date = "'.$booking_date.'"'.' AND"'.$booking_slot_starting_time.
+			'" < ADDTIME(bookings.sequence, SEC_TO_TIME(schedule.per_patient_time*60))) '.
 			' GROUP BY main_docs.doctor_id ORDER BY bias_reduction_score DESC;';
 
 		$available_doctors = $this->db->query($sql_query);

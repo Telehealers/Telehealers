@@ -51,13 +51,14 @@ class Appointment_model extends CI_model {
                 $venue_id." as venue_id, ".$doctor_id." as doctor_id, ".$schedul_id." as schedul_id, '".
                 $problem."' as problem, '".$service."' as service, '".$servicetype."' as servicetype, '".
                 $symt1."' as symt1, '".$symt2."' as symt2, '".$get_date_time."' as get_date_time, "
-                .$get_by." as get_by, ".$date." as date, ".$status." as status, '".
+                .$get_by." as get_by, '".$date."' as date, ".$status." as status, '".
                 $sequence."' as sequence WHERE 1 NOT IN (".
                 "SELECT 1 FROM appointment_tbl apt, schedul_setup_tbl schedule".
                 " WHERE apt.doctor_id = schedule.doctor_id AND ".
                 " schedule.doctor_id = ".$savedata["doctor_id"].
                 " AND apt.sequence <= '".$savedata["sequence"]."' AND ".
-                " '".$savedata["sequence"]."' <= ADDTIME(apt.sequence, schedule.per_patient_time))"
+                " '".$savedata["sequence"]."' <= ADDTIME(apt.sequence, schedule.per_patient_time)".
+                " AND apt.date = '".$date."')"
             ;
         return $this->db->query($insert_query) ;
     }

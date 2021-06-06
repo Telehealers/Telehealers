@@ -88,6 +88,7 @@
                                     <a title="Delete" class="btn btn-xs btn-danger" href="<?php echo base_url();?>admin/Patient_controller/delete_patient/<?php echo html_escape($value->patient_id) ;?>" onclick="return confirm('Are you want to delete?');">
                                     <i class="fa fa-trash"></i> </a>
 									<a target="_blank" title="Referral to Doctor" class="btn btn-xs btn-info" href="<?php echo base_url();?>admin/Patient_controller/referral_patient/<?php echo html_escape($value->patient_id);?>">                                    <i class="fa fa-edit"></i> </a>
+									<a target="_blank" title="Book Appointment" class="btn btn-xs btn-info" href="<?php echo base_url();?>Appointment/createAppointForAssistant/<?php echo html_escape($value->patient_id);?>">                                    <i class="fa fa-edit"></i> </a>
                                 </td> 
                             </tr>
                             <?php
