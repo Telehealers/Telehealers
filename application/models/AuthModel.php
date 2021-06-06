@@ -24,6 +24,7 @@ class AuthModel extends CI_model {
 
 
         } elseif($type==2) {
+            /** Case of assistant. */
             $query = $this->db->select('log_info.*,users_tbl.*')
             ->from('log_info')
             ->join('users_tbl', 'users_tbl.log_id = log_info.log_id','left')

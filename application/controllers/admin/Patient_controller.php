@@ -718,17 +718,19 @@ class Patient_controller extends CI_Controller {
 				$doctor_email = $result_doc[0]['email'];
 			}
 		}
-		
-		$sql2 = "select * from doctor_tbl where doctor_id = '".$user_id."'";
+		/** Inform doctors about referral */
+		$sql2 = "select * from doctor_tbl where doctor_id = '".$referred_doctor."'";
 		$res2 = $this->db->query($sql2);
 		$result2 = $res2->result_array();
 		if(is_array($result2) && count($result2)>0){
 			$doctor_name_f = $result2[0]['doctor_name'];
 		}
 		
-		$message = $this->conference->createVideoCallInformationMail('<p>Hey Dr. '.$doctor_name.',</p>
-			<p>Patient referral to you by '.$doctor_name_f.'.</p>
-			<p>ID: '.$patient_id.'</p>');
+		$message = $this->conference->createVideoCallInformationMail(
+			'<p>New patient referred to you</p>'.
+			'<p>Hey Dr. '.$doctor_name.',</p>'.
+			'<p>Patient referral to you by '.$doctor_name_f.'.</p>'.
+			'<p>ID: '.$patient_id.'</p>');
 
 		$ci->email->from('info@telehealers.in', 'telehealers');
 		$list = array($doctor_email);
@@ -737,13 +739,10 @@ class Patient_controller extends CI_Controller {
 		$ci->email->subject('Referraled A Patient (Telehealers)');
 		$ci->email->message($message);
 		$ci->email->send();
-
-		$this->session->set_flashdata('exception','<div class="alert alert-success msg">Patient has been successfully Referraled.</div><br>');
-
-		redirect('admin/Patient_controller/referral_patient/'.$patient_id);
 	
-			  
-  }	  
+		$this->session->set_flashdata('exception','<div class="alert alert-success msg">Patient has been successfully Referraled.</div><br>');	
+		redirect('admin/Patient_controller/referral_patient/'.$patient_id);	
+	}	  
   
 
 }	
