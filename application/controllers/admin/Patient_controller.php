@@ -36,15 +36,12 @@ class Patient_controller extends CI_Controller {
 		if($user_type==2){
 			$user_id = $this->session->userdata('user_id');	
 		}
-		//echo $user_id;die();
 		if($user_type==1 && $user_id==1){
+			/** Case of Admin */
 			$data['patient_info'] = $this->patient_model->get_all_patient();	
 		}else{
-			//echo '1..'.$user_id;
 			$data['patient_info'] = $this->patient_model->get_by_id_patient($user_id);
-			//echo $data['patient_info'];die();
 		}
-		//echo "<pre>";print_r($data['patient_info']);die();
 		$data['title'] = "Patient List";
 		$this->load->view('admin/_header',$data);
 		$this->load->view('admin/_left_sideber');
