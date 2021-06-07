@@ -544,7 +544,7 @@ function randstrGenapp($len)
 			'logged_in' => TRUE
 		);
 		$user_type = $this->session->userdata('user_type');
-		if ($user_type == 2) {
+		if ($user_type == 2 || $user_type == 1) {
 			$mes = 'Appointment of Doctor '.$doctor_name.' on '.$app_date.'-'.$app_time.' with patient '.$p_name.' confirmed.';
 			$this->session->set_flashdata('message',"<div class='alert alert-success'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>".$mes."</div>");
 			redirect("patient_list");
