@@ -411,7 +411,7 @@ function randstrGenapp($len)
 		$data['service1'] = $service;
 		$data['service2'] = $servicetype;
 		/**Fetch venue data */
-		$venue_info_query = "select * from venue_tbl where venue_id = '".$venue_id."'";
+		$venue_info_query = "select venue_name from venue_tbl where venue_id = '".$venue_id."'";
 		$venue_data = $this->db->query($venue_info_query)->result()[0];
 		if (!$venue_data) {
 			/**Bad venue fetch */
@@ -420,7 +420,10 @@ function randstrGenapp($len)
 		}
 		$venue_name = $venue_data->venue_name;
 
-		$doctor_info_query = "select doctor_name, log_id from doctor_tbl where doctor_id = '".$doctor_id."'";
+		$doctor_info_query = "select doc.doctor_name as doctor_name, doc.log_id as log_id, ".
+			"sched.schedul_id AS schedul_id from doctor_tbl doc, schedul_setup_tbl sched ".
+			"WHERE doc.doctor_id = ".$doctor_id." AND doc.doctor_id = sched.doctor_id ".
+			"AND sched.day = DAYOFWEEK('".$booking_date."')";
 		$doctor_entry = $this->db->query($doctor_info_query)->result()[0];
 		if (!$doctor_entry) {
 			/** Bad doctor_id from input */
@@ -429,6 +432,7 @@ function randstrGenapp($len)
 		}
 		$doctor_name = $doctor_entry->doctor_name;
 		$log_id = $doctor_entry->log_id;
+		$schedul_id = $doctor_entry->schedul_id;
 		/** Bad way to generate ID
 		 * TODO: Use auto-increment.
 		 */
@@ -444,6 +448,7 @@ function randstrGenapp($len)
 			'problem' => "",
 			'service' => $service,
 			'servicetype' => $servicetype,
+			'schedul_id' => $schedul_id,
 			'get_date_time' => date("Y-m-d h:i:s"),
 		);
 

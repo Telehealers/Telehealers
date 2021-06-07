@@ -200,7 +200,17 @@ class Overview_model extends CI_model {
                   ->get()
                   ->result();
           return $result; 
- 	}		public function to_day_appointment_by_id($id) 	{	 	    $tow_day = date('Y-m-d');			              $result = $this->db->select("action_serial.*,doctor_tbl.*,                  patient_tbl.*,                  venue_tbl.*,")                  ->from('action_serial')				->where('doctor_tbl.doctor_id',$id)                  ->join('patient_tbl', 'patient_tbl.patient_id = action_serial.patient_id','left')                                    ->join('doctor_tbl', 'doctor_tbl.doctor_id = action_serial.doctor_id','left')                                    ->join('venue_tbl', ' venue_tbl.venue_id = action_serial.venue_id','left')                  ->where('action_serial.date',$tow_day)                  ->get()                  ->result();          return $result;  	}
+ 	}		
+	/** A function to return appointment scheduled today.*/
+	public function to_day_appointment_by_id($id) {
+		$today = date('Y-m-d');
+		$query = "SELECT apt.*, doc.*, patient.*, venue.* FROM appointment_tbl apt, ".
+		"doctor_tbl doc, patient_tbl patient, venue_tbl venue WHERE ".
+		"venue.venue_id = apt.venue_id AND doc.doctor_id = apt.doctor_id AND".
+		" patient.patient_id = apt.patient_id AND apt.doctor_id = ".
+		$id." AND apt.date = '".$today."'";
+		return $this->db->query($query)->result();
+	}
 
 
 
@@ -209,36 +219,25 @@ class Overview_model extends CI_model {
 #------------------------------------#	
  	 public function to_day_get_appointment()
  	 {
- 	 	$tow_day = date('Y-m-d');
-		 
-
-            $result = $this->db->select("action_serial.*,doctor_tbl.*,
-                  patient_tbl.*,
-                  venue_tbl.*,")
-
-              ->from('action_serial')
-
-              ->join('patient_tbl', 'patient_tbl.patient_id = action_serial.patient_id','left')
-              
-              ->join('doctor_tbl', 'doctor_tbl.doctor_id = action_serial.doctor_id','left')
-              
-              ->join('venue_tbl', ' venue_tbl.venue_id = action_serial.venue_id','left')
-              ->like('action_serial.get_date_time',$tow_day)
-              ->get()
-              ->result(); 
-
-          return $result; 
+		$today = date('Y-m-d');
+		$query = "SELECT apt.*, doc.*, patient.*, venue.*, sched.* FROM appointment_tbl apt, ".
+		"doctor_tbl doc, patient_tbl patient, venue_tbl venue, schedul_setup_tbl sched WHERE ".
+		"venue.venue_id = apt.venue_id AND doc.doctor_id = apt.doctor_id AND sched.schedul_id = apt.schedul_id AND ".
+		" patient.patient_id = apt.patient_id ".
+		" AND CAST(apt.get_date_time AS DATE) = '"."$today"."'";
+		return $this->db->query($query)->result();
  	 }	 
 
-	 public function to_day_get_appointment_by_id($id) 	 { 
-
-	 $tow_day = date('Y-m-d');		 
-
-	 $result = $this->db->select("action_serial.*,doctor_tbl.*,                  patient_tbl.*,                  venue_tbl.*,")              ->from('action_serial')			  ->where('doctor_tbl.doctor_id',$id)	              ->join('patient_tbl', 'patient_tbl.patient_id = action_serial.patient_id','left')                            ->join('doctor_tbl', 'doctor_tbl.doctor_id = action_serial.doctor_id','left')                            ->join('venue_tbl', ' venue_tbl.venue_id = action_serial.venue_id','left')              ->like('action_serial.get_date_time',$tow_day)              ->get()              ->result();  
-
-	 return $result;  	
-
-	 }
+	/** Get appointments booked today for doctor_id = $id */
+	public function to_day_get_appointment_by_id($id) 	 { 
+		$today = date('Y-m-d');
+		$query = "SELECT apt.*, doc.*, patient.*, venue.*, sched.* FROM appointment_tbl apt, ".
+			"doctor_tbl doc, patient_tbl patient, venue_tbl venue, schedul_setup_tbl sched WHERE ".
+			"venue.venue_id = apt.venue_id AND doc.doctor_id = apt.doctor_id AND sched.schedul_id = apt.schedul_id AND ".
+			" patient.patient_id = apt.patient_id AND apt.doctor_id = ".
+			$id." AND CAST(apt.get_date_time AS DATE) = '"."$today"."'";
+		return $this->db->query($query)->result();
+	}
 
 #-------------------------------------
  	 public function last_30(){
