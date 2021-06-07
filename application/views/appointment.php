@@ -590,7 +590,13 @@ input.range::-ms-fill-upper {
     <h1 for="customRange3" class="form-label labelStyle mb-3" >Consultants</h1>
         <input type="hidden" name="base_url" id="base_url" value="<?php echo base_url()?>">
         <input type="hidden" name="sequence" id="sequence" value="">
-        <input type="hidden" name="p_id" id="p_id" value="<?php if ($this->session->userdata('user_type') == 2) {echo $patient_id_from_assistant;} ?>">
+        <input type="hidden" name="p_id" id="p_id" value="<?php 
+          if ($this->session->userdata('user_type') == 2 || $this->session->userdata('user_type') == 1) {
+            /** Allow doctors and assistants to set p_id */
+            echo $patient_id_from_assistant;
+          } else {
+            echo $this->session->userdata('user_id');
+          } ?>">
         <input type="hidden" name="doctor_id" id="doctor_id" >
         <input type="hidden" name="servicetype_id" id="servicetype_id" >
     </div>
