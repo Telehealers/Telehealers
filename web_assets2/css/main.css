@@ -947,7 +947,39 @@ a:hover {
 
 
 /* ***********************************online_booking_form_block_css_END**************************** */
-
+.whatsapp_button{
+	position: fixed;
+    bottom: 30px;
+    left: 20px;
+    background: #ee3a20;
+    padding: 0;
+    color: #fff;
+    width: 64px;
+    height: 64px;
+    transition: .5s ease-in-out;
+    -webkit-transition: .5s ease-in-out;
+    -moz-transition: .5s ease-in-out;
+    -ms-transition: .5s ease-in-out;
+    -o-transition: .5s ease-in-out;
+    border-radius: 50px;
+    -webkit-border-radius: 50px;
+    -moz-border-radius: 50px;
+    -ms-border-radius: 50px;
+    -o-border-radius: 50px;
+    -webkit-animation: mover 1s infinite alternate;
+    animation: mover 1s infinite alternate;
+    cursor: pointer;
+    z-index: 999999;
+}
+.whatsapp_button .number_call {
+    padding-left: 10px;
+    display: inline-block;
+    transition: .5s ease-in-out;
+    -webkit-transition: .5s ease-in-out;
+    -moz-transition: .5s ease-in-out;
+    -ms-transition: .5s ease-in-out;
+    -o-transition: .5s ease-in-out;
+}
 
 /* ***********************************home_about_block_css_start**************************** */
 

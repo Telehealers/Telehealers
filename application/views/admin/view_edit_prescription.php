@@ -25,6 +25,7 @@
            
          <div class="row">
              <?php 
+
                 $attributes = array( 'class' => 'form-horizontal','name'=>'n_p');
                 echo form_open_multipart('admin/Prescription_controller/update_prescription', $attributes);
              ?>
@@ -48,13 +49,7 @@
                                         <div class="col-md-12 col-xs-12">
                                             <div class="caption">
                                                 <span class="caption-subject font-green sbold uppercase"><?php echo display('name');?> : </span><?php echo html_escape(@$pres->patient_name);?>,&nbsp&nbsp&nbsp
-                                                <span class="caption-subject font-green sbold uppercase"><?php echo display('age');?> : </span>
-                                                <?php
-                                                    $date1=date_create(@$pres->birth_date);
-                                                    $date2= date_create( date('y-m-d'));
-                                                    $diff=date_diff($date1,$date2);
-                                                    echo @$diff->format("%Y-Y:%m-M:%d-D");
-                                                ?>,&nbsp&nbsp&nbsp 
+                                                <span class="caption-subject font-green sbold uppercase"><?php echo display('age');?> : </span> <?php echo html_escape(@$pres->age);?>,&nbsp&nbsp&nbsp
                                                 <span class="caption-subject font-green sbold uppercase"><?php echo display('sex');?> : </span><?php echo html_escape(@$pres->sex);?>,&nbsp&nbsp&nbsp
                                                 <span class="caption-subject font-green sbold uppercase">Id : </span><?php echo html_escape(@$pres->patient_id);?>
                                             </div>
@@ -109,8 +104,7 @@
                                                                     <?php foreach($m_info as $medicine){?>
                                                                         <div class="form-group ">
                                                                              <div class="col-md-1 col-xs-12">
-                                                                                <input type="text"  class="form-control" name="
-                                                                                type[]" value="<?php echo html_escape($medicine->medicine_type)?>" placeholder="<?php echo display(
+                                                                                <input type="text"  class="form-control" name="type[]" value="<?php echo html_escape($medicine->medicine_type)?>" placeholder="<?php echo display(
                                                                                 'type')?>" />
                                                                                
                                                                             </div>

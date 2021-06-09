@@ -196,8 +196,9 @@
 								<div class="form-group">
                                     <label class="col-md-3 control-label">Language</label>
                                     <div class="col-md-7">
-                                         <textarea name="language" value="<?php echo html_escape(@$doctor_info->language); ?>" 
-                                            class="form-control" rows="3"><?php echo html_escape(@$doctor_info->language); ?></textarea>
+									<?php foreach($doc_language as $val){?>
+										<input type="checkbox" name="language[]" value="<?php echo $val; ?>" />&nbsp;<?php echo $val; ?>
+									<?php }?>		
                                     </div>
                                 </div>
 								

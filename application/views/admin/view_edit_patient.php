@@ -52,9 +52,10 @@
                                 </div>
 
                                  <div class="form-group">
-                                    <label class="col-md-3 control-label"><span class="text-danger">* </span><?php echo display('birth_date');?></label>
+                                    <label class="col-md-3 control-label"><span class="text-danger">* </span><?php echo display('age');?></label>
                                     <div class="col-md-6">
-                                       <input type="text" required="" value="<?php echo html_escape($patient_info->birth_date);?>" autocomplete="off" name="birth_date" class="form-control datepicker1" placeholder="<?php echo display('date_placeholder');?>">
+                                    <input type="text" name="age" id="age" value="<?php echo html_escape($patient_info->age); ?>"  class="form-control"
+                                    placeholder="<?php echo display('age'); ?>                ">
                                      </div>
                                 </div>
 
@@ -79,40 +80,13 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group">
-                                    <label class="col-md-3 control-label"><?php echo display('blood_group');?> </label>
-                                    <div class="col-md-6">
-                                        <select class="form-control" name="blood_group">
-                                            <option value=''>--<?php echo display('blood_group');?>--</option>
-                                            <option value='A+' <?php echo (html_escape($patient_info->blood_group)=='A+'?'selected':'')?>>A+</option>
-                                            <option value='A-' <?php echo (html_escape($patient_info->blood_group)=='A-'?'selected':'')?>>A-</option>
-                                            <option value='B+' <?php echo (html_escape($patient_info->blood_group)=='B+'?'selected':'')?>>B+</option>
-                                            <option value='B-' <?php echo (html_escape($patient_info->blood_group)=='B-'?'selected':'')?>>B-</option>
-                                            <option value='O+' <?php echo (html_escape($patient_info->blood_group)=='O+'?'selected':'')?>>O+</option>
-                                            <option value='O-' <?php echo (html_escape($patient_info->blood_group)=='O-'?'selected':'')?>>O-</option>
-                                            <option value='AB+' <?php echo (html_escape($patient_info->blood_group)=='AB+'?'selected':'')?>>AB+</option>
-                                            <option value='AB-' <?php echo (html_escape($patient_info->blood_group)=='AB-'?'selected':'')?>>AB-</option>
-                                            <option value='Unknown' <?php echo (html_escape($patient_info->blood_group)=='Unknown'?'selected':'')?>>Unknown</option>
-                                        </select>
+                                
                                     </div>
                                 </div>
 
-                                 <div class="form-group">
-                                    <label class="col-md-3 control-label"> <span class="text-danger">* </span> <?php echo display('address');?></label>
-                                    <div class="col-md-6">
-                                        <textarea name="address" required="" value="<?php echo html_escape($patient_info->address);?>"
-                                          class="form-control"><?php echo html_escape($patient_info->address);?></textarea>
-                                    </div>
-                                </div>
+                                
 
 
-                                <div class="form-group">
-                                    <label class="col-md-3 control-label"><?php echo display('picture');?></label>
-                                    <div class="col-md-6">
-                                        <img src="<?php echo html_escape($patient_info->picture);?>" > 
-                                        <input type="file" name="picture">
-                                    </div>
-                                </div>
                                 <input type='hidden' name="patient_id" value="<?php echo html_escape($patient_info->patient_id); ?>">
                                 <input type='hidden' name="image" value="<?php echo html_escape($patient_info->picture); ?>">
 

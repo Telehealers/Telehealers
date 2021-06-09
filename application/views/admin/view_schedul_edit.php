@@ -47,19 +47,7 @@
                             echo form_open('admin/Schedule_controller/edit_schedul_stup', $attributes);                
                         ?>
 
-                        <div class="form-body">
-                            <div class="form-group">
-                                <label class="col-md-3 control-label"><?php echo display('venue');?> </label>
-                            <div class="col-md-5">
-                                <select class="form-control" name="venue" id="v_id">
-                                    <option value=''>--<?php echo display('select_venue');?>--</option>
-                                    <?php foreach ($venue_info as $key => $value) {
-                                      echo ' <option value="'.html_escape($value->venue_id).'" '.(html_escape($schedul_info->venue_id)==html_escape($value->venue_id)?'selected':'').'>'.html_escape($value->venue_name).'</option>';
-                                    }?>
-                                </select>
-                                <?php echo form_error('venue', '<div class=" text-danger">', '</div>'); ?>
-                            </div>
-                        </div>
+                        
 
 
                         <div class="form-group">
@@ -94,15 +82,16 @@
                                 <div class="form-group">
                                     <label class="col-md-3 control-label"><?php echo display('day');?></label>
                                     <div class="col-md-5">
-                                        <select class="form-control" name="day" id="day" onchange="loadError(this.value);">
+                                        <select class="form-control" name="day" id="day">
                                             <option value=''>--Select day--</option>
-                                            <option value='1' <?php echo (html_escape($schedul_info->day)=='1'?'selected':'')?>><?php echo display('saturday');?></option>
-                                            <option value='2' <?php echo (html_escape($schedul_info->day)=='2'?'selected':'')?>><?php echo display('sunday');?></option>
-                                            <option value='3' <?php echo (html_escape($schedul_info->day)=='3'?'selected':'')?>><?php echo display('monday');?></option>
-                                            <option value='4' <?php echo (html_escape($schedul_info->day)=='4'?'selected':'')?>><?php echo display('tuesday');?></option>
-                                            <option value='5' <?php echo (html_escape($schedul_info->day)=='5'?'selected':'')?>><?php echo display('wednesday');?></option>
-                                            <option value='6' <?php echo (html_escape($schedul_info->day)=='6'?'selected':'')?>><?php echo display('thusday');?></option>
-                                            <option value='7' <?php echo (html_escape($schedul_info->day)=='7'?'selected':'')?>><?php echo display('friday');?></option>
+                                            <option value='1' <?php echo (html_escape($schedul_info->day)=='1'?'selected':'')?>><?php echo display('sunday');?></option>
+                                            <option value='2' <?php echo (html_escape($schedul_info->day)=='2'?'selected':'')?>><?php echo display('monday');?></option>
+                                            <option value='3' <?php echo (html_escape($schedul_info->day)=='3'?'selected':'')?>><?php echo display('tuesday');?></option>
+                                            <option value='4' <?php echo (html_escape($schedul_info->day)=='4'?'selected':'')?>><?php echo display('wednesday');?></option>
+                                            <option value='5' <?php echo (html_escape($schedul_info->day)=='5'?'selected':'')?>><?php echo display('thusday');?></option>
+                                            <option value='6' <?php echo (html_escape($schedul_info->day)=='6'?'selected':'')?>><?php echo display('friday');?></option>
+                                             <option value='7' <?php echo (html_escape($schedul_info->day)=='7'?'selected':'')?>><?php echo display('saturday');?></option>
+
                                         </select>
                                         <?php echo form_error('day', '<div class=" text-danger">', '</div>'); ?>
                                     </div>

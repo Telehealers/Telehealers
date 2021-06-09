@@ -36,20 +36,20 @@
 
     function day($day){
         if($day == 1){
-            return $day = "Saturday";
+            return $day = "Sunday";
         }
         elseif ($day == 2) {
-            return $day = "Sunday";
-        }elseif ($day == 3) {
             return $day = "Monday";
-        }elseif ($day == 4) {
+        }elseif ($day == 3) {
             return $day = "Tuesday";
-        }elseif ($day == 5) {
+        }elseif ($day == 4) {
             return $day = "Wednesday";
+        }elseif ($day == 5) {
+            return $day = "Thursday";
         }elseif ($day == 6) {
-            return $day = "Thusday";
-        }else {
             return $day = "Friday";
+        }else {
+            return $day = "Saturday";
         }
     }
 
@@ -72,8 +72,6 @@
                                 <tr>
                                     <th >#SL</th>
                                     <th >Doctor </th>
-									<th >Fees</th>
-									<th ><?php echo display('venue');?> </th>
                                     <th ><?php echo display('day');?> </th>
                                     <th ><?php echo display('start_time');?> </th>
                                     <th ><?php echo display('end_time');?> </th>
@@ -101,8 +99,6 @@
                                 <tr>
                                     <td><?php echo $i++;?></td>
 									<td><?php echo html_escape($doctor_name);?></td>
-									<td><?php if($value->fees==1){echo 'Free';}if($value->fees==2){echo 'Paid';}?></td>
-                                    <td><?php echo html_escape($value->venue_name);?></td>
                                     <td><?php echo html_escape(day($value->day));?></td>
                                     <td><?php echo html_escape($value->start_time);?></td>
                                     <td><?php echo html_escape($value->end_time);?></td>

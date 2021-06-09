@@ -155,6 +155,7 @@ if($user_type==1){
                             <ul class="treeview-menu">
                                 <li><a href="<?php echo base_url()?>admin/Appointment_controller"> <i class="fa fa-plus" aria-hidden="true"></i> <?php echo display('create_appointment')?></a></li>
                                 <li><a href="<?php echo base_url()?>admin/Appointment_controller/appointment_list"> <i class="fa fa-list" aria-hidden="true"></i> <?php echo display('appointment_list')?></a></li>
+								<li><a href="<?php echo base_url()?>admin/Appointment_controller/appointment_list_referral"> <i class="fa fa-list" aria-hidden="true"></i>Referral Appointment</a></li>
                         
                             </ul>
                         </li>
@@ -257,6 +258,7 @@ if($user_type==1){
                                 <li><a href="<?php echo base_url()?>admin/Doctor_controller/doctor_list"> <i class="fa fa-list" aria-hidden="true"></i> Doctors List</a></li>
 								<li><a href="<?php echo base_url()?>admin/Department_controller/department_list"> <i class="fa fa-list" aria-hidden="true"></i> Doctors Departments</a></li>
 								<li><a href="<?php echo base_url()?>admin/Doctor_controller/approveDoctor"> <i class="fa fa-list" aria-hidden="true"></i> Aggriment Content</a></li>
+								<li><a href="<?php echo base_url()?>admin/Doctor_controller/languageDoctor"> <i class="fa fa-list" aria-hidden="true"></i> Doctor Language</a></li>
                             </ul>
                         </li>
 
@@ -565,8 +567,9 @@ if($user_type==1){
                             </span>
                         </a>
                          <ul class="treeview-menu">
-                            <li><a href="<?php echo base_url()?>admin/Appointment_controller"> <i class="fa fa-plus" aria-hidden="true"></i> <?php echo display('create_appointment')?></a></li>
+                            <li><a href="<?php echo base_url()?>Appointment"> <i class="fa fa-plus" aria-hidden="true"></i> <?php echo display('create_appointment')?></a></li>
                             <li><a href="<?php echo base_url()?>admin/Appointment_controller/appointment_list"> <i class="fa fa-list" aria-hidden="true"></i> <?php echo display('appointment_list')?></a></li>
+							<li><a href="<?php echo base_url()?>admin/Appointment_controller/appointment_list_referral"> <i class="fa fa-list" aria-hidden="true"></i>Referral Appointment</a></li>
                         </ul>
                     </li>
 
