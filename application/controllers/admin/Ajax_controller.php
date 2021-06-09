@@ -54,6 +54,32 @@ class Ajax_controller extends CI_Controller {
       echo json_encode($result);
   }
 
+  public function medicine_selection() {
+    if (!empty($_GET['term'])){
+      $keyword = $_GET['term']; 
+      $result = $this->db->select('*')
+      ->from('medecine_info')
+      ->like('medicine_name', $keyword)
+      ->get()
+      ->result();
+
+      $medicines = array();
+      echo  '[';
+      if(!empty($result)) {
+            $addComa=false;
+            foreach ($result as $value) {
+              if ($addComa) {
+                echo ",";
+              }
+              $addComa = true;
+              array_push($medicines, $value);
+              echo '{"value":"'.$value->medicine_id.'", "label":"'.$value->medicine_name.'"}';
+            }
+            // echo '<ul>';
+        }
+        echo ']';
+      }
+  }
 
   #------------------------------------------------
   #       medicine_sajetion
