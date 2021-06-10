@@ -167,7 +167,7 @@ class Doctor_controller extends CI_Controller {
 					'blood_group' => $this->input->post('blood_group',TRUE),
 					'doctor_phone' => $this->input->post('phone',TRUE),
 					'address' => $this->input->post('address',TRUE),
-					'language' => implode(',',$this->input->post('language',TRUE)),
+					'language' => $this->input->post('language',TRUE)?implode(',',$this->input->post('language',TRUE)):'',
 					'meet_url' => $this->input->post('meet_url',TRUE),
 					'about_me' => $this->input->post('about_me',TRUE),
 					'service_place' => $this->input->post('service_place',TRUE),
@@ -189,7 +189,7 @@ class Doctor_controller extends CI_Controller {
 					redirect('admin/Doctor_controller/edit_profile/'.$doctor_id);
 			  }else{
 				  //redirect('profile');
-				  redirect('admin/Doctor_controller/edit_profile/'.$doctor_id);
+				  redirect('profile');
 			  }
                
 

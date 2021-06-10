@@ -75,7 +75,7 @@
 
                                     <div class="portlet-title">
                                          <div class="form-group ">
-                                            <div class="col-md-4"><input type="text" class="form-control" value="<?php echo html_escape(@$pres->history);?>" placeholder="<?php echo display('history')?>" name="history" /></div>
+                                            <div class="col-md-12"><textarea type="text" class="form-control"  placeholder="<?php echo display('history')?>" name="history"/> <?php echo html_escape(@$pres->history);?>"</textarea></div>
                                             <div class="col-md-4"><input type="text" class="form-control" value="<?php echo html_escape(@$pres->oex);?>" placeholder="<?php echo display('oex')?>" name="oex" /></div>
                                             <div class="col-md-4"><input type="text" class="form-control" value="<?php echo html_escape(@$pres->pd);?>" placeholder="<?php echo display('pd')?>" name="pd" value=""/></div> 
                                         </div>
