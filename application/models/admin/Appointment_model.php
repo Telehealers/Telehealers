@@ -41,7 +41,8 @@ class Appointment_model extends CI_model {
         $servicetype = array_key_exists('servicetype', $savedata)? $savedata['servicetype']:"";
         $symt1 = array_key_exists('symt1', $savedata)? $savedata['symt1']:"";
         $symt2 = array_key_exists('symt2', $savedata)? $savedata['symt2']:"";
-        $get_by = array_key_exists('get_by', $savedata)? $savedata['get_by']:0; 
+        //$get_by = array_key_exists('get_by', $savedata)? $savedata['get_by']:0; 
+		$get_by = 0; 
         $get_date_time = array_key_exists('get_date_time', $savedata)? $savedata['get_date_time']:""; 
         $status = array_key_exists('status', $savedata)? $savedata['status']:1; 
         

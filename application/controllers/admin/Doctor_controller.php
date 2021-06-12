@@ -396,7 +396,8 @@ class Doctor_controller extends CI_Controller {
 		$this->form_validation->set_rules('email', 'Email', 'valid_email|is_unique[log_info.email]');
 
 		$this->form_validation->set_rules('password', 'Password', 'trim|required|min_length[8]');
-		$this->form_validation->set_rules('language', 'Language', 'trim|required|');
+		$this->form_validation->set_rules('language[]', 'Language','required');
+
 
 		
 		if ($this->form_validation->run()==true) {	
