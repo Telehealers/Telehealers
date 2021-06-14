@@ -684,7 +684,7 @@ public function registration()
                      $this->email->to($this->input->post('email',TRUE));
                      $this->email->subject("Registration");
                      $this->email->message($message);
-                     $this->email->send();
+                     //$this->email->send();
                 #-----------------------------
                     // save email delivary data
                     $save_email = array(
