@@ -167,7 +167,7 @@ class Doctor_controller extends CI_Controller {
 					'blood_group' => $this->input->post('blood_group',TRUE),
 					'doctor_phone' => $this->input->post('phone',TRUE),
 					'address' => $this->input->post('address',TRUE),
-					'language' => implode(',',$this->input->post('language',TRUE)),
+					'language' => $this->input->post('language',TRUE)?implode(',',$this->input->post('language',TRUE)):'',
 					'meet_url' => $this->input->post('meet_url',TRUE),
 					'about_me' => $this->input->post('about_me',TRUE),
 					'service_place' => $this->input->post('service_place',TRUE),
@@ -189,7 +189,7 @@ class Doctor_controller extends CI_Controller {
 					redirect('admin/Doctor_controller/edit_profile/'.$doctor_id);
 			  }else{
 				  //redirect('profile');
-				  redirect('admin/Doctor_controller/edit_profile/'.$doctor_id);
+				  redirect('profile');
 			  }
                
 
@@ -396,7 +396,8 @@ class Doctor_controller extends CI_Controller {
 		$this->form_validation->set_rules('email', 'Email', 'valid_email|is_unique[log_info.email]');
 
 		$this->form_validation->set_rules('password', 'Password', 'trim|required|min_length[8]');
-		$this->form_validation->set_rules('language', 'Language', 'trim|required|');
+		$this->form_validation->set_rules('language[]', 'Language','required');
+
 
 		
 		if ($this->form_validation->run()==true) {	

@@ -54,6 +54,30 @@ class Ajax_controller extends CI_Controller {
       echo json_encode($result);
   }
 
+  public function medicine_selection() {
+    if (!empty($_GET['term'])){
+      $keyword = $_GET['term']; 
+      $result = $this->db->select('medicine_id,medicine_name')
+      ->from('medecine_info')
+      ->like('medicine_name', $keyword)
+      ->get()
+      ->result();
+
+      echo  '[';
+      if(!empty($result)) {
+            $addComa=false;
+            foreach ($result as $value) {
+              if ($addComa) {
+                echo ",";
+              }
+              $addComa = true;
+              echo '{"value":"'.$value->medicine_id.'", "label":"'.$value->medicine_name.'"}';
+            }
+            // echo '<ul>';
+        }
+        echo ']';
+      }
+  }
 
   #------------------------------------------------
   #       medicine_sajetion
@@ -100,30 +124,103 @@ class Ajax_controller extends CI_Controller {
     }
 
 
+  public function test_selection() {
+      if (!empty($_GET['term'])){
+        $keyword = $_GET['term']; 
+        $result = $this->db->select('test_id,test_name')
+        ->from('test_name_tbl')
+        ->like('test_name', $keyword)
+        ->get()
+        ->result();
+
+        $tests = array();
+        echo  '[';
+        if(!empty($result)) {
+              $addComa=false;
+              foreach ($result as $value) {
+                if ($addComa) {
+                  echo ",";
+                }
+                $addComa = true;
+                echo '{"value":"'.$value->test_id.'", "label":"'.$value->test_name.'"}';
+              }
+              // echo '<ul>';
+          }
+          echo ']';
+        }
+     }
+
     #------------------------------------------------
-    #       advice_sajetion
+    #       advice_selection
     #------------------------------------------------
-    public function advice_sajetion()
+    public function advice_selection()
     {
-        if (!empty($_GET['keyword'])) {
-            $keyword = $_GET['keyword'];
-            $result = $this->db->select('*')
+        if (!empty($_GET['term'])) {
+            $keyword = $_GET['term'];
+            $result = $this->db->select('advice_id,advice')
             ->from('doctor_advice')
             ->like('advice',$keyword)
-            ->where('create_by',$this->session->userdata('doctor_id'))
             ->get()
             ->result();
                 
+            $tests = array();
+            echo  '[';
             if(!empty($result)) {
-                echo  '<ul class="country-list" id="country-list">';
-                $i=1;
-                foreach ($result as $value) {
-                    echo '<li value="'.$value->advice_id.'">'.$value->advice.'</li>';
+              $addComa=false;
+              foreach ($result as $value) {
+                if ($addComa) {
+                  echo ",";
                 }
-                echo '<ul>';
-            }
+                $addComa = true;
+                
+                echo '{"value":"'.$value->advice_id.'", "label":"'.$value->advice.'"}';
+              }
+              // echo '<ul>';
+          }
+          echo ']';
         }
   }
+
+      public function patient_selection()
+    {
+        $doctor_id = $this->session->userdata('doctor_id');
+
+        if (!empty($_GET['term'])) {
+            $keyword = $_GET['term'];
+            $result=null;
+            if($doctor_id=='1'){
+              $result = $this->db->select('patient_id,patient_name')
+            ->from('patient_tbl')
+            ->like('patient_name',$keyword)
+            ->get()
+            ->result();  
+            }
+            else{
+            $result = $this->db->select('patient_id,patient_name')
+            ->from('patient_tbl')
+            ->where('doctor_id',$doctor_id)
+            ->like('patient_name',$keyword)
+            ->get()
+            ->result();
+            }    
+            $tests = array();
+            echo  '[';
+            if(!empty($result)) {
+              $addComa=false;
+              foreach ($result as $value) {
+                if ($addComa) {
+                  echo ",";
+                }
+                $addComa = true;
+                
+                echo '{"value":"'.$value->patient_id.'", "label":"'.$value->patient_name.'"}';
+              }
+              // echo '<ul>';
+          }
+          echo ']';
+        }
+  }
+
 
     #------------------------------------------------
     #       Company_sajetion

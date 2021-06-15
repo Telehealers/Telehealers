@@ -135,11 +135,7 @@ class Prescription_controller extends CI_Controller {
 	#----------------------------------------------------#
 			 	# medicine assign for patient 
 	#----------------------------------------------------#    
-	    $mdata['med_type'] = $this->input->post('type',TRUE);
 	 	$mdata['medicine_id'] = ($this->input->post('medicine_id',TRUE));
-	 	$mdata['mg'] = ($this->input->post('mg',TRUE));
-	 	$mdata['dose'] = ($this->input->post('dose',TRUE));
-	 	$mdata['day'] = ($this->input->post('day',TRUE));
 	 	$mdata['comments'] = ($this->input->post('comments',TRUE));
 	 	$mdata['appointment_id'] = $appointment_id;
 	 	$mdata['prescription_id'] = $prescription_id;
@@ -182,10 +178,6 @@ class Prescription_controller extends CI_Controller {
 	                    'prescription_id'=> $mdata['prescription_id'],
 	                    'appointment_id'=> $mdata['appointment_id'],
 	                    'medicine_id'=> $mdata['med_id'],
-	                    'mg'=>$mdata['mg'][$i],
-	                    'dose'=>$mdata['dose'][$i],
-	                    'day'=>$mdata['day'][$i],
-	                    'medicine_type' => $mdata['med_type'][$i],
 	                    'medicine_com'=>$mdata['comments'][$i]
 	            );
 
@@ -275,8 +267,11 @@ class Prescription_controller extends CI_Controller {
 		}
 		
 		$d['appointment_id'] = $appointment_id;	
+		$base_url=base_url();
     	$this->session->set_userdata($d);
-		$this->session->set_flashdata('message','<div class="alert alert-success msg">Prescription has been add successfully.</div>');
+		$this->session->set_flashdata('message','<div class="alert alert-success msg">Prescription has been add successfully.
+			<a href="'.$base_url.'admin/Prescription_controller/my_prescription/'.$prescription_id.'" target="_blank" style="  text-decoration: underline;  color: white;">Click here</a> to view the prescription</div>');
+
 	 	redirect("admin/Prescription_controller/prescription_list");
 		
 		//redirect("prescription");
