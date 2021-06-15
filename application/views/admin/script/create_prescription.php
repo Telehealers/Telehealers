@@ -1,24 +1,4 @@
 <script type="text/javascript">
-  function addActive(x, currentFocus) {
-
-    /*a function to classify an item as "active":*/
-    if (!x) return false;
-    /*start by removing the "active" class on all items:*/
-    removeActive(x, currentFocus);
-
-    if (currentFocus >= x.length) currentFocus = 0;
-    if (currentFocus < 0) currentFocus = (x.length - 1);
-    /*add class "autocomplete-active":*/
-
-    x[currentFocus].classList.add("autocomplete-active");
-  }
-
-  function removeActive(x) {
-    /*a function to remove the "active" class from all autocomplete items:*/
-    for (var i = x.length - 1; i >= 0; i--) {
-      x[i].classList.remove("autocomplete-active");
-    }
-  }
 
   function loadName() {
     'use strict';
@@ -65,6 +45,7 @@
       select: function(event, ui) {
         $(medicineNameID).val(ui.item.label);
         $(medicineValueID).val(ui.item.value);
+        loadName();
         return false;
       },
       focus: function(event, ui) {
@@ -105,6 +86,8 @@
 
     /** Add autocomplete to initial element. */
     addAutocompleteToHTMLDiv('#medicine_name', '#medicine_value', base_url + getMedicineURL);
+    getPatientURL = 'admin/Ajax_controller/patient_selection/'
+    addAutocompleteToHTMLDiv('#patient_name', '#p_id', base_url + getPatientURL);
 
     $(wrapper).on('click', '.remove_button', function(e) {
       e.preventDefault();

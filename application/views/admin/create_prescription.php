@@ -78,12 +78,8 @@
                                     <?php if(is_array($patient_info) && count($patient_info)>0){?>
                                     <div class="row">
                                          <div class="col-xs-12 pid" > 
-                                        <select class="form-control"  name="p_id" id="p_id" onChange="loadName(this.value)" required>
-                                            <option value="">Select Patient</option>
-                                            <?php foreach($patient_info as $val){?>
-                                            <option value="<?php echo $val->patient_id?>"><?php echo $val->patient_id?> (<?php echo $val->patient_name?>)</option>
-                                            <?php }}?>
-                                        </select>
+                                        <input type="hidden" class="form-control"  name="p_id" id="p_id"  required>
+                                        <input type="text" class="form-control" name="patient_name" id="patient_name" placeholder="<?php echo display('patient_name')?>" ><? }?>
                                     </div>
 
                                          <div class="col-xs-12">

@@ -181,6 +181,47 @@ class Ajax_controller extends CI_Controller {
         }
   }
 
+      public function patient_selection()
+    {
+        $doctor_id = $this->session->userdata('doctor_id');
+
+        if (!empty($_GET['term'])) {
+            $keyword = $_GET['term'];
+            $result=null;
+            if($doctor_id=='1'){
+              $result = $this->db->select('patient_id,patient_name')
+            ->from('patient_tbl')
+            ->like('patient_name',$keyword)
+            ->get()
+            ->result();  
+            }
+            else{
+            $result = $this->db->select('patient_id,patient_name')
+            ->from('patient_tbl')
+            ->where('doctor_id',$doctor_id)
+            ->like('patient_name',$keyword)
+            ->get()
+            ->result();
+            }    
+            $tests = array();
+            echo  '[';
+            if(!empty($result)) {
+              $addComa=false;
+              foreach ($result as $value) {
+                if ($addComa) {
+                  echo ",";
+                }
+                $addComa = true;
+                
+                echo '{"value":"'.$value->patient_id.'", "label":"'.$value->patient_name.'"}';
+              }
+              // echo '<ul>';
+          }
+          echo ']';
+        }
+  }
+
+
     #------------------------------------------------
     #       Company_sajetion
     #------------------------------------------------
