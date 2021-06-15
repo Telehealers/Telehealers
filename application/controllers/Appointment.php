@@ -562,7 +562,7 @@ function randstrGenapp($len)
 	}
 
 	public function patientAppointment(){
-
+		
 		$ci = get_instance();
 		$ci->load->library('email');
 		//Necessary variable initialization
@@ -582,25 +582,25 @@ function randstrGenapp($len)
         $config['protocol'] = $protocol;
         $config['smtp_host'] = $smtp_host;
         $config['smtp_port'] = $smtp_port;
-        $config['smtp_user'] = $smtp_user;
+        $config['smtp_user'] = $smtp_user; 
         $config['smtp_pass'] = $smtp_pass;
         $config['charset'] = "utf-8";
         $config['mailtype'] = "html";
         $config['newline'] = "\r\n";
 		$ci->email->initialize($config);
-
+		
 		$p_date = $this->input->post('p_date',TRUE);
 		$patient_id = $this->input->post('patient_id',TRUE);
 		$schedul_id = $this->input->post('schedul_id',TRUE);
 		$sequence = $this->input->post('sequence',TRUE);
-		$doctor_id = $this->input->post('doctor_id',TRUE);
+		$doctor_id = $this->input->post('doctor',TRUE);
 		$problem = $this->input->post('problem',TRUE);
 		$venue_id = '3';
 		$venue_name = 'Online';
-
+		
 		$app_type_val = $this->input->post('app_type_val',TRUE);
 		$service1 = 'Consultation for COVID-19';
-
+		
 		$sql_pat = "select * from patient_tbl where patient_id = '".$patient_id."'";
 		$res_pat = $this->db->query($sql_pat);
 		$result_pat = $res_pat->result_array();
@@ -611,8 +611,8 @@ function randstrGenapp($len)
 			$p_gender = $result_pat[0]['sex'];
 			$p_age = $result_pat[0]['age'];
 			$p_log_id = $result_pat[0]['log_id'];
-		}
-
+		}	
+		
 		$per_patient_time = '15';
 		$sql_sh = "select * from schedul_setup_tbl where schedul_id = '".$schedul_id."'";
 		$res_sh = $this->db->query($sql_sh);
@@ -621,7 +621,7 @@ function randstrGenapp($len)
 		if(is_array($result_sh) && count($result_sh)>0){
 			$per_patient_time = $result_sh[0]['per_patient_time'];
 		}
-
+		
 		$sql = "select * from doctor_tbl where doctor_id = '".$doctor_id."'";
 		$res = $this->db->query($sql);
 		$result = $res->result_array();
@@ -629,11 +629,11 @@ function randstrGenapp($len)
 			$doctor_name = $result[0]['doctor_name'];
 			$fees = $result[0]['fees'];
 		}
-
+				
 		$appointment_id = "A".date('y').strtoupper($this->randstrGenapp(5));
-
+		
 		$date = $this->input->post('p_date',TRUE);
-
+		
 		$appointmentData = array(
 		'date' => $this->input->post('p_date',TRUE),
 		'patient_id' => $patient_id,
@@ -648,11 +648,11 @@ function randstrGenapp($len)
 		'get_date_time' => date("Y-m-d h:i:s"),
 		'get_by' => 'Won'
 		);
-
+		
 		$p_cc = $problem;
 
 		$this->appointment_model->SaveAppoin($appointmentData);
-
+		
 		$sql = "select * from doctor_tbl where doctor_id = '".$doctor_id."'";
 		$res = $this->db->query($sql);
 		$result = $res->result_array();
@@ -681,35 +681,37 @@ function randstrGenapp($len)
 			if(is_array($result_doc) && count($result_doc)>0){
 				$doctor_email = $result_doc[0]['email'];
 			}
-		}
-
+		}	
+		
 		$sql_rk = "select * from token2 where id = '1'";
 		$res_rk = $this->db->query($sql_rk);
 		$result_rk = $res_rk->result_array();
 		if(is_array($result_rk) && count($result_rk)>0){
 			$refershToken = $result_rk[0]['refersh_token'];
 		}
+		
 
-		$sql_tk = "select * from token where id = '1'";
-		$res_tk = $this->db->query($sql_tk);
-		$result_tk = $res_tk->result_array();
-		if(is_array($result_tk) && count($result_tk)>0){
-			$accessToken = $result_tk[0]['access_token'];
-		}
+		/** Video call room creation **/				
+		/*$superpro_meeting_url = $this->createVideoCallRoom(
+			$doctor_name, $doctor_email,
+			$p_name, $p_email);
+		*/
+		
 		$superpro_meeting_url = $this->conference->createVideoCallRoom(
 			$doctor_name, $doctor_email,
 			$p_name, $p_email);
+
 		$meeting_pass = '';
 
 		$symt1 = $superpro_meeting_url;
 		$symt2 = $meeting_pass;
-
+		
 		$sql_m = "update appointment_tbl set symt1 = '".$symt1."',symt2 = '".$symt2."' where appointment_id = '$appointment_id'";
 		$this->db->query($sql_m);
 		
 		
-		
-		$message = $this->conference->createVideoCallInformationMail('
+		/*
+		$message = $this->createVideoCallInformationMail('
 			<p>Hey <strong>'.$p_name.'</strong>,</p>
 			<p>Our staff member has confirmed you for a '.$service1.' appointment on '.date('jS F Y',strtotime($date)).' with Dr. '.$doctor_name.'. If you have questions before your appointment,
 				use the contact form with appointment ID to get in touch with us.</p>
@@ -729,6 +731,28 @@ function randstrGenapp($len)
 			<p>Appointment Date: '.date('jS F Y',strtotime($date)).'</p>
 			<p>Appointment Time: '.date('h:i A', strtotime($sequence)).'</p>
 			<p>Appointment ID: '.$appointment_id.'</p>');
+			*/
+	$message = $this->conference->createVideoCallInformationMail('
+			<p>Hey <strong>'.$p_name.'</strong>,</p>
+			<p>Our staff member has confirmed you for a '.$service.
+				' appointment on '.$booking_date.' with Dr. '.$doctor_name.
+				'. If you have questions before your appointment,'.
+				'use the contact form with appointment ID to get in touch with us.</p>
+			<h2 style="text-align:left;font-weight:600;color:#356d82">Videocall Details:</h2>
+			<p>Superpro video call link: '.$superpro_meeting_url.',</p>
+			<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Appointment ID - ('.$appointment_id.')</h2><h1></h1>
+			<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Doctor Details:</h2><h1></h1>
+			<p>Name: '.$doctor_name.'</p>
+			<h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Patient Details:</h2>
+			<p>Name: '.$p_name.'</p>
+			<p>ID: '.$patient_id.'</p>
+			<p>Email: '.$p_email.'.Enter this in videocall link to join.</p>
+			<p>Phone: '.$p_phone.'</p>
+			<p>Age: '.$p_age.'</p>
+			<p>Gender: '.$p_gender.',</p>
+			<p>Appointment Date: '.$booking_date.'</p>
+			<p>Appointment Time: '.date('h:i A', strtotime($sequence)).'</p>
+			<p>Appointment ID: '.$appointment_id.'</p>');		
 
 		$ci->email->from('info@telehealers.in', 'telehealers');
 		$list = array($p_email);
@@ -737,7 +761,7 @@ function randstrGenapp($len)
 		$ci->email->subject('Appointment Information');
 		$ci->email->message($message);
 		$ci->email->send();
-
+		
 		$ci->email->from('info@telehealers.in', 'telehealers');
 		$list = array($doctor_email);
 		$ci->email->to($list);
@@ -750,7 +774,7 @@ function randstrGenapp($len)
 
 		if($user_type==1){
 			$mes='successfully created appointment';
-			$this->session->set_flashdata('message',$mes);
+			$this->session->set_flashdata('message',"<div class='alert alert-success'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>".$mes."</div>");
 		redirect("admin/Appointment_controller/appointment_list");
 		}		
 		else{
@@ -772,14 +796,14 @@ function randstrGenapp($len)
 		'fees' => '0'
 		);
 
-		$data['appointmentData'] = $appointmentData;
-
+		$data['appointmentData'] = $appointmentData; 	
+		
 		//echo "<pre>";print_r($data);die();
 		$data['info'] = $this->home_view_model->Home_satup();
-
+		
 		$app_time = date('h:i A', strtotime($sequence));
 		$app_date = date('jS F Y',strtotime($this->input->post('p_date',TRUE)));
-
+		
 		$mes = 'You have made an appointment with '.$doctor_name.' on '.$app_date.'-'.$app_time.'<br>Welcome to your patient dashboard here you can see all your appointments, prescriptions and tests that you upload to the portal. You can always login back using the registered mobile number - '.$p_phone;
 		$session_data = array(
 			'log_id' => $p_log_id,
@@ -794,6 +818,7 @@ function randstrGenapp($len)
 		$this->session->set_userdata($session_data);
 		$this->session->set_flashdata('message',"<div class='alert alert-success'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>".$mes."</div>");
         	redirect('Patient');
+		//$this->load->view('public/process_appointment_info',$data); 
 		//$this->load->view('public/process_appointment_info',$data); 
 	}
 }
@@ -937,7 +962,7 @@ public function registration()
                      $this->email->to($this->input->post('email',TRUE));
                      $this->email->subject("Registration");
                      $this->email->message($message);
-                     $this->email->send();
+                     //$this->email->send();
                 #-----------------------------
                     // save email delivary data
                     $save_email = array(
