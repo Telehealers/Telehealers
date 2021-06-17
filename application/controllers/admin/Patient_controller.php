@@ -19,7 +19,7 @@ class Patient_controller extends CI_Controller {
 		$this->load->model('admin/Venue_model','venue_model');
 		$this->load->model('admin/Overview_model','overview_model');
 		$this->load->model('admin/email/Email_model','email_model');
-		
+		$this->load->model("Superpro_model", "conference");
   }
 /*
 |--------------------------------------
@@ -36,15 +36,12 @@ class Patient_controller extends CI_Controller {
 		if($user_type==2){
 			$user_id = $this->session->userdata('user_id');	
 		}
-		//echo $user_id;die();
-		if($user_type==1 && $user_id==1){
+		if($user_type==1 && $user_id==1 || $user_type == 2){
+			/** Case of Admin */
 			$data['patient_info'] = $this->patient_model->get_all_patient();	
 		}else{
-			//echo '1..'.$user_id;
 			$data['patient_info'] = $this->patient_model->get_by_id_patient($user_id);
-			//echo $data['patient_info'];die();
 		}
-		//echo "<pre>";print_r($data['patient_info']);die();
 		$data['title'] = "Patient List";
 		$this->load->view('admin/_header',$data);
 		$this->load->view('admin/_left_sideber');
@@ -334,7 +331,7 @@ class Patient_controller extends CI_Controller {
                     $this->email->to($this->input->post('email',TRUE));
                     $this->email->subject("Registration");
                     $this->email->message($message);
-                    $this->email->send();
+                    //$this->email->send();
                     #-----------------------------
                      
                     // save email delivary data
@@ -666,6 +663,10 @@ class Patient_controller extends CI_Controller {
 	
 	  
   }
+  /**A function to referr patient to another doctors.
+   * This function updates ref_doc_id, ref_doc_id_by column of patient_tbl
+   * and adds rows for ref_doc_id and patient's documents(sharing docs).
+   */
   public function referral_patient_save(){
 	 
 		$patient_id = $this->input->post('p_id',TRUE);
@@ -674,16 +675,20 @@ class Patient_controller extends CI_Controller {
 			$user_id = $this->session->userdata('doctor_id');
 		}else{
 			$user_id = $this->session->userdata('user_id');
-		} 
+		}
+		$referred_doctor = $this->input->post('doctor',TRUE);
 		$savedata =  array(
-		'ref_doc_id' => $this->input->post('doctor',TRUE),
+		'ref_doc_id' => $referred_doctor,
 		'ref_doc_id_by' => $user_id
 		);
 		
 		$doc_id = $this->input->post('doctor',TRUE);
 
 		$this->patient_model->save_edit_patient($savedata,$patient_id);
-		//$user_id = $this->session->userdata('log_id');
+		if (!$this->patient_model->transfer_patient_doc_to_new_doctor(
+			$patient_id, $user_id, $referred_doctor)) {
+				log_message("error", "Bad transfer function.");
+		}
 		
 		$ci = get_instance();
 		$ci->load->library('email');
@@ -713,87 +718,31 @@ class Patient_controller extends CI_Controller {
 				$doctor_email = $result_doc[0]['email'];
 			}
 		}
-		
-		$sql2 = "select * from doctor_tbl where doctor_id = '".$user_id."'";
+		/** Inform doctors about referral */
+		$sql2 = "select * from doctor_tbl where doctor_id = '".$referred_doctor."'";
 		$res2 = $this->db->query($sql2);
 		$result2 = $res2->result_array();
 		if(is_array($result2) && count($result2)>0){
 			$doctor_name_f = $result2[0]['doctor_name'];
-			$doc_id_f = $result2[0]['doc_id'];
-			$log_id_f = $result2[0]['log_id'];
 		}
 		
-		
-		
-		$message = '<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #f1f1f1;">
-    <center style="width: 100%; background-color: #f1f1f1;">
-        <div style="display: none; font-size: 1px;max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
-            &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
-        </div>
-        <div style="max-width: 600px; margin: 0 auto;" class="email-container">
-            <!-- BEGIN BODY -->
-            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
-                <tbody><tr>
-                    <td valign="top" class="bg_white" style="padding: 1em 2.5em 0 2.5em;">
-                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-                            <tbody><tr>
-                                <td class="logo" style="text-align: left;">
-                                    <h1>
-                                        <a href="http://telehealers.in/">
-                                        <img src="http://telehealers.in/assets/uploads/images/telehe2.png">    
-                                        </a>
-                                    </h1>
-                                </td>
-                            </tr>
-                        </tbody></table>
-                    </td>
-                </tr>
-                <tr>
-                    </tr></tbody></table><table class="bg_white" role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-                        <tbody><tr style="border-bottom: 1px solid rgba(0,0,0,.05);">
-                            <td valign="middle" width="100%" style="text-align:left; padding: 0 2.5em;">
-                                <div class="product-entry">
-                                    <div class="text">
-                                        <p>Hey Dr. '.$doctor_name.',</p>
-                                        <p>Patient referral to you by '.$doctor_name_f.'.</p>
-                                        
-                                        <p>ID: '.$patient_id.'</p>
-										
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody></table>
-                
-            
-            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
-                <tbody><tr>
-                    <td class="bg_white" style="text-align: center;">
-                        <p>Receive these email? You can <a href="#" style="color: rgba(0,0,0,.8);">Unsubscribe here</a></p>
-                    </td>
-                </tr>
-            </tbody></table>
+		$message = $this->conference->createVideoCallInformationMail(
+			'<p>New patient referred to you</p>'.
+			'<p>Hey Dr. '.$doctor_name.',</p>'.
+			'<p>Patient referral to you by '.$doctor_name_f.'.</p>'.
+			'<p>ID: '.$patient_id.'</p>');
 
-        </div>
-    </center>
-
-
-</body></html>';
-
-                    $ci->email->from('info@telehealers.in', 'telehealers');
-					$list = array($doctor_email);
-					$ci->email->to($list);
-					$this->email->reply_to('info@telehealers.in', 'telehealers');
-					$ci->email->subject('Referraled A Patient (Telehealers)');
-					$ci->email->message($message);
-					$ci->email->send();
-
-		$this->session->set_flashdata('exception','<div class="alert alert-success msg">Patient has been successfully Referraled.</div><br>');
-
-		redirect('admin/Patient_controller/referral_patient/'.$patient_id);
+		$ci->email->from('info@telehealers.in', 'telehealers');
+		$list = array($doctor_email);
+		$ci->email->to($list);
+		$this->email->reply_to('info@telehealers.in', 'telehealers');
+		$ci->email->subject('Referraled A Patient (Telehealers)');
+		$ci->email->message($message);
+		$ci->email->send();
 	
-			  
-  }	  
+		$this->session->set_flashdata('exception','<div class="alert alert-success msg">Patient has been successfully Referraled.</div><br>');	
+		redirect('admin/Patient_controller/referral_patient/'.$patient_id);	
+	}	  
   
 
 }	

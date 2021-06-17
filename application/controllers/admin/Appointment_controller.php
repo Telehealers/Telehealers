@@ -45,14 +45,18 @@ class Appointment_controller extends CI_Controller {
 		$user_type = $this->session->userdata('user_type');
 		if($user_type==1){
 			$doctor_id = $this->session->userdata('doctor_id');
-      $data['patient_info'] = $this->patient_model->get_by_id_patient($doctor_id);
+			
+			
 			if($doctor_id!="1"){
+				$data['patient_info'] = $this->patient_model->get_by_id_patient($doctor_id);
 				$data['doctor_info'] = $this->doctor_model->getDoctorListById($doctor_id);	
 			}else{
 				$data['doctor_info'] = $this->doctor_model->getDoctorListByselect();
+				$data['patient_info'] = $this->patient_model->get_all_patient();
 			}
 			
 		}else{
+			$data['patient_info'] = $this->patient_model->get_all_patient();
 			$data['doctor_info'] = $this->doctor_model->getDoctorListByselect();
 		}
         $data['title'] = "Create New Appointment";
@@ -182,7 +186,7 @@ class Appointment_controller extends CI_Controller {
 			 $data['appointmaent_info'] = $this->overview_model->to_day_appointment();
 			}
 			else{
-				$data['appointmaent_info'] = $this->overview_model->to_day_appointment_by_id($doctor_id);	
+				$data['appointmaent_info'] = $this->overview_model->to_day_appointment_by_id($doctor_id);
 			}
 		}else{
        		 $data['appointmaent_info'] = $this->overview_model->to_day_appointment();
@@ -207,7 +211,21 @@ class Appointment_controller extends CI_Controller {
 
         $data['teamplate'] = $this->sms_setup_model->teamplate_list();
         
-        $data['appointmaent_info'] = $this->overview_model->to_day_get_appointment();
+		$user_type = $this->session->userdata('user_type');
+        if($user_type=='1'){
+			$doctor_id = $this->session->userdata('doctor_id');
+			if($doctor_id=='1'){
+			 $data['appointmaent_info'] = $this->overview_model->
+			 	to_day_get_appointment();
+			}
+			else{
+				$data['appointmaent_info'] = $this->overview_model->
+					to_day_get_appointment_by_id($doctor_id);
+			}
+		}else{
+			$data['appointmaent_info'] = $this->overview_model->
+				to_day_get_appointment();
+		}
 		
 		
 		$this->load->view('admin/_header',$data);

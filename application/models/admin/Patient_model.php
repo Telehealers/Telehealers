@@ -38,18 +38,13 @@ public function save_patient($savedata)
       return $result;
  }
 
-public function get_by_id_patient($id){
-	$query = $this->db->select('*')
-      ->from("patient_tbl")
-	  ->where('doctor_id',$id)
-      ->get();
-    $result = $query->result();
-	$sql = "select a.* from patient_tbl as a, appointment_tbl as b where b.doctor_id = '$id' and b.patient_id = a. patient_id";
-	$res = $this->db->query($sql);
-	//$result = $res->result_array();
-	$result = $query->result();
-	//echo $sql;die();
-    return $result;
+/** Get patient ID from doctor_id($id) as in referral or doctor_id
+ *  field.
+ */
+public function get_by_id_patient($id) {
+    $query = "SELECT * FROM patient_tbl WHERE doctor_id = ".$id.
+        " OR ref_doc_id = ".$id;
+    return $this->db->query($query)->result();
 }
 
 public function get_referral_patient($id){
@@ -119,6 +114,18 @@ public function get_patient_inde_info($patient_id)
 
  $this->db->insert('patient_doc_tbl', $savedata);
  
+ }
+
+ /** A Function to send patient docs to new doctor 
+  * NOTE: All existing doctors will have their copy.
+  * TODO: Take decision on wether to remove or add new rows.
+ */
+ public function transfer_patient_doc_to_new_doctor($patient_id, $referee_doctor, $referred_doctor) {
+    $transfer_query = "INSERT INTO patient_doc_tbl SELECT ".
+    "patient_doc_id, patient_id, ".$referred_doctor." as doctor_id,document, add_date".
+    " FROM patient_doc_tbl WHERE patient_id = '".$patient_id."' ".
+    " AND doctor_id = ".$referee_doctor ;
+    return $this->db->query($transfer_query);
  }
  
  

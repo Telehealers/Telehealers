@@ -230,14 +230,7 @@
                                     </div>
                                 </div>
 								
-								<div class="form-group">
-                                    <label class="col-md-3 control-label">Signature</label>
-                                    <div class="col-md-7">
-                                        <img src="<?php echo html_escape(@$doctor_info->picture2);?>" width="200px">
-                                        <input type="file" name="picture2"> 
-                                         <span>[ jpg,png,jpeg,gif and max size is 1MB]</span>
-                                    </div>
-                                </div>
+							
 								
 								<?php if(isset($doctor_info->picture3)){?>
 								<div class="form-group">

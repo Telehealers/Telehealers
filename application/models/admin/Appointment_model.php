@@ -22,14 +22,46 @@ class Appointment_model extends CI_model {
         ->get()->result();
     }
     
-    /*
-    |------------------------------------------------
-    |    save appointment data to appointment_tbl
-    |------------------------------------------------
+    /** A function to save appointment as in input(savedata) into appointment_tbl.
+     * NOTE: This function ensures atomicity and therefore other function doesn't need
+     *  to caller function doesn't need to consider failure case where 2 appointment of 
+     *  same slot is booked twice. 
     */
     public function SaveAppoin($savedata)
     {
-        $this->db->insert('appointment_tbl',$savedata);
+        $date = array_key_exists('date', $savedata)? $savedata['date']:""; 
+        $patient_id = array_key_exists('patient_id', $savedata)? $savedata['patient_id']:""; 
+        $appointment_id = array_key_exists('appointment_id', $savedata)? $savedata['appointment_id']:""; 
+        $schedul_id = array_key_exists('schedul_id', $savedata)? $savedata['schedul_id']:0; 
+        $sequence = array_key_exists('sequence', $savedata)? $savedata['sequence']:""; 
+        $venue_id = array_key_exists('venue_id', $savedata)? $savedata['venue_id']:""; 
+        $doctor_id = array_key_exists('doctor_id', $savedata)? $savedata['doctor_id']:""; 
+        $problem = array_key_exists('problem', $savedata)? $savedata['problem']:""; 
+        $service = array_key_exists('service', $savedata)? $savedata['service']:""; 
+        $servicetype = array_key_exists('servicetype', $savedata)? $savedata['servicetype']:"";
+        $symt1 = array_key_exists('symt1', $savedata)? $savedata['symt1']:"";
+        $symt2 = array_key_exists('symt2', $savedata)? $savedata['symt2']:"";
+        //$get_by = array_key_exists('get_by', $savedata)? $savedata['get_by']:0; 
+		$get_by = 0; 
+        $get_date_time = array_key_exists('get_date_time', $savedata)? $savedata['get_date_time']:""; 
+        $status = array_key_exists('status', $savedata)? $savedata['status']:1; 
+        
+        $insert_query = "INSERT INTO appointment_tbl (appointment_id, patient_id, venue_id, doctor_id,".
+            " schedul_id, problem, service, servicetype, symt1, symt2, get_date_time, get_by, date, status, sequence) ".
+            "SELECT '".$appointment_id."' as appointment_id, '".$patient_id."' as patient_id, ".
+                $venue_id." as venue_id, ".$doctor_id." as doctor_id, ".$schedul_id." as schedul_id, '".
+                $problem."' as problem, '".$service."' as service, '".$servicetype."' as servicetype, '".
+                $symt1."' as symt1, '".$symt2."' as symt2, '".$get_date_time."' as get_date_time, "
+                .$get_by." as get_by, '".$date."' as date, ".$status." as status, '".
+                $sequence."' as sequence WHERE 1 NOT IN (".
+                "SELECT 1 FROM appointment_tbl apt, schedul_setup_tbl schedule".
+                " WHERE apt.doctor_id = schedule.doctor_id AND ".
+                " schedule.doctor_id = ".$savedata["doctor_id"].
+                " AND apt.sequence <= '".$savedata["sequence"]."' AND ".
+                " '".$savedata["sequence"]."' <= ADDTIME(apt.sequence, schedule.per_patient_time)".
+                " AND apt.date = '".$date."')"
+            ;
+        return $this->db->query($insert_query) ;
     }
 
     public function Save_sms_info($save_sms_info){

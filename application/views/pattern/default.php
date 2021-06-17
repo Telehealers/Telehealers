@@ -128,17 +128,6 @@
 		                        </div>
 		                      <?php } ?>
 
-                                <?php if(!empty($value->history)){?>
-                                <div class="history">
-                                    <h4><?php echo display('history');?> </h4>
-                                    <?php 
-                                        $hs =  explode(",",$value->history);
-                                        for ($i=0; $i<count($hs); $i++) {
-                                             echo '<li class="tg">'.html_escape(@$hs[$i]).'</li>';
-                                        }
-                                    ?>
-                                </div>
-                                <?php } ?>
 
 		                        <?php if(!empty($value->temperature)){?>
 		                         <div class="temperature">
@@ -182,17 +171,7 @@
 		                        </div>
                                  <?php } ?>
 
-		                    <?php if(!empty($a_info)) { ?>
-                                <div class="advice-details">
-                                    <h4><?php echo display('advice');?></h4>
-                                    <ul>
-                                        <?php  $i=1; foreach ($a_info as $value2) { ?>
-                                        <li><?php echo html_escape(@$value2->advice);?></li>
-
-                                        <?php } ?>
-                                    </ul>
-                                </div>
-                             <?php } ?>
+		                    
                     </div><!--end left sideber-->
 
 
@@ -200,17 +179,24 @@
                     <!-- right sideber -->
                     <div class="col-md-8 col-sm-8 right-side">
                         <div class="table-responsive marg">
+                           <?php if(!empty($value->history)){?>
+                            <table  class="table table-bordered table-hover">
+                                <div class="history">
+                                    <thead><tr><th>
+                                    <h4><?php echo display('history');?> </h4></th></tr></thead>
+                                    <tbody><tr><td>
+                                    <div style="text-indent: 5%;"><?php 
+                                        echo html_escape(@$value->history);
+                                    ?></div></td></tr></tbody>
+                                </div>
+                                <?php } ?>
                             <table  class="table table-bordered table-hover">
                                 
                                 <thead>
                                     
                                     <tr>
                                         <th><?php echo display('sl');?></th>
-                                        <th><?php echo display('type');?></th>
                                         <th><?php echo display('medicine_name');?></th>
-                                        <th><?php echo display('mgml');?></th>
-                                        <th><?php echo display('dose');?> </th>
-                                        <th><?php echo display('day');?></th>
                                         <th><?php echo display('medicine_comment');?></th>
                                     </tr>
                                     
@@ -219,12 +205,8 @@
                                 <tbody>
                                 <?php $i=1; foreach ($patient_info as $value1) {  ?>
                                     <tr>
-                                        <td><?php echo @$i++;?></td>
-                                        <td><?php echo html_escape(@$value1->medicine_type);?></td>
+                                        <td><?php echo '&#8226;';?></td>
                                         <td><?php echo html_escape(@$value1->medicine_name);?></td>
-                                        <td><?php echo html_escape(@$value1->mg);?></td>
-                                        <td><?php echo html_escape(@$value1->dose);?></td>
-                                        <td><?php echo html_escape(@$value1->day);?></td>
                                         <td><?php echo html_escape(@$value1->medicine_com);?></td>
                                     </tr>
                                 <?php } ?> 
@@ -238,6 +220,17 @@
                                 
                             </table>
                         </div>
+                        <?php if(!empty($a_info)) { ?>
+                                <div class="advice-details">
+                                    <h4><?php echo display('advice');?></h4>
+                                    <ul>
+                                        <?php  $i=1; foreach ($a_info as $value2) { ?>
+                                        <li><?php echo html_escape(@$value2->advice);?></li>
+
+                                        <?php } ?>
+                                    </ul>
+                                </div>
+                             <?php } ?>
                     </div><!-- end right sideber-->
 
                 </div>

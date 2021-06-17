@@ -78,12 +78,8 @@
                                     <?php if(is_array($patient_info) && count($patient_info)>0){?>
                                     <div class="row">
                                          <div class="col-xs-12 pid" > 
-                                        <select class="form-control"  name="p_id" id="p_id" onChange="loadName(this.value)" required>
-                                            <option value="">Select Patient</option>
-                                            <?php foreach($patient_info as $val){?>
-                                            <option value="<?php echo $val->patient_id?>"><?php echo $val->patient_id?> (<?php echo $val->patient_name?>)</option>
-                                            <?php }}?>
-                                        </select>
+                                        <input type="hidden" class="form-control"  name="p_id" id="p_id"  required>
+                                        <input type="text" class="form-control" name="patient_name" id="patient_name" placeholder="<?php echo display('patient_name')?>" ><? }?>
                                     </div>
 
                                          <div class="col-xs-12">
@@ -122,7 +118,7 @@
 									<br>
                                     <div class="portlet-title">
                                          <div class="form-group ">
-                                            <div class="col-md-6"><input type="text" class="form-control"  placeholder="<?php echo display('patient_cc')?>" name="Problem"  value=" <?php echo html_escape(@$patient_info->problem);?>"/></div>
+                                            <div class="col-md-6"><input type="text" class="form-control"  placeholder="<?php echo display('patient_cc')?>" name="Problem"  value=""/></div>
                                             <div class="col-md-2"><input type="text" class="form-control "  placeholder="<?php echo display('patient_weight')?>" name="Weight" value=""/></div> 
                                             <div class="col-md-2"><input type="text" class="form-control"  placeholder="<?php echo display('patient_bp')?>" name="Pressure"  value=""/></div>
                                             <div class="col-md-2"><input type="text" class="form-control"  placeholder="<?php echo display('temperature')?>" name="temperature"  value=""/></div>
@@ -130,7 +126,7 @@
                                     </div><hr/>
                                     <div class="portlet-title">
                                          <div class="form-group ">
-                                            <div class="col-md-4"><input type="text" class="form-control"  placeholder="<?php echo display('history')?>" name="history" /></div>
+                                            <div class="col-md-12"><textarea type="text" class="form-control"  placeholder="<?php echo display('history')?>" name="history"/></textarea></div>
                                             <div class="col-md-4"><input type="text" class="form-control"  placeholder="<?php echo display('oex')?>" name="oex" /></div>
                                             <div class="col-md-4"><input type="text" class="form-control"  placeholder="<?php echo display('pd')?>" name="pd" value=""/></div> 
                                         </div>
@@ -155,18 +151,12 @@
                                                     <td>
                                                         <div class="field_wrapper">
                                                             <div class="form-group ">
-                                                                <div class="col-md-1 col-xs-12">
-                                                                     <input type="text"  class="form-control" name="type[]"  placeholder="Type" />
-                                                                </div>
+                                                                
                                                                 <div class="col-md-3 col-xs-12">
-                                                                    <input type="hidden" class="mdcn_value" name="medicine_id[]" value="" />
-                                                                    <input type="text"  class="mdcn_name form-control" name="md_name[]" autocomplete="off" placeholder="<?php echo display('medicine_name')?>" />
-                                                                    <div id="suggesstion-box"></div>
+                                                                    <input type="hidden" id="medicine_value" class="mdcn_value" name="medicine_id[]" value="" />
+                                                                    <input type="text"  id="medicine_name" class="mdcn_name form-control" name="md_name[]" autocomplete="off" placeholder="<?php echo display('medicine_name')?>" />
                                                                 </div>
 
-                                                                 <div class="col-md-2 col-xs-12" ><input type="text"  class="form-control"  placeholder="<?php echo display('mgml')?>L" name="mg[]"  /></div> 
-                                                                 <div class="col-md-1 col-xs-12" ><input type="text"  class="form-control"  placeholder="<?php echo display('dose')?>" name="dose[]"  /></div>
-                                                                 <div class="col-md-1 col-xs-12"><input type="text"  class="form-control"  placeholder="<?php echo display('day')?>" name="day[]"  /></div>
                                                                  <div class="col-md-3 col-xs-10"><input type="text"  class="form-control"  placeholder="<?php echo display('medicine_comment')?>" name="comments[]"  /></div> 
                                                                 <a href="javascript:void(0);" class=" btn btn-danger remove_button" title="Remove field"><span class="glyphicon glyphicon-trash"></span></a>
                                                             </div> 
@@ -203,8 +193,8 @@
                                                                 <div id="count_test1">
                                                                 <div class="form-group ">
                                                                     <div class="col-md-5 col-xs-12">
-                                                                        <input type="hidden" class="test_value" name="test_name[]" value="" />
-                                                                        <input placeholder="<?php echo display('test_name')?>"   class="test_name form-control" name="te_name[]" autocomplete="off" >
+                                                                        <input type="hidden" id="test_value" class="test_value" name="test_name[]" value="" />
+                                                                        <input placeholder="<?php echo display('test_name')?>"   id="test_name" class="test_name form-control" name="te_name[]" autocomplete="off" >
                                                                         <div id="test-box"></div>
                                                                     </div>
                                                                     <div class="col-md-5 col-xs-10"> 
@@ -240,8 +230,8 @@
                                                                     <div id="count_advice1">
                                                                         <div class="form-group ">
                                                                             <div class="col-md-10 col-xs-10">
-                                                                                <input type="hidden" class="advice_value" name="advice_name[]" value=""/>
-                                                                                <input placeholder="<?php echo display('advice')?>" class="advice_name form-control" name="adv[]" autocomplete="off" >
+                                                                                <input type="hidden" id="advice_value" class="advice_value" name="advice_name[]" value=""/>
+                                                                                <input placeholder="<?php echo display('advice')?>" id="advice_name" class="advice_name form-control" name="adv[]" autocomplete="off" >
                                                                                 <div  id="advice-box"></div>
                                                                             </div><a href="javascript:void(0);" class=" btn btn-danger remove_button" title="Remove field"><span class="glyphicon glyphicon-trash"></span></a>
                                                                         </div>
