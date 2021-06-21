@@ -602,13 +602,13 @@ input.range::-ms-fill-upper {
     </div>
     <div class="embed-responsive border border-primary rounded" id="tutorialPhone" style="display: none;padding-bottom: 150%;">
       <video class="embed-responsive-item responsive-iframe" loop autoplay muted controls>
-        <source src="../../web_assets/videos/telehealers-book-on-phone-compressed.mp4" type="video/mp4">
+        <source src="<?php echo base_url()?>web_assets/videos/telehealers-book-on-phone-compressed.mp4" type="video/mp4">
         Your browser does not support the video tag.
       </video>
     </div>
       <div class="embed-responsive embed-responsive-16by9 border border-primary rounded" id="tutorial" style="display: none">
          <video class="embed-responsive-item responsive-iframe" autoplay muted loop controls>
-        <source src="../../web_assets/videos/book-appointment-tutorial-pc.mp4" type="video/mp4">
+        <source src="<?php echo base_url()?>web_assets/videos/book-appointment-tutorial-pc.mp4" type="video/mp4">
         Your browser does not support the video tag.
       </video>
     </div>
