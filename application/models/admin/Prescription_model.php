@@ -44,7 +44,7 @@ class Prescription_model extends CI_model {
         );
         $this->db->from("prescription");
         $this->db->join('patient_tbl', 'patient_tbl.patient_id = prescription.patient_id','left'); 
-		$this->db->where('patient_tbl.doctor_id',$user_id);
+		$this->db->where('prescription.doctor_id',$user_id);
         $query = $this->db->get();
         $result = $query->result();
         return $result;
