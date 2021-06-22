@@ -620,6 +620,7 @@ public function registration()
             'patient_email' => $this->input->post('email',true),
             'patient_phone' => $this->input->post('phone',true),
             'sex' => $this->input->post('gender',true),
+            'age' => $this->input->post('age',true),
             'create_date'=>$create_date
             );
 

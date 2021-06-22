@@ -748,7 +748,8 @@ $(document).ready(function(){
 
 	$("#phone").keypress (function (event) {
 		var charLength = $(this).val().length;
-		if(charLength < 11){
+        
+		if(charLength < 10){
 			if ((event.which < 32) || (event.which > 126)){
 				return true;
 			}
@@ -759,7 +760,8 @@ $(document).ready(function(){
 	});
     $("#phone1").keypress (function (event) {
         var charLength = $(this).val().length;
-        if(charLength < 11){
+
+        if(charLength < 10){
             if ((event.which < 32) || (event.which > 126)){
                 return true;
             }
