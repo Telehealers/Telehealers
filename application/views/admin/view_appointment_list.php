@@ -148,7 +148,7 @@
                                         <?php if(empty($result) AND $this->session->userdata('user_type')==1) { ?>
                                             <a class="btn btn-xs btn-primary" data-toggle="tooltip" title="Create Prescription!"   href="<?php echo base_url();?>admin/Prescription_controller/create_prescription/<?php echo html_escape($value->appointment_id); ?>" ><i class="fa fa-user-md"></i></a>
                                         <?php } else { ?>
-                                            <a class="btn btn-xs btn-primary" data-toggle="tooltip" title="View Prescription!"  target="_blank" href="<?php echo base_url();?>admin/Prescription_controller/my_prescription/<?php echo html_escape($value->appointment_id); ?>"><i class="fa fa-eye"></i></a>   
+                                            <a class="btn btn-xs btn-primary" data-toggle="tooltip" title="View Prescription!"  target="_blank" href="<?php echo base_url();?>admin/Prescription_controller/my_prescription/null/<?php echo html_escape($value->appointment_id); ?>"><i class="fa fa-eye"></i></a>   
                                         <?php } ?> 
                                         <a class="btn btn-xs btn-danger" data-toggle="tooltip" title="Delete" href="<?php echo base_url();?>admin/Appointment_controller/delete_appointment/<?php echo html_escape($value->appointment_id); ?>"><i class="fa fa-trash" aria-hidden="true"></i></a>
 									   <a class="btn btn-xs btn-primary" href="<?php echo base_url();?>admin/Appointment_controller/appointment_referral/<?php echo $value->appointment_id; ?>">Referral</a>

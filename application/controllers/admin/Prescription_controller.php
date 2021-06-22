@@ -706,14 +706,22 @@ class Prescription_controller extends CI_Controller {
 	#		veiw my_prescription
 	#--------------------------------------------
 
-	public function my_prescription($prescription_id=NULL)
+	public function my_prescription($prescription_id=NULL,$appointment_id=NULL)
 	{
 
 		$info = $this->db->where('name','timezone')->get('web_pages_tbl')->row();
           
         date_default_timezone_set(@$info->details);
 
-
+        $temp_pres=$this->db->select('prescription_id')
+        ->from('prescription')
+        ->where('appointment_id',$appointment_id)
+        ->get()
+        ->row();
+		if($prescription_id=='null'){
+			$prescription_id=$temp_pres->prescription_id;
+		}
+        
 		$data['patient_info'] = $this->prescription_model->prescription_by_id($prescription_id);
 	    
 	    // test query
