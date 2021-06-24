@@ -420,7 +420,8 @@ function randstrGenapp($len)
 		}
 		$venue_name = $venue_data->venue_name;
 
-		$doctor_info_query = "select doc.doctor_name as doctor_name, doc.log_id as log_id, ".
+		$doctor_info_query = "select doc.doctor_name as doctor_name,".
+			" doc.doctor_phone as doctor_phone, doc.log_id as log_id, ".
 			"sched.schedul_id AS schedul_id from doctor_tbl doc, schedul_setup_tbl sched ".
 			"WHERE doc.doctor_id = ".$doctor_id." AND doc.doctor_id = sched.doctor_id ".
 			"AND sched.day = DAYOFWEEK('".$booking_date."')";
@@ -431,6 +432,7 @@ function randstrGenapp($len)
 			show_404();
 		}
 		$doctor_name = $doctor_entry->doctor_name;
+		$doctor_phone = $doctor_entry->doctor_phone;
 		$log_id = $doctor_entry->log_id;
 		$schedul_id = $doctor_entry->schedul_id;
 		/** Bad way to generate ID
@@ -484,7 +486,16 @@ function randstrGenapp($len)
 		$sql_m = "update appointment_tbl set symt1 = '".$symt1."',symt2 = '".$symt2."' where appointment_id = '$appointment_id'";
 		$this->db->query($sql_m);
 
-		/** Informing participants */
+		/** Informing participants via SMS */
+		$sms_booked_time = $booking_date.'+'.str_replace(' ','+',
+			date('h:i A', strtotime($sequence)));
+		$sms_message = $this -> smsgateway->msg_appointment_booked_rightnow(
+			$superpro_meeting_url, 
+			$sms_booked_time);
+		$this->smsgateway->send_sms($p_phone, $sms_message);
+		$this->smsgateway->send_sms($doctor_phone, $sms_message);
+
+		/** via email */
 		$message = $this->conference->createVideoCallInformationMail('
 			<p>Hey <strong>'.$p_name.'</strong>,</p>
 			<p>Our staff member has confirmed you for a '.$service.
@@ -560,7 +571,7 @@ function randstrGenapp($len)
 			redirect('Patient');	
 		}
 	}
-
+	/**TODO: Remove this function and its usage. */
 	public function patientAppointment(){
 		
 		$ci = get_instance();
@@ -611,6 +622,7 @@ function randstrGenapp($len)
 			$p_gender = $result_pat[0]['sex'];
 			$p_age = $result_pat[0]['age'];
 			$p_log_id = $result_pat[0]['log_id'];
+			$p_phone = $result_pat[0]['patient_phone'];
 		}	
 		
 		$per_patient_time = '15';
@@ -633,9 +645,9 @@ function randstrGenapp($len)
 		$appointment_id = "A".date('y').strtoupper($this->randstrGenapp(5));
 		
 		$date = $this->input->post('p_date',TRUE);
-		
+		$booking_date = $this->input->post('p_date',TRUE);
 		$appointmentData = array(
-		'date' => $this->input->post('p_date',TRUE),
+		'date' => $booking_date,
 		'patient_id' => $patient_id,
 		'appointment_id' =>$appointment_id,
 		'schedul_id' => $schedul_id,
@@ -708,8 +720,14 @@ function randstrGenapp($len)
 		
 		$sql_m = "update appointment_tbl set symt1 = '".$symt1."',symt2 = '".$symt2."' where appointment_id = '$appointment_id'";
 		$this->db->query($sql_m);
-		
-		
+			
+		/** SMS patient about appointment */
+		$sms_booked_time = $booking_date.'+'.str_replace(' ','+',
+			date('h:i A', strtotime($sequence)));
+		$sms_message = $this -> smsgateway->msg_appointment_booked_rightnow(
+			$superpro_meeting_url, 
+			$sms_booked_time);
+		$this->Smsgateway->send_sms($p_phone, $sms_message);
 		/*
 		$message = $this->createVideoCallInformationMail('
 			<p>Hey <strong>'.$p_name.'</strong>,</p>

@@ -133,13 +133,22 @@ class Patientreports extends CI_Controller {
 			$create_date = date('Y-m-d h:i:s');
 			
 			$savedata =  array(
-              'patient_id' => $p_id,			                'doctor_id' => $doctor_id,
+              'patient_id' => $p_id,			                
+			  'doctor_id' => $doctor_id,
               'document' => $image,
               'add_date' => $create_date
             );
 			
 			$this->patient_model->save_patient_doc($savedata);
 			
+			/** Inform doctor about shared doc */
+			$doc_info_query = "select doctor_phone from doctor_tbl where doctor_id = '".$doctor_id."'";
+			$doctor_entry = $this->db->query($doc_info_query)->result();
+			if (($doctor_entry) && isset($doctor_entry[0]['doctor_phone'])) {
+				$this->smsgateway->send_sms($doctor_entry[0]['doctor_phone'],
+					$this->smsgateway->msg_patient_shared_document($p_id));
+			}
+
 			$user_id = $this->session->userdata('log_id');
 			$action_title = 'Add patient document';
 			$action_description = 'User add patient document';
