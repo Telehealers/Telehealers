@@ -1180,6 +1180,39 @@ public function registration()
 		}}
 	}
 
+	/** A function to get all booked time slot of a given doctor 
+	 * Inputs in header of post request: doctor_name or doctor_id ie one of them
+	 * If doctor_id is given doctor_name will be ignored. 
+	 * And date as 'yyyy-mm-dd'.
+	*/
+	public function getBookedSlotOfADoctor() {
+		$doctor_id = $this->input->post('doctor_id', TRUE);
+		$doctor_name = $this->input->post('doctor_name', TRUE);
+		$date = $this->input->post('date', TRUE);
+		if ($doctor_id) {
+			$doctor_filter = "doc.doctor_id = ".$doctor_id ;
+		} else {
+			$doctor_filter = "doc.doctor_name = '".$doctor_name."'";
+		}
+		$get_slot_query = "SELECT bookings.sequence as start_time,".
+			"ADDTIME(bookings.sequence, SEC_TO_TIME(sched.per_patient_time * 60) ) as end_time ".
+			"FROM appointment_tbl bookings, schedul_setup_tbl sched, doctor_tbl doc WHERE ".
+			"bookings.schedul_id = sched.schedul_id AND bookings.doctor_id = doc.doctor_id ".
+			"AND bookings.date = '".$date."' AND ".$doctor_filter." ORDER BY bookings.sequence ASC";
+		$booked_slots = $this->db->query($get_slot_query);
+		echo "[";
+		$addComa = false ;
+		foreach($booked_slots->result() as $slot) {
+			if ($addComa) {
+				echo ",";
+			} else {
+				$addComa = true;
+			}
+			echo '{"start_time": "'.$slot->start_time.'", "end_time": "'.$slot->end_time.'" }';
+		}
+		echo "]";
+	}
+
 	public function getpromocodeprice(){
 		$coupon_code = $this->input->post('coupon_code',TRUE);
 		$sql = "select * from promocode where title = '".$coupon_code."'";
