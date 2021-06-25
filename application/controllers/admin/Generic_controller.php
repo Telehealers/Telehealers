@@ -614,8 +614,7 @@ class Generic_controller extends CI_Controller {
 			$patient_id."'";
 		$patient_entry = $this->db->query($patient_query)->result();
 		if ($patient_entry && isset($patient_entry[0]['patient_phone'])) {
-			$this->smsgateway->send_sms($patient_entry[0]['patient_phone'], 
-				$this->smsgateway->msg_prescription_alert());
+			$this->smsgateway->sms_prescription_alert($patient_entry[0]['patient_phone']); 
 		}
 		
 	 	$d['appointment_id'] = $pdata['appointment_id'];

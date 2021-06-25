@@ -560,7 +560,7 @@ class Doctor_controller extends CI_Controller {
 		
 		/** Inform doctor via sms about successful registration */
 		if (!$doctor_phone) {
-			$this->smsgateway->send_sms($doctor_phone, $this->smsgateway->msg_doctor_registration_successful());
+			$this->smsgateway->sms_successful_registration_to_doctor($doctor_phone);
 		}
 
 		$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';

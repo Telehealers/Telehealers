@@ -78,7 +78,7 @@ class Doctorlogin extends CI_Controller {
 			$new_otp = rand(1000,9999);
 			$sql = "update doctor_tbl set opt_code = '$new_otp' where doctor_phone = '$phone'";
 			$this->db->query($sql);
-			$this->smsgateway->send_sms($phone, $this->smsgateway->msg_otp($new_otp));			
+			$this->smsgateway->sms_otp($phone, $new_otp);
 			echo '1';
 		}else{
 			echo '0';

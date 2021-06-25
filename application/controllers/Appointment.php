@@ -489,11 +489,8 @@ function randstrGenapp($len)
 		/** Informing participants via SMS */
 		$sms_booked_time = $booking_date.'+'.str_replace(' ','+',
 			date('h:i A', strtotime($sequence)));
-		$sms_message = $this -> smsgateway->msg_appointment_booked_rightnow(
-			$superpro_meeting_url, 
-			$sms_booked_time);
-		$this->smsgateway->send_sms($p_phone, $sms_message);
-		$this->smsgateway->send_sms($doctor_phone, $sms_message);
+		$this->smsgateway->sms_appointment_confirmation($p_phone, $superpro_meeting_url, $sms_booked_time);
+		$this->smsgateway->sms_appointment_confirmation($doctor_phone, $superpro_meeting_url, $sms_booked_time);
 
 		/** via email */
 		$message = $this->conference->createVideoCallInformationMail('
@@ -724,10 +721,7 @@ function randstrGenapp($len)
 		/** SMS patient about appointment */
 		$sms_booked_time = $booking_date.'+'.str_replace(' ','+',
 			date('h:i A', strtotime($sequence)));
-		$sms_message = $this -> smsgateway->msg_appointment_booked_rightnow(
-			$superpro_meeting_url, 
-			$sms_booked_time);
-		$this->Smsgateway->send_sms($p_phone, $sms_message);
+		$this->smsgateway->sms_appointment_confirmation($p_phone, $superpro_meeting_url, $sms_booked_time);
 		/*
 		$message = $this->createVideoCallInformationMail('
 			<p>Hey <strong>'.$p_name.'</strong>,</p>
