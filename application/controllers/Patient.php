@@ -927,7 +927,7 @@ public function registration()
 			var_dump($new_otp);
 			$sql = "update patient_tbl set opt_code = '$new_otp' where patient_phone = '$phone'";
 			$this->db->query($sql);
-			$this->smsgateway->send_sms($phone, $this->smsgateway->msg_otp($new_otp));			
+			$this->smsgateway->sms_otp($phone, $new_otp);
 			echo '1';
 		}else{
 			echo '0';

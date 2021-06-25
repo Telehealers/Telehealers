@@ -145,8 +145,8 @@ class Patientreports extends CI_Controller {
 			$doc_info_query = "select doctor_phone from doctor_tbl where doctor_id = '".$doctor_id."'";
 			$doctor_entry = $this->db->query($doc_info_query)->result();
 			if (($doctor_entry) && isset($doctor_entry[0]['doctor_phone'])) {
-				$this->smsgateway->send_sms($doctor_entry[0]['doctor_phone'],
-					$this->smsgateway->msg_patient_shared_document($p_id));
+				$this->smsgateway->sms_alert_doctor_about_patient_documents(
+					$doctor_entry[0]['doctor_phone'], $p_id);
 			}
 
 			$user_id = $this->session->userdata('log_id');
