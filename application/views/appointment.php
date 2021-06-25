@@ -11,18 +11,20 @@
     <link rel="icon" href="<?php echo (!empty(html_escape($info->fabicon->picture))?html_escape($info->fabicon->picture):null); ?>" type="image">
     <!-- Bootstrap CSS -->
 
-    <link rel="stylesheet" href="<?php echo base_url();?>web_assets2/css/main.css">
+  
 	<link href="<?php echo base_url()?>assets/plugins/jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
-	<link rel="stylesheet" href="<?php echo base_url();?>web_assets2/appointment/css/main.css">
-    <link rel="stylesheet" href="<?php echo base_url();?>web_assets2/appointment/css/style.css">
-    <link rel="stylesheet" href="<?php echo base_url();?>web_assets2/appointment/css/calendar_style.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<!-- <link rel="stylesheet" href="<?php echo base_url();?>web_assets2/appointment/css/main.css"> -->
+    <!-- <link rel="stylesheet" href="<?php echo base_url();?>web_assets2/appointment/css/style.css"> -->
+    <!-- <link rel="stylesheet" href="<?php echo base_url();?>web_assets2/appointment/css/calendar_style.css"> -->
+
+
+<link rel="stylesheet" href="<?php echo base_url();?>web_assets2/css/main.css">
+ 
     
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
     <!-- Isolated Version of Bootstrap, not needed if your site already uses Bootstrap -->
-    <link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" />
+    <!-- <link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" /> -->
     <!-- Bootstrap Date-Picker Plugin -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
@@ -46,6 +48,8 @@
 
   gtag('config', 'G-Y9P95E4VWH');
 </script>
+    <link rel="stylesheet" href="<?php echo base_url();?>web_assets2/css/bootstrap.min.css">
+
 	<script type="text/javascript">
 /* var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
 (function(){
@@ -342,11 +346,11 @@ input.range::-ms-fill-upper {
    text-align: center;
  }
 
- a {
+ /*a {
    text-decoration: none;
    font-weight: bolder;
    color: red;
- }
+ }*/
 
  #inner:first-child {
    margin-left: 0;
@@ -451,13 +455,14 @@ input.range::-ms-fill-upper {
 </style>
 <body>
   <?php $this->load->view('header.php')?>
+  
     <div class="container" style="background: white;margin-top: 20px;margin-bottom: 20px;border-radius: 10px;box-shadow: 4px 5px 8px #ababab;">
     <div class="row" style="text-align:center; color:white;background:grey;border-top-left-radius: 8px;border-top-right-radius: 8px;padding:10px ;padding-left:100px;padding-right:100px">
     <div class="col-12">
     <h4>Book Appointment</h4>
     </div>
     </div>
-    <?php   $attributes = array('class' => 'form-horizontal','role'=>'form');
+    <?php   $attributes = array('class' => 'form-horizontal','role'=>'form','id'=>'AppForm');
             echo form_open_multipart('Appointment/confirmation', $attributes);
       ?>
     <div id="q_warn_msg" class="mt-3 alert alert-warning" style="display:none"></div>
@@ -493,7 +498,7 @@ input.range::-ms-fill-upper {
       </div>
   <div class="form-check" style="margin-left:30px">
         <input class="form-check-input" type="radio" name="flexRadioDefault" value="non_covid" id="flexRadioDefault2" >
-        <label class="form-check-label pl-4" for="flexRadioDefault2">Non-Covid</label>
+        <label class="form-check-label pl-4" for="flexRadioDefault2">Specialities</label>
   </div>
 
     </div>
@@ -567,7 +572,7 @@ input.range::-ms-fill-upper {
     <div class="row mb-3" id="department_type" style="display:none;padding-left:2%;padding-right:2%">
     <div class="col-sm-12 col-md-12 col-lg-12">
     <h1 for="customRange3" class="form-label labelStyle mb-4 mt-4" style="margin-top:0%">Departments</h1>
-    <div class="btn-group" id="elem" style="width:inherit;height:40px !important;display: flex;
+    <div class="btn-group" id="elem" style="width:inherit;height:100% !important;display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     align-content: space-between;
@@ -633,10 +638,12 @@ input.range::-ms-fill-upper {
           </div>
       </div>
     </div>
+        
+
     <div class="row" style="padding: 10px;background: #f3f3f3;box-shadow: 0px -4px 5px #cac3c3ad;">
   <div class="col-12">
   <div style="float:right">
-<button type="submit"  class="btn btn-success" style="width: 200px;height: 50px;font-size: 25px;background: #393f7d;"><?php echo display('submit')?></button>
+<button type="submit" id="submit" class="btn btn-success" style="width: 200px;height: 50px;font-size: 25px;background: #393f7d;"><?php echo display('submit')?></button>
 </div>
   </div>
   </div>
@@ -645,20 +652,7 @@ input.range::-ms-fill-upper {
 
 </div>
 
-<!-- Modal -->
-<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="myModalLabel">Modal header</h3>
-    </div>
-    <div class="modal-body">
-        <p>One fine body…</p>
-    </div>
-    <div class="modal-footer">
-        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-        <button class="btn btn-primary">Save changes</button>
-    </div>
-</div>></form>
+</form>
 <script>
 var servicetype='';
  function IsMobile() {
@@ -694,8 +688,7 @@ function hideTutorial() {
 
 function getDoctors(language,date,hour,min,am_pm){
     $('#docs')[0].textContent='';
-     $('#q_succ_msg').hide();
-    $('#my-modal').modal({show: 'false'});
+    $('#q_succ_msg').hide();
     var base_url=$('#base_url').val();
     $.ajax({
     url:base_url+'index.php/Appointment/getdoctorforappointment',
@@ -722,7 +715,7 @@ function cleanHours(originalVal){
 }
 date_today=new Date();
 function fetchTime(date,hour, minute,am_pm,language){
-
+  $('#q_succ_msg').hide();
   date = date ? date : $('#datepicker').datepicker('getFormattedDate');
   date_cool = new Date(date);
   hour = hour ? hour : cleanHours($('#time_hour')[0].elements[0].value);
@@ -770,6 +763,231 @@ $(document).ready(function(){
 // });
 showTutorial();
 
+$('#headlogin').on('click',function(){
+        $('#logtab').click();
+        $('.form-control').val('');
+        $('#meserr').html('');
+        $('#meserrReg').html('');
+        $('#otp_field').css('display','none');
+        $('#sendOtp').show();
+         $('#login').hide();
+         $('#otpmess').html('');
+
+
+    });
+
+ 
+  
+  $("#phone").keypress (function (event) {
+    var charLength = $(this).val().length;
+        
+    if(charLength < 10){
+      if ((event.which < 32) || (event.which > 126)){
+        return true;
+      }
+      return jQuery.isNumeric ($(this).val () + String.fromCharCode (event.which));
+    }else{
+      return false;
+    }
+  });
+    $("#phone1").keypress (function (event) {
+        var charLength = $(this).val().length;
+
+        if(charLength < 10){
+            if ((event.which < 32) || (event.which > 126)){
+                return true;
+            }
+            return jQuery.isNumeric ($(this).val () + String.fromCharCode (event.which));
+        }else{
+            return false;
+        }
+    });
+  $("#otp").keypress (function (event) {
+    var charLength = $(this).val().length;
+    if(charLength < 4){
+      if ((event.which < 32) || (event.which > 126)){
+        return true;
+      }
+      return jQuery.isNumeric ($(this).val () + String.fromCharCode (event.which));
+    }else{
+      return false;
+    }
+  });
+  $('#sendOtp').click(function(){
+    var base_url = $('#base_url').val();
+    var phone = $('#phone').val();
+    if(phone==""){
+      $('#meserr').html('Please enter mobile number first');
+    }else{
+      $('#meserr').html('');
+      $.ajax({
+        url:base_url+'index.php/Patient/checkUser',
+        method: 'post',
+        data: {phone:phone},
+        type: 'POST',
+        success: function(response){
+          if(response==0){
+            $('#meserr').html('Incorrect Mobile number');
+          }else{
+            $('#otp_field').css('display','block');
+            $('#otpmess').html('Otp sent on your mobile number...');
+            $('#sendOtp').hide();
+            $('#login').show();
+          }
+          //$('#q_succ_msg').html('Your details has been submited successfully.');
+          //$('#q_succ_msg').html(response);
+        }
+      });
+    }
+  });
+  $('#login').click(function (){
+    var base_url = $('#base_url').val();
+    var phone = $('#phone').val();
+    var otp = $('#otp').val();
+    var msg = '';
+    if(phone==""){
+      msg += 'Please enter mobile number<br>';
+    }
+    if(otp==""){
+      msg += 'Please enter Otp<br>';
+    }
+    if(msg!=""){
+      $('#meserr').html(msg);
+    }else{
+      $('#meserr').html('');
+      $.ajax({ 
+        url:base_url+'index.php/Patient/userLogin',
+        method: 'post',
+        data: {phone:phone,otp:otp},
+        type: 'POST',
+        success: function(response){
+          if(response==0){
+            $('#meserr').html('Incorrect Mobile number');
+          }else if(response==1){
+            $('#meserr').html('You enter wrong Otp'); 
+          }else{
+            $('#p_id').val(response);
+            $('#myModal').modal('hide');
+            $('#submit').click();
+             // window.location.href = 'Patient';
+          }
+          //$('#q_succ_msg').html('Your details has been submited successfully.');
+          //$('#q_succ_msg').html(response);
+        }
+      });
+    }
+  });
+    $('#auth').click(function (){
+        var base_url = $('#base_url').val();
+        var phone = $('#phone1').val();
+        var otp = $('#otp1').val();
+        var msg = '';
+        if(phone==""){
+            msg += 'Please enter mobile number<br>';
+        }
+        if(otp==""){
+            msg += 'Please enter Otp<br>';
+        }
+        if(msg!=""){
+            $('#meserr1').html(msg);
+        }else{
+            $('#meserr1').html('');
+            $.ajax({
+                url:base_url+'index.php/Patient/userLogin',
+                method: 'post',
+                data: {phone:phone,otp:otp},
+                type: 'POST',
+                success: function(response){
+                    if(response==0){
+                        $('#meserr1').html('Incorrect Mobile number');
+                    }else if(response==1){
+                        $('#meserr1').html('You enter wrong Otp');
+                    }else{
+                      $('#p_id').val(response);
+                      console.log('patient',response);
+                      $('#myModal').modal('hide');
+                      $('#submit').click();
+                    }
+                    //$('#q_succ_msg').html('Your details has been submited successfully.');
+                    //$('#q_succ_msg').html(response);
+                }
+            });
+        }
+    });
+
+    $('#register').click(function(){
+        var name    = $('#name').val();
+        var email     = $('#email').val();
+        var age      = $('#age').val();
+        var phone      = $('#phone1').val();
+
+        var baseUrl =$('#base_url').val();
+        var gender = document.querySelector('input[name="inlineRadioOptions"]:checked')
+            console.log(gender);
+        var msg=''    
+        if(name==""){
+            msg += 'Please enter name<br>';
+        }
+        if(email==""){
+            msg += 'Please enter Email<br>';
+        }
+        if(!age){
+            msg += 'Please enter Age<br>';
+        }
+        if(!gender){
+            msg+='Please select gender<br>';
+        }
+        else{
+            gender=gender.value;
+        }
+        if(phone.length<10){
+            msg+='Incorrect Phone Number<br>'
+        }
+
+        
+        if(msg!=""){
+            $('#meserrReg').html(msg);
+        }else{
+
+            $('#meserrReg').html('');
+            $.ajax({
+                url:baseUrl+'index.php/Welcome/registration',
+                method: 'post',
+                data: {name:name, email:email,age:age , phone: phone,gender:gender},
+                type: 'POST',
+                success: function(response){
+                   if (response==0) {
+                        // this user already exists , show error to user that number is already registered , please log in 
+                        $('#meserrReg').html('This phone number is already registered. Please login')
+                   }
+                   else if(response==1){
+                    // new user has been created , 
+                    $.ajax({
+                        url:baseUrl+'index.php/Patient/checkUser',
+                        method: 'post',
+                        data: {phone:phone},
+                        type: 'POST',
+                        success: function(response){
+                        if(response==0){
+                            $('#meserr').html('Incorrect Mobile number');
+                        }else{
+                            $('#otpmess1').html('Otp sent on your mobile number...');
+                            $('#otp_field1').css('display','block');
+                            $('#auth').css('display','block');
+                            $('#register').hide();
+                            $('#registeringuser').value=true;
+                          }}});
+                          
+                   }
+
+                }
+            });
+        }});
+    $("#myTab a").click(function(e){
+            e.preventDefault();
+            $(this).tab('show');
+        });
+
 
   $("#datepicker").datepicker(
 {format: "yyyy-mm-dd",
@@ -785,16 +1003,16 @@ $('#ambtn').ready(function(){
 
 $('#datepicker').on('changeDate',function(e) {
     var date=($('#datepicker').datepicker('getFormattedDate'));
-    fetchTime(date);
+    fetchTime();
     $('#p_date').val(date);
-    console.log($('#p_date').val());
+
 
   });
 
 $('#dLabel ').on('DOMNodeInserted',function(e){
     var language=e.target.innerHTML;
     //console.log(language);
-  fetchTime(null,null,null,null,language,null);
+  fetchTime();
 
 });
 
@@ -802,7 +1020,7 @@ $('#dLabel ').on('DOMNodeInserted',function(e){
 
 $('#time_hour').on('change', function(ev){
     var hour = cleanHours(parseInt(ev.target.value));
-    fetchTime(null,hour,null,null,null,null);
+    fetchTime();
 
 });
 
@@ -854,7 +1072,7 @@ $(document).on('click', 'input:radio[id^="flexRadioDefault"]', function(event) {
   if(queryType == "covid"){
   // department_type
   document.getElementById('department_type').style.display = 'none';
-
+  fetchTime();
 
   }
 
@@ -975,7 +1193,34 @@ $('#p_phone').keypress(function (e) {
   }
 });
 
+ $('#myModal').on('hide.bs.modal', function () {  
+     console.log('closing modal');
+     $('#loginForm')[0].reset();
 
+     $('#registerForm')[0].reset();
+
+
+    });
+
+$("form").submit(function(e) {
+  $('#meserr').html('');
+  $('#meserrReg').html('');
+  console.log('submitting');
+  var p_id=$('#p_id').val();
+
+  if(!p_id){
+    // user without login 
+    $('#myModal').modal('show');
+    $('#regtab').click();
+    e.preventDefault();
+  }
+  
+  if(!($('#p_date').val() && $('#sequence').val() && $('#doctor_id').val() &&  $('#servicetype_id').val())){
+    console.log('cant do submit');
+    e.preventDefault();
+  }
+
+})
 
 $("#p_phone").keypress (function (event) {
       if ((event.which < 32) || (event.which > 126)) return true;
@@ -1315,14 +1560,10 @@ var current_fs, next_fs, previous_fs; //fieldsets
               easing: 'easeInOutBack'
           });
       });
- 
-  $(".submit").click(function () {
-    $('#myModal').modal('show');
-          // return false;
-      })
 
 });
 </script>
 <?php $this->load->view('footer');?>
+<?php $this->load->view('loginModal.php')?>
 </body>
 </html>
