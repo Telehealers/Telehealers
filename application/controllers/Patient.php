@@ -969,7 +969,7 @@ public function registration()
                     'logged_in' => TRUE
                 );
 				$this->session->set_userdata($session_data);
-				echo '2';	
+				echo $patient_id;	
 			}
 		}else{
 			echo '0';
