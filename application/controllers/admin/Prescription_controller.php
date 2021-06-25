@@ -105,8 +105,9 @@ class Prescription_controller extends CI_Controller {
 
 	 	$this->session->unset_userdata('appointment_id');
 	 	$this->session->unset_userdata('prescription_id'); 	
+		$patient_id = $this->input->post('patient_id',TRUE);
 	 	$appointment_id=$this->input->post('appointment_id',TRUE)?$this->input->post('appointment_id',TRUE): "A".date('y').strtoupper($this->randstrGen(2,4));
-	 	$pdata['patient_id'] = $this->input->post('patient_id',TRUE);
+	 	$pdata['patient_id'] = $patient_id;
 	 	$pdata['appointment_id'] = $appointment_id;
 	 	$pdata['doctor_id'] = $this->session->userdata('doctor_id',TRUE);
 	 	$pdata['Pressure'] = $this->input->post('Pressure',TRUE);
@@ -264,6 +265,14 @@ class Prescription_controller extends CI_Controller {
             	);
             	$this->db->insert('advice_prescriptiion',$advice_data);
 			}
+		}
+		/** Inform patient about shared prescription via sms */
+		$patient_query = "select patient_phone from patient_tbl where patient_id = '".
+		$patient_id."'";
+		$patient_entry = $this->db->query($patient_query)->result();
+		if ($patient_entry && isset($patient_entry[0]['patient_phone'])) {
+			$this->smsgateway->send_sms($patient_entry[0]['patient_phone'], 
+				$this->smsgateway->msg_prescription_alert());
 		}
 		
 		$d['appointment_id'] = $appointment_id;	

@@ -31,6 +31,7 @@ class Generic_controller extends CI_Controller {
 		
 		$this->load->model('admin/email/Email_model','email_model');
         $this->load->library('email');
+		$this->load->library('Smsgateway');
 		
 	}
 
@@ -609,7 +610,13 @@ class Generic_controller extends CI_Controller {
 				$this->db->query($sql_int);
 			}
 		}
-		
+		$patient_query = "select patient_phone from patient_tbl where patient_id = '".
+			$patient_id."'";
+		$patient_entry = $this->db->query($patient_query)->result();
+		if ($patient_entry && isset($patient_entry[0]['patient_phone'])) {
+			$this->smsgateway->send_sms($patient_entry[0]['patient_phone'], 
+				$this->smsgateway->msg_prescription_alert());
+		}
 		
 	 	$d['appointment_id'] = $pdata['appointment_id'];
 	 	$d['prescription_id'] = $p;
