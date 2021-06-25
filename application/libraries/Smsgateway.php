@@ -1,4 +1,5 @@
 <?php
+    /** This class contains all sms centric logic(message and APIs) and functionality */
     class Smsgateway
     {
         /** Functions to send sms */
