@@ -590,7 +590,7 @@ public function registration()
 {
       $this->form_validation->set_rules('name', 'Name', 'trim|required');
       $this->form_validation->set_rules('phone', 'Phone Number', 'trim|required|min_length[6]|max_length[15]');
-      $this->form_validation->set_rules('email', 'Email', 'required' );
+      $this->form_validation->set_rules('email', 'Email', 'trim|required' );
       if ($this->form_validation->run()==true) {
          #------------------------------------------------#
           $exists_user = $this->patient_model->exists_user(
