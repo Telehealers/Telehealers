@@ -1180,10 +1180,28 @@ public function registration()
 		}}
 	}
 
+	/** A helper function for getBookedSlotOfADoctor function,
+	 * This function unset properties: doctor_name, doctor_id, 
+	 * per_patient_time and returns input object.
+	 * WARNING: USE WITH CAUTION, only written for getBookedSlotOfADoctor.
+	 */
+	private function helperSlotUnsetter($slot) {
+		unset($slot->doctor_name);
+		unset($slot->doctor_id);
+		unset($slot->per_patient_time);
+		return $slot;
+	}
 	/** A function to get all booked time slot of a given doctor 
 	 * Inputs in header of post request: doctor_name or doctor_id ie one of them
 	 * If doctor_id is given doctor_name will be ignored. 
 	 * And date as 'yyyy-mm-dd'.
+	 * Response: {"doctor_name":..., "doctor_id":..., "per_patient_time_in_minutes":...,
+	 * 	"booked_time_for_the_day":array_<Description_below>}
+	 * 	Array of slots where each slot is a continuous range
+	 * 	of time for which doctor is booked, say doc x has appointment for
+	 * 	7 PM, 7:15 PM, 7:30 PM and x has set its per_patient_time to be 15 minutes
+	 * 	then our Response["booked_time_for_the_day"] will contain 
+	 * 	{"start_time": "19:00:00", "end_time": "19:45:00"} as one of its elements.
 	*/
 	public function getBookedSlotOfADoctor() {
 		$doctor_id = $this->input->post('doctor_id', TRUE);
@@ -1194,23 +1212,36 @@ public function registration()
 		} else {
 			$doctor_filter = "doc.doctor_name = '".$doctor_name."'";
 		}
+		/**Invariant: Slots doesn't intersect */
 		$get_slot_query = "SELECT bookings.sequence as start_time,".
-			"ADDTIME(bookings.sequence, SEC_TO_TIME(sched.per_patient_time * 60) ) as end_time ".
+			"ADDTIME(bookings.sequence, SEC_TO_TIME(sched.per_patient_time * 60) ) as end_time, ".
+			"doc.doctor_name as doctor_name, doc.doctor_id as doctor_id,".
+			"sched.per_patient_time as per_patient_time ".
 			"FROM appointment_tbl bookings, schedul_setup_tbl sched, doctor_tbl doc WHERE ".
 			"bookings.schedul_id = sched.schedul_id AND bookings.doctor_id = doc.doctor_id ".
 			"AND bookings.date = '".$date."' AND ".$doctor_filter." ORDER BY bookings.sequence ASC";
-		$booked_slots = $this->db->query($get_slot_query);
-		echo "[";
-		$addComa = false ;
-		foreach($booked_slots->result() as $slot) {
-			if ($addComa) {
-				echo ",";
-			} else {
-				$addComa = true;
-			}
-			echo '{"start_time": "'.$slot->start_time.'", "end_time": "'.$slot->end_time.'" }';
+		$booked_slots = $this->db->query($get_slot_query)->result();
+		$starting_slot = current($booked_slots);
+		if (!$starting_slot) {
+			echo "";
+		} else {
+			$response = array(
+				"doctor_name" => $starting_slot->doctor_name,
+				"doctor_id" => $starting_slot->doctor_id,
+				"per_patient_time_in_minutes" => $starting_slot->per_patient_time,
+				"booked_time_for_the_day" => array($this->helperSlotUnsetter($starting_slot))
+			);
 		}
-		echo "]";
+		while ($slot = next($booked_slots)) {
+			$last_slot = end($response['booked_time_for_the_day']);
+			if ($last_slot->end_time == $slot->start_time) {
+				$last_slot->end_time = $slot->end_time ;
+			} else {
+				array_push($response['booked_time_for_the_day'], 
+					$this->helperSlotUnsetter($slot));
+			}
+		}
+		echo json_encode($response);
 	}
 
 	public function getpromocodeprice(){
