@@ -121,19 +121,13 @@ $hello = GeraHash(5);
 								if(is_array($patient_appointment_info) && count($patient_appointment_info)>0){
 									foreach($patient_appointment_info as $val){
 									$doctor_id = $val['doctor_id'];
-									$doctor_arr[] = $doctor_id;
-									$sql = "select * from doctor_tbl where doctor_id = '".$doctor_id."'";
-									$res = $this->db->query($sql);
-									$result = $res->result_array();
-									if(is_array($result) && count($result)>0){
-										$doctor_name = $result[0]['doctor_name'];
-										$doc_id = $result[0]['doc_id'];
-										$log_id = $result[0]['log_id'];
-										$department = $result[0]['department'];
-										$designation = $result[0]['designation'];
-										$degrees = $result[0]['degrees'];
-										$specialist = $result[0]['specialist'];
-									}
+									$doctor_name = $val['doctor_name'];
+									$doc_id = $val['doc_id'];
+									$log_id = $val['log_id'];
+									$department = $val['department'];
+									$designation = $val['designation'];
+									$degrees = $val['degrees'];
+									$specialist = $val['specialist'];
 									$prescription_id='';
 									$app_id = $val['appointment_id'];
 									$sql_pre = "select * from prescription where appointment_id = '".$app_id."'";
@@ -142,7 +136,7 @@ $hello = GeraHash(5);
 									if(is_array($result_pre) && count($result_pre)>0){
 										$prescription_id = $result_pre[0]['prescription_id'];
 										$prescription_type = $result_pre[0]['prescription_type'];
-									}	
+									}
 								?>
                                     <tr>
                                         <td><?php echo $val['appointment_id'];?></td>
@@ -155,7 +149,7 @@ $hello = GeraHash(5);
 										?></td>
                                         <td><?php echo $app_time;?></td>
                                         <td><a href="<?php echo $val['symt1'];?>"><?php echo $val['symt1'];?></a></td>
-                                        <td><?php echo $val['service'];?></td>
+                                        <td><?php echo $val['servicetype'];?></td>
 										
 								    </tr>
 								<?php }} ?>	
@@ -166,49 +160,19 @@ $hello = GeraHash(5);
                         </div>
 						<br><br>
 						<div id="bookippointment" style="">
-						<div class="row"><div class="col-md-12 previous_heading">Previous Consulting Doctors</div></div>
-						<?php 
-							$doctor_arr = array_unique($doctor_arr);
-							if(is_array($doctor_arr) && count($doctor_arr)>0){
-								?>
-								
-                            
-								<?php
+						<div class="row"><div class="col-md-12 previous_heading">Previously Consulted and Referred Doctors</div></div>
+							<?php
 								$i=0;
-							foreach($doctor_arr as $val){
-								$i++;
-								$sql = "select * from doctor_tbl where doctor_id = '".$val."'";
-								$res = $this->db->query($sql);
-								$result = $res->result_array();
-								if(is_array($result) && count($result)>0){
-									$doctor_name = $result[0]['doctor_name'];
-								}
-								$d_day=array();
-								$sql2 = "select * from schedul_setup_tbl where doctor_id = '".$val."' and venue_id = '3'";
-								//echo $sql2;
-								$res2 = $this->db->query($sql2);
-								$result2 = $res2->result_array();
-								if(is_array($result2) && count($result2)>0){
-									foreach($result2 as $va){
-										$d_day[] = $va['day'];	
-									}
-								}
-								//echo "<pre>";print_r($d_day);
-								$d_day = array_unique($d_day);
-								?>
+								foreach($all_related_doctors_to_the_patient as $dr){
+									$i++;
+									$doctor_name = $dr->doctor_name;
+							?>
 								<div class="row">
 									<div class="col-md-1"><?php echo $i; ?></div>
 									<div class="col-md-5"><?php echo $doctor_name; ?></div>
-									<!-- <div class="col-md-6"><a href="javascript:void(0)" class="btn_app" onclick="setdocapp('<?php echo $doctor_name;?>','<?php echo $val;?>')" >Book Appointment</a> -->
-									<!-- </div> -->
-									</div><br>	
-								<?php
-							}
-							?>
-							
-							
+								</div><br>	
 							<?php
-							}
+								}
 							?>
 						<div class="applyjobform" style="display:none;">
                                 <?php 

@@ -927,7 +927,7 @@ class Appointment_controller extends CI_Controller {
 		$ci = get_instance();
 		$ci->load->library('email');
 		$email_config = $this->email_model->email_config();
-		if(is_array($email_config) && count($email_config)>0){
+		if($email_config){
 			$protocol = $email_config->protocol;
 			$smtp_host = $email_config->mailpath;
 			$smtp_port = $email_config->port;
@@ -1259,7 +1259,6 @@ class Appointment_controller extends CI_Controller {
 	}  
 	
 	public function referral_appointment_save(){
-	 
 		$ci = get_instance();
 		$ci->load->library('email');
         $config['protocol'] = "tls";
@@ -1297,7 +1296,6 @@ class Appointment_controller extends CI_Controller {
 			$this->appointment_model->UpdateReferralAppointment($savedata,$ref_id);
 			$get_appointment = $this->appointment_model->check_appointment_referral($appointment_id);
 		}else{
-			
 			$this->appointment_model->SaveReferralAppointment($savedata);
 		}
 		
@@ -1321,8 +1319,12 @@ class Appointment_controller extends CI_Controller {
 		//echo "<pre>";print_r($referal_from);
 		//echo "<pre>";print_r($referal_to);
 		//echo "<pre>";print_r($get_appointment);die();
-		
-		
+		$this->appointment_model->insertPatientDoctorMap(
+			current($this->appointment_model->getAppointmentByID( 
+				$appointment_id))->patient_id,
+			$referral_to
+		);
+
 		$message = '<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #f1f1f1;">
     <center style="width: 100%; background-color: #f1f1f1;">
         <div style="display: none; font-size: 1px;max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
@@ -1397,9 +1399,7 @@ class Appointment_controller extends CI_Controller {
 
 		$this->session->set_flashdata('exception','<div class="alert alert-success msg">Appointment has been successfully Referral.</div><br>');
 
-		redirect('admin/Appointment_controller/appointment_referral/'.$appointment_id);
-	
-			  
+		redirect('admin/Appointment_controller/appointment_referral/'.$appointment_id);			  
   }	  
   
 }

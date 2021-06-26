@@ -76,11 +76,13 @@ class Patient extends CI_Controller {
 			$patient_id = $result_sh[0]['patient_id'];
 		} 
 		if($patient_id!=""){
-			$sql_pt = "select * from appointment_tbl where patient_id = '".$patient_id."' order by id DESC";
+			$sql_pt = "select apt.*, drs.* from appointment_tbl apt, doctor_tbl drs".
+                " where apt.doctor_id = drs.doctor_id AND apt.patient_id = '".$patient_id."' order by id DESC";
 			$res_pt = $this->db->query($sql_pt);
 			$result_pt = $res_pt->result_array();
 			$data['patient_appointment_info'] = $result_pt;
-			
+            /** Get related doctor */
+            $data['all_related_doctors_to_the_patient'] = $this->doctor_model->get_doctor_from_patient_id($patient_id);
 		}
 		//echo "<pre>";print_r($data['patient_appointment_info']);die();
         //setup information

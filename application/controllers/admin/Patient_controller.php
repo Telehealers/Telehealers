@@ -19,8 +19,9 @@ class Patient_controller extends CI_Controller {
 		$this->load->model('admin/Venue_model','venue_model');
 		$this->load->model('admin/Overview_model','overview_model');
 		$this->load->model('admin/email/Email_model','email_model');
+        $this->load->model('admin/Appointment_model','appointment_model');
 		$this->load->model("Superpro_model", "conference");
-  }
+  	}
 /*
 |--------------------------------------
 |     view all patient list
@@ -681,8 +682,10 @@ class Patient_controller extends CI_Controller {
 		'ref_doc_id' => $referred_doctor,
 		'ref_doc_id_by' => $user_id
 		);
-		
 		$doc_id = $this->input->post('doctor',TRUE);
+		/** Map patients on referral */
+		$this->appointment_model->insertPatientDoctorMap(
+			$patient_id, $referred_doctor, $user_id);
 
 		$this->patient_model->save_edit_patient($savedata,$patient_id);
 		if (!$this->patient_model->transfer_patient_doc_to_new_doctor(
