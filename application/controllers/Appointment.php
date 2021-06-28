@@ -1246,7 +1246,8 @@ public function registration()
 			if (!$doctor_info) {
 				/** Show error */
 				log_message('error',"Error[getBookedSlotOfADoctor]:Bad doctor_info".$doctor_filter);
-				show_404();
+				echo 'no docs';
+				return;
 			}
 			$response = array(
 				"doctor_name" => $doctor_info->doctor_name,
