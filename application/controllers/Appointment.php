@@ -1116,7 +1116,8 @@ public function registration()
 	}
 	/* 	Get available doctors
 	*	Post input used: servicetype_id(INT), preferred_language(STRING), booking_hour (HH),
-			 booking_minute (MM), booking_am_pm (AM|PM), booking_date(YYYY-MM-DD)
+			 booking_minute (MM), booking_am_pm (AM|PM), booking_date(YYYY-MM-DD),
+			 searched_doctor_id (INT, =0 => no searched-doctor) as in doctor_tbl.
     *  	returns: HTML doctor list with pictures and all-unselected radio buttons.
         TODO: rows with bias_reduction < 0, are rows with other languages,
 			handle this case.
@@ -1125,8 +1126,7 @@ public function registration()
 		  a 3-categorized language set.
     */
 	public function getdoctorforappointment(){
-		//NOTE: Input can also be mapped to post input, uncomment below comments
-		// to use them.
+		//Input reading.
 		$servicetype_id = $this->input->post('servicetype_id',TRUE);
 		$servicetype_filter = ($servicetype_id)? 'stdm.servicetype_id = '.$servicetype_id.' AND ':"";
 		$preferred_language = $this->input->post('preferred_language', TRUE);
@@ -1136,6 +1136,9 @@ public function registration()
 		$this->input->post("booking_am_pm", TRUE);
 		$booking_slot_starting_time = date("H:i:s", strtotime($sequence));
 		$booking_date = $this->input->post('booking_date', TRUE);
+		$searched_doctor_id = $this->input->post('searched_doctor_id', TRUE);
+		$searched_doctor_filter = (!$searched_doctor_id)? "" : 
+			" AND main_docs.doctor_id = ".$searched_doctor_id;
 
 		/** SQL-Query: 
 		 * Incldes aggregation on doctor_id: A contigency mechanism so that no
@@ -1158,6 +1161,7 @@ public function registration()
 			'bookings.sequence <=  "'.$booking_slot_starting_time.'" AND '.
 			'bookings.date = "'.$booking_date.'"'.' AND"'.$booking_slot_starting_time.
 			'" < ADDTIME(bookings.sequence, SEC_TO_TIME(schedule.per_patient_time*60))) '.
+			$searched_doctor_filter.
 			' GROUP BY main_docs.doctor_id ORDER BY bias_reduction_score DESC;';
 
 		$available_doctors = $this->db->query($sql_query);
@@ -1232,16 +1236,16 @@ public function registration()
 		$starting_slot = current($booked_slots);
 		if (!$starting_slot) {
 			echo "";
-		} else {
-			$response = array(
-				"doctor_name" => $starting_slot->doctor_name,
-				"doctor_id" => $starting_slot->doctor_id,
-				"per_patient_time_in_minutes" => $starting_slot->per_patient_time,
-				"start_time_of_the_day" => $starting_slot->start_time_of_the_day,
-				"end_time_of_the_day" => $starting_slot->end_time_of_the_day,
-				"booked_time_for_the_day" => array($this->helperSlotUnsetter($starting_slot))
-			);
+			return ;
 		}
+		$response = array(
+			"doctor_name" => $starting_slot->doctor_name,
+			"doctor_id" => $starting_slot->doctor_id,
+			"per_patient_time_in_minutes" => $starting_slot->per_patient_time,
+			"start_time_of_the_day" => $starting_slot->start_time_of_the_day,
+			"end_time_of_the_day" => $starting_slot->end_time_of_the_day,
+			"booked_time_for_the_day" => array($this->helperSlotUnsetter($starting_slot))
+		);
 		while ($slot = next($booked_slots)) {
 			$last_slot = end($response['booked_time_for_the_day']);
 			if ($last_slot->end_time == $slot->start_time) {
