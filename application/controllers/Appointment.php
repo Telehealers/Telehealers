@@ -1132,9 +1132,9 @@ public function registration()
 		$preferred_language = $this->input->post('preferred_language', TRUE);
 		$preferred_language_filter = '(language LIKE "%'.$preferred_language.'%")';
 		$sequence =$this->input->post("booking_hour",TRUE).":".
-		$this->input->post("booking_minute", TRUE).":00 ".
-		$this->input->post("booking_am_pm", TRUE);
-		$booking_slot_starting_time = date("H:i:s", strtotime($sequence));
+		$this->input->post("booking_minute", TRUE).":00";
+		
+		$booking_slot_starting_time = $sequence;
 		$booking_date = $this->input->post('booking_date', TRUE);
 		$searched_doctor_id = $this->input->post('searched_doctor_id', TRUE);
 		$searched_doctor_filter = (!$searched_doctor_id)? "" : 
@@ -1163,7 +1163,7 @@ public function registration()
 			'" < ADDTIME(bookings.sequence, SEC_TO_TIME(schedule.per_patient_time*60))) '.
 			$searched_doctor_filter.
 			' GROUP BY main_docs.doctor_id ORDER BY bias_reduction_score DESC;';
-
+		
 		$available_doctors = $this->db->query($sql_query);
 
 		foreach ($available_doctors->result() as $doc) {

@@ -79,7 +79,7 @@
                                     <div class="row">
                                          <div class="col-xs-12 pid" > 
                                         <input type="hidden" class="form-control"  name="p_id" id="p_id"  required>
-                                        <input type="text" class="form-control" name="patient_name" id="patient_name" placeholder="<?php echo display('patient_name')?>" ><? }?>
+                                        <input type="text" class="form-control" name="patient_name" id="patient_name" placeholder="<?php echo display('patient_name')?>" onchange="loadName()" ><? }?>
                                     </div>
 
                                          <div class="col-xs-12">

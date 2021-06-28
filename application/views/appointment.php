@@ -20,9 +20,10 @@
 
 
 <link rel="stylesheet" href="<?php echo base_url();?>web_assets2/css/main.css">
- 
+        <script src="https://www.localhost:8443/assets/plugins/jquery-ui-1.12.1/jquery-ui.min.js" type="text/javascript"></script>
+
     
-    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
     <!-- Isolated Version of Bootstrap, not needed if your site already uses Bootstrap -->
     <!-- <link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" /> -->
     <!-- Bootstrap Date-Picker Plugin -->
@@ -93,6 +94,15 @@ $hello = GeraHash(5);
   padding: 0;
   border: 0;
   background: transparent;
+  background-image: linear-gradient(
+      to right, 
+      #fffdc2,
+      #fffdc2 15%,
+      #ff0000 15%,
+      #ff0000 35%,
+      #fffdc2 35%
+    );
+
 }
 
 input.range:focus {
@@ -508,60 +518,38 @@ input.range::-ms-fill-upper {
     <div>
     <h1 for="customRange3" class="form-label labelStyle" style="margin-top: 0;">Book Time Slot</h1>
     <fieldset class="range__field" id="time_hour" value="10">
-   <input class="range" type="range" min="-2" max="10" value="-2">
-   <svg role="presentation" width="100%" height="10" xmlns="http://www.w3.org/2000/svg">
-      <rect class="range__tick" x="0%" y="3" width="1" height="10"></rect>
-      <rect class="range__tick" x="8.3%" y="3" width="1" height="10"></rect>
-      <rect class="range__tick" x="16.6%" y="3" width="1" height="10"></rect>
-      <rect class="range__tick" x="24.9%" y="3" width="1" height="10"></rect>
-      <rect class="range__tick" x="33.2%" y="3" width="1" height="10"></rect>
-      <rect class="range__tick" x="41.5%" y="3" width="1" height="10"></rect>
-      <rect class="range__tick" x="49.8%" y="3" width="1" height="10"></rect>
-      <rect class="range__tick" x="58.1%" y="3" width="1" height="10"></rect>
-      <rect class="range__tick" x="66.4%" y="3" width="1" height="10"></rect>
-      <rect class="range__tick" x="74.7%" y="3" width="1" height="10"></rect>
-      <rect class="range__tick" x="83%" y="3" width="1" height="10"></rect>
-      <rect class="range__tick" x="91.3%" y="3" width="1" height="10"></rect>
-      <rect class="range__tick" x="99.6%" y="3" width="1" height="10"></rect>
-
+   <input class="range" type="range" min="0" max="96" value="23">
+   <svg role="presentation" width="100%" height="20" xmlns="http://www.w3.org/2000/svg">
+      <?php     
+      $ret = "";
+      $count=95;
+      $incr = 100 / $count ;
+    for($i = 0; $i < $count;) {
+      echo $ret.'<rect class="range__tick" x="'.$incr*($i+1).'%" y="3" width="1" height="15"> </rect>';
+      echo $ret.'<rect class="range__tick" x="'.$incr*($i+2).'%" y="3" width="1" height="10"> </rect>';
+      echo $ret.'<rect class="range__tick" x="'.$incr*($i+3).'%" y="3" width="1" height="10"> </rect>';
+      echo $ret.'<rect class="range__tick" x="'.$incr*($i+4).'%" y="3" width="1" height="10"> </rect>';
+      $i=$i+4;
+    }
+  
+  
+ ?>
 
    </svg>
    <svg role="presentation" width="100%" height="14" xmlns="http://www.w3.org/2000/svg">
-      <text class="range__point" x="0%" y="14" text-anchor="start">10</text>
-      <text class="range__point" x="8.3%" y="14" text-anchor="middle">11</text>
-      <text class="range__point" x="16.6%" y="14" text-anchor="middle">12</text>
-      <text class="range__point" x="24.9%" y="14" text-anchor="middle">1</text>
-      <text class="range__point" x="33.2%" y="14" text-anchor="middle">2</text>
-      <text class="range__point" x="41.5%" y="14" text-anchor="middle">3</text>
-      <text class="range__point" x="49.8%" y="14" text-anchor="middle">4</text>
-      <text class="range__point" x="58.1%" y="14" text-anchor="middle">5</text>
-      <text class="range__point" x="66.4%" y="14" text-anchor="middle">6</text>
-      <text class="range__point" x="74.7%" y="14" text-anchor="middle">7</text>
-      <text class="range__point" x="83%" y="14" text-anchor="end">8</text>
-      <text class="range__point" x="91.3%" y="14" text-anchor="middle">9</text>
-      <text class="range__point" x="99.6%" y="14" text-anchor="end">10</text>
+      <?php
+      $count=24;
+      $incr= 100/$count;
+      for ($i=0; $i <$count ; $i++) { 
+        # code...
+      echo '<text class="range__point" x="'.(($incr*$i)+100/96).'%" y="14" text-anchor="middle">'.$i.'</text>';
+      } ?>
    </svg>
 </fieldset>
     </div>
     </div></div>
         <div class="row mt-4" style="padding-left:2%;padding-right:2%">
- <div class="col-sm-12 col-md-6 col-lg-6">
-    <div class="btn-group"id="minute" role="group" aria-label="Basic example">
-  <button type="button" id="btn1" class="btn btn-secondary">0:00</button>
-  <button type="button" class="btn btn-secondary">0:15</button>
-  <button type="button" class="btn btn-secondary">0:30</button>
-  <button type="button" class="btn btn-secondary">0:45</button>
-</div>
-
-    </div>
-    <div class="col-sm-12 col-md-3 col-lg-2" style="">
-    <div class="btn-group" role="group"  id="meredium" aria-label="Basic example">
-  <button type="button" id="ambtn" class="btn btn-secondary">A M</button>
-  <button type="button" class="btn btn-secondary">P M</button>
-
-</div>
-    </div>
-
+ 
     <div class="col-sm-12 col-md-3 col-lg-4">
 
 <h1 for="customRange3" id="time" class="form-label labelStyle" style="margin-bottom: 0 !important;margin-top:0px;padding-top: 5px;"></h1>
@@ -591,9 +579,15 @@ input.range::-ms-fill-upper {
     </div>
     </div>
 
-    <div class="row" style="padding-left:2%;padding-right:2%">
-    <div class="col-sm-12 col-md-12 col-lg-12">
-    <h1 for="customRange3" class="form-label labelStyle mb-3" >Consultants</h1>
+    <div class="row" style="padding-left:2%;padding-right:2%;margin-top:6%;margin-bottom: 2%">
+
+    <div class="col-sm-3 col-md-3 col-lg-3">  
+       <h1 for="customRange3" class="form-label labelStyle mb-3" >Consultants</h1>
+    </div>
+    <div class="col-sm-3 col-md-3 col-lg-3">  
+        <input type="input" name="doctorSearch" id="doctorSearch" placeholder="Search for Doctor" style="padding:2%" onchange="searchDoc()">
+        <input type="hidden" name="doctorSearchId" id="doctorSearchId" >
+    </div>
         <input type="hidden" name="base_url" id="base_url" value="<?php echo base_url()?>">
         <input type="hidden" name="sequence" id="sequence" value="">
         <input type="hidden" name="p_id" id="p_id" value="<?php 
@@ -605,7 +599,7 @@ input.range::-ms-fill-upper {
           } ?>">
         <input type="hidden" name="doctor_id" id="doctor_id" >
         <input type="hidden" name="servicetype_id" id="servicetype_id" >
-    </div>
+
     </div>
     <div class="embed-responsive border border-primary rounded" id="tutorialPhone" style="display: none;padding-bottom: 150%;">
       <video class="embed-responsive-item responsive-iframe" loop autoplay muted controls>
@@ -653,8 +647,11 @@ input.range::-ms-fill-upper {
 </div>
 
 </form>
+
+<script src="<?php echo base_url();?>web_assets2/js/helpers.js"></script>
 <script>
 var servicetype='';
+var base_url=$('#base_url').val();
  function IsMobile() {
           var Uagent = navigator.userAgent||navigator.vendor||window.opera;
             return(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino|android|ipad|playbook|silk/i.test(Uagent)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(Uagent.substr(0,4))); 
@@ -686,14 +683,14 @@ function hideTutorial() {
 }
 
 
-function getDoctors(language,date,hour,min,am_pm){
+function getDoctors(language,date,hour,min,am_pm,doc_id){
     $('#docs')[0].textContent='';
     $('#q_succ_msg').hide();
     var base_url=$('#base_url').val();
     $.ajax({
     url:base_url+'index.php/Appointment/getdoctorforappointment',
     method: 'post',
-    data: {servicetype_id:servicetype,preferred_language:language,booking_date:date,booking_hour:hour,booking_minute:min,booking_am_pm:am_pm},
+    data: {servicetype_id:servicetype,preferred_language:language,booking_date:date,booking_hour:hour,booking_minute:min,searched_doctor_id:doc_id},
     type: 'POST',
     success: function(response){
       if(!$.trim(response)){
@@ -706,12 +703,32 @@ function getDoctors(language,date,hour,min,am_pm){
     }
   });
 }
+
+// function searchDoc(){
+//   console.log('searching');
+//   fetchTime(); 
+//}
+function pad(num, size) {
+    num = num.toString();
+    while (num.length < size) num = "0" + num;
+    return num;
+}
+
+
 function cleanHours(originalVal){
   originalVal=parseInt(originalVal)
- if(originalVal<=0){
-      originalVal+=12;
-    }
-  return originalVal
+
+  return pad(Math.floor(
+originalVal/4),2);
+}
+function getMinute(originalVal){
+   var minutes=(originalVal%4)*15
+   if(minutes==0){
+    return '00'
+   }
+   else{
+    return minutes;
+   }
 }
 date_today=new Date();
 function fetchTime(date,hour, minute,am_pm,language){
@@ -719,14 +736,14 @@ function fetchTime(date,hour, minute,am_pm,language){
   date = date ? date : $('#datepicker').datepicker('getFormattedDate');
   date_cool = new Date(date);
   hour = hour ? hour : cleanHours($('#time_hour')[0].elements[0].value);
-  minute= minute ? minute: $('#minute .active').text().substr(2,4);
-  am_pm=am_pm? am_pm : ($('#meredium .active').text()).replace(/\s/g, "");
-  date_time = date_cool.toDateString()+" "+hour+":"+minute+" "+am_pm;
+  minute= minute ? minute:getMinute($('#time_hour')[0].elements[0].value);
+  
+  date_time = date_cool.toDateString()+" "+hour+":"+minute;
   selected_dt = new Date(date_time);
   document.getElementById("time").innerHTML = date_time;
-  $("#sequence").val(hour+":"+minute+" "+am_pm);
-  time=hour+":"+minute+" "+am_pm;
-  console.log(selected_dt.toString(),date_today.toString());
+  $("#sequence").val(hour+":"+minute+" ");
+  time=hour+":"+minute+" "
+  
   if(selected_dt.getTime()< date_today.getTime()){
         showTutorial();
         $('#docs')[0].textContent='';
@@ -735,7 +752,7 @@ function fetchTime(date,hour, minute,am_pm,language){
 
 
   language=language?language:$('#dLabel').text()
-
+  var doc_id=$('#doctorSearchId').val(); 
   //console.log(language);
   if(language=='Select Language'){
     language='';
@@ -752,7 +769,7 @@ function fetchTime(date,hour, minute,am_pm,language){
   if(servicetype){
     $('#q_warn_msg').hide();
     $('#servicetype_id').val(servicetype);
-    getDoctors(language,date,hour,minute,am_pm);
+    getDoctors(language,date,hour,minute,doc_id);
   }
 
 }
@@ -762,6 +779,10 @@ $(document).ready(function(){
 //     console.log('hello');
 // });
 showTutorial();
+var getdoctorSearchUrl='admin/Ajax_controller/doctor_selection/';
+addAutocompleteToHTMLDiv('#doctorSearch', '#doctorSearchId', base_url + getdoctorSearchUrl);
+
+
 
 $('#headlogin').on('click',function(){
         $('#logtab').click();
@@ -776,7 +797,24 @@ $('#headlogin').on('click',function(){
 
     });
 
- 
+$( "#doctorSearch").on( "autocompleteselect", function( event, ui ) {
+  
+  $('#doctorSearch').val(ui.item.label);
+  $('#doctorSearchId').val(ui.item.value);
+  console.log('selecting some doc',ui.item.label);
+  var doc_id=ui.item.value;
+  var date = $('#datepicker').datepicker('getFormattedDate');
+  console.log(date);
+
+  $.ajax({
+    url:base_url+'index.php/Appointment/getBookedSlotOfADoctor/'+doc_id+'/'+date,
+    method: 'post',
+    type: 'POST',
+    success: function(response){
+    }})
+  fetchTime();
+
+} );
   
   $("#phone").keypress (function (event) {
     var charLength = $(this).val().length;
@@ -1109,7 +1147,7 @@ $(function() {
 
        // Inserting Outer
 
-       elem.find('#inner').wrap('<div class="col-sm-10 col-md-10 col-lg-10"id="outer"/>');
+       elem.find('#inner').wrap('<div class="col-sm-10 col-md-10 col-lg-10"id="outer" style="font-family:-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;"/>');
 
        var outer = $('#outer');
 
