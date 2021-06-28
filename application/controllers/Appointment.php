@@ -1218,41 +1218,61 @@ public function registration()
 		$doctor_name = $this->input->post('doctor_name', TRUE);
 		// $date = $this->input->post('date', TRUE);
 		if ($doctor_id) {
-			$doctor_filter = "doc.doctor_id = ".$doctor_id ;
+			$doctor_filter = "drs.doctor_id = ".$doctor_id ;
 		} else {
-			$doctor_filter = "doc.doctor_name = '".$doctor_name."'";
+			$doctor_filter = "drs.doctor_name = '".$doctor_name."'";
 		}
 		/**Invariant: Slots doesn't intersect */
 		$get_slot_query = "SELECT bookings.sequence as start_time,".
 			" ADDTIME(bookings.sequence, SEC_TO_TIME(sched.per_patient_time * 60) ) as end_time,".
-			" doc.doctor_name as doctor_name, doc.doctor_id as doctor_id,".
+			" drs.doctor_name as doctor_name, drs.doctor_id as doctor_id,".
 			" sched.per_patient_time as per_patient_time,".
 			" sched.start_time as start_time_of_the_day, sched.end_time AS end_time_of_the_day".
-			" FROM appointment_tbl bookings, schedul_setup_tbl sched, doctor_tbl doc WHERE".
-			" bookings.schedul_id = sched.schedul_id AND bookings.doctor_id = doc.doctor_id".
+			" FROM appointment_tbl bookings, schedul_setup_tbl sched, doctor_tbl drs WHERE".
+			" bookings.schedul_id = sched.schedul_id AND bookings.doctor_id = drs.doctor_id".
 			" AND bookings.date = '".$date."' AND ".$doctor_filter.
 			" AND sched.day = DAYOFWEEK('".$date."') ORDER BY bookings.sequence ASC";
 		$booked_slots = $this->db->query($get_slot_query)->result();
 		$starting_slot = current($booked_slots);
 		if (!$starting_slot) {
-			echo "";
-			return ;
-		}
-		$response = array(
-			"doctor_name" => $starting_slot->doctor_name,
-			"doctor_id" => $starting_slot->doctor_id,
-			"per_patient_time_in_minutes" => $starting_slot->per_patient_time,
-			"start_time_of_the_day" => $starting_slot->start_time_of_the_day,
-			"end_time_of_the_day" => $starting_slot->end_time_of_the_day,
-			"booked_time_for_the_day" => array($this->helperSlotUnsetter($starting_slot))
-		);
-		while ($slot = next($booked_slots)) {
-			$last_slot = end($response['booked_time_for_the_day']);
-			if ($last_slot->end_time == $slot->start_time) {
-				$last_slot->end_time = $slot->end_time ;
-			} else {
-				array_push($response['booked_time_for_the_day'], 
-					$this->helperSlotUnsetter($slot));
+			/** Create empty response */
+			$doctor_info_query = "SELECT drs.doctor_name as doctor_name,".
+				" drs.doctor_id as doctor_id, sched.per_patient_time as per_patient_time,".
+				" sched.start_time as start_time_of_the_day,".
+				" sched.end_time as end_time_of_the_day FROM doctor_tbl drs,".
+				" schedul_setup_tbl as sched WHERE drs.doctor_id = sched.doctor_id".
+				" AND ".$doctor_filter;
+			$doctor_info = current($this->db->query($doctor_info_query)->result());
+			if (!$doctor_info) {
+				/** Show error */
+				log_message('error',"Error[getBookedSlotOfADoctor]:Bad doctor_info".$doctor_filter);
+				show_404();
+			}
+			$response = array(
+				"doctor_name" => $doctor_info->doctor_name,
+				"doctor_id" => $doctor_info->doctor_id,
+				"per_patient_time_in_minutes" => $doctor_info->per_patient_time,
+				"start_time_of_the_day" => $doctor_info->start_time_of_the_day,
+				"end_time_of_the_day" => $doctor_info->end_time_of_the_day,
+				"booked_time_for_the_day" => array()
+			);
+		} else {
+			$response = array(
+				"doctor_name" => $starting_slot->doctor_name,
+				"doctor_id" => $starting_slot->doctor_id,
+				"per_patient_time_in_minutes" => $starting_slot->per_patient_time,
+				"start_time_of_the_day" => $starting_slot->start_time_of_the_day,
+				"end_time_of_the_day" => $starting_slot->end_time_of_the_day,
+				"booked_time_for_the_day" => array($this->helperSlotUnsetter($starting_slot))
+			);
+			while ($slot = next($booked_slots)) {
+				$last_slot = end($response['booked_time_for_the_day']);
+				if ($last_slot->end_time == $slot->start_time) {
+					$last_slot->end_time = $slot->end_time ;
+				} else {
+					array_push($response['booked_time_for_the_day'], 
+						$this->helperSlotUnsetter($slot));
+				}
 			}
 		}
 		echo json_encode($response);
