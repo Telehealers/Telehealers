@@ -1212,6 +1212,9 @@ public function registration()
 	 * 	then our Response["booked_time_for_the_day"] will contain 
 	 * 	{"start_time": "19:00:00", "end_time": "19:45:00"} as one of its elements.
 	 * NOTE: All time is in 24 hrs format
+	 * USAGE TIPS: 
+	 * 404-response: Either bad doctor/doctor schedule not available for the day
+	 * empty booked_time_for_the_day : All slots are available
 	*/
 	public function getBookedSlotOfADoctor($doctor_id, $date) {
 		// $doctor_id = $this->input->post('doctor_id', TRUE);
