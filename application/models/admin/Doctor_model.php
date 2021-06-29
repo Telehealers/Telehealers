@@ -37,6 +37,13 @@ class Doctor_model extends CI_model {
 		}    
 				
 	}
+
+	public function get_doctor_from_patient_id($patient_id) {
+		$query = "SELECT drs.* FROM doctor_tbl drs, doctor_patient_map".
+			" dpm WHERE dpm.doctor_id = drs.doctor_id AND ".
+			" dpm.patient_id = '".$patient_id."'";
+		return $this->db->query($query)->result();
+	}
 				
 
 /*
@@ -130,8 +137,5 @@ class Doctor_model extends CI_model {
 			}
 		}
 		return $langArr;
-		
-		
 	}
-	
 }       

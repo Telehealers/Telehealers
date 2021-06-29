@@ -2,7 +2,6 @@
 
 class Appointment_model extends CI_model {
 
-
     public function Check_appointment($date=NULL,$patient=NULL){
       
        return $result = $this->db->select('*')
@@ -14,7 +13,7 @@ class Appointment_model extends CI_model {
 	
 	public function Check_appointment_with_doctor($date=NULL,$patient=NULL,$doc_id=NULL){
       
-       return $result = $this->db->select('*')
+       return $this->db->select('*')
         ->from('appointment_tbl')
         ->where('date',$date)
         ->where('patient_id',$patient)
@@ -22,13 +21,33 @@ class Appointment_model extends CI_model {
         ->get()->result();
     }
     
+    /** A function to get appointment data from ID*/
+    public function getAppointmentByID($appointment_id) {
+        $query = "SELECT * FROM appointment_tbl WHERE appointment_id".
+            " = '".$appointment_id."'";
+        return $this->db->query($query)->result();
+    }
+    /** A function to add entries to patient doctor map conditionally. 
+     * Is also used as a helper in saveappointment.
+     * referee = 0 => Not referred by anyone.
+    */
+	public function insertPatientDoctorMap($patient_id, $doctor_id, $referee=0) {
+		$query = "INSERT INTO doctor_patient_map (patient_id, doctor_id, referee) ".
+			" SELECT '".$patient_id."' as patient_id, ".$doctor_id." as doctor_id,".
+			" ".$referee." as referee WHERE 1 NOT IN (SELECT 1 FROM doctor_patient_map".
+			" WHERE doctor_id = ".$doctor_id." AND patient_id = '".$patient_id."')";
+		$this->db->query($query);
+	}
+
     /** A function to save appointment as in input(savedata) into appointment_tbl.
      * NOTE: This function ensures atomicity and therefore other function doesn't need
      *  to caller function doesn't need to consider failure case where 2 appointment of 
      *  same slot is booked twice. 
+     * Also update doctor_patient_map entry
     */
     public function SaveAppoin($savedata)
     {
+        /**Read inputs */
         $date = array_key_exists('date', $savedata)? $savedata['date']:""; 
         $patient_id = array_key_exists('patient_id', $savedata)? $savedata['patient_id']:""; 
         $appointment_id = array_key_exists('appointment_id', $savedata)? $savedata['appointment_id']:""; 
@@ -46,6 +65,10 @@ class Appointment_model extends CI_model {
         $get_date_time = array_key_exists('get_date_time', $savedata)? $savedata['get_date_time']:""; 
         $status = array_key_exists('status', $savedata)? $savedata['status']:1; 
         
+        /** Add entry to doctor_patient_map */
+        $this->insertPatientDoctorMap($patient_id, $doctor_id);
+
+        /** Save appointment */
         $insert_query = "INSERT INTO appointment_tbl (appointment_id, patient_id, venue_id, doctor_id,".
             " schedul_id, problem, service, servicetype, symt1, symt2, get_date_time, get_by, date, status, sequence) ".
             "SELECT '".$appointment_id."' as appointment_id, '".$patient_id."' as patient_id, ".
