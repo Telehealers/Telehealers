@@ -93,15 +93,8 @@ $hello = GeraHash(5);
   margin: 0;
   padding: 0;
   border: 0;
-  background: transparent;
-  background-image: linear-gradient(
-      to right, 
-      #fffdc2,
-      #fffdc2 15%,
-      #ff0000 15%,
-      #ff0000 35%,
-      #fffdc2 35%
-    );
+
+  
 
 }
 
@@ -149,7 +142,6 @@ input.range::-webkit-slider-runnable-track {
   height: 5px;
   cursor: pointer;
   box-shadow: 1px 1px 1px rgba(0, 0, 0, 0), 0px 0px 1px rgba(13, 13, 13, 0);
-  background: indigo;
   border-radius: 20px;
   border: 0;
 }
@@ -159,7 +151,7 @@ input.range::-moz-range-track {
   height: 5px;
   cursor: pointer;
   box-shadow: 1px 1px 1px rgba(0, 0, 0, 0), 0px 0px 1px rgba(13, 13, 13, 0);
-  background: indigo;
+  background: blue;
   border-radius: 20px;
   border: 0;
 }
@@ -175,7 +167,7 @@ input.range::-ms-track {
 
 input.range::-ms-fill-lower,
 input.range::-ms-fill-upper {
-  background: indigo;
+  background: blue;
   border: 0;
   border-radius: 40px;
   box-shadow: 1px 1px 1px rgba(0, 0, 0, 0), 0px 0px 1px rgba(13, 13, 13, 0);
@@ -518,7 +510,7 @@ input.range::-ms-fill-upper {
     <div>
     <h1 for="customRange3" class="form-label labelStyle" style="margin-top: 0;">Book Time Slot</h1>
     <fieldset class="range__field" id="time_hour" value="10">
-   <input class="range" type="range" min="0" max="96" value="23">
+   <input class="range" id="slider" type="range" min="0" max="96" value="23">
    <svg role="presentation" width="100%" height="20" xmlns="http://www.w3.org/2000/svg">
       <?php     
       $ret = "";
@@ -585,7 +577,7 @@ input.range::-ms-fill-upper {
        <h1 for="customRange3" class="form-label labelStyle mb-3" >Consultants</h1>
     </div>
     <div class="col-sm-3 col-md-3 col-lg-3">  
-        <input type="input" name="doctorSearch" id="doctorSearch" placeholder="Search for Doctor" style="padding:2%" onchange="searchDoc()">
+        <input type="input" name="doctorSearch" id="doctorSearch" placeholder="Search for Doctor" style="padding:2%" >
         <input type="hidden" name="doctorSearchId" id="doctorSearchId" >
     </div>
         <input type="hidden" name="base_url" id="base_url" value="<?php echo base_url()?>">
@@ -686,6 +678,7 @@ function hideTutorial() {
 function getDoctors(language,date,hour,min,am_pm,doc_id){
     $('#docs')[0].textContent='';
     $('#q_succ_msg').hide();
+    doc_id=$('#doctorSearchId').val(); 
     var base_url=$('#base_url').val();
     $.ajax({
     url:base_url+'index.php/Appointment/getdoctorforappointment',
@@ -730,6 +723,11 @@ function getMinute(originalVal){
     return minutes;
    }
 }
+
+function convertStringToTimeInt(time) {
+return time.split(":").map((x, index) => parseInt(x) * ([60,1,0][index]) ) .reduce((x,y) => x+y)
+}
+
 date_today=new Date();
 function fetchTime(date,hour, minute,am_pm,language){
   $('#q_succ_msg').hide();
@@ -782,7 +780,7 @@ showTutorial();
 var getdoctorSearchUrl='admin/Ajax_controller/doctor_selection/';
 addAutocompleteToHTMLDiv('#doctorSearch', '#doctorSearchId', base_url + getdoctorSearchUrl);
 
-
+document.styleSheets[0].addRule('input.range',"background-image: -webkit-linear-gradient(left, green 0%,  red 0%, red 56.25%,  green 56.25%, green 68.75%,  red 68.75%, red 100%,  green 100%)");
 
 $('#headlogin').on('click',function(){
         $('#logtab').click();
@@ -811,6 +809,28 @@ $( "#doctorSearch").on( "autocompleteselect", function( event, ui ) {
     method: 'post',
     type: 'POST',
     success: function(response){
+      console.log(response);
+      if(response!=''){
+        debugger;
+      response=JSON.parse(response);
+      var slots=[{start_time: '0:00', end_time: response.start_time_of_the_day}]
+      slots = slots.concat(response.booked_time_for_the_day);
+      slots.push({start_time: response.end_time_of_the_day, end_time: "24:00"})
+
+      var background_image='-webkit-linear-gradient(left';
+      var available_color='green';
+      var booked_color='red'
+      var grey='grey'
+      console.log('slots',slots)
+    for (let slot of slots) {
+        background_image += ` ,${available_color} ${convertStringToTimeInt(slot.start_time) * 100 / (24*60)}%,  ${booked_color} ${convertStringToTimeInt(slot.start_time) * 100 / (24*60)}%`
+        background_image += ` ,${booked_color} ${convertStringToTimeInt(slot.end_time) * 100 / (24*60)}%,  ${available_color} ${convertStringToTimeInt(slot.end_time) * 100 / (24*60)}%`
+          }
+
+        console.log(background_image);
+      $('#slider').css("background-image",background_image + ')');
+       //document.styleSheets[0].addRule('input.range',"background-image:" + background_image +")");
+     }
     }})
   fetchTime();
 

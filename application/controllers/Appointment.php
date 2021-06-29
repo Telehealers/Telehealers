@@ -1249,7 +1249,7 @@ public function registration()
 			if (!$doctor_info) {
 				/** Show error */
 				log_message('error',"Error[getBookedSlotOfADoctor]:Bad doctor_info".$doctor_filter);
-				echo 'no docs';
+				show_404();
 				return;
 			}
 			$response = array(
