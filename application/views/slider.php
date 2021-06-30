@@ -62,13 +62,13 @@
 	align-items: center;
 	font-size: 14px;
 	font-weight: 800;
-	color: #fff;
+	color: #000;
 	background-color: #fff;
 	border: 4px solid #000;
 	border-radius: 100%;
 	box-sizing: border-box;
 	transform: translateX(-50%);
-	transition: top .3s ease-in-out, color .3s ease-in-out;
+	-webkit-transition:: top .3s ease-in-out
 }
 .slider-ui .value.up {
 	top: -110%;
