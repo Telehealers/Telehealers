@@ -173,6 +173,57 @@ input.range::-ms-fill-upper {
   box-shadow: 1px 1px 1px rgba(0, 0, 0, 0), 0px 0px 1px rgba(13, 13, 13, 0);
 }
 
+/*#slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width : 1rem ;
+    height: 1rem ;
+    border-radius: 50% ;
+    background-color: var(--slider-thumb-color) ;
+    cursor: pointer ;
+    z-index: 99 ;
+    border: 2px solid var(--slider-fill-color) ;
+    transition: border-color 300ms ease-out ;
+}*/
+
+#value {
+    position: absolute ;
+    bottom: calc(100% + 0.5rem) ;
+    left: calc( var(--value) * calc(100% - 1rem) - 0.8rem) ;
+    min-width: 3ch ;
+    border-radius: 4px ;
+    pointer-events: none ;
+
+    padding: 0.5rem ;
+    display: flex ;
+    align-items: center ;
+    justify-content: center ;
+
+    color: #FFF ;
+    background-color: var(--slider-fill-color);
+    opacity: 0 ;
+
+    transition: left 300ms ease-out , opacity 300ms 300ms ease-out , background-color 300ms ease-out ;
+}
+
+#value::before {
+    position: absolute ;
+    content: "" ;
+    top: 100% ;
+    left: 50% ;
+    width: 1rem ;
+    height: 1rem ;
+    border-radius: 2px ;
+    background-color: inherit ;
+    transform: translate(-50%,-80%) rotate(45deg);
+    z-index: -1 ;
+}
+
+input.range:hover  #value {
+    opacity: 1 ;
+} 
+
+
 .range__tick {
   fill: #a0a0a0;
 }
@@ -505,38 +556,15 @@ input.range::-ms-fill-upper {
 
     </div>
     </div>
+
+
     <div class="row mb-3" style="padding-left:2%;padding-right:2%">
     <div class="col-sm-12 col-md-12 col-lg-12">
     <div>
     <h1 for="customRange3" class="form-label labelStyle" style="margin-top: 0;">Book Time Slot</h1>
     <fieldset class="range__field" id="time_hour" value="10">
-   <input class="range" id="slider" type="range" min="0" max="96" value="23">
-   <svg role="presentation" width="100%" height="20" xmlns="http://www.w3.org/2000/svg">
-      <?php     
-      $ret = "";
-      $count=95;
-      $incr = 100 / $count ;
-    for($i = 0; $i < $count;) {
-      echo $ret.'<rect class="range__tick" x="'.$incr*($i+1).'%" y="3" width="1" height="15"> </rect>';
-      echo $ret.'<rect class="range__tick" x="'.$incr*($i+2).'%" y="3" width="1" height="10"> </rect>';
-      echo $ret.'<rect class="range__tick" x="'.$incr*($i+3).'%" y="3" width="1" height="10"> </rect>';
-      echo $ret.'<rect class="range__tick" x="'.$incr*($i+4).'%" y="3" width="1" height="10"> </rect>';
-      $i=$i+4;
-    }
-  
-  
- ?>
-
-   </svg>
-   <svg role="presentation" width="100%" height="14" xmlns="http://www.w3.org/2000/svg">
-      <?php
-      $count=24;
-      $incr= 100/$count;
-      for ($i=0; $i <$count ; $i++) { 
-        # code...
-      echo '<text class="range__point" x="'.(($incr*$i)+100/96).'%" y="14" text-anchor="middle">'.$i.'</text>';
-      } ?>
-   </svg>
+      <?php $this->load->view('slider');?>
+   
 </fieldset>
     </div>
     </div></div>
@@ -780,8 +808,8 @@ showTutorial();
 var getdoctorSearchUrl='admin/Ajax_controller/doctor_selection/';
 addAutocompleteToHTMLDiv('#doctorSearch', '#doctorSearchId', base_url + getdoctorSearchUrl);
 
-const defaultSliderBackgroundImage = " -webkit-linear-gradient(left, green 0%, green 100%)"
-document.styleSheets[0].addRule('input.range',`background-image:${defaultSliderBackgroundImage}`);
+const defaultSliderBackgroundImage = " -webkit-linear-gradient(left, #00cec9 0%, #00cec9 100%)"
+    $('.slider-ui .bar').css("background-image", defaultSliderBackgroundImage);
 
 $('#headlogin').on('click',function(){
         $('#logtab').click();
@@ -796,6 +824,32 @@ $('#headlogin').on('click',function(){
 
     });
 
+const sliders = document.querySelectorAll(".slider-ui");
+
+sliders.forEach(slider => {
+  let input = slider.querySelector("input[type=range]");
+  let min = input.getAttribute("min");
+  let max = input.getAttribute("max");
+  let valueElem = slider.querySelector(".value");
+
+  slider.querySelector(".min").innerText = '00:00';
+  slider.querySelector(".max").innerText = '23:59';
+
+  function setValueElem() {
+    valueElem.innerText = cleanHours(input.value)+':'+getMinute(input.value);
+    let percent = (input.value - min) / (max - min) * 100;
+    valueElem.style.left = percent + "%";
+  }
+  setValueElem();
+
+  input.addEventListener("input", setValueElem);
+  input.addEventListener("mousedown", () => {
+    valueElem.classList.add("up");
+  });
+  input.addEventListener("mouseup", () => {
+    valueElem.classList.remove("up");
+  });
+});
 /** A function to update slider by using getBookedSlotOfDoctor, on 
  * successful response.
  */
@@ -807,8 +861,8 @@ function updateSliderColorFromBookedTimeAPI(bookedSlotDocResponse) {
   slots.push({start_time: bookedSlotDocResponse.end_time_of_the_day, end_time: "24:00"})
 
   var background_image='-webkit-linear-gradient(left';
-  var available_color='green';
-  var booked_color='red'
+  var available_color='#00cec9';
+  var booked_color='#808080'
   var grey='grey'
   console.log('slots',slots)
   for (let slot of slots) {
@@ -816,7 +870,7 @@ function updateSliderColorFromBookedTimeAPI(bookedSlotDocResponse) {
     background_image += ` ,${booked_color} ${convertStringToTimeInt(slot.end_time) * 100 / (24*60)}%,  ${available_color} ${convertStringToTimeInt(slot.end_time) * 100 / (24*60)}%`
   }
   console.log(background_image);
-  $('#slider').css("background-image",background_image + ')');
+  $('.slider-ui .bar').css("background-image",background_image + ')');
 }
 
 /** A function to update slider color from input params 
@@ -825,7 +879,7 @@ function updateSliderColorFromBookedTimeAPI(bookedSlotDocResponse) {
 */
 function updateSliderColor(doctorID, date) {
   if (!doctorID) {
-    $('#slider').css("background-image", defaultSliderBackgroundImage);
+    $('.slider-ui .bar').css("background-image", defaultSliderBackgroundImage);
     return ;
   }
   $.ajax({
