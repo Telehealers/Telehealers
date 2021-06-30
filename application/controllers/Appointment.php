@@ -1244,7 +1244,7 @@ public function registration()
 				" sched.start_time as start_time_of_the_day,".
 				" sched.end_time as end_time_of_the_day FROM doctor_tbl drs,".
 				" schedul_setup_tbl as sched WHERE drs.doctor_id = sched.doctor_id".
-				" AND ".$doctor_filter;
+				" AND ".$doctor_filter." AND sched.day = DAYOFWEEK('".$date."') ";
 			$doctor_info = current($this->db->query($doctor_info_query)->result());
 			if (!$doctor_info) {
 				/** Show error */

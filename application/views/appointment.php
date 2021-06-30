@@ -780,7 +780,8 @@ showTutorial();
 var getdoctorSearchUrl='admin/Ajax_controller/doctor_selection/';
 addAutocompleteToHTMLDiv('#doctorSearch', '#doctorSearchId', base_url + getdoctorSearchUrl);
 
-document.styleSheets[0].addRule('input.range',"background-image: -webkit-linear-gradient(left, green 0%,  red 0%, red 56.25%,  green 56.25%, green 68.75%,  red 68.75%, red 100%,  green 100%)");
+const defaultSliderBackgroundImage = " -webkit-linear-gradient(left, green 0%, green 100%)"
+document.styleSheets[0].addRule('input.range',`background-image:${defaultSliderBackgroundImage}`);
 
 $('#headlogin').on('click',function(){
         $('#logtab').click();
@@ -795,48 +796,70 @@ $('#headlogin').on('click',function(){
 
     });
 
-$( "#doctorSearch").on( "autocompleteselect", function( event, ui ) {
+/** A function to update slider by using getBookedSlotOfDoctor, on 
+ * successful response.
+ */
+function updateSliderColorFromBookedTimeAPI(bookedSlotDocResponse) {
+  console.log(bookedSlotDocResponse);
+  bookedSlotDocResponse=JSON.parse(bookedSlotDocResponse);
+  var slots=[{start_time: '0:00', end_time: bookedSlotDocResponse.start_time_of_the_day}]
+  slots = slots.concat(bookedSlotDocResponse.booked_time_for_the_day);
+  slots.push({start_time: bookedSlotDocResponse.end_time_of_the_day, end_time: "24:00"})
+
+  var background_image='-webkit-linear-gradient(left';
+  var available_color='green';
+  var booked_color='red'
+  var grey='grey'
+  console.log('slots',slots)
+  for (let slot of slots) {
+    background_image += ` ,${available_color} ${convertStringToTimeInt(slot.start_time) * 100 / (24*60)}%,  ${booked_color} ${convertStringToTimeInt(slot.start_time) * 100 / (24*60)}%`
+    background_image += ` ,${booked_color} ${convertStringToTimeInt(slot.end_time) * 100 / (24*60)}%,  ${available_color} ${convertStringToTimeInt(slot.end_time) * 100 / (24*60)}%`
+  }
+  console.log(background_image);
+  $('#slider').css("background-image",background_image + ')');
+}
+
+/** A function to update slider color from input params 
+ * Input doctorID {Int | Null} : Null=> use defaultSliderBackgroundImage
+ * date {String}: Format yyyy-mm-dd
+*/
+function updateSliderColor(doctorID, date) {
+  if (!doctorID) {
+    $('#slider').css("background-image", defaultSliderBackgroundImage);
+    return ;
+  }
+  $.ajax({
+    url:base_url+'index.php/Appointment/getBookedSlotOfADoctor/'+doctorID+'/'+date,
+    method: 'post',
+    type: 'POST',
+    success: updateSliderColorFromBookedTimeAPI,
+    error: function(error) {
+      $('#slider').css("background-image", " -webkit-linear-gradient(left, red 0%, red 100%)");
+    }
+  })
+}
+
+
+$( "#doctorSearch").on( "input", function( event, ui ) {
+  console.log("HERE");
+  $('#doctorSearchId').val(null);
+  updateSliderColor(null, null);
+} );
   
+
+
+$( "#doctorSearch").on( "autocompleteselect", function( event, ui ) {
   $('#doctorSearch').val(ui.item.label);
   $('#doctorSearchId').val(ui.item.value);
   console.log('selecting some doc',ui.item.label);
   var doc_id=ui.item.value;
   var date = $('#datepicker').datepicker('getFormattedDate');
   console.log(date);
-
-  $.ajax({
-    url:base_url+'index.php/Appointment/getBookedSlotOfADoctor/'+doc_id+'/'+date,
-    method: 'post',
-    type: 'POST',
-    success: function(response){
-      console.log(response);
-      if(response!=''){
-        debugger;
-      response=JSON.parse(response);
-      var slots=[{start_time: '0:00', end_time: response.start_time_of_the_day}]
-      slots = slots.concat(response.booked_time_for_the_day);
-      slots.push({start_time: response.end_time_of_the_day, end_time: "24:00"})
-
-      var background_image='-webkit-linear-gradient(left';
-      var available_color='green';
-      var booked_color='red'
-      var grey='grey'
-      console.log('slots',slots)
-    for (let slot of slots) {
-        background_image += ` ,${available_color} ${convertStringToTimeInt(slot.start_time) * 100 / (24*60)}%,  ${booked_color} ${convertStringToTimeInt(slot.start_time) * 100 / (24*60)}%`
-        background_image += ` ,${booked_color} ${convertStringToTimeInt(slot.end_time) * 100 / (24*60)}%,  ${available_color} ${convertStringToTimeInt(slot.end_time) * 100 / (24*60)}%`
-          }
-
-        console.log(background_image);
-      $('#slider').css("background-image",background_image + ')');
-       //document.styleSheets[0].addRule('input.range',"background-image:" + background_image +")");
-     }
-    }})
+  updateSliderColor(doc_id, date);
   fetchTime();
-
 } );
-  
-  $("#phone").keypress (function (event) {
+
+$("#phone").keypress (function (event) {
     var charLength = $(this).val().length;
         
     if(charLength < 10){
@@ -1062,9 +1085,10 @@ $('#ambtn').ready(function(){
 $('#datepicker').on('changeDate',function(e) {
     var date=($('#datepicker').datepicker('getFormattedDate'));
     fetchTime();
+    $('.datepicker').hide();
     $('#p_date').val(date);
-
-
+    docID = $("#doctorSearchId").val()
+    updateSliderColor(docID, date);
   });
 
 $('#dLabel ').on('DOMNodeInserted',function(e){
