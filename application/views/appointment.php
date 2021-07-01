@@ -614,6 +614,9 @@ function fetchTime(date,hour, minute,am_pm,language){
   if(selected_dt.getTime()< date_today.getTime()){
         showTutorial();
         $('#docs')[0].textContent='';
+        $('#q_warn_msg').html('Please select a future time for appointment');
+        $('#q_warn_msg').show();  
+
          return; 
   }
 
@@ -667,8 +670,9 @@ $('#headlogin').on('click',function(){
 
 const sliders = document.querySelectorAll(".slider-ui");
 
-sliders.forEach(slider => {
-  let input = slider.querySelector("input[type=range]");
+function slider_basics(slider){
+
+ let input = slider.querySelector("input[type=range]");
   let min = input.getAttribute("min");
   let max = input.getAttribute("max");
   let valueElem = slider.querySelector(".value");
@@ -691,8 +695,8 @@ sliders.forEach(slider => {
   input.addEventListener("mouseup", () => {
     valueElem.classList.remove("up");
   });
-});
-
+};
+sliders.forEach(slider =>slider_basics(slider)); 
 /** A function to update slider by using getBookedSlotOfDoctor, on 
  * successful response.
  */
