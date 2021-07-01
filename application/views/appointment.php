@@ -1037,6 +1037,14 @@ $('#docs').on('click',function(event){
       var docid = event.target.getAttribute("data-value");
        console.log('docid',docid);
        $('#doctor_id').val(docid);
+    var target = $('#submit');
+    if (target.length) {
+        $('html,body').animate({
+            scrollTop: target.offset().top
+        }, 1000);
+        return false;
+    }
+
 });
 
 
@@ -1165,6 +1173,9 @@ docs.forEach(button => {
     // do some action according to button
     // show success feedback
     $(this).addClass("btn-group__item--active").siblings().removeClass("btn-group__item--active");
+
+
+
 
   })
 })
