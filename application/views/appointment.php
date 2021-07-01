@@ -444,8 +444,8 @@ $hello = GeraHash(5);
        <h1 for="customRange3" class="form-label labelStyle mb-3" >Consultants</h1>
     </div>
     <div class="col-sm-3 col-md-3 col-lg-3">  
-        <input type="input" name="doctorSearch" id="doctorSearch" placeholder="Search for Doctor" style="padding:2%" >
-        <input type="hidden" name="doctorSearchId" id="doctorSearchId" >
+        <input type="input" name="doctorSearch" id="doctorSearch" placeholder="Search for Doctor" style="padding:2%">
+        <input type="hidden" name="doctorSearchId" id="doctorSearchId" value="<?php if($doctor_search_id){echo $doctor_search_id;} ?>" >
     </div>
         <input type="hidden" name="base_url" id="base_url" value="<?php echo base_url()?>">
         <input type="hidden" name="sequence" id="sequence" value="">
@@ -608,7 +608,7 @@ function fetchTime(date,hour, minute,am_pm,language){
   date_time = date_cool.toDateString()+" "+hour+":"+minute;
   selected_dt = new Date(date_time);
   document.getElementById("time").innerHTML = date_time;
-  $("#sequence").val(hour+":"+minute+" ");
+  $("#sequence").val(hour+":"+minute+":00");
   time=hour+":"+minute+" "
   
   if(selected_dt.getTime()< date_today.getTime()){
@@ -692,12 +692,15 @@ sliders.forEach(slider => {
     valueElem.classList.remove("up");
   });
 });
+
 /** A function to update slider by using getBookedSlotOfDoctor, on 
  * successful response.
  */
 function updateSliderColorFromBookedTimeAPI(bookedSlotDocResponse) {
   console.log(bookedSlotDocResponse);
   bookedSlotDocResponse=JSON.parse(bookedSlotDocResponse);
+  $('#doctorSearch').val(bookedSlotDocResponse.doctor_name);
+
   var slots=[{start_time: '0:00', end_time: bookedSlotDocResponse.start_time_of_the_day}]
   slots = slots.concat(bookedSlotDocResponse.booked_time_for_the_day);
   slots.push({start_time: bookedSlotDocResponse.end_time_of_the_day, end_time: "24:00"})
@@ -971,6 +974,10 @@ $("#phone").keypress (function (event) {
 startDate: new Date()
 });
 
+let doctor_search_id=$('#doctorSearchId').val()
+if(doctor_search_id){
+  updateSliderColor(doctor_search_id,$('#datepicker').datepicker('getFormattedDate'));
+}
 $('#btn1').ready(function(){
   $('#btn1').addClass("active");
 });

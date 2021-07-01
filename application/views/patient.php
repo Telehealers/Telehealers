@@ -168,8 +168,11 @@ $hello = GeraHash(5);
 									$doctor_name = $dr->doctor_name;
 							?>
 								<div class="row">
-									<div class="col-md-1"><?php echo $i; ?></div>
-									<div class="col-md-5"><?php echo $doctor_name; ?></div>
+									<div class="col-md-1 col-xs-1 "><?php echo $i; ?></div>
+									<div class="col-md-5 col-xs-5"><?php echo $doctor_name; ?></div>
+									<div class="col-md-6 col-xs-5">
+										<a href="<?php echo base_url().'Appointment/createAppointOfDoc/'.$dr->doctor_id?>" class="btn btn-info" role="button">Book Appointment</a> 
+									</div>
 								</div><br>	
 							<?php
 								}

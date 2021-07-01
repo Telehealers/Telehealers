@@ -55,10 +55,11 @@ class Appointment extends CI_Controller {
 |   View home page in the website
 |--------------------------------------
 */
-	public function index($patient_id=NULL)
+	public function index($patient_id=NULL,$doctor_search_id=NULL)
 	{
 		// $email_config = $this->email_model->email_config();
 		$data['patient_id_from_assistant'] = $patient_id;
+		$data['doctor_search_id']= $doctor_search_id;
     //     //get_schedule_list
         $data['schedule'] = $this->schedule_model->get_schedule_list();
     //     //setup information
@@ -123,6 +124,10 @@ class Appointment extends CI_Controller {
 	/** An alias for index as used by Assistants. */
 	function createAppointForAssistant($patient_id) {
 		$this->index($patient_id);
+	}
+	/** An alias for index as used by Assistants. */
+	function createAppointOfDoc($doctor_search_id) {
+		$this->index(null,$doctor_search_id);
 	}
 
 /*
@@ -369,6 +374,7 @@ function randstrGenapp($len)
 		$this->form_validation->set_rules('servicetype_id', 'service', 'required');
 
 		if (!$this->form_validation->run()) {
+
 			log_message("error", "Bad post-inputs");
 			redirect("appointment");
 		}
@@ -378,7 +384,6 @@ function randstrGenapp($len)
 		 */
 		$booking_date = $this->input->post('p_date', TRUE);
 		$sequence = $this->input->post("sequence",TRUE);
-		$sequence = date("H:i:s", strtotime($sequence));
 		$servicetype_id = $this->input->post('servicetype_id',TRUE);
 		$doctor_id = $this->input->post('doctor_id');
 		$patient_id = "";
@@ -389,6 +394,7 @@ function randstrGenapp($len)
 		$servicetype_entry = $this->db->query($servicetype_query)->result()[0];
 		if (!$servicetype_entry) {
 			/** Bad service from input */
+
 			log_message('error', "Bad service query: ".$servicetype_query." ");
 			show_404();
 		}
