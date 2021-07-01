@@ -520,12 +520,12 @@ firstTime=1
 function showTutorial() {
 if(firstTime){
   $('#q_succ_msg').html('Watch tutorial video below.');
-  $('#q_succ_msg').show();
+  $('#q_succ_msg').fadeIn();
   firstTime=0;
 }
 else{
   $('#q_warn_msg').html('No Consultants available at selected time. Watch tutorial video below.');
-  $('#q_warn_msg').show();
+  $('#q_warn_msg').fadeIn();
 }
 
 if (IsMobile()){
@@ -599,7 +599,7 @@ return time.split(":").map((x, index) => parseInt(x) * ([60,1,0][index]) ) .redu
 
 date_today=new Date();
 function fetchTime(date,hour, minute,am_pm,language){
-  $('#q_succ_msg').hide();
+  $('#q_succ_msg').fadeOut("slow");
   date = date ? date : $('#datepicker').datepicker('getFormattedDate');
   date_cool = new Date(date);
   hour = hour ? hour : cleanHours($('#time_hour')[0].elements[0].value);
@@ -615,7 +615,7 @@ function fetchTime(date,hour, minute,am_pm,language){
         showTutorial();
         $('#docs')[0].textContent='';
         $('#q_warn_msg').html('Please select a future time for appointment');
-        $('#q_warn_msg').show();  
+        $('#q_warn_msg').fadeIn("slow");
 
          return; 
   }
@@ -633,11 +633,11 @@ function fetchTime(date,hour, minute,am_pm,language){
   }
   else if($('input:radio[id^="flexRadioDefault"]')[1].checked & !servicetype){
       $('#q_warn_msg').html('select a department to view doctors');
-      $('#q_warn_msg').show();
+      $('#q_warn_msg').fadeIn("slow");
   }
 
   if(servicetype){
-    $('#q_warn_msg').hide();
+    $('#q_warn_msg').fadeOut("slow");
     $('#servicetype_id').val(servicetype);
     getDoctors(language,date,hour,minute,doc_id);
   }
@@ -668,6 +668,7 @@ $('#headlogin').on('click',function(){
 
     });
 
+
 const sliders = document.querySelectorAll(".slider-ui");
 
 function slider_basics(slider){
@@ -682,6 +683,7 @@ function slider_basics(slider){
   slider.querySelector(".max").innerText = '23:59';
 
   function setValueElem() {
+
     valueElem.innerText = cleanHours(input.value)+':'+getMinute(input.value);
     let percent = (input.value - min) / (max - min) * 100;
     valueElem.style.left = percent + "%";
@@ -1253,8 +1255,8 @@ $('#contact_us').click(function(){
     }
   }
   if(msg!=""){
-          $('#q_succ_msg').hide();
-          $('#q_show_error').show();
+          $('#q_succ_msg').alert('close');
+          $('#q_show_error').fadeIn("slow");
           $('#q_succ_msg').html('');
           $('#q_show_error').html(msg);
       }else{
