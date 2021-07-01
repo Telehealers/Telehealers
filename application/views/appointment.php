@@ -20,7 +20,7 @@
 
 
 <link rel="stylesheet" href="<?php echo base_url();?>web_assets2/css/main.css">
-        <script src="https://www.localhost:8443/assets/plugins/jquery-ui-1.12.1/jquery-ui.min.js" type="text/javascript"></script>
+        <script src="<?php echo base_url()?>assets/plugins/jquery-ui-1.12.1/jquery-ui.min.js" type="text/javascript"></script>
 
     
 
@@ -545,12 +545,14 @@ function hideTutorial() {
 function getDoctors(language,date,hour,min,am_pm,doc_id){
     $('#docs')[0].textContent='';
     $('#q_succ_msg').hide();
-    doc_id=$('#doctorSearchId').val(); 
+    doc_id=$('#doctorSearchId').val();
+     
+    var doctor_dept=doc_id?null:servicetype;
     var base_url=$('#base_url').val();
     $.ajax({
     url:base_url+'index.php/Appointment/getdoctorforappointment',
     method: 'post',
-    data: {servicetype_id:servicetype,preferred_language:language,booking_date:date,booking_hour:hour,booking_minute:min,searched_doctor_id:doc_id},
+    data: {servicetype_id:doctor_dept,preferred_language:language,booking_date:date,booking_hour:hour,booking_minute:min,searched_doctor_id:doc_id},
     type: 'POST',
     success: function(response){
       if(!$.trim(response)){
@@ -728,7 +730,7 @@ function updateSliderColor(doctorID, date) {
     type: 'POST',
     success: updateSliderColorFromBookedTimeAPI,
     error: function(error) {
-      $('#slider').css("background-image", " -webkit-linear-gradient(left, red 0%, red 100%)");
+      $('.slider-ui .bar').css("background-image", " -webkit-linear-gradient(left, #808080 0%, #808080 100%)");
     }
   })
 }
