@@ -177,64 +177,7 @@ $hello = GeraHash(5);
 							<?php
 								}
 							?>
-						<div class="applyjobform" style="display:none;">
-                                <?php 
-						$mag = $this->session->flashdata('message');
-						if($mag !=''){
-						echo $mag."<br>";
-						}
 						
-                            $attributes = array('class' => 'form-horizontal','id'=>'p_info','name'=>'p_info','role'=>'form');
-                            echo form_open_multipart('Appointment/patientAppointment', $attributes);                
-							
-                        ?>
-						
-						<input type='hidden' name="patient_id" id="patient_id" value="<?php echo $patient_info[0]['patient_id']?>">
-						<input type='hidden' name="patient_email" id="patient_email" value="<?php echo $patient_info[0]['patient_email']?>">
-						<input type='hidden' name="doctor_id" id="doctor_id" value="">
-                                    <h2 id="dr_name" style="font-size:20px;">Book Appointment</h2>
-									<div id="errmsg" style="display:none;" class="alert alert-danger"></div>
-                                    <div class="row" style="display:none;">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label for="email">Doctor</label>
-                                                <input type="text" class="form-control1" name="d_name" id="d_name" value="" disabled>
-                                            </div>
-                                        </div>
-									</div>
-									<div class="row">
-                                        <div class="col-md-7">
-                                            <div class="form-group">
-                                                <label for="phone-number">Date</label>
-                                                <input type="date" class="form-control datepicker3" name="p_date" id="p_date" value="" required>
-                                            </div>
-                                        </div>
-									</div>
-									<div class="row">									
-                                        <div class="col-md-7">
-                                            <div class="form-group">
-                                                <div class="schedul1" style="width:100%; float:left; clear:both; margin-top:20px;"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-									<br>
-									<div class="row">
-                                        <div class="col-md-7">
-                                            <div class="form-group">
-                                                <label for="phone-number">Tell us your symptom or health problem</label>
-                                                <textarea name="problem" id="problem" class="form-control" required></textarea>
-                                            </div>
-                                        </div>
-									</div>
-									<div class="row">				
-                                        <div class="col-md-7 mb-4">
-                                            <div class="sbtn">
-											    <input type="button" onClick="checkValidate()" value="Book Appointment">
-                                            </div>
-                                        </div>
-									</div>
-                                <?php echo form_close();?>
-						    </div>
 						</div>	
                     </div>
                 </div>
