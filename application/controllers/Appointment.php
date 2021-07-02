@@ -46,6 +46,7 @@ class Appointment extends CI_Controller {
 
 		/**Load Superpro Model */
 		$this->load->model('Superpro_model', 'conference');
+		date_default_timezone_set($this->config->config['time_zone']);
   }
 
 

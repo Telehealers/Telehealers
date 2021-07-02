@@ -10,8 +10,8 @@ class Dashboard extends CI_Controller {
 		parent::__construct();
 		$this->load->library('session');
 		$user_type = $this->session->userdata('user_type');  
-		$session_id = $this->session->userdata('session_id'); 
-
+		$session_id = $this->session->userdata('session_id');
+		date_default_timezone_set($this->config->config['time_zone']);
 	    if($session_id == NULL ) {
 	     redirect('logout');
 	    }
