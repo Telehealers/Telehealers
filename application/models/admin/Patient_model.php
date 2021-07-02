@@ -1,7 +1,11 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Patient_model extends CI_model {
-
+    public function __construct() 
+	{
+		parent::__construct();
+		$this->load->model('admin/Appointment_model','appointment_model');
+	}
 /*
 |------------------------------------------------
 |   chack user exist or not
@@ -17,11 +21,17 @@ public function exists_user($patient_phone)
 /*
 |------------------------------------------------
 |  save patient to patient_tbl
+|  & updates doctor_patient_map
 |------------------------------------------------
 */
 public function save_patient($savedata)
 {
-      $this->db->insert('patient_tbl', $savedata);
+    $insertSuccess = $this->db->insert('patient_tbl', $savedata);
+    /** Make entry in doctor-patient-map */
+    if ($insertSuccess) {
+        $this->appointment_model->insertPatientDoctorMap(
+            $savedata['patient_id'],$savedata['doctor_id']);
+    }
 }
 
 /*
