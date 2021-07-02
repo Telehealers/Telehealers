@@ -1200,8 +1200,17 @@ $('#p_phone').keypress(function (e) {
      $('#loginForm')[0].reset();
 
      $('#registerForm')[0].reset();
-
-
+           $('.form-control').val('');
+        $('#meserr').html('');
+        $('#meserrReg').html('');
+        $('#otp_field').css('display','none');
+        $('#sendOtp').show();
+         $('#login').hide();
+         $('#otpmess').html('');
+         $('#otpmess1').html('');
+         $('#otp1').hide();
+         $('#auth').hide();
+         $('#register').show()
     });
 
 $("form").submit(function(e) {

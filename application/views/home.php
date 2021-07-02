@@ -521,7 +521,19 @@ $(document).ready(function(){
 
      $('#registerForm')[0].reset();
 
+        $('.form-control').val('');
+        $('#meserr').html('');
+        $('#meserrReg').html('');
+        $('#otp_field').css('display','none');
+        $('#sendOtp').show();
+         $('#login').hide();
+         $('#otpmess').html('');
+         $('#otpmess1').html('');
+         $('#otp1').hide();
+         $('#auth').hide();
+         $('#register').show()
 
+         
     });
 
     $('#aptBtn').on('click',function(){
@@ -536,13 +548,6 @@ $('#headlogin').on('click',function(){
 
  $('#loginBtn').on('click',function(){
         $('#logtab').click();
-        $('.form-control').val('');
-        $('#meserr').html('');
-        $('#meserrReg').html('');
-        $('#otp_field').css('display','none');
-        $('#sendOtp').show();
-         $('#login').hide();
-         $('#otpmess').html('');
 
 
 
