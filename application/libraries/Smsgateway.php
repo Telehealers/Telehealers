@@ -1,44 +1,82 @@
 <?php
+    /** This class contains all sms centric logic(message and APIs) and functionality */
     class Smsgateway
     {
-        public function send($config = [])
-        {            
-         
-            switch (strtolower($config['apiProvider'])) {
+        /** Functions to send sms */
+        public function sms_appointment_confirmation($phone_no, $meeting_url, $booked_time) {
+            $sms_message = $this->msg_appointment_booked_rightnow(
+                $meeting_url, 
+                $booked_time);
+            return $this->send_sms($phone_no, $sms_message, "TLHLRS");
+        }
 
-                case 'nexmo':
-                        return $this->nexmo($config);
-                    break; 
-                 case 'clickatell':
-                        return $this->send_clickatell_message($config);
-                    break;
-                                       
-                default:
-                        return json_encode(['exception' => 'No api found']);
-                    break;
+        public function sms_otp($phone_no, $otp) {
+            return $this->send_sms($phone_no, $this->msg_otp($otp), "LOADIT");
+        }
+
+        public function sms_successful_registration_to_patient($phone_no) {
+            return $this->send_sms($phone_no, $this->msg_patient_registration_successful(), "TLHLRS");
+        }
+        
+        public function sms_prescription_alert($phone_no) {
+            return $this->smsgateway->send_sms($phone_no, 
+               $this->msg_prescription_alert(), "TLHLRS");
+        }
+
+        /** A function to alert doctor that patient had shard his documents */
+        public function sms_alert_doctor_about_patient_documents($doctor_phone, $patient_id) {
+            $this->send_sms($doctor_phone,
+					$this->msg_patient_shared_document($patient_id), "TLHLRS");
+        }
+
+        public function sms_successful_registration_to_doctor($phone_no) {
+			return $this->send_sms($phone_no, $this->smsgateway->msg_doctor_registration_successful(), "TLHLRS");
+        }
+        /** A function to send sms to phone_no using curl 
+         * return : if fails return true else return true
+         * Use sms template function (msg*) to create sms_text.
+         * send_param belongs to {TLHLRS, LOADIT}
+        */
+        private function send_sms($phone_no, $sms_text, $send_param) {
+            $api_url = "http://japi.instaalerts.zone/httpapi/QueryStringReceiver?ver=1.0&key=pjjXNjf8In8sb8BdmFYVgw==&encrypt=0&dest=".
+                $phone_no."&send=".$send_param."&text=".$sms_text;
+            $curl_session = curl_init();
+            curl_setopt($curl_session, CURLOPT_URL, $api_url);
+            curl_setopt($curl_session, CURLOPT_RETURNTRANSFER, TRUE);
+            curl_setopt($curl_session, CURLOPT_HEADER, true);
+            $sms_api_response = curl_exec($curl_session);
+            if (!$sms_api_response) {
+                log_message("error", "OTP failed phone:".$phone_no.", message:".$sms_text);
+                return false;
             }
-        } 
-
-
-        #--------------------------------------
-        # For nexmo provider
-        public function nexmo($config = [])
-        {                       
-            $url = "https://rest.nexmo.com/sms/json?api_key=".urlencode($config['username'])."&api_secret=".urlencode($config['password'])."&to=".urlencode($config['to'])."&from=".urlencode($config['from'])."&text=".urlencode($config['message'])."";                       
-            $data = file_get_contents($url);
-            return $data; 
+            curl_close($curl_session);
+            return true;
+        }
+        /** Message for doctors that patient has shared documents */
+        private function msg_patient_shared_document($patient_id) {
+            return 'Patient+'.$patient_id.'+shared+reports.+Check+them+on+your+dashboard.';
+        }
+        /** Message for patient that prescription has been made */
+        private function msg_prescription_alert() {
+            return 'Prescription+sent+to+email.+Click+https://$_SERVER[HTTPS_HOST]'; 
+        }
+        /** Successful doctor registration msg */
+        private function msg_doctor_registration_successful() {
+            return 'Successfully+registered+on+telehealers+with+this+number.+Use+discord+or+known+member+for+queries.+-+Telehealers';
+        }
+        /** Successful patient registeration msg */
+        private function msg_patient_registration_successful() {
+            return 'Successfully+registered+on+telehealers+with+this+number.+Helpline+9071123400+call+whatsapp.';
+        }
+        /** Function to create appointment string msg */
+        private function msg_appointment_booked_rightnow($meeting_url, $booked_time) {
+            return 'Appointment+scheduled+right+now+link:+'.$meeting_url.'+'.$booked_time.'+Telehealers.' ;
         }
 
-
-        #--------------------------------------------       
-        public function send_clickatell_message($config = [])
-        {
-            $url = "HTTP/S://platform.clickatell.com/messages/http/send?apiKey=".urlencode($config['username'])."==&to=".urlencode($config['to'])."&content=".urlencode($config['message'])."&from=".urlencode($config['from'])."";
-            $result = $this->_do_api_call($url); 
-            return $result;    
+        /** Function for otp messages */
+        private function msg_otp($otp) {
+            return "OTP%20IS%20-%20".$otp ;
         }
-
-
         private function _do_api_call($url)
         {
             $result = file($url);      

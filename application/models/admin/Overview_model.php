@@ -2,7 +2,10 @@
 
 class Overview_model extends CI_model {
 
-
+	public function __construct() 
+	{
+		date_default_timezone_set($this->config->config['time_zone']);
+	}
 
 #-----------------------------------
  	 public function email_list(){

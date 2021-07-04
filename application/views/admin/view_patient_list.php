@@ -83,12 +83,10 @@
                                 <td><?php echo $doctor_name;?></td>
 								
                                 <td class="">
-                                    <a target="_blank" title="Upload Document" class="btn btn-xs btn-info" href="<?php echo base_url();?>admin/Patient_controller/upload_patient_doc/<?php echo html_escape($value->patient_id);?>">                                    <i class="fa fa-edit"></i> </a>																		<a title="Update" class="btn btn-xs btn-info" href="<?php echo base_url();?>admin/Patient_controller/patient_edit/<?php echo html_escape($value->patient_id);?>">
-                                    <i class="fa fa-edit"></i> </a>
-                                    <a title="Delete" class="btn btn-xs btn-danger" href="<?php echo base_url();?>admin/Patient_controller/delete_patient/<?php echo html_escape($value->patient_id) ;?>" onclick="return confirm('Are you want to delete?');">
-                                    <i class="fa fa-trash"></i> </a>
-									<a target="_blank" title="Referral to Doctor" class="btn btn-xs btn-info" href="<?php echo base_url();?>admin/Patient_controller/referral_patient/<?php echo html_escape($value->patient_id);?>">                                    <i class="fa fa-edit"></i> </a>
-									<a target="_blank" title="Book Appointment" class="btn btn-xs btn-info" href="<?php echo base_url();?>Appointment/createAppointForAssistant/<?php echo html_escape($value->patient_id);?>">                                    <i class="fa fa-edit"></i> </a>
+                                    <a target="_blank" title="Upload Document" class="btn btn-xs btn-info" href="<?php echo base_url();?>admin/Patient_controller/upload_patient_doc/<?php echo html_escape($value->patient_id);?>">Upload Document</a>				
+                                    <a title="Update" class="btn btn-xs btn-info" href="<?php echo base_url();?>admin/Patient_controller/patient_edit/<?php echo html_escape($value->patient_id);?>">Update</a>
+									<a target="_blank" title="Referral to Doctor" class="btn btn-xs btn-info" href="<?php echo base_url();?>admin/Patient_controller/referral_patient/<?php echo html_escape($value->patient_id);?>">Refer</a>
+									<a target="_blank" class="btn btn-xs btn-primary" title="Book Appointment" href="<?php echo base_url();?>Appointment/createAppointForAssistant/<?php echo html_escape($value->patient_id);?>">Book Appointment</a>
                                 </td> 
                             </tr>
                             <?php

@@ -509,6 +509,7 @@ class Doctor_controller extends CI_Controller {
 
 		$birth_date = date('Y-m-d',strtotime($this->input->post('birth_date',TRUE)));	
 
+		$doctor_phone = $this->input->post('phone',TRUE);
 		$savedata =  array(
 		
 		'log_id' => $log_id,
@@ -533,7 +534,7 @@ class Doctor_controller extends CI_Controller {
 		
 		'blood_group' => $this->input->post('blood_group',TRUE),
 		
-		'doctor_phone' => $this->input->post('phone',TRUE),
+		'doctor_phone' => $doctor_phone,
 		
 		'address' => $this->input->post('address',TRUE),
 		
@@ -557,6 +558,11 @@ class Doctor_controller extends CI_Controller {
 		
 		$doc_id = $this->db->insert_id();
 		
+		/** Inform doctor via sms about successful registration */
+		if (!$doctor_phone) {
+			$this->smsgateway->sms_successful_registration_to_doctor($doctor_phone);
+		}
+
 		$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 		$charactersLength = strlen($characters);
 		$randomString = '';

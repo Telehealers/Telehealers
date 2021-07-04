@@ -46,6 +46,7 @@ class Appointment extends CI_Controller {
 
 		/**Load Superpro Model */
 		$this->load->model('Superpro_model', 'conference');
+		date_default_timezone_set($this->config->config['time_zone']);
   }
 
 
@@ -55,10 +56,11 @@ class Appointment extends CI_Controller {
 |   View home page in the website
 |--------------------------------------
 */
-	public function index($patient_id=NULL)
+	public function index($patient_id=NULL,$doctor_search_id=NULL)
 	{
 		// $email_config = $this->email_model->email_config();
 		$data['patient_id_from_assistant'] = $patient_id;
+		$data['doctor_search_id']= $doctor_search_id;
     //     //get_schedule_list
         $data['schedule'] = $this->schedule_model->get_schedule_list();
     //     //setup information
@@ -123,6 +125,10 @@ class Appointment extends CI_Controller {
 	/** An alias for index as used by Assistants. */
 	function createAppointForAssistant($patient_id) {
 		$this->index($patient_id);
+	}
+	/** An alias for index as used by Assistants. */
+	function createAppointOfDoc($doctor_search_id) {
+		$this->index(null,$doctor_search_id);
 	}
 
 /*
@@ -369,6 +375,7 @@ function randstrGenapp($len)
 		$this->form_validation->set_rules('servicetype_id', 'service', 'required');
 
 		if (!$this->form_validation->run()) {
+
 			log_message("error", "Bad post-inputs");
 			redirect("appointment");
 		}
@@ -378,7 +385,6 @@ function randstrGenapp($len)
 		 */
 		$booking_date = $this->input->post('p_date', TRUE);
 		$sequence = $this->input->post("sequence",TRUE);
-		$sequence = date("H:i:s", strtotime($sequence));
 		$servicetype_id = $this->input->post('servicetype_id',TRUE);
 		$doctor_id = $this->input->post('doctor_id');
 		$patient_id = "";
@@ -389,6 +395,7 @@ function randstrGenapp($len)
 		$servicetype_entry = $this->db->query($servicetype_query)->result()[0];
 		if (!$servicetype_entry) {
 			/** Bad service from input */
+
 			log_message('error', "Bad service query: ".$servicetype_query." ");
 			show_404();
 		}
@@ -420,7 +427,8 @@ function randstrGenapp($len)
 		}
 		$venue_name = $venue_data->venue_name;
 
-		$doctor_info_query = "select doc.doctor_name as doctor_name, doc.log_id as log_id, ".
+		$doctor_info_query = "select doc.doctor_name as doctor_name,".
+			" doc.doctor_phone as doctor_phone, doc.log_id as log_id, ".
 			"sched.schedul_id AS schedul_id from doctor_tbl doc, schedul_setup_tbl sched ".
 			"WHERE doc.doctor_id = ".$doctor_id." AND doc.doctor_id = sched.doctor_id ".
 			"AND sched.day = DAYOFWEEK('".$booking_date."')";
@@ -431,6 +439,7 @@ function randstrGenapp($len)
 			show_404();
 		}
 		$doctor_name = $doctor_entry->doctor_name;
+		$doctor_phone = $doctor_entry->doctor_phone;
 		$log_id = $doctor_entry->log_id;
 		$schedul_id = $doctor_entry->schedul_id;
 		/** Bad way to generate ID
@@ -484,7 +493,13 @@ function randstrGenapp($len)
 		$sql_m = "update appointment_tbl set symt1 = '".$symt1."',symt2 = '".$symt2."' where appointment_id = '$appointment_id'";
 		$this->db->query($sql_m);
 
-		/** Informing participants */
+		/** Informing participants via SMS */
+		$sms_booked_time = $booking_date.'+'.str_replace(' ','+',
+			date('h:i A', strtotime($sequence)));
+		$this->smsgateway->sms_appointment_confirmation($p_phone, $superpro_meeting_url, $sms_booked_time);
+		$this->smsgateway->sms_appointment_confirmation($doctor_phone, $superpro_meeting_url, $sms_booked_time);
+
+		/** via email */
 		$message = $this->conference->createVideoCallInformationMail('
 			<p>Hey <strong>'.$p_name.'</strong>,</p>
 			<p>Our staff member has confirmed you for a '.$service.
@@ -560,7 +575,7 @@ function randstrGenapp($len)
 			redirect('Patient');	
 		}
 	}
-
+	/**TODO: Remove this function and its usage. */
 	public function patientAppointment(){
 		
 		$ci = get_instance();
@@ -611,6 +626,7 @@ function randstrGenapp($len)
 			$p_gender = $result_pat[0]['sex'];
 			$p_age = $result_pat[0]['age'];
 			$p_log_id = $result_pat[0]['log_id'];
+			$p_phone = $result_pat[0]['patient_phone'];
 		}	
 		
 		$per_patient_time = '15';
@@ -633,9 +649,9 @@ function randstrGenapp($len)
 		$appointment_id = "A".date('y').strtoupper($this->randstrGenapp(5));
 		
 		$date = $this->input->post('p_date',TRUE);
-		
+		$booking_date = $this->input->post('p_date',TRUE);
 		$appointmentData = array(
-		'date' => $this->input->post('p_date',TRUE),
+		'date' => $booking_date,
 		'patient_id' => $patient_id,
 		'appointment_id' =>$appointment_id,
 		'schedul_id' => $schedul_id,
@@ -708,8 +724,11 @@ function randstrGenapp($len)
 		
 		$sql_m = "update appointment_tbl set symt1 = '".$symt1."',symt2 = '".$symt2."' where appointment_id = '$appointment_id'";
 		$this->db->query($sql_m);
-		
-		
+			
+		/** SMS patient about appointment */
+		$sms_booked_time = $booking_date.'+'.str_replace(' ','+',
+			date('h:i A', strtotime($sequence)));
+		$this->smsgateway->sms_appointment_confirmation($p_phone, $superpro_meeting_url, $sms_booked_time);
 		/*
 		$message = $this->createVideoCallInformationMail('
 			<p>Hey <strong>'.$p_name.'</strong>,</p>
@@ -1104,7 +1123,8 @@ public function registration()
 	}
 	/* 	Get available doctors
 	*	Post input used: servicetype_id(INT), preferred_language(STRING), booking_hour (HH),
-			 booking_minute (MM), booking_am_pm (AM|PM), booking_date(YYYY-MM-DD)
+			 booking_minute (MM), booking_am_pm (AM|PM), booking_date(YYYY-MM-DD),
+			 searched_doctor_id (INT, =0 => no searched-doctor) as in doctor_tbl.
     *  	returns: HTML doctor list with pictures and all-unselected radio buttons.
         TODO: rows with bias_reduction < 0, are rows with other languages,
 			handle this case.
@@ -1113,17 +1133,19 @@ public function registration()
 		  a 3-categorized language set.
     */
 	public function getdoctorforappointment(){
-		//NOTE: Input can also be mapped to post input, uncomment below comments
-		// to use them.
+		//Input reading.
 		$servicetype_id = $this->input->post('servicetype_id',TRUE);
 		$servicetype_filter = ($servicetype_id)? 'stdm.servicetype_id = '.$servicetype_id.' AND ':"";
 		$preferred_language = $this->input->post('preferred_language', TRUE);
 		$preferred_language_filter = '(language LIKE "%'.$preferred_language.'%")';
 		$sequence =$this->input->post("booking_hour",TRUE).":".
-		$this->input->post("booking_minute", TRUE).":00 ".
-		$this->input->post("booking_am_pm", TRUE);
-		$booking_slot_starting_time = date("H:i:s", strtotime($sequence));
+		$this->input->post("booking_minute", TRUE).":00";
+		
+		$booking_slot_starting_time = $sequence;
 		$booking_date = $this->input->post('booking_date', TRUE);
+		$searched_doctor_id = $this->input->post('searched_doctor_id', TRUE);
+		$searched_doctor_filter = (!$searched_doctor_id)? "" : 
+			" AND main_docs.doctor_id = ".$searched_doctor_id;
 
 		/** SQL-Query: 
 		 * Incldes aggregation on doctor_id: A contigency mechanism so that no
@@ -1146,8 +1168,9 @@ public function registration()
 			'bookings.sequence <=  "'.$booking_slot_starting_time.'" AND '.
 			'bookings.date = "'.$booking_date.'"'.' AND"'.$booking_slot_starting_time.
 			'" < ADDTIME(bookings.sequence, SEC_TO_TIME(schedule.per_patient_time*60))) '.
+			$searched_doctor_filter.
 			' GROUP BY main_docs.doctor_id ORDER BY bias_reduction_score DESC;';
-
+		
 		$available_doctors = $this->db->query($sql_query);
 
 		foreach ($available_doctors->result() as $doc) {
@@ -1166,6 +1189,104 @@ public function registration()
 
       </div></div>';
 		}}
+	}
+
+	/** A helper function for getBookedSlotOfADoctor function,
+	 * This function unset properties: doctor_name, doctor_id, 
+	 * per_patient_time and returns input object.
+	 * WARNING: USE WITH CAUTION, only written for getBookedSlotOfADoctor.
+	 */
+	private function helperSlotUnsetter($slot) {
+		unset($slot->doctor_name);
+		unset($slot->doctor_id);
+		unset($slot->per_patient_time);
+		unset($slot->start_time_of_the_day);
+		unset($slot->end_time_of_the_day);
+		return $slot;
+	}
+
+	/** A function to get all booked time slot of a given doctor 
+	 * Inputs in header of post request: doctor_name or doctor_id ie one of them
+	 * If doctor_id is given doctor_name will be ignored. 
+	 * And date as 'yyyy-mm-dd'.
+	 * Response: {"doctor_name":..., "doctor_id":..., "per_patient_time_in_minutes":...,
+	 *  "start_time_of_the_day":<Time from which doctor is online>, 
+	 * 	"end_time_of_the_day":<Time after which doctor is offline>,
+	 * 	"booked_time_for_the_day":array_<Description_below>}
+	 * 	Array of slots where each slot is a continuous range
+	 * 	of time for which doctor is booked, say doc x has appointment for
+	 * 	7 PM, 7:15 PM, 7:30 PM and x has set its per_patient_time to be 15 minutes
+	 * 	then our Response["booked_time_for_the_day"] will contain 
+	 * 	{"start_time": "19:00:00", "end_time": "19:45:00"} as one of its elements.
+	 * NOTE: All time is in 24 hrs format
+	 * USAGE TIPS: 
+	 * 404-response: Either bad doctor/doctor schedule not available for the day
+	 * empty booked_time_for_the_day : All slots are available
+	*/
+	public function getBookedSlotOfADoctor($doctor_id, $date) {
+		// $doctor_id = $this->input->post('doctor_id', TRUE);
+		$doctor_name = $this->input->post('doctor_name', TRUE);
+		// $date = $this->input->post('date', TRUE);
+		if ($doctor_id) {
+			$doctor_filter = "drs.doctor_id = ".$doctor_id ;
+		} else {
+			$doctor_filter = "drs.doctor_name = '".$doctor_name."'";
+		}
+		/**Invariant: Slots doesn't intersect */
+		$get_slot_query = "SELECT bookings.sequence as start_time,".
+			" ADDTIME(bookings.sequence, SEC_TO_TIME(sched.per_patient_time * 60) ) as end_time,".
+			" drs.doctor_name as doctor_name, drs.doctor_id as doctor_id,".
+			" sched.per_patient_time as per_patient_time,".
+			" sched.start_time as start_time_of_the_day, sched.end_time AS end_time_of_the_day".
+			" FROM appointment_tbl bookings, schedul_setup_tbl sched, doctor_tbl drs WHERE".
+			" bookings.schedul_id = sched.schedul_id AND bookings.doctor_id = drs.doctor_id".
+			" AND bookings.date = '".$date."' AND ".$doctor_filter.
+			" AND sched.day = DAYOFWEEK('".$date."') ORDER BY bookings.sequence ASC";
+		$booked_slots = $this->db->query($get_slot_query)->result();
+		$starting_slot = current($booked_slots);
+		if (!$starting_slot) {
+			/** Create empty response */
+			$doctor_info_query = "SELECT drs.doctor_name as doctor_name,".
+				" drs.doctor_id as doctor_id, sched.per_patient_time as per_patient_time,".
+				" sched.start_time as start_time_of_the_day,".
+				" sched.end_time as end_time_of_the_day FROM doctor_tbl drs,".
+				" schedul_setup_tbl as sched WHERE drs.doctor_id = sched.doctor_id".
+				" AND ".$doctor_filter." AND sched.day = DAYOFWEEK('".$date."') ";
+			$doctor_info = current($this->db->query($doctor_info_query)->result());
+			if (!$doctor_info) {
+				/** Show error */
+				log_message('error',"Error[getBookedSlotOfADoctor]:Bad doctor_info".$doctor_filter);
+				show_404();
+				return;
+			}
+			$response = array(
+				"doctor_name" => $doctor_info->doctor_name,
+				"doctor_id" => $doctor_info->doctor_id,
+				"per_patient_time_in_minutes" => $doctor_info->per_patient_time,
+				"start_time_of_the_day" => $doctor_info->start_time_of_the_day,
+				"end_time_of_the_day" => $doctor_info->end_time_of_the_day,
+				"booked_time_for_the_day" => array()
+			);
+		} else {
+			$response = array(
+				"doctor_name" => $starting_slot->doctor_name,
+				"doctor_id" => $starting_slot->doctor_id,
+				"per_patient_time_in_minutes" => $starting_slot->per_patient_time,
+				"start_time_of_the_day" => $starting_slot->start_time_of_the_day,
+				"end_time_of_the_day" => $starting_slot->end_time_of_the_day,
+				"booked_time_for_the_day" => array($this->helperSlotUnsetter($starting_slot))
+			);
+			while ($slot = next($booked_slots)) {
+				$last_slot = end($response['booked_time_for_the_day']);
+				if ($last_slot->end_time == $slot->start_time) {
+					$last_slot->end_time = $slot->end_time ;
+				} else {
+					array_push($response['booked_time_for_the_day'], 
+						$this->helperSlotUnsetter($slot));
+				}
+			}
+		}
+		echo json_encode($response);
 	}
 
 	public function getpromocodeprice(){

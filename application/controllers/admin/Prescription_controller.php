@@ -105,8 +105,9 @@ class Prescription_controller extends CI_Controller {
 
 	 	$this->session->unset_userdata('appointment_id');
 	 	$this->session->unset_userdata('prescription_id'); 	
+		$patient_id = $this->input->post('patient_id',TRUE);
 	 	$appointment_id=$this->input->post('appointment_id',TRUE)?$this->input->post('appointment_id',TRUE): "A".date('y').strtoupper($this->randstrGen(2,4));
-	 	$pdata['patient_id'] = $this->input->post('patient_id',TRUE);
+	 	$pdata['patient_id'] = $patient_id;
 	 	$pdata['appointment_id'] = $appointment_id;
 	 	$pdata['doctor_id'] = $this->session->userdata('doctor_id',TRUE);
 	 	$pdata['Pressure'] = $this->input->post('Pressure',TRUE);
@@ -264,6 +265,13 @@ class Prescription_controller extends CI_Controller {
             	);
             	$this->db->insert('advice_prescriptiion',$advice_data);
 			}
+		}
+		/** Inform patient about shared prescription via sms */
+		$patient_query = "select patient_phone from patient_tbl where patient_id = '".
+		$patient_id."'";
+		$patient_entry = $this->db->query($patient_query)->result();
+		if ($patient_entry && isset($patient_entry[0]['patient_phone'])) {
+			$this->smsgateway->sms_prescription_alert($patient_entry[0]['patient_phone']);
 		}
 		
 		$d['appointment_id'] = $appointment_id;	
@@ -706,14 +714,22 @@ class Prescription_controller extends CI_Controller {
 	#		veiw my_prescription
 	#--------------------------------------------
 
-	public function my_prescription($prescription_id=NULL)
+	public function my_prescription($prescription_id=NULL,$appointment_id=NULL)
 	{
 
 		$info = $this->db->where('name','timezone')->get('web_pages_tbl')->row();
           
         date_default_timezone_set(@$info->details);
 
-
+        $temp_pres=$this->db->select('prescription_id')
+        ->from('prescription')
+        ->where('appointment_id',$appointment_id)
+        ->get()
+        ->row();
+		if($prescription_id=='null'){
+			$prescription_id=$temp_pres->prescription_id;
+		}
+        
 		$data['patient_info'] = $this->prescription_model->prescription_by_id($prescription_id);
 	    
 	    // test query

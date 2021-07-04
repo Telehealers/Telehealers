@@ -1,7 +1,11 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Patient_model extends CI_model {
-
+    public function __construct() 
+	{
+		parent::__construct();
+		$this->load->model('admin/Appointment_model','appointment_model');
+	}
 /*
 |------------------------------------------------
 |   chack user exist or not
@@ -17,11 +21,17 @@ public function exists_user($patient_phone)
 /*
 |------------------------------------------------
 |  save patient to patient_tbl
+|  & updates doctor_patient_map
 |------------------------------------------------
 */
 public function save_patient($savedata)
 {
-      $this->db->insert('patient_tbl', $savedata);
+    $insertSuccess = $this->db->insert('patient_tbl', $savedata);
+    /** Make entry in doctor-patient-map */
+    if ($insertSuccess) {
+        $this->appointment_model->insertPatientDoctorMap(
+            $savedata['patient_id'],$savedata['doctor_id']);
+    }
 }
 
 /*
@@ -38,22 +48,20 @@ public function save_patient($savedata)
       return $result;
  }
 
-/** Get patient ID from doctor_id($id) as in referral or doctor_id
- *  field.
- */
+/** Get patient ID from doctor_id($id).
+*/
 public function get_by_id_patient($id) {
-    $query = "SELECT * FROM patient_tbl WHERE doctor_id = ".$id.
-        " OR ref_doc_id = ".$id;
+    $query = "SELECT * FROM patient_tbl patients, doctor_patient_map dpm WHERE ".
+        "  dpm.patient_id = patients.patient_id AND dpm.doctor_id = ".$id.
+        " AND dpm.referee = 0" ;
     return $this->db->query($query)->result();
 }
 
 public function get_referral_patient($id){
-	$query = $this->db->select('*')
-      ->from("patient_tbl")
-	  ->where('ref_doc_id',$id)
-      ->get();
-      $result = $query->result();
-      return $result;
+    $query = "SELECT * FROM patient_tbl patients, doctor_patient_map dpm WHERE ".
+        "  dpm.patient_id = patients.patient_id AND dpm.doctor_id = ".$id.
+        " AND dpm.referee != 0" ;
+    return $this->db->query($query)->result();
 }
 /*
 |------------------------------------------------

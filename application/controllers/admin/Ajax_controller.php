@@ -150,6 +150,33 @@ class Ajax_controller extends CI_Controller {
         }
      }
 
+     #doctor selection 
+    public function doctor_selection() {
+      if (!empty($_GET['term'])){
+        $keyword = $_GET['term']; 
+        $result = $this->db->select('doctor_id,doctor_name')
+        ->from('doctor_tbl')
+        ->like('doctor_name', $keyword)
+        ->get()
+        ->result();
+
+        $tests = array();
+        echo  '[';
+        if(!empty($result)) {
+              $addComa=false;
+              foreach ($result as $value) {
+                if ($addComa) {
+                  echo ",";
+                }
+                $addComa = true;
+                echo '{"value":"'.$value->doctor_id.'", "label":"'.$value->doctor_name.'"}';
+              }
+              // echo '<ul>';
+          }
+          echo ']';
+        }
+     }
+
     #------------------------------------------------
     #       advice_selection
     #------------------------------------------------

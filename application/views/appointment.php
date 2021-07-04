@@ -11,18 +11,21 @@
     <link rel="icon" href="<?php echo (!empty(html_escape($info->fabicon->picture))?html_escape($info->fabicon->picture):null); ?>" type="image">
     <!-- Bootstrap CSS -->
 
-    <link rel="stylesheet" href="<?php echo base_url();?>web_assets2/css/main.css">
+  
 	<link href="<?php echo base_url()?>assets/plugins/jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
-	<link rel="stylesheet" href="<?php echo base_url();?>web_assets2/appointment/css/main.css">
-    <link rel="stylesheet" href="<?php echo base_url();?>web_assets2/appointment/css/style.css">
-    <link rel="stylesheet" href="<?php echo base_url();?>web_assets2/appointment/css/calendar_style.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<!-- <link rel="stylesheet" href="<?php echo base_url();?>web_assets2/appointment/css/main.css"> -->
+    <!-- <link rel="stylesheet" href="<?php echo base_url();?>web_assets2/appointment/css/style.css"> -->
+    <!-- <link rel="stylesheet" href="<?php echo base_url();?>web_assets2/appointment/css/calendar_style.css"> -->
+
+
+<link rel="stylesheet" href="<?php echo base_url();?>web_assets2/css/main.css">
+        <script src="<?php echo base_url()?>assets/plugins/jquery-ui-1.12.1/jquery-ui.min.js" type="text/javascript"></script>
+
     
-    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
     <!-- Isolated Version of Bootstrap, not needed if your site already uses Bootstrap -->
-    <link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" />
+    <!-- <link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" /> -->
     <!-- Bootstrap Date-Picker Plugin -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
@@ -46,6 +49,8 @@
 
   gtag('config', 'G-Y9P95E4VWH');
 </script>
+    <link rel="stylesheet" href="<?php echo base_url();?>web_assets2/css/bootstrap.min.css">
+
 	<script type="text/javascript">
 /* var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
 (function(){
@@ -80,115 +85,6 @@ $hello = GeraHash(5);
     .owl-carousel .owl-item img{width:65%;}
 
 
-    input.range {
-  -webkit-appearance: none;
-  bottom: -10px;
-  position: relative;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  background: transparent;
-}
-
-input.range:focus {
-  outline: 0;
-}
-input.range::-moz-focus-outer {
-  border: 0;
-}
-
-input.range::-webkit-slider-thumb {
-  box-shadow: 1px 1px 1px black, 0px 0px 1px black;
-  border: 0;
-  height: 20px;
-  width: 20px;
-  border-radius: 50%;
-  background: white;
-  cursor: pointer;
-  -webkit-appearance: none;
-  margin-top: -7.5px;
-}
-
-input.range::-moz-range-thumb {
-  box-shadow: 1px 1px 1px black, 0px 0px 1px black;
-  border: 0;
-  height: 20px;
-  width: 20px;
-  border-radius: 50%;
-  background: white;
-  cursor: pointer;
-}
-input.range::-ms-thumb {
-  box-shadow: 1px 1px 1px black, 0px 0px 1px black;
-  border: 0;
-  height: 20px;
-  width: 20px;
-  border-radius: 50%;
-  background: white;
-  cursor: pointer;
-  height: 5px;
-}
-
-input.range::-webkit-slider-runnable-track {
-  width: 100%;
-  height: 5px;
-  cursor: pointer;
-  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0), 0px 0px 1px rgba(13, 13, 13, 0);
-  background: indigo;
-  border-radius: 20px;
-  border: 0;
-}
-
-input.range::-moz-range-track {
-  width: 100%;
-  height: 5px;
-  cursor: pointer;
-  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0), 0px 0px 1px rgba(13, 13, 13, 0);
-  background: indigo;
-  border-radius: 20px;
-  border: 0;
-}
-
-input.range::-ms-track {
-  width: 100%;
-  height: 5px;
-  cursor: pointer;
-  background: transparent;
-  border-color: transparent;
-  color: transparent;
-}
-
-input.range::-ms-fill-lower,
-input.range::-ms-fill-upper {
-  background: indigo;
-  border: 0;
-  border-radius: 40px;
-  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0), 0px 0px 1px rgba(13, 13, 13, 0);
-}
-
-.range__tick {
-  fill: #a0a0a0;
-}
-
-.range__tick:first-child {
-  -webkit-transform: translateX(2px);
-  -moz-transform: translateX(2px);
-  -ms-transform: translateX(2px);
-  -o-transform: translateX(2px);
-  transform: translateX(2px);
-}
-.range__tick:last-child {
-  -webkit-transform: translateX(-3px);
-  -moz-transform: translateX(-3px);
-  -ms-transform: translateX(-3px);
-  -o-transform: translateX(-3px);
-  transform: translateX(-3px);
-}
-
-.range__field {
-  border: 0;
-}
 #dLabel {
     width: 240px;
   height: 40px;
@@ -342,11 +238,11 @@ input.range::-ms-fill-upper {
    text-align: center;
  }
 
- a {
+ /*a {
    text-decoration: none;
    font-weight: bolder;
    color: red;
- }
+ }*/
 
  #inner:first-child {
    margin-left: 0;
@@ -451,16 +347,19 @@ input.range::-ms-fill-upper {
 </style>
 <body>
   <?php $this->load->view('header.php')?>
+  
     <div class="container" style="background: white;margin-top: 20px;margin-bottom: 20px;border-radius: 10px;box-shadow: 4px 5px 8px #ababab;">
     <div class="row" style="text-align:center; color:white;background:grey;border-top-left-radius: 8px;border-top-right-radius: 8px;padding:10px ;padding-left:100px;padding-right:100px">
     <div class="col-12">
     <h4>Book Appointment</h4>
     </div>
     </div>
-    <?php   $attributes = array('class' => 'form-horizontal','role'=>'form');
+    <?php   $attributes = array('class' => 'form-horizontal','role'=>'form','id'=>'AppForm');
             echo form_open_multipart('Appointment/confirmation', $attributes);
       ?>
+    <div id="q_warn_msg" class="mt-3 alert alert-warning" style="display:none"></div>
     <div id="q_succ_msg" class="mt-3 alert alert-success" style="display:none"></div>
+
 
     <div class="row pt-4" style="margin-bottom: 20px;padding-left:2%;padding-right:2%">
     <div class="col-sm-12 col-md-4 col-lg-4">
@@ -491,70 +390,25 @@ input.range::-ms-fill-upper {
       </div>
   <div class="form-check" style="margin-left:30px">
         <input class="form-check-input" type="radio" name="flexRadioDefault" value="non_covid" id="flexRadioDefault2" >
-        <label class="form-check-label pl-4" for="flexRadioDefault2">Non-Covid</label>
+        <label class="form-check-label pl-4" for="flexRadioDefault2">Specialities</label>
   </div>
 
     </div>
     </div>
+
+
     <div class="row mb-3" style="padding-left:2%;padding-right:2%">
     <div class="col-sm-12 col-md-12 col-lg-12">
     <div>
     <h1 for="customRange3" class="form-label labelStyle" style="margin-top: 0;">Book Time Slot</h1>
     <fieldset class="range__field" id="time_hour" value="10">
-   <input class="range" type="range" min="-2" max="10" value="-2">
-   <svg role="presentation" width="100%" height="10" xmlns="http://www.w3.org/2000/svg">
-      <rect class="range__tick" x="0%" y="3" width="1" height="10"></rect>
-      <rect class="range__tick" x="8.3%" y="3" width="1" height="10"></rect>
-      <rect class="range__tick" x="16.6%" y="3" width="1" height="10"></rect>
-      <rect class="range__tick" x="24.9%" y="3" width="1" height="10"></rect>
-      <rect class="range__tick" x="33.2%" y="3" width="1" height="10"></rect>
-      <rect class="range__tick" x="41.5%" y="3" width="1" height="10"></rect>
-      <rect class="range__tick" x="49.8%" y="3" width="1" height="10"></rect>
-      <rect class="range__tick" x="58.1%" y="3" width="1" height="10"></rect>
-      <rect class="range__tick" x="66.4%" y="3" width="1" height="10"></rect>
-      <rect class="range__tick" x="74.7%" y="3" width="1" height="10"></rect>
-      <rect class="range__tick" x="83%" y="3" width="1" height="10"></rect>
-      <rect class="range__tick" x="91.3%" y="3" width="1" height="10"></rect>
-      <rect class="range__tick" x="99.6%" y="3" width="1" height="10"></rect>
-
-
-   </svg>
-   <svg role="presentation" width="100%" height="14" xmlns="http://www.w3.org/2000/svg">
-      <text class="range__point" x="0%" y="14" text-anchor="start">10</text>
-      <text class="range__point" x="8.3%" y="14" text-anchor="middle">11</text>
-      <text class="range__point" x="16.6%" y="14" text-anchor="middle">12</text>
-      <text class="range__point" x="24.9%" y="14" text-anchor="middle">1</text>
-      <text class="range__point" x="33.2%" y="14" text-anchor="middle">2</text>
-      <text class="range__point" x="41.5%" y="14" text-anchor="middle">3</text>
-      <text class="range__point" x="49.8%" y="14" text-anchor="middle">4</text>
-      <text class="range__point" x="58.1%" y="14" text-anchor="middle">5</text>
-      <text class="range__point" x="66.4%" y="14" text-anchor="middle">6</text>
-      <text class="range__point" x="74.7%" y="14" text-anchor="middle">7</text>
-      <text class="range__point" x="83%" y="14" text-anchor="end">8</text>
-      <text class="range__point" x="91.3%" y="14" text-anchor="middle">9</text>
-      <text class="range__point" x="99.6%" y="14" text-anchor="end">10</text>
-   </svg>
+      <?php $this->load->view('slider');?>
+   
 </fieldset>
     </div>
     </div></div>
         <div class="row mt-4" style="padding-left:2%;padding-right:2%">
- <div class="col-sm-12 col-md-6 col-lg-6">
-    <div class="btn-group"id="minute" role="group" aria-label="Basic example">
-  <button type="button" id="btn1" class="btn btn-secondary">0:00</button>
-  <button type="button" class="btn btn-secondary">0:15</button>
-  <button type="button" class="btn btn-secondary">0:30</button>
-  <button type="button" class="btn btn-secondary">0:45</button>
-</div>
-
-    </div>
-    <div class="col-sm-12 col-md-3 col-lg-2" style="">
-    <div class="btn-group" role="group"  id="meredium" aria-label="Basic example">
-  <button type="button" id="ambtn" class="btn btn-secondary">A M</button>
-  <button type="button" class="btn btn-secondary">P M</button>
-
-</div>
-    </div>
-
+ 
     <div class="col-sm-12 col-md-3 col-lg-4">
 
 <h1 for="customRange3" id="time" class="form-label labelStyle" style="margin-bottom: 0 !important;margin-top:0px;padding-top: 5px;"></h1>
@@ -563,10 +417,9 @@ input.range::-ms-fill-upper {
     </div></div>
     
     <div class="row mb-3" id="department_type" style="display:none;padding-left:2%;padding-right:2%">
-
     <div class="col-sm-12 col-md-12 col-lg-12">
     <h1 for="customRange3" class="form-label labelStyle mb-4 mt-4" style="margin-top:0%">Departments</h1>
-    <div class="btn-group" id="elem" style="width:inherit;height:40px !important;display: flex;
+    <div class="btn-group" id="elem" style="width:inherit;height:100% !important;display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     align-content: space-between;
@@ -585,9 +438,15 @@ input.range::-ms-fill-upper {
     </div>
     </div>
 
-    <div class="row" style="padding-left:2%;padding-right:2%">
-    <div class="col-sm-12 col-md-12 col-lg-12">
-    <h1 for="customRange3" class="form-label labelStyle mb-3" >Consultants</h1>
+    <div class="row" style="padding-left:2%;padding-right:2%;margin-top:6%;margin-bottom: 2%">
+
+    <div class="col-sm-3 col-md-3 col-lg-3">  
+       <h1 for="customRange3" class="form-label labelStyle mb-3" >Consultants</h1>
+    </div>
+    <div class="col-sm-3 col-md-3 col-lg-3">  
+        <input type="input" name="doctorSearch" id="doctorSearch" placeholder="Search for Doctor" style="padding:2%">
+        <input type="hidden" name="doctorSearchId" id="doctorSearchId" value="<?php if($doctor_search_id){echo $doctor_search_id;} ?>" >
+    </div>
         <input type="hidden" name="base_url" id="base_url" value="<?php echo base_url()?>">
         <input type="hidden" name="sequence" id="sequence" value="">
         <input type="hidden" name="p_id" id="p_id" value="<?php 
@@ -599,11 +458,24 @@ input.range::-ms-fill-upper {
           } ?>">
         <input type="hidden" name="doctor_id" id="doctor_id" >
         <input type="hidden" name="servicetype_id" id="servicetype_id" >
-    </div>
-    </div>
-    <div class="container" style="padding:0px;height: 500px;overflow-y: auto;overflow-x: hidden;width: auto;">
-  <div class="row"  id="docs" style="padding-left:2%;padding-right:2%">
 
+    </div>
+    <div class="embed-responsive border border-primary rounded" id="tutorialPhone" style="display: none;padding-bottom: 150%;">
+      <video class="embed-responsive-item responsive-iframe" loop autoplay muted controls>
+        <source src="<?php echo base_url()?>web_assets/videos/telehealers-book-on-phone-compressed.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+      <div class="embed-responsive embed-responsive-16by9 border border-primary rounded" id="tutorial" style="display: none">
+         <video class="embed-responsive-item responsive-iframe" autoplay muted loop controls>
+        <source src="<?php echo base_url()?>web_assets/videos/book-appointment-tutorial-pc.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+
+    <div class="container" style="padding:0px;height: 500px;overflow-y: auto;overflow-x: hidden;width: auto;">
+    <div class="row"  id="docs" style="padding-left:2%;padding-right:2%">
+      
     </div>
     </div>
     <div class="container-fluid" style="padding-left:2%;padding-right:2%">
@@ -619,10 +491,12 @@ input.range::-ms-fill-upper {
           </div>
       </div>
     </div>
+        
+
     <div class="row" style="padding: 10px;background: #f3f3f3;box-shadow: 0px -4px 5px #cac3c3ad;">
   <div class="col-12">
   <div style="float:right">
-<button type="submit"  class="btn btn-success" style="width: 200px;height: 50px;font-size: 25px;background: #393f7d;"><?php echo display('submit')?></button>
+<button type="submit" id="submit" class="btn btn-success" style="width: 200px;height: 50px;font-size: 25px;background: #393f7d;"><?php echo display('submit')?></button>
 </div>
   </div>
   </div>
@@ -631,65 +505,124 @@ input.range::-ms-fill-upper {
 
 </div>
 
-<!-- Modal -->
-<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="myModalLabel">Modal header</h3>
-    </div>
-    <div class="modal-body">
-        <p>One fine body…</p>
-    </div>
-    <div class="modal-footer">
-        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-        <button class="btn btn-primary">Save changes</button>
-    </div>
-</div>></form>
+</form>
+
+<script src="<?php echo base_url();?>web_assets2/js/helpers.js"></script>
 <script>
 var servicetype='';
-function getDoctors(language,date,hour,min,am_pm){
+var base_url=$('#base_url').val();
+ function IsMobile() {
+          var Uagent = navigator.userAgent||navigator.vendor||window.opera;
+            return(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino|android|ipad|playbook|silk/i.test(Uagent)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(Uagent.substr(0,4))); 
+        };
+
+firstTime=1
+function showTutorial() {
+if(firstTime){
+  $('#q_succ_msg').html('Watch tutorial video below.');
+  $('#q_succ_msg').fadeIn();
+  firstTime=0;
+}
+else{
+  $('#q_warn_msg').html('No Consultants available at selected time. Watch tutorial video below.');
+  $('#q_warn_msg').fadeIn();
+}
+
+if (IsMobile()){
+    $('#tutorialPhone').show();
+} 
+else{
+  $('#tutorial').show();
+}
+}
+
+function hideTutorial() {
+    $('#tutorialPhone').hide();
+    $('#tutorial').hide();
+}
+
+
+function getDoctors(language,date,hour,min,am_pm,doc_id){
     $('#docs')[0].textContent='';
-    $('#my-modal').modal({show: 'false'});
+    $('#q_succ_msg').hide();
+    doc_id=$('#doctorSearchId').val();
+     
+    var doctor_dept=doc_id?null:servicetype;
     var base_url=$('#base_url').val();
     $.ajax({
     url:base_url+'index.php/Appointment/getdoctorforappointment',
     method: 'post',
-    data: {servicetype_id:servicetype,preferred_language:language,booking_date:date,booking_hour:hour,booking_minute:min,booking_am_pm:am_pm},
+    data: {servicetype_id:doctor_dept,preferred_language:language,booking_date:date,booking_hour:hour,booking_minute:min,searched_doctor_id:doc_id},
     type: 'POST',
     success: function(response){
-      $('#docs').prepend(response);
+      if(!$.trim(response)){
+        showTutorial();
+        }
+      else{
+        hideTutorial();
+        $('#docs').html(response);
+      }
     }
   });
 }
+
+// function searchDoc(){
+//   console.log('searching');
+//   fetchTime(); 
+//}
+function pad(num, size) {
+    num = num.toString();
+    while (num.length < size) num = "0" + num;
+    return num;
+}
+
+
 function cleanHours(originalVal){
   originalVal=parseInt(originalVal)
- if(originalVal<=0){
-      originalVal+=12;
-    }
-  return originalVal
+
+  return pad(Math.floor(
+originalVal/4),2);
 }
+function getMinute(originalVal){
+   var minutes=(originalVal%4)*15
+   if(minutes==0){
+    return '00'
+   }
+   else{
+    return minutes;
+   }
+}
+
+function convertStringToTimeInt(time) {
+return time.split(":").map((x, index) => parseInt(x) * ([60,1,0][index]) ) .reduce((x,y) => x+y)
+}
+
 date_today=new Date();
 function fetchTime(date,hour, minute,am_pm,language){
-
+  $('#q_succ_msg').fadeOut("slow");
   date = date ? date : $('#datepicker').datepicker('getFormattedDate');
   date_cool = new Date(date);
   hour = hour ? hour : cleanHours($('#time_hour')[0].elements[0].value);
-  minute= minute ? minute: $('#minute .active').text().substr(2,4);
-  am_pm=am_pm? am_pm : ($('#meredium .active').text()).replace(/\s/g, "");
-  date_time = date_cool.toDateString()+" "+hour+":"+minute+" "+am_pm;
+  minute= minute ? minute:getMinute($('#time_hour')[0].elements[0].value);
+  
+  date_time = date_cool.toDateString()+" "+hour+":"+minute;
   selected_dt = new Date(date_time);
   document.getElementById("time").innerHTML = date_time;
-  $("#sequence").val(hour+":"+minute+" "+am_pm);
-  time=hour+":"+minute+" "+am_pm;
-  console.log(selected_dt.toString(),date_today.toString());
+  $("#sequence").val(hour+":"+minute+":00");
+  time=hour+":"+minute+" "
+  
   if(selected_dt.getTime()< date_today.getTime()){
+        showTutorial();
         $('#docs')[0].textContent='';
+        $('#q_warn_msg').html('Please select a future time for appointment');
+        $('#q_warn_msg').fadeIn("slow");
+
          return; 
   }
 
 
   language=language?language:$('#dLabel').text()
-
+  var doc_id=$('#doctorSearchId').val(); 
   //console.log(language);
   if(language=='Select Language'){
     language='';
@@ -699,14 +632,14 @@ function fetchTime(date,hour, minute,am_pm,language){
     servicetype='1'; // default dept general dept / general physician , needs to be checked with db
   }
   else if($('input:radio[id^="flexRadioDefault"]')[1].checked & !servicetype){
-      $('#q_succ_msg').html('select a department to view doctors');
-      $('#q_succ_msg').show();
+      $('#q_warn_msg').html('select a department to view doctors');
+      $('#q_warn_msg').fadeIn("slow");
   }
 
   if(servicetype){
-    $('#q_succ_msg').hide();
+    $('#q_warn_msg').fadeOut("slow");
     $('#servicetype_id').val(servicetype);
-    getDoctors(language,date,hour,minute,am_pm);
+    getDoctors(language,date,hour,minute,doc_id);
   }
 
 }
@@ -715,11 +648,342 @@ $(document).ready(function(){
 // $('#minute button').click(function(){
 //     console.log('hello');
 // });
+showTutorial();
+var getdoctorSearchUrl='admin/Ajax_controller/doctor_selection/';
+addAutocompleteToHTMLDiv('#doctorSearch', '#doctorSearchId', base_url + getdoctorSearchUrl);
+
+const defaultSliderBackgroundImage = " -webkit-linear-gradient(left, #00cec9 0%, #00cec9 100%)"
+    $('.slider-ui .bar').css("background-image", defaultSliderBackgroundImage);
+
+$('#headlogin').on('click',function(){
+        $('#logtab').click();
+        $('.form-control').val('');
+        $('#meserr').html('');
+        $('#meserrReg').html('');
+        $('#otp_field').css('display','none');
+        $('#sendOtp').show();
+         $('#login').hide();
+         $('#otpmess').html('');
+
+
+    });
+
+
+const sliders = document.querySelectorAll(".slider-ui");
+
+function slider_basics(slider){
+
+ let input = slider.querySelector("input[type=range]");
+  let min = input.getAttribute("min");
+  let max = input.getAttribute("max");
+  let valueElem = slider.querySelector(".value");
+
+
+  slider.querySelector(".min").innerText = '00:00';
+  slider.querySelector(".max").innerText = '23:59';
+
+  function setValueElem() {
+
+    valueElem.innerText = cleanHours(input.value)+':'+getMinute(input.value);
+    let percent = (input.value - min) / (max - min) * 100;
+    valueElem.style.left = percent + "%";
+  }
+  setValueElem();
+
+  input.addEventListener("input", setValueElem);
+  input.addEventListener("mousedown", () => {
+    valueElem.classList.add("up");
+  });
+  input.addEventListener("mouseup", () => {
+    valueElem.classList.remove("up");
+  });
+};
+sliders.forEach(slider =>slider_basics(slider)); 
+/** A function to update slider by using getBookedSlotOfDoctor, on 
+ * successful response.
+ */
+function updateSliderColorFromBookedTimeAPI(bookedSlotDocResponse) {
+  console.log(bookedSlotDocResponse);
+  bookedSlotDocResponse=JSON.parse(bookedSlotDocResponse);
+  $('#doctorSearch').val(bookedSlotDocResponse.doctor_name);
+
+  var slots=[{start_time: '0:00', end_time: bookedSlotDocResponse.start_time_of_the_day}]
+  slots = slots.concat(bookedSlotDocResponse.booked_time_for_the_day);
+  slots.push({start_time: bookedSlotDocResponse.end_time_of_the_day, end_time: "24:00"})
+
+  var background_image='-webkit-linear-gradient(left';
+  var available_color='#00cec9';
+  var booked_color='#808080'
+  var grey='grey'
+  console.log('slots',slots)
+  for (let slot of slots) {
+    background_image += ` ,${available_color} ${convertStringToTimeInt(slot.start_time) * 100 / (24*60)}%,  ${booked_color} ${convertStringToTimeInt(slot.start_time) * 100 / (24*60)}%`
+    background_image += ` ,${booked_color} ${convertStringToTimeInt(slot.end_time) * 100 / (24*60)}%,  ${available_color} ${convertStringToTimeInt(slot.end_time) * 100 / (24*60)}%`
+  }
+  console.log(background_image);
+  $('.slider-ui .bar').css("background-image",background_image + ')');
+}
+
+/** A function to update slider color from input params 
+ * Input doctorID {Int | Null} : Null=> use defaultSliderBackgroundImage
+ * date {String}: Format yyyy-mm-dd
+*/
+function updateSliderColor(doctorID, date) {
+  if (!doctorID) {
+    $('.slider-ui .bar').css("background-image", defaultSliderBackgroundImage);
+    return ;
+  }
+  $.ajax({
+    url:base_url+'index.php/Appointment/getBookedSlotOfADoctor/'+doctorID+'/'+date,
+    method: 'post',
+    type: 'POST',
+    success: updateSliderColorFromBookedTimeAPI,
+    error: function(error) {
+      $('.slider-ui .bar').css("background-image", " -webkit-linear-gradient(left, #808080 0%, #808080 100%)");
+    }
+  })
+}
+
+
+$( "#doctorSearch").on( "input", function( event, ui ) {
+  console.log("HERE");
+  $('#doctorSearchId').val(null);
+  updateSliderColor(null, null);
+} );
+  
+
+
+$( "#doctorSearch").on( "autocompleteselect", function( event, ui ) {
+  $('#doctorSearch').val(ui.item.label);
+  $('#doctorSearchId').val(ui.item.value);
+  console.log('selecting some doc',ui.item.label);
+  var doc_id=ui.item.value;
+  var date = $('#datepicker').datepicker('getFormattedDate');
+  console.log(date);
+  updateSliderColor(doc_id, date);
+  fetchTime();
+} );
+
+$("#phone").keypress (function (event) {
+    var charLength = $(this).val().length;
+        
+    if(charLength < 10){
+      if ((event.which < 32) || (event.which > 126)){
+        return true;
+      }
+      return jQuery.isNumeric ($(this).val () + String.fromCharCode (event.which));
+    }else{
+      return false;
+    }
+  });
+    $("#phone1").keypress (function (event) {
+        var charLength = $(this).val().length;
+
+        if(charLength < 10){
+            if ((event.which < 32) || (event.which > 126)){
+                return true;
+            }
+            return jQuery.isNumeric ($(this).val () + String.fromCharCode (event.which));
+        }else{
+            return false;
+        }
+    });
+  $("#otp").keypress (function (event) {
+    var charLength = $(this).val().length;
+    if(charLength < 4){
+      if ((event.which < 32) || (event.which > 126)){
+        return true;
+      }
+      return jQuery.isNumeric ($(this).val () + String.fromCharCode (event.which));
+    }else{
+      return false;
+    }
+  });
+  $('#sendOtp').click(function(){
+    var base_url = $('#base_url').val();
+    var phone = $('#phone').val();
+    if(phone==""){
+      $('#meserr').html('Please enter mobile number first');
+    }else{
+      $('#meserr').html('');
+      $.ajax({
+        url:base_url+'index.php/Patient/checkUser',
+        method: 'post',
+        data: {phone:phone},
+        type: 'POST',
+        success: function(response){
+          if(response==0){
+            $('#meserr').html('Incorrect Mobile number');
+          }else{
+            $('#otp_field').css('display','block');
+            $('#otpmess').html('Otp sent on your mobile number...');
+            $('#sendOtp').hide();
+            $('#login').show();
+          }
+          //$('#q_succ_msg').html('Your details has been submited successfully.');
+          //$('#q_succ_msg').html(response);
+        }
+      });
+    }
+  });
+  $('#login').click(function (){
+    var base_url = $('#base_url').val();
+    var phone = $('#phone').val();
+    var otp = $('#otp').val();
+    var msg = '';
+    if(phone==""){
+      msg += 'Please enter mobile number<br>';
+    }
+    if(otp==""){
+      msg += 'Please enter Otp<br>';
+    }
+    if(msg!=""){
+      $('#meserr').html(msg);
+    }else{
+      $('#meserr').html('');
+      $.ajax({ 
+        url:base_url+'index.php/Patient/userLogin',
+        method: 'post',
+        data: {phone:phone,otp:otp},
+        type: 'POST',
+        success: function(response){
+          if(response==0){
+            $('#meserr').html('Incorrect Mobile number');
+          }else if(response==1){
+            $('#meserr').html('You enter wrong Otp'); 
+          }else{
+            $('#p_id').val(response);
+            $('#myModal').modal('hide');
+            $('#submit').click();
+             // window.location.href = 'Patient';
+          }
+          //$('#q_succ_msg').html('Your details has been submited successfully.');
+          //$('#q_succ_msg').html(response);
+        }
+      });
+    }
+  });
+    $('#auth').click(function (){
+        var base_url = $('#base_url').val();
+        var phone = $('#phone1').val();
+        var otp = $('#otp1').val();
+        var msg = '';
+        if(phone==""){
+            msg += 'Please enter mobile number<br>';
+        }
+        if(otp==""){
+            msg += 'Please enter Otp<br>';
+        }
+        if(msg!=""){
+            $('#meserr1').html(msg);
+        }else{
+            $('#meserr1').html('');
+            $.ajax({
+                url:base_url+'index.php/Patient/userLogin',
+                method: 'post',
+                data: {phone:phone,otp:otp},
+                type: 'POST',
+                success: function(response){
+                    if(response==0){
+                        $('#meserr1').html('Incorrect Mobile number');
+                    }else if(response==1){
+                        $('#meserr1').html('You enter wrong Otp');
+                    }else{
+                      $('#p_id').val(response);
+                      console.log('patient',response);
+                      $('#myModal').modal('hide');
+                      $('#submit').click();
+                    }
+                    //$('#q_succ_msg').html('Your details has been submited successfully.');
+                    //$('#q_succ_msg').html(response);
+                }
+            });
+        }
+    });
+
+    $('#register').click(function(){
+        var name    = $('#name').val();
+        var email     = $('#email').val();
+        var age      = $('#age').val();
+        var phone      = $('#phone1').val();
+
+        var baseUrl =$('#base_url').val();
+        var gender = document.querySelector('input[name="inlineRadioOptions"]:checked')
+            console.log(gender);
+        var msg=''    
+        if(name==""){
+            msg += 'Please enter name<br>';
+        }
+        if(email==""){
+            msg += 'Please enter Email<br>';
+        }
+        if(!age){
+            msg += 'Please enter Age<br>';
+        }
+        if(!gender){
+            msg+='Please select gender<br>';
+        }
+        else{
+            gender=gender.value;
+        }
+        if(phone.length<10){
+            msg+='Incorrect Phone Number<br>'
+        }
+
+        
+        if(msg!=""){
+            $('#meserrReg').html(msg);
+        }else{
+
+            $('#meserrReg').html('');
+            $.ajax({
+                url:baseUrl+'index.php/Welcome/registration',
+                method: 'post',
+                data: {name:name, email:email,age:age , phone: phone,gender:gender},
+                type: 'POST',
+                success: function(response){
+                   if (response==0) {
+                        // this user already exists , show error to user that number is already registered , please log in 
+                        $('#meserrReg').html('This phone number is already registered. Please login')
+                   }
+                   else if(response==1){
+                    // new user has been created , 
+                    $.ajax({
+                        url:baseUrl+'index.php/Patient/checkUser',
+                        method: 'post',
+                        data: {phone:phone},
+                        type: 'POST',
+                        success: function(response){
+                        if(response==0){
+                            $('#meserr').html('Incorrect Mobile number');
+                        }else{
+                            $('#otpmess1').html('Otp sent on your mobile number...');
+                            $('#otp_field1').css('display','block');
+                            $('#auth').css('display','block');
+                            $('#register').hide();
+                            $('#registeringuser').value=true;
+                          }}});
+                          
+                   }
+
+                }
+            });
+        }});
+    $("#myTab a").click(function(e){
+            e.preventDefault();
+            $(this).tab('show');
+        });
+
+
   $("#datepicker").datepicker(
 {format: "yyyy-mm-dd",
 startDate: new Date()
 });
 
+let doctor_search_id=$('#doctorSearchId').val()
+if(doctor_search_id){
+  updateSliderColor(doctor_search_id,$('#datepicker').datepicker('getFormattedDate'));
+}
 $('#btn1').ready(function(){
   $('#btn1').addClass("active");
 });
@@ -729,16 +993,17 @@ $('#ambtn').ready(function(){
 
 $('#datepicker').on('changeDate',function(e) {
     var date=($('#datepicker').datepicker('getFormattedDate'));
-    fetchTime(date);
+    fetchTime();
+    $('.datepicker').hide();
     $('#p_date').val(date);
-    console.log($('#p_date').val());
-
+    docID = $("#doctorSearchId").val()
+    updateSliderColor(docID, date);
   });
 
 $('#dLabel ').on('DOMNodeInserted',function(e){
     var language=e.target.innerHTML;
     //console.log(language);
-  fetchTime(null,null,null,null,language,null);
+  fetchTime();
 
 });
 
@@ -746,7 +1011,7 @@ $('#dLabel ').on('DOMNodeInserted',function(e){
 
 $('#time_hour').on('change', function(ev){
     var hour = cleanHours(parseInt(ev.target.value));
-    fetchTime(null,hour,null,null,null,null);
+    fetchTime();
 
 });
 
@@ -772,6 +1037,14 @@ $('#docs').on('click',function(event){
       var docid = event.target.getAttribute("data-value");
        console.log('docid',docid);
        $('#doctor_id').val(docid);
+    var target = $('#submit');
+    if (target.length) {
+        $('html,body').animate({
+            scrollTop: target.offset().top
+        }, 1000);
+        return false;
+    }
+
 });
 
 
@@ -798,7 +1071,7 @@ $(document).on('click', 'input:radio[id^="flexRadioDefault"]', function(event) {
   if(queryType == "covid"){
   // department_type
   document.getElementById('department_type').style.display = 'none';
-
+  fetchTime();
 
   }
 
@@ -835,7 +1108,7 @@ $(function() {
 
        // Inserting Outer
 
-       elem.find('#inner').wrap('<div class="col-sm-10 col-md-10 col-lg-10"id="outer"/>');
+       elem.find('#inner').wrap('<div class="col-sm-10 col-md-10 col-lg-10"id="outer" style="font-family:-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;"/>');
 
        var outer = $('#outer');
 
@@ -901,6 +1174,9 @@ docs.forEach(button => {
     // show success feedback
     $(this).addClass("btn-group__item--active").siblings().removeClass("btn-group__item--active");
 
+
+
+
   })
 })
 
@@ -919,7 +1195,43 @@ $('#p_phone').keypress(function (e) {
   }
 });
 
+ $('#myModal').on('hide.bs.modal', function () {  
+     console.log('closing modal');
+     $('#loginForm')[0].reset();
 
+     $('#registerForm')[0].reset();
+           $('.form-control').val('');
+        $('#meserr').html('');
+        $('#meserrReg').html('');
+        $('#otp_field').css('display','none');
+        $('#sendOtp').show();
+         $('#login').hide();
+         $('#otpmess').html('');
+         $('#otpmess1').html('');
+         $('#otp1').hide();
+         $('#auth').hide();
+         $('#register').show()
+    });
+
+$("form").submit(function(e) {
+  $('#meserr').html('');
+  $('#meserrReg').html('');
+  console.log('submitting');
+  var p_id=$('#p_id').val();
+
+  if(!p_id){
+    // user without login 
+    $('#myModal').modal('show');
+    $('#regtab').click();
+    e.preventDefault();
+  }
+  
+  if(!($('#p_date').val() && $('#sequence').val() && $('#doctor_id').val() &&  $('#servicetype_id').val())){
+    console.log('cant do submit');
+    e.preventDefault();
+  }
+
+})
 
 $("#p_phone").keypress (function (event) {
       if ((event.which < 32) || (event.which > 126)) return true;
@@ -963,8 +1275,8 @@ $('#contact_us').click(function(){
     }
   }
   if(msg!=""){
-          $('#q_succ_msg').hide();
-          $('#q_show_error').show();
+          $('#q_succ_msg').alert('close');
+          $('#q_show_error').fadeIn("slow");
           $('#q_succ_msg').html('');
           $('#q_show_error').html(msg);
       }else{
@@ -1259,14 +1571,10 @@ var current_fs, next_fs, previous_fs; //fieldsets
               easing: 'easeInOutBack'
           });
       });
- 
-  $(".submit").click(function () {
-    $('#myModal').modal('show');
-          // return false;
-      })
 
 });
 </script>
 <?php $this->load->view('footer');?>
+<?php $this->load->view('loginModal.php')?>
 </body>
 </html>

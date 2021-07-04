@@ -19,8 +19,9 @@ class Patient_controller extends CI_Controller {
 		$this->load->model('admin/Venue_model','venue_model');
 		$this->load->model('admin/Overview_model','overview_model');
 		$this->load->model('admin/email/Email_model','email_model');
+        $this->load->model('admin/Appointment_model','appointment_model');
 		$this->load->model("Superpro_model", "conference");
-  }
+  	}
 /*
 |--------------------------------------
 |     view all patient list
@@ -234,64 +235,14 @@ class Patient_controller extends CI_Controller {
 			
 			$patient_name = $this->input->post('name',TRUE);
 			
-			$message = '<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #f1f1f1;">
-    <center style="width: 100%; background-color: #f1f1f1;">
-        <div style="display: none; font-size: 1px;max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
-            &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
-        </div>
-        <div style="max-width: 600px; margin: 0 auto;" class="email-container">
-            <!-- BEGIN BODY -->
-            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
-                <tbody><tr>
-                    <td valign="top" class="bg_white" style="padding: 1em 2.5em 0 2.5em;">
-                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-                            <tbody><tr>
-                                <td class="logo" style="text-align: left;">
-                                    <h1>
-                                        <a href="http://telehealers.in/">
-                                        <img src="http://telehealers.in/assets/uploads/images/telehe2.png">    
-                                        </a>
-                                    </h1>
-                                </td>
-                            </tr>
-                        </tbody></table>
-                    </td>
-                </tr>
-                <tr>
-                    </tr></tbody></table><table class="bg_white" role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-                        <tbody><tr style="border-bottom: 1px solid rgba(0,0,0,.05);">
-                            <td valign="middle" width="100%" style="text-align:left; padding: 0 2.5em;">
-                                <div class="product-entry">
-                                    <div class="text">
-                                       <h2 style="text-align:left;margin-top:30px;font-weight:600;color:#356d82">Dear '.$p_name.':</h2>
-										<p>Thanks for choosing telehealers.in</p>
-										<p>Kindly visit Your dashboard using registered mobile number.</p>
-										<p>Url:  https://telehealers.in/Userlogin</p>
-										<p>&nbsp;</p>
-										<p>Keep in touch during this tough time! </p>
-										<p>Kindly write us back without any hasitation if you find any issues at support@telehealers.in</p>
-										
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody></table>
-                
-            
-            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
-                <tbody><tr>
-                    <td class="bg_white" style="text-align: center;">
-                        <p>Receive these email? You can <a href="#" style="color: rgba(0,0,0,.8);">Unsubscribe here</a></p>
-                    </td>
-                </tr>
-            </tbody></table>
-
-        </div>
-    </center>
-
-
-</body></html>';
-
+			$message = $this->conference->createVideoCallInformationMail(
+				"<p>Thanks for choosing telehealers.in</p>".
+				"<p>Kindly visit Your dashboard using registered mobile number.</p>".
+				"<p>Url:  https://telehealers.in</p>".
+				"<p>&nbsp;</p>".
+				"<p>Keep in touch during this tough time! </p>".
+				"<p>Kindly write us back without any hasitation if you find any issues at support@telehealers.in</p>"
+			);
 			$ci->email->from('info@telehealers.in', 'telehealers');
 			$list = array($p_email);
 			$ci->email->to($list);
@@ -681,8 +632,10 @@ class Patient_controller extends CI_Controller {
 		'ref_doc_id' => $referred_doctor,
 		'ref_doc_id_by' => $user_id
 		);
-		
 		$doc_id = $this->input->post('doctor',TRUE);
+		/** Map patients on referral */
+		$this->appointment_model->insertPatientDoctorMap(
+			$patient_id, $referred_doctor, $user_id);
 
 		$this->patient_model->save_edit_patient($savedata,$patient_id);
 		if (!$this->patient_model->transfer_patient_doc_to_new_doctor(

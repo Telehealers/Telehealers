@@ -21,12 +21,12 @@ class Superpro_model extends CI_model {
             "usersAdd":[
                 {
                     "name":"'.$doctor_name.'",
-                    "email":"'.$doctor_email.'",
+                    "email":"'.trim($doctor_email).'",
                     "role":"host"
                 },
                 {
                     "name":"'.$patient_name.'",
-                    "email":"'.$patient_email.'",
+                    "email":"'.trim($patient_email).'",
                     "role":"aud"
                 },
                 {

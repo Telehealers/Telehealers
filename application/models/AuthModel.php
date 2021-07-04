@@ -4,7 +4,6 @@ class AuthModel extends CI_model {
 
     public function authenticet($email=NULL,$password=NULL,$type=NULL)
     {
-        
         if($type==1){
 
             $query = $this->db->select('log_info.*,doctor_tbl.*')

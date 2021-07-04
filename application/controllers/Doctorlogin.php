@@ -67,6 +67,7 @@ class Doctorlogin extends CI_Controller {
         $this->load->view('doctorlogin',$data);
 	}
 
+	/**A function to send check user via sending OTP */
 	public function checkUser(){
 		$phone = $this->input->post('phone',TRUE);
 		
@@ -74,18 +75,10 @@ class Doctorlogin extends CI_Controller {
 		$res_doc = $this->db->query($sql_doc);
 		$result_doc = $res_doc->result_array();
 		if(is_array($result_doc) && count($result_doc)>0){
-			$patient_name = $result_doc[0]['patient_name'];
-			$rand = rand(1000,9999);
-			$sql = "update doctor_tbl set opt_code = '$rand' where doctor_phone = '$phone'";
+			$new_otp = rand(1000,9999);
+			$sql = "update doctor_tbl set opt_code = '$new_otp' where doctor_phone = '$phone'";
 			$this->db->query($sql);
-			$path = "http://japi.instaalerts.zone/httpapi/QueryStringReceiver?ver=1.0&key=pjjXNjf8In8sb8BdmFYVgw==&encrypt=0&dest=".$phone."&send=LOADIT&text=OTP%20IS%20-%20".$rand;
-			
-			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL, $path);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-			curl_setopt($ch, CURLOPT_HEADER, true);
-			curl_exec($ch); 
-			
+			$this->smsgateway->sms_otp($phone, $new_otp);
 			echo '1';
 		}else{
 			echo '0';

@@ -76,11 +76,13 @@ class Patient extends CI_Controller {
 			$patient_id = $result_sh[0]['patient_id'];
 		} 
 		if($patient_id!=""){
-			$sql_pt = "select * from appointment_tbl where patient_id = '".$patient_id."' order by id DESC";
+			$sql_pt = "select apt.*, drs.* from appointment_tbl apt, doctor_tbl drs".
+                " where apt.doctor_id = drs.doctor_id AND apt.patient_id = '".$patient_id."' order by id DESC";
 			$res_pt = $this->db->query($sql_pt);
 			$result_pt = $res_pt->result_array();
 			$data['patient_appointment_info'] = $result_pt;
-			
+            /** Get related doctor */
+            $data['all_related_doctors_to_the_patient'] = $this->doctor_model->get_doctor_from_patient_id($patient_id);
 		}
 		//echo "<pre>";print_r($data['patient_appointment_info']);die();
         //setup information
@@ -915,6 +917,7 @@ public function registration()
 		echo $con;
 	}
 	
+    /** Checks user via OTP */
 	public function checkUser(){
 		$phone = $this->input->post('phone',TRUE);
 		$sql_doc ="SELECT * FROM `patient_tbl` WHERE `patient_phone` LIKE '".$phone."'"; 
@@ -922,18 +925,11 @@ public function registration()
 		$result_doc = $res_doc->result_array();
 		if(is_array($result_doc) && count($result_doc)>0){
 			$patient_name = $result_doc[0]['patient_name'];
-			$rand = rand(1000,9999);
-			var_dump($rand);
-			$sql = "update patient_tbl set opt_code = '$rand' where patient_phone = '$phone'";
+			$new_otp = rand(1000,9999);
+			var_dump($new_otp);
+			$sql = "update patient_tbl set opt_code = '$new_otp' where patient_phone = '$phone'";
 			$this->db->query($sql);
-			$path = "http://japi.instaalerts.zone/httpapi/QueryStringReceiver?ver=1.0&key=pjjXNjf8In8sb8BdmFYVgw==&encrypt=0&dest=".$phone."&send=LOADIT&text=OTP%20IS%20-%20".$rand;
-			
-			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL, $path);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-			curl_setopt($ch, CURLOPT_HEADER, true);
-			curl_exec($ch); 
-			
+			$this->smsgateway->sms_otp($phone, $new_otp);
 			echo '1';
 		}else{
 			echo '0';
@@ -969,7 +965,7 @@ public function registration()
                     'logged_in' => TRUE
                 );
 				$this->session->set_userdata($session_data);
-				echo '2';	
+				echo $patient_id;	
 			}
 		}else{
 			echo '0';
