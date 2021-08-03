@@ -11,8 +11,8 @@ class Sms_setup_controller extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->library('session');
-    $this->load->library('Smsgateway');
-		$session_id = $this->session->userdata('session_id'); 
+    $this->load->model('Smsgateway', 'smsgateway');
+    $session_id = $this->session->userdata('session_id'); 
 	    if($session_id == NULL ){
 	     redirect('logout');
 	    }

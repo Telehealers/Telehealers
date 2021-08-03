@@ -29,6 +29,7 @@ class Prescription_controller extends CI_Controller {
 	 	$this->load->model('admin/Venue_model','venue_model');
 	 	$this->load->model('admin/Overview_model','overview_model');
 	 	$this->load->model('admin/Represcription','represcription');
+		$this->load->model('Smsgateway', 'smsgateway');
 		$this->load->model('admin/Doctor_model','doctor_model');
 	 	
 	 	$result = $this->db->select('*')->from('web_pages_tbl')->where('name','timezone')->get()->row();
@@ -270,8 +271,8 @@ class Prescription_controller extends CI_Controller {
 		$patient_query = "select patient_phone from patient_tbl where patient_id = '".
 		$patient_id."'";
 		$patient_entry = $this->db->query($patient_query)->result();
-		if ($patient_entry && isset($patient_entry[0]['patient_phone'])) {
-			$this->smsgateway->sms_prescription_alert($patient_entry[0]['patient_phone']);
+		if ($patient_entry && property_exists($patient_entry[0], 'patient_phone')) {
+			$this->smsgateway->sms_prescription_alert($patient_entry[0]->patient_phone);
 		}
 		
 		$d['appointment_id'] = $appointment_id;	

@@ -11,7 +11,7 @@ public function __construct()
 {
 	parent::__construct();
 	$this->load->library('session');
-	$this->load->library('Smsgateway');
+	$this->load->model('Smsgateway', 'smsgateway');
 	$session_id = $this->session->userdata('session_id'); 
  	$result = $this->db->select('*')->from('web_pages_tbl')->where('name','timezone')->get()->row();
 	

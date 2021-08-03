@@ -31,7 +31,7 @@ class Generic_controller extends CI_Controller {
 		
 		$this->load->model('admin/email/Email_model','email_model');
         $this->load->library('email');
-		$this->load->library('Smsgateway');
+        $this->load->model('Smsgateway', 'smsgateway');
 		
 	}
 

@@ -38,7 +38,7 @@ class Appointment extends CI_Controller {
 		$this->load->model('admin/Doctor_model','doctor_model');
        	$this->load->model('admin/Ajax_model','ajax_model');
 
-        $this->load->library('Smsgateway');
+        $this->load->model('Smsgateway', 'smsgateway');
 		$this->load->library('session');
         //
         $this->load->model('admin/email/Email_model','email_model');

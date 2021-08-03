@@ -455,8 +455,8 @@ class Ajax_controller extends CI_Controller {
 public function sendSms(){
       
     // load sms gateway
-    $this->load->library('Smsgateway');
-
+    $this->load->model('Smsgateway', 'smsgateway');
+    
     $appointment_id = $this->input->post('appointment_id',TRUE);
     $appointment_date = $this->input->post('appointment_date',TRUE);
     $sequence = $this->input->post('sequence',TRUE);

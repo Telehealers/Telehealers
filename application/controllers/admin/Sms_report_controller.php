@@ -11,7 +11,7 @@ class Sms_report_controller extends CI_Controller {
     {
 		parent::__construct();
 		$this->load->library('session');
-        $this->load->library('Smsgateway');
+        $this->load->model('Smsgateway', 'smsgateway');
 		$session_id = $this->session->userdata('session_id'); 
 	    if($session_id == NULL ){
 	     redirect('logout');

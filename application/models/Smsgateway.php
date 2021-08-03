@@ -1,6 +1,6 @@
 <?php
     /** This class contains all sms centric logic(message and APIs) and functionality */
-    class Smsgateway
+    class Smsgateway extends CI_Model
     {
         /** Functions to send sms */
         public function sms_appointment_confirmation($phone_no, $meeting_url, $booked_time) {

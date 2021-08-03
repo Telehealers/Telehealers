@@ -22,8 +22,8 @@ class Appointment_controller extends CI_Controller {
         $this->load->model('admin/Basic_model','basic_model');
 		$this->load->model('admin/Appointment_model','appointment_model');
 		$this->load->model('admin/Venue_model','venue_model');
-		$this->load->library('Smsgateway');
-        $this->load->model('admin/Overview_model','overview_model');
+        $this->load->model('Smsgateway', 'smsgateway');
+		$this->load->model('admin/Overview_model','overview_model');
         $this->load->model('admin/email/Email_model','email_model');
 		$this->load->model('admin/Doctor_model','doctor_model');
         $this->load->library('email');

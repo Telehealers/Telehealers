@@ -37,7 +37,7 @@ class Doctorlist extends CI_Controller {
 		// Load Doctor model
 		$this->load->model('admin/Doctor_model','doctor_model');
         //
-        $this->load->library('Smsgateway');
+        $this->load->model('Smsgateway', 'smsgateway');
 		
         $this->load->model('admin/email/Email_model','email_model');
         $this->load->library('email');
