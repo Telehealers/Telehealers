@@ -377,7 +377,7 @@ $hello = GeraHash(5);
     <div class="col-sm-12 col-md-4 col-lg-4" >
     <div class="form-group" style="margin-bottom: 0;padding-top: 4px;padding-left:6%;padding-right:6%; ">
             <div class='input-group date' id='datepicker'>
-               <input type='text' name="p_date" id="p_date"class="form-control" value="<?php echo date("Y-m-d");?>" />
+               <input type='text' name="p_date" id="p_date" autocomplete="off" class="form-control" value="<?php echo date("Y-m-d");?>" />
                <span class="input-group-addon">
                </span>
             </div>
@@ -1200,7 +1200,6 @@ $('#p_phone').keypress(function (e) {
      $('#loginForm')[0].reset();
 
      $('#registerForm')[0].reset();
-           $('.form-control').val('');
         $('#meserr').html('');
         $('#meserrReg').html('');
         $('#otp_field').css('display','none');
