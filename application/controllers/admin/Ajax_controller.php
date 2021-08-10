@@ -217,20 +217,15 @@ class Ajax_controller extends CI_Controller {
             $result=null;
             if($doctor_id=='1'){
               $result = $this->db->select('patient_id,patient_name')
-            ->from('patient_tbl')
-            ->like('patient_name',$keyword)
-            ->get()
-            ->result();  
+                ->from('patient_tbl')
+                ->like('patient_name',$keyword)
+                ->get()
+                ->result();  
             }
             else{
-            $result = $this->db->select('patient_id,patient_name')
-            ->from('patient_tbl')
-            ->where('doctor_id',$doctor_id)
-            ->like('patient_name',$keyword)
-            ->get()
-            ->result();
+              $result = $this->ajax_model->get_patients_for_doctor(
+                $doctor_id, $keyword);
             }    
-            $tests = array();
             echo  '[';
             if(!empty($result)) {
               $addComa=false;

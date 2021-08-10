@@ -363,5 +363,17 @@ public function get_appointment($venue_id=NULL,$date=NULL,$doctor_id=NULL)
       $this->db->update('appointment_tbl');
   }
 
-
+  /** A function to find patients for a doctor.
+   * param doctor_id, patient_name_prefix {String}
+   * NOTE: !$doctor_id / !$patient_name_prefix are not allowed
+   *        Handle these cases if you want to.
+   */
+  public function get_patients_for_doctor($doctor_id, $patient_name_prefix) {
+    $query = "SELECT patients.patient_id as patient_id, ".
+      "patients.patient_name as patient_name FROM ".
+      "patient_tbl patients, doctor_patient_map dpm WHERE ".
+        "dpm.patient_id = patients.patient_id AND dpm.doctor_id = ".
+        $doctor_id." AND patients.patient_name LIKE '%".$patient_name_prefix."%'";
+    return $this->db->query($query)->result();
+  }
 }
