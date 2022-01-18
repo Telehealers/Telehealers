@@ -822,11 +822,7 @@ class Prescription_controller extends CI_Controller {
 	#----------------------------------------------------#
 			 	# medicine assign for patient 
 	#----------------------------------------------------#    
-	    $mdata['med_type'] = $this->input->post('type',TRUE)?$this->input->post('type',TRUE):[] ;
 	 	$mdata['medicine_id'] =($this->input->post('medicine_id',TRUE))?($this->input->post('medicine_id',TRUE)):[];
-	 	$mdata['mg'] = ($this->input->post('mg',TRUE))?($this->input->post('mg',TRUE)):[];
-	 	$mdata['dose'] = ($this->input->post('dose',TRUE))?($this->input->post('dose',TRUE)):[];
-	 	$mdata['day'] = ($this->input->post('day',TRUE));
 	 	$mdata['comments'] = ($this->input->post('comments',TRUE));
 	 	$mdata['appointment_id'] = $this->input->post('appointment_id',TRUE);
 	 	$mdata['prescription_id'] = $pres_id;
@@ -876,10 +872,6 @@ class Prescription_controller extends CI_Controller {
 	                    'prescription_id'=> $mdata['prescription_id'],
 	                    'appointment_id'=> $mdata['appointment_id'],
 	                    'medicine_id'=> $mdata['med_id'],
-	                    'mg'=>$mdata['mg'][$i],
-	                    'dose'=>$mdata['dose'][$i],
-	                    'day'=>$mdata['day'][$i],
-	                    'medicine_type' => $mdata['med_type'][$i],
 	                    'medicine_com'=>$mdata['comments'][$i]
 	            );
 

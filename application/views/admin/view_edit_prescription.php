@@ -103,20 +103,12 @@
                         
                                                                     <?php foreach($m_info as $medicine){?>
                                                                         <div class="form-group ">
-                                                                             <div class="col-md-1 col-xs-12">
-                                                                                <input type="text"  class="form-control" name="type[]" value="<?php echo html_escape($medicine->medicine_type)?>" placeholder="<?php echo display(
-                                                                                'type')?>" />
-                                                                               
-                                                                            </div>
                                                                              <div class="col-md-3 col-xs-12">
                                                                                 <input type="hidden" class="mdcn_value" name="medicine_id[]" value="<?php echo html_escape($medicine->medicine_id)?>" />
                                                                                 <input type="text"  class="mdcn_name form-control" name="md_name[]"  value="<?php echo html_escape($medicine->medicine_name)?>" autocomplete="off" placeholder="<?php echo display('medicine_name')?>" />
                                                                                 <div id="suggesstion-box"></div>
                                                                              </div>
 
-                                                                             <div class="col-md-2 col-xs-12" ><input type="text"  class="form-control"  placeholder="<?php echo display('mgml')?>" value="<?php echo html_escape($medicine->mg)?>" name="mg[]" /></div> 
-                                                                             <div class="col-md-1 col-xs-12" ><input type="text"  class="form-control"  placeholder="<?php echo display('dose')?>" name="dose[]" value="<?php echo html_escape($medicine->dose)?>" /></div>
-                                                                             <div class="col-md-1 col-xs-12"><input type="text"  class="form-control"  placeholder="<?php echo display('day')?>" name="day[]" value="<?php echo html_escape($medicine->day)?>" /></div>
                                                                              <div class="col-md-3 col-xs-10"><input type="text"  class="form-control"  placeholder="<?php echo display('medicine_comment')?>" name="comments[]" value="<?php echo html_escape($medicine->medicine_com)?>" /></div> 
                                                                             <a href="javascript:void(0);" class=" btn btn-danger remove_button" title="Remove field"><span class="glyphicon glyphicon-trash"></span></a>
                                                                         </div> 
